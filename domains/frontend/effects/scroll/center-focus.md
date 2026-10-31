@@ -1,7 +1,7 @@
 ---
 zh: 越靠中间越大
 en: Center-weighted carousel
-order: 30
+order: 90
 ---
 
 ## 是什么

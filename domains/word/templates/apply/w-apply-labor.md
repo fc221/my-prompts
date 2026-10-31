@@ -2,7 +2,7 @@
 zh: 劳动仲裁申请书
 en: Labor arbitration application
 aka: 劳动仲裁 仲裁申请书 劳动争议仲裁 劳动人事争议仲裁申请书 证据目录 讨薪 欠薪
-order: 120
+order: 130
 ---
 
 ## 是什么

@@ -2,7 +2,7 @@
 zh: 奖学金与助学金申请
 en: Scholarship and grant application
 aka: 奖学金申请书 助学金申请书 国家励志奖学金 国家助学金 贫困生申请 申请理由 助学金申请书怎么写
-order: 20
+order: 70
 ---
 
 ## 是什么

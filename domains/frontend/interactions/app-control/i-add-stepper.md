@@ -1,7 +1,7 @@
 ---
 zh: 加入后原地变加减
 en: Add button to stepper
-order: 80
+order: 50
 ---
 
 ## 是什么

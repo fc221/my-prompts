@@ -2,7 +2,7 @@
 zh: 理清页面重点
 en: No focal point
 aka: 没有重点
-order: 140
+order: 70
 ---
 
 ## 是什么

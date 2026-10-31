@@ -1,7 +1,7 @@
 ---
 zh: 标签栏播放碟
 en: Tab bar player disc
-order: 20
+order: 70
 ---
 
 ## 是什么

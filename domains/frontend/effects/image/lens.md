@@ -1,7 +1,7 @@
 ---
 zh: 放大镜透镜
 en: Magnifier lens
-order: 70
+order: 60
 ---
 
 ## 是什么

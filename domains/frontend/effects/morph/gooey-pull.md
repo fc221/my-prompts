@@ -1,7 +1,7 @@
 ---
 zh: 拉出液桥再断开
 en: Gooey pull
-order: 60
+order: 40
 ---
 
 ## 是什么

@@ -1,7 +1,7 @@
 ---
 zh: 先诊断后定点修改
 en: Review, fix, recheck
-order: 170
+order: 20
 ---
 
 ## 是什么

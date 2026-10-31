@@ -1,7 +1,7 @@
 ---
 zh: 高度平滑展开
 en: Smooth height expand
-order: 50
+order: 10
 ---
 
 ## 是什么

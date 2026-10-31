@@ -2,7 +2,7 @@
 zh: 数字滚动计数
 en: Count-up number
 aka: 数字滚动 数字翻牌 数字跳动 计数器
-order: 30
+order: 100
 ---
 
 ## 是什么

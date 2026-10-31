@@ -2,7 +2,7 @@
 zh: 字重随动
 en: Variable weight follow
 aka: 可变字体 字重动画 字体粗细跟随 variable font weight
-order: 160
+order: 190
 ---
 
 ## 是什么

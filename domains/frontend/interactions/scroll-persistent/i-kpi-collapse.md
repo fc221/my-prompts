@@ -1,7 +1,7 @@
 ---
 zh: 指标区收成一行
 en: Collapsing KPI strip
-order: 55
+order: 40
 ---
 
 ## 是什么

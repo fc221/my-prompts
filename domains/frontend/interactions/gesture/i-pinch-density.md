@@ -1,7 +1,7 @@
 ---
 zh: 捏合换密度
 en: Pinch to change density
-order: 85
+order: 140
 ---
 
 ## 是什么

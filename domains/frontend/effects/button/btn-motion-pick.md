@@ -1,7 +1,7 @@
 ---
 zh: 按钮动效怎么选
 en: Choosing button motion
-order: 5
+order: 10
 ---
 
 ## 是什么

@@ -1,7 +1,7 @@
 ---
 zh: 导航悬停滑块
 en: Sliding nav highlight
-order: 20
+order: 30
 ---
 
 ## 是什么

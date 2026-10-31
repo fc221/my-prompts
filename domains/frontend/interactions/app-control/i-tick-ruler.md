@@ -1,7 +1,7 @@
 ---
 zh: 横向刻度尺调参
 en: Horizontal scale dial
-order: 30
+order: 20
 ---
 
 ## 是什么

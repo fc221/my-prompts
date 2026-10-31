@@ -1,7 +1,7 @@
 ---
 zh: 不挡地图的底部面板
 en: Non-blocking sheet
-order: 60
+order: 80
 ---
 
 ## 是什么

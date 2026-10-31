@@ -1,7 +1,7 @@
 ---
 zh: 视差滚动
 en: Parallax layers
-order: 20
+order: 40
 ---
 
 ## 是什么

@@ -2,7 +2,7 @@
 zh: 渐进模糊
 en: Progressive blur
 aka: 渐变模糊 分层模糊 边缘模糊 variable blur
-order: 90
+order: 50
 ---
 
 ## 是什么

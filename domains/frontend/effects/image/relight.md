@@ -1,7 +1,7 @@
 ---
 zh: 拖动光源照亮照片
 en: Movable light
-order: 60
+order: 100
 ---
 
 ## 是什么

@@ -1,7 +1,7 @@
 ---
 zh: 叠卡展开
 en: Stacked cards expand
-order: 40
+order: 50
 ---
 
 ## 是什么

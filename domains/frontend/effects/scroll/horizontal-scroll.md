@@ -1,7 +1,7 @@
 ---
 zh: 横向滚动区
 en: Pinned horizontal scroll
-order: 50
+order: 80
 ---
 
 ## 是什么

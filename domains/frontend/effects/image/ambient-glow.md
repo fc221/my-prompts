@@ -1,7 +1,7 @@
 ---
 zh: 图片周围的氛围光
 en: Ambient image glow
-order: 95
+order: 110
 ---
 
 ## 是什么

@@ -1,7 +1,7 @@
 ---
 zh: 靠近就放大的图标栏
 en: Magnifying dock
-order: 70
+order: 50
 ---
 
 ## 是什么

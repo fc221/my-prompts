@@ -2,7 +2,7 @@
 zh: 凹槽底部导航
 en: Notched tab bar
 aka: 弧形底部导航 曲线导航 凹陷导航栏 curved tab bar
-order: 90
+order: 40
 ---
 
 ## 是什么

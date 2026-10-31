@@ -1,7 +1,7 @@
 ---
 zh: 拖到另一列
 en: Cross-column drag
-order: 100
+order: 20
 ---
 
 ## 是什么

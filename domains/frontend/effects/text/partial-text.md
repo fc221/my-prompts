@@ -1,7 +1,7 @@
 ---
 zh: 只动变了的那几个字
 en: Changed-part transition
-order: 120
+order: 90
 ---
 
 ## 是什么

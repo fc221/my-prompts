@@ -2,7 +2,7 @@
 zh: 去掉配色的 AI 味
 en: Generic AI colors
 aka: 颜色很AI味
-order: 20
+order: 40
 ---
 
 ## 是什么

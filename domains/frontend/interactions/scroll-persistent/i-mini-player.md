@@ -1,7 +1,7 @@
 ---
 zh: 视频悬浮小窗
 en: Floating mini video
-order: 10
+order: 60
 ---
 
 ## 是什么

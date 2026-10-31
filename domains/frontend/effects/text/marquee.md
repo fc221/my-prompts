@@ -1,7 +1,7 @@
 ---
 zh: 无限滚动横带
 en: Infinite marquee
-order: 40
+order: 130
 ---
 
 ## 是什么

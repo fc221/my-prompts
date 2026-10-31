@@ -2,7 +2,7 @@
 zh: 优化点击热区
 en: Hard to tap
 aka: 按钮点不中 老误触
-order: 80
+order: 200
 ---
 
 ## 是什么

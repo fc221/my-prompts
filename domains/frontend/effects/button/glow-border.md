@@ -1,7 +1,7 @@
 ---
 zh: 流光边框按钮
 en: Animated gradient border
-order: 20
+order: 30
 ---
 
 ## 是什么

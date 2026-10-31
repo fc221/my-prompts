@@ -1,7 +1,7 @@
 ---
 zh: 操作后撤销
 en: Undo after action
-order: 30
+order: 50
 ---
 
 ## 是什么

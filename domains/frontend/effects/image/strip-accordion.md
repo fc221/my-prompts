@@ -1,7 +1,7 @@
 ---
 zh: 竖条展开相册
 en: Expanding strips
-order: 90
+order: 50
 ---
 
 ## 是什么

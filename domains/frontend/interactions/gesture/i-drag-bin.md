@@ -2,7 +2,7 @@
 zh: 拖到回收区
 en: Drag to trash zone
 aka: 拖拽删除 拖到垃圾桶 回收站 删除区
-order: 105
+order: 30
 ---
 
 ## 是什么

@@ -1,7 +1,7 @@
 ---
 zh: 滚动渐显
 en: Scroll reveal
-order: 10
+order: 20
 ---
 
 ## 是什么

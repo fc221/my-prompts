@@ -1,7 +1,7 @@
 ---
 zh: 互相推开的小球
 en: Collision nudge
-order: 40
+order: 50
 ---
 
 ## 是什么

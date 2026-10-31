@@ -1,7 +1,7 @@
 ---
 zh: 一段段走完的连播
 en: Segmented autoplay
-order: 80
+order: 90
 ---
 
 ## 是什么

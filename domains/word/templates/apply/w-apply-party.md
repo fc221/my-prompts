@@ -2,7 +2,7 @@
 zh: 入党申请书
 en: Party membership application format
 aka: 入党申请书格式 入党申请书怎么写 申请入党 思想汇报 此致敬礼格式
-order: 140
+order: 120
 ---
 
 ## 是什么

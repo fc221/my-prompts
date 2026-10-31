@@ -2,7 +2,7 @@
 zh: 图标柔和替换
 en: Soft icon swap
 aka: 汉堡变叉 菜单图标变叉 图标切换
-order: 70
+order: 80
 ---
 
 ## 是什么

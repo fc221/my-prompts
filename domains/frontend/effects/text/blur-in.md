@@ -1,7 +1,7 @@
 ---
 zh: 由虚到实的标题
 en: Blur-in heading
-order: 100
+order: 40
 ---
 
 ## 是什么

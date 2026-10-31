@@ -1,7 +1,7 @@
 ---
 zh: 分组标题依次顶住
 en: Stacked section headers
-order: 40
+order: 30
 ---
 
 ## 是什么

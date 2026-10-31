@@ -1,7 +1,7 @@
 ---
 zh: 圆泡弹出菜单
 en: Bubble menu
-order: 50
+order: 70
 ---
 
 ## 是什么

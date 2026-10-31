@@ -1,7 +1,7 @@
 ---
 zh: 鼠标聚光背景
 en: Cursor spotlight
-order: 50
+order: 40
 ---
 
 ## 是什么

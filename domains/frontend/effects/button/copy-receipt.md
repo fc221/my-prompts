@@ -2,7 +2,7 @@
 zh: 复制回执
 en: Copy receipt
 aka: 复制反馈 已复制 复制成功提示 剪贴板回执
-order: 75
+order: 90
 ---
 
 ## 是什么

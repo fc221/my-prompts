@@ -1,7 +1,7 @@
 ---
 zh: 菜单展开成卡片
 en: Card menu
-order: 40
+order: 60
 ---
 
 ## 是什么

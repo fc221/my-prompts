@@ -1,7 +1,7 @@
 ---
 zh: 滚轮时间选择
 en: Scroll-snap time wheel
-order: 20
+order: 10
 ---
 
 ## 是什么

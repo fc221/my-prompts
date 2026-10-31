@@ -2,7 +2,7 @@
 zh: 筛选时卡片流动重排
 en: Filter reflow animation
 aka: FLIP 动画 列表重排动画 卡片补位 筛选过渡 View Transitions
-order: 90
+order: 70
 ---
 
 ## 是什么

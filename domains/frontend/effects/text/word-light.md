@@ -1,7 +1,7 @@
 ---
 zh: 读到哪亮到哪
 en: Scroll-lit words
-order: 70
+order: 140
 ---
 
 ## 是什么

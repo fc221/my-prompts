@@ -1,7 +1,7 @@
 ---
 zh: 波形进度条
 en: Waveform seek bar
-order: 40
+order: 80
 ---
 
 ## 是什么

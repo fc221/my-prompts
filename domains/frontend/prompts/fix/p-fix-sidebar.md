@@ -2,7 +2,7 @@
 zh: 优化侧栏细节
 en: Polish a clumsy sidebar
 aka: 侧栏看着别扭
-order: 180
+order: 170
 ---
 
 ## 是什么

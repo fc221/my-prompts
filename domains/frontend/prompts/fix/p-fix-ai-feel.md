@@ -1,7 +1,7 @@
 ---
 zh: 去掉整页 AI 感
 en: De-AI a whole page
-order: 25
+order: 30
 ---
 
 ## 是什么

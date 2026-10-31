@@ -2,7 +2,7 @@
 zh: 文字方块
 en: Rotating word block
 aka: 3D 文字方块 关键词轮换 翻转词 旋转标语 文字立方体
-order: 50
+order: 80
 ---
 
 ## 是什么

@@ -1,7 +1,7 @@
 ---
 zh: 配送进度卡展开
 en: Delivery progress reveal
-order: 60
+order: 100
 ---
 
 ## 是什么

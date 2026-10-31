@@ -2,7 +2,7 @@
 zh: 开题报告
 en: Thesis proposal
 aka: 开题 开题报告格式 开题报告模板 选题依据 研究方案 文献综述 技术路线
-order: 70
+order: 80
 ---
 
 ## 是什么

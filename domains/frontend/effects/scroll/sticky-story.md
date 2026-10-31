@@ -1,7 +1,7 @@
 ---
 zh: 滚动钉住叙事
 en: Sticky scroll story
-order: 30
+order: 60
 ---
 
 ## 是什么

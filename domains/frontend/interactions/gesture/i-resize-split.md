@@ -1,7 +1,7 @@
 ---
 zh: 拖动分隔条改宽度
 en: Draggable splitter
-order: 90
+order: 50
 ---
 
 ## 是什么

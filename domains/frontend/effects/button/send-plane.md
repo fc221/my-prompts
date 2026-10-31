@@ -2,7 +2,7 @@
 zh: 纸飞机发送按钮
 en: Paper plane send button
 aka: 发送动画 发送按钮 飞出图标 发送成功
-order: 90
+order: 100
 ---
 
 ## 是什么

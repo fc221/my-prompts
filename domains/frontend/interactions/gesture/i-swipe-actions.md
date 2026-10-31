@@ -1,7 +1,7 @@
 ---
 zh: 滑动操作
 en: Swipe actions
-order: 30
+order: 60
 ---
 
 ## 是什么

@@ -2,7 +2,7 @@
 zh: 套餐联动切换
 en: Linked plan switcher
 aka: 定价切换 会员套餐切换 价格滚动 套餐卡片 pricing toggle
-order: 75
+order: 50
 ---
 
 ## 是什么

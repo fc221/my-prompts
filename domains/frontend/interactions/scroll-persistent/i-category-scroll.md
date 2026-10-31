@@ -1,7 +1,7 @@
 ---
 zh: 左分类右列表联动
 en: Category rail sync
-order: 30
+order: 50
 ---
 
 ## 是什么

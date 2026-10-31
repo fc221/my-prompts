@@ -1,7 +1,7 @@
 ---
 zh: 图标伸出名称
 en: Expanding icon label
-order: 80
+order: 50
 ---
 
 ## 是什么

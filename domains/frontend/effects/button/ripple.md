@@ -2,7 +2,7 @@
 zh: 水波点击
 en: Ripple click
 aka: 水波按钮 涟漪 波纹
-order: 40
+order: 70
 ---
 
 ## 是什么

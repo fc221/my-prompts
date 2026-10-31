@@ -1,7 +1,7 @@
 ---
 zh: 跟着背景换黑白
 en: Auto-contrast overlay
-order: 80
+order: 20
 ---
 
 ## 是什么

@@ -1,7 +1,7 @@
 ---
 zh: 下拉刷新
 en: Pull to refresh
-order: 40
+order: 70
 ---
 
 ## 是什么

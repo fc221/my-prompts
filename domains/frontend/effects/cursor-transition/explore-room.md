@@ -1,7 +1,7 @@
 ---
 zh: 点物件进房间各处
 en: Explorable room
-order: 40
+order: 50
 ---
 
 ## 是什么

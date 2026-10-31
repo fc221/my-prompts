@@ -1,7 +1,7 @@
 ---
 zh: 乐观更新
 en: Optimistic update
-order: 20
+order: 40
 ---
 
 ## 是什么

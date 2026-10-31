@@ -1,7 +1,7 @@
 ---
 zh: 小圆点长成卡片
 en: Dot to card morph
-order: 10
+order: 20
 ---
 
 ## 是什么

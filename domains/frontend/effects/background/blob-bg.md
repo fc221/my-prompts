@@ -2,7 +2,7 @@
 zh: 流体形状背景
 en: Fluid blob background
 aka: 流体背景 液态色块 变形色团 有机形状 blob morph
-order: 70
+order: 20
 ---
 
 ## 是什么

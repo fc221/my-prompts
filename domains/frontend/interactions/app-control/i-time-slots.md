@@ -1,7 +1,7 @@
 ---
 zh: 拖选时间段
 en: Drag to pick a time range
-order: 90
+order: 60
 ---
 
 ## 是什么

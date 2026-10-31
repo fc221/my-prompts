@@ -2,7 +2,7 @@
 zh: 修复手机端排版
 en: Broken on mobile
 aka: 手机上排版乱
-order: 90
+order: 110
 ---
 
 ## 是什么

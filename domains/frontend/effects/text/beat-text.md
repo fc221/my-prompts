@@ -1,7 +1,7 @@
 ---
 zh: 踩着节拍变色的标题
 en: Beat-synced color title
-order: 140
+order: 60
 ---
 
 ## 是什么

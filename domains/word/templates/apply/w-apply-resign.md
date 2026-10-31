@@ -2,7 +2,7 @@
 zh: 离职申请
 en: Resignation letter
 aka: 辞职信 辞职申请 辞职报告 离职申请书 离职交接 最后工作日
-order: 80
+order: 40
 ---
 
 ## 是什么

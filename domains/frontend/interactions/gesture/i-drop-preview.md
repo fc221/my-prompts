@@ -1,7 +1,7 @@
 ---
 zh: 松手前先看落点
 en: Landing preview
-order: 110
+order: 40
 ---
 
 ## 是什么

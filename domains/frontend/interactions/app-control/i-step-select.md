@@ -1,7 +1,7 @@
 ---
 zh: 一屏一问的偏好收集
 en: One-question-per-screen quiz
-order: 50
+order: 110
 ---
 
 ## 是什么

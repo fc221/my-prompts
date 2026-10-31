@@ -2,7 +2,7 @@
 zh: 打磨界面细节
 en: Small polish details
 aka: 细节不够精致
-order: 190
+order: 80
 ---
 
 ## 是什么

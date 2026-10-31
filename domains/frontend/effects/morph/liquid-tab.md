@@ -1,7 +1,7 @@
 ---
 zh: 会拉伸的选中块
 en: Stretchy indicator
-order: 20
+order: 30
 ---
 
 ## 是什么

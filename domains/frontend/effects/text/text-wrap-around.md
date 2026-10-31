@@ -2,7 +2,7 @@
 zh: 文字绕开移动物体
 en: Text wrapping around a moving object
 aka: 文字环绕 动态绕排 文字避让 绕排 text reflow
-order: 180
+order: 200
 ---
 
 ## 是什么

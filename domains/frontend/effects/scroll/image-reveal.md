@@ -1,7 +1,7 @@
 ---
 zh: 图片滚动揭幕
 en: Image reveal on scroll
-order: 40
+order: 30
 ---
 
 ## 是什么

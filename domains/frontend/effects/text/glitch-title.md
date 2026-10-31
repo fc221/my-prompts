@@ -2,7 +2,7 @@
 zh: 信号故障标题
 en: Glitch title
 aka: 故障风标题 故障文字 赛博标题 RGB错位 色散抖动
-order: 170
+order: 120
 ---
 
 ## 是什么

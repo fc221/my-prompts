@@ -1,7 +1,7 @@
 ---
 zh: 切成条带的照片
 en: Ribbon slices
-order: 80
+order: 40
 ---
 
 ## 是什么

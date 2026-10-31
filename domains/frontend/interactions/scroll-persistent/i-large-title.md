@@ -1,7 +1,7 @@
 ---
 zh: 大标题收成导航栏
 en: Collapsing large title
-order: 50
+order: 10
 ---
 
 ## 是什么

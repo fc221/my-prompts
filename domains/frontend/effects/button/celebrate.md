@@ -2,7 +2,7 @@
 zh: 完成庆祝
 en: Completion confetti
 aka: 点击爆散 撒花 彩带 粒子爆开
-order: 60
+order: 110
 ---
 
 ## 是什么

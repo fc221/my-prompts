@@ -1,7 +1,7 @@
 ---
 zh: 绕圈拨动的旋钮
 en: Rotary dial
-order: 35
+order: 30
 ---
 
 ## 是什么

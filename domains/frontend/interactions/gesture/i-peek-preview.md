@@ -1,7 +1,7 @@
 ---
 zh: 长按托起看一眼
 en: Press to peek
-order: 55
+order: 100
 ---
 
 ## 是什么

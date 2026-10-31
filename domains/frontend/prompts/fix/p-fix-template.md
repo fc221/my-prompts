@@ -2,7 +2,7 @@
 zh: 去掉页面模板感
 en: Looks templated
 aka: 像模板 没个性
-order: 150
+order: 50
 ---
 
 ## 是什么

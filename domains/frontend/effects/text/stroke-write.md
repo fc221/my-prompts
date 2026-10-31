@@ -1,7 +1,7 @@
 ---
 zh: 一笔笔写出来的字
 en: Stroke drawing
-order: 110
+order: 50
 ---
 
 ## 是什么

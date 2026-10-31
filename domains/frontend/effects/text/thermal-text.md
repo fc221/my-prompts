@@ -1,7 +1,7 @@
 ---
 zh: 热成像大字
 en: Thermal type
-order: 130
+order: 170
 ---
 
 ## 是什么

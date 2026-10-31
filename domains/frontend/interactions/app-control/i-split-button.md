@@ -1,7 +1,7 @@
 ---
 zh: 开始键拆成暂停 / 结束
 en: Start splits to pause & stop
-order: 10
+order: 70
 ---
 
 ## 是什么

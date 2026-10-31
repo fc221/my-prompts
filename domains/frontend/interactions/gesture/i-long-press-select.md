@@ -1,7 +1,7 @@
 ---
 zh: 长按多选
 en: Long-press multi-select
-order: 50
+order: 90
 ---
 
 ## 是什么

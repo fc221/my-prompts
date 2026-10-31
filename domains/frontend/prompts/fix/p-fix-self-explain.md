@@ -2,7 +2,7 @@
 zh: 删减界面说明文字
 en: Over-explained UI
 aka: 界面在自我解释
-order: 210
+order: 140
 ---
 
 ## 是什么

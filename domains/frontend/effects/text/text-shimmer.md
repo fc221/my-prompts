@@ -1,7 +1,7 @@
 ---
 zh: 文字上的扫光
 en: Shimmering text
-order: 90
+order: 150
 ---
 
 ## 是什么

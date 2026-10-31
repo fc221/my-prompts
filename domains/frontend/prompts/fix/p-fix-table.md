@@ -2,7 +2,7 @@
 zh: 优化表格可读性
 en: Unreadable table
 aka: 表格看不清
-order: 100
+order: 150
 ---
 
 ## 是什么

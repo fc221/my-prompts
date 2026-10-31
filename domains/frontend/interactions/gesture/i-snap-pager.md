@@ -1,7 +1,7 @@
 ---
 zh: 吸附分页滑动
 en: Snap paging
-order: 60
+order: 80
 ---
 
 ## 是什么

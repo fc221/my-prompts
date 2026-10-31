@@ -2,7 +2,7 @@
 zh: 采购申请与审批单
 en: Purchase request and approval form
 aka: 采购申请单 请购单 采购审批表 物资申购单 采购申请报告 申购单
-order: 50
+order: 60
 ---
 
 ## 是什么

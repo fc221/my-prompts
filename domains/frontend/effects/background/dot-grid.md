@@ -1,7 +1,7 @@
 ---
 zh: 点阵渐隐背景
 en: Dot grid fade
-order: 20
+order: 50
 ---
 
 ## 是什么

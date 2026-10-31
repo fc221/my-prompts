@@ -2,7 +2,7 @@
 zh: 打字切词标题
 en: Word swap typing
 aka: 替换打字 标题换词 单词轮换 打字换词
-order: 15
+order: 20
 ---
 
 ## 是什么

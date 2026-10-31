@@ -1,7 +1,7 @@
 ---
 zh: 标签栏正中的主按钮
 en: Center action tab
-order: 70
+order: 80
 ---
 
 ## 是什么

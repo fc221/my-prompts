@@ -1,7 +1,7 @@
 ---
 zh: 红点与未读的来去
 en: Badge & unread flow
-order: 100
+order: 30
 ---
 
 ## 是什么

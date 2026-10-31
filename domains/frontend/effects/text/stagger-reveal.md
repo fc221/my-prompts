@@ -1,7 +1,7 @@
 ---
 zh: 标题逐行浮现
 en: Staggered text reveal
-order: 20
+order: 30
 ---
 
 ## 是什么

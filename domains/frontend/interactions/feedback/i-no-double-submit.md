@@ -1,7 +1,7 @@
 ---
 zh: 防重复提交
 en: Prevent double submit
-order: 40
+order: 60
 ---
 
 ## 是什么

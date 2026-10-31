@@ -2,7 +2,7 @@
 zh: 实习与走读申请
 en: Internship, off-campus living and readmission requests
 aka: 自主实习申请 校外实习申请 走读申请 校外住宿申请 复学申请 更换培养方案申请
-order: 100
+order: 90
 ---
 
 ## 是什么

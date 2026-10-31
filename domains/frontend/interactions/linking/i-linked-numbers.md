@@ -1,7 +1,7 @@
 ---
 zh: 统计面板同步滚动
 en: Synced stats panel
-order: 70
+order: 40
 ---
 
 ## 是什么

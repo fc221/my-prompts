@@ -1,7 +1,7 @@
 ---
 zh: 磁吸按钮
 en: Magnetic button
-order: 10
+order: 20
 ---
 
 ## 是什么

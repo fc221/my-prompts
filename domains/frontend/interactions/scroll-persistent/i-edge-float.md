@@ -1,7 +1,7 @@
 ---
 zh: 吸边悬浮球
 en: Edge-docked floating button
-order: 80
+order: 90
 ---
 
 ## 是什么

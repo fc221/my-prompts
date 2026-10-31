@@ -2,7 +2,7 @@
 zh: 滑杆弹出票券
 en: Slider-driven ticket stack
 aka: 滑杆调数量 票券堆叠 时长选择 优惠券滑杆 数量滑块
-order: 33
+order: 40
 ---
 
 ## 是什么

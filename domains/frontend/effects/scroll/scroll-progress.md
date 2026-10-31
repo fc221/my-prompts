@@ -1,7 +1,7 @@
 ---
 zh: 阅读进度条
 en: Scroll progress bar
-order: 30
+order: 10
 ---
 
 ## 是什么

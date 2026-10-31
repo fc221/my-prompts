@@ -1,7 +1,7 @@
 ---
 zh: 粒子聚散成形
 en: Particle morph
-order: 60
+order: 50
 ---
 
 ## 是什么

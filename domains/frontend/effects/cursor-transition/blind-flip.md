@@ -2,7 +2,7 @@
 zh: 百叶翻页
 en: Venetian blind flip
 aka: 百叶窗翻转 横条翻转 分条翻页 百叶窗切换 blinds transition
-order: 60
+order: 40
 ---
 
 ## 是什么
