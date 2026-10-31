@@ -288,11 +288,18 @@ node scripts/validate.mjs --browser frontend.interactions --shots /tmp/kb-shots 
 
 **Issue**：选“问题反馈”或“内容建议”模板。提之前先在[网站](https://fc221.github.io/my-prompts/)上搜一下，确认条目是否已有。
 
+**分支**：
+
+- `main` 是线上版本，合并后自动部署到网站。只能通过 PR 合并，不能直接推送。
+- `beta` 是开发分支，日常改动都进这里，攒够一批后开 `beta` → `main` 的 PR。
+- 外部贡献从 `beta` 拉分支，PR 的目标选 `beta`，不要选 `main`。
+
 **Pull Request**：
 
-- 从 `main` 拉分支，一个 PR 只做一件事。比如只加一个分类的条目，不顺手重排别的内容。
-- 标题就是合并后的提交信息，写成“类型：说明”，类型有内容、修复、功能、文档、工程，如 `内容：新增工资条模板`、`修复：窄卡片标题被裁切`。
-- 只用 Squash 合并，合并后自动删除分支。分支里有几个提交都可以。
+- 一个 PR 只做一件事。比如只加一个分类的条目，不顺手重排别的内容。`beta` → `main` 的 PR 是一批改动，不受这条限制。
+- 标题就是合并提交的标题，写成“类型：说明”，类型有内容、修复、功能、文档、工程，如 `内容：新增工资条模板`、`修复：窄卡片标题被裁切`。
+- 只用 Merge commit 合并。Squash 会让 `beta` 和 `main` 的历史分叉，下一次 PR 又带上旧改动。
+- 合并到 `main` 后把 `beta` 快进到 `main`：`git checkout beta && git pull --ff-only origin main && git push`。
 - 提交信息不加 `Co-Authored-By`。
 - 改了示例或界面要附截图。
-- CI 会跑 `prettier --check`、`npm run check`、`npm run build`，全部通过才能合并。
+- CI 会跑 `prettier --check`、`npm run check`、`npm run build`，合并到 `main` 必须全部通过。

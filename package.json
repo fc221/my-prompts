@@ -7,6 +7,7 @@
     "#kb": "./src/adapter/index.ts"
   },
   "description": "提示词知识库：按领域整理的规范要点与可复制提示词",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "npm run typecheck && vite build",
