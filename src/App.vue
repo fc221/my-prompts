@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue';
-import { entries, matches } from './kb';
+import { entries, matches, REPO_URL } from './kb';
 import type { KbEntry } from './types';
 import { state } from './state';
+import AppIcon from './components/AppIcon.vue';
 import AppSidebar from './components/AppSidebar.vue';
 import AppTopbar from './components/AppTopbar.vue';
 import SectionHeader from './components/SectionHeader.vue';
@@ -107,6 +108,17 @@ watch(
         </div>
         <p class="sr-only" role="status">{{ conds ? `符合${conds}的有 ${shown.length} 条` : '' }}</p>
       </main>
+      <footer class="site-foot" :class="{ tray: state.picks.length }">
+        <p>
+          MyPrompts · © 2026 fc221 ·
+          <a :href="`${REPO_URL}/blob/main/LICENSE`" target="_blank" rel="noopener">MIT 协议</a>
+        </p>
+        <nav aria-label="项目链接">
+          <a :href="REPO_URL" target="_blank" rel="noopener"><AppIcon name="github" :size="16" />GitHub 仓库</a>
+          <a :href="`${REPO_URL}/issues/new/choose`" target="_blank" rel="noopener">反馈问题</a>
+          <a :href="`${REPO_URL}/blob/main/CONTRIBUTING.md`" target="_blank" rel="noopener">参与贡献</a>
+        </nav>
+      </footer>
     </div>
 
     <dialog
@@ -162,6 +174,7 @@ watch(
   flex-direction: column;
 }
 .content {
+  flex: 1;
   width: 100%;
   max-width: 1480px;
   margin: 0 auto;
@@ -176,6 +189,46 @@ watch(
 .content.tray {
   padding-bottom: 120px;
 } /* 右下角的组合托盘约 64px 高、离底 24px，最后一行卡片的按钮不能被它挡住 */
+.site-foot {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+  padding-block: var(--space-4) var(--space-5);
+  padding-left: max(24px, env(safe-area-inset-left, 0px));
+  padding-right: max(24px, env(safe-area-inset-right, 0px));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.site-foot.tray {
+  padding-bottom: 96px;
+} /* 组合托盘浮在右下角，页脚链接不能被它挡住 */
+.site-foot p {
+  margin: 0;
+}
+.site-foot nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+}
+.site-foot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  color: inherit;
+}
+@media (hover: hover) {
+  .site-foot a:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+  }
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));

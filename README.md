@@ -2,6 +2,8 @@
 
 给人浏览、复制提示词交给 AI 用的网页。按领域组织（目前有前端、后端、API、PDF、Word、Excel），每个领域分若干板块，每条有示例、要点和可复制的提示词；“组合”可以把几条合成一段提示词，⌘K / Ctrl+K 全局搜索。
 
+在线预览：<https://fc221.github.io/my-prompts/>
+
 技术栈：Vue 3 + TypeScript + Vite，打包成单个 HTML 文件。
 
 ## 使用

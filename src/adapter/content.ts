@@ -169,7 +169,7 @@ export function buildDomains(src: ContentSource): { domains: Domain[]; problems:
             })
             .sort(byOrder)
             .map(({ key, entry }): Entry => {
-              const e: Entry = { ...entry, sec: section.key, cat: c.name };
+              const e: Entry = { ...entry, sec: section.key, path: key, cat: c.name };
               if (src.demos[key]) e.demo = src.demos[key];
               if (src.wires[key]?.wire) e.wire = src.wires[key].wire;
               if (src.wires[key]?.wireMobile) e.wireMobile = src.wires[key].wireMobile;

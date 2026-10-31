@@ -1,7 +1,7 @@
 <script setup lang="ts">
-// 顶栏：手机上的菜单按钮、当前位置、全局搜索入口、组合入口
+// 顶栏：手机上的菜单按钮、当前位置、全局搜索入口、组合入口、仓库链接
 import { computed } from 'vue';
-import { domainOf } from '../kb';
+import { domainOf, REPO_URL } from '../kb';
 import { state, toast } from '../state';
 import AppIcon from './AppIcon.vue';
 
@@ -36,6 +36,16 @@ defineEmits<{ picks: [] }>();
       <AppIcon name="stack" :size="16" /><span class="pl">组合</span
       ><span v-if="state.picks.length" class="badge">{{ state.picks.length }}</span>
     </button>
+    <a
+      class="icon-btn gh"
+      :href="REPO_URL"
+      target="_blank"
+      rel="noopener"
+      aria-label="GitHub 仓库（新窗口打开）"
+      title="GitHub 仓库"
+    >
+      <AppIcon name="github" :size="20" />
+    </a>
   </header>
 </template>
 
@@ -139,8 +149,9 @@ defineEmits<{ picks: [] }>();
   .search kbd {
     display: none;
   }
-  .pl {
+  .pl,
+  .gh {
     display: none;
-  }
+  } /* 手机顶栏留给搜索，仓库入口在菜单底部和页脚 */
 }
 </style>

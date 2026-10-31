@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // 详情：右侧抽屉（手机全屏）。预览、是什么 / 适合 / 不适合 / 注意、要点、提示词；底部可切上一条 / 下一条
 import { computed, nextTick, ref, watch } from 'vue';
-import { byId, byZh, domainOf, entries, fullPrompt, sectionOf } from '../kb';
+import { byId, byZh, domainOf, entries, fullPrompt, REPO_URL, sectionOf } from '../kb';
 import { copy, openDetail, state, togglePick } from '../state';
 import AppIcon from './AppIcon.vue';
 import EntryPreview from './EntryPreview.vue';
@@ -25,6 +25,11 @@ async function copyPrompt() {
 const body = ref<HTMLElement>();
 const e = computed(() => (state.detail ? byId.get(state.detail) : undefined));
 const sec = computed(() => (e.value ? sectionOf(e.value) : undefined));
+const sourceUrl = computed(() => `${REPO_URL}/blob/main/domains/${e.value?.path}.md`);
+// 问题反馈表单的“出现在哪”按字段 id 预填
+const issueUrl = computed(
+  () => `${REPO_URL}/issues/new?template=bug.yml&where=${encodeURIComponent(`${e.value?.zh}（${e.value?.id}）`)}`,
+);
 const picked = computed(() => !!e.value && state.picks.includes(e.value.id));
 const rows = computed(() =>
   e.value
@@ -157,6 +162,10 @@ function onBackdrop(ev: MouseEvent) {
             <p v-if="domainOf(e.domain).tail" class="tail">复制时会在末尾附上通用要求：{{ domainOf(e.domain).tail }}</p>
           </div>
         </section>
+        <p class="src">
+          <a :href="sourceUrl" target="_blank" rel="noopener"><AppIcon name="github" :size="14" />在 GitHub 查看这条</a>
+          <a :href="issueUrl" target="_blank" rel="noopener">反馈这条</a>
+        </p>
       </div>
 
       <footer class="df">
@@ -381,6 +390,27 @@ function onBackdrop(ev: MouseEvent) {
   background: var(--accent-soft);
   border-radius: 4px;
   padding: 0 2px;
+}
+.src {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.src a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  color: inherit;
+}
+@media (hover: hover) {
+  .src a:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+  }
 }
 .df {
   display: flex;

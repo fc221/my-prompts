@@ -43,6 +43,8 @@ export interface Entry {
   id: string;
   /** 板块 key：由条目所在的板块目录决定，adapter 补上 */
   sec: string;
+  /** 相对 domains/ 的路径，不带后缀，如 frontend/components/pick/c-pick-search */
+  path: string;
   /** 分类名：由条目所在的分类文件决定，adapter 补上 */
   cat: string;
   zh: string;

@@ -3,7 +3,7 @@
 // 每个领域是一个可折叠分组，默认展开当前领域；collapsible 只给桌面常驻侧栏用。
 // 收起后每个领域只留一个图标，悬停或点击在右侧弹出它的板块（浮层放在顶层，不被侧栏裁切）；领域再多也只占一列图标
 import { computed, onMounted, onUnmounted, reactive, ref, useId, watch } from 'vue';
-import { domains, entries } from '../kb';
+import { domains, entries, REPO_URL } from '../kb';
 import { go, originOf, setTheme, state } from '../state';
 import AppIcon from './AppIcon.vue';
 
@@ -219,6 +219,16 @@ watch(mini, () => {
             <AppIcon :name="t.icon" :size="16" />
           </button>
         </div>
+        <a
+          class="icon-btn gh"
+          :href="REPO_URL"
+          target="_blank"
+          rel="noopener"
+          aria-label="GitHub 仓库（新窗口打开）"
+          title="GitHub 仓库"
+        >
+          <AppIcon name="github" :size="18" />
+        </a>
         <button
           v-if="collapsible"
           type="button"
@@ -231,6 +241,16 @@ watch(mini, () => {
         </button>
       </template>
       <template v-else>
+        <a
+          class="icon-btn"
+          :href="REPO_URL"
+          target="_blank"
+          rel="noopener"
+          aria-label="GitHub 仓库（新窗口打开）"
+          data-tip="GitHub 仓库"
+        >
+          <AppIcon name="github" :size="18" />
+        </a>
         <button
           type="button"
           class="icon-btn"
@@ -390,6 +410,9 @@ watch(mini, () => {
   font-weight: 400;
   font-variant-numeric: tabular-nums;
 }
+.gh {
+  margin-left: auto;
+} /* 贴着收起按钮，不被两端对齐推到中间 */
 .foot {
   display: flex;
   align-items: center;

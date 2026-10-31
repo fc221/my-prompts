@@ -31,6 +31,8 @@ const { domains: built } = buildDomains({
   wires: rel(import.meta.glob<{ wire?: Wire; wireMobile?: Wire }>('../domains/*/*/*/*.wire.ts', { eager: true })),
 });
 
+export const REPO_URL = 'https://github.com/fc221/my-prompts';
+
 export const domains: Domain[] = built.sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
 
 export const entries: KbEntry[] = domains.flatMap((d) =>
