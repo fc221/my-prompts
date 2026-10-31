@@ -1,0 +1,634 @@
+<link rel="stylesheet" href="../../_shared/pick.css">
+<style>
+  .x {
+    position: relative;
+    display: grid;
+    grid-template-columns: 6px minmax(0, 1fr);
+    gap: 8px;
+    width: 100%;
+    max-width: 300px;
+    height: 112px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  @container (min-height: 260px) {
+    .x {
+      zoom: 1.5;
+    }
+  }
+  :where(.x) button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+  .x :focus-visible {
+    outline: 2px solid #3b5bdb;
+    outline-offset: 1px;
+  }
+  .x-lv {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 3px;
+  }
+  .x-lv i {
+    flex: 1;
+    border-radius: 3px;
+    background: #e1e4ea;
+  }
+  .x-lv i.on {
+    background: var(--c);
+  }
+  .x-app {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #e1e4ea;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .x-body {
+    flex: 1;
+    min-height: 0;
+    padding: 8px 10px;
+  }
+  .x-sk {
+    display: block;
+    height: 7px;
+    margin-bottom: 7px;
+    border-radius: 4px;
+    background: #e8ebf0;
+  }
+  .x-note {
+    margin: 0;
+    color: #5b616e;
+    font-size: 11px;
+    line-height: 16px;
+  }
+  .x .x-btn {
+    height: 26px;
+    padding: 0 10px;
+    border: 1px solid #cdd2da;
+    border-radius: 6px;
+    background: #fff;
+    white-space: nowrap;
+  }
+  .x-link {
+    color: #2b45b0;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .x-icons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 12px 0 4px;
+  }
+  .x-icons button {
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    padding: 4px 0;
+    border-radius: 6px;
+  }
+  .x-icons button:hover {
+    background: #f1f3f7;
+  }
+  .x-ic {
+    position: relative;
+    width: 22px;
+    height: 22px;
+  }
+  .x-ic svg {
+    width: 22px;
+    height: 22px;
+    color: #4a505b;
+  }
+  .x-dot,
+  .x-num {
+    position: absolute;
+    top: -2px;
+    right: -3px;
+    width: 8px;
+    height: 8px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    background: #e03131;
+  }
+  .x-num {
+    top: -5px;
+    right: -9px;
+    width: auto;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 3px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 10px;
+    font-style: normal;
+    line-height: 14px;
+    text-align: center;
+  }
+  .x-toast {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 15px;
+    background: #24292f;
+    color: #fff;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    animation: x-down 0.22s ease-out;
+  }
+  @keyframes x-down {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -8px);
+    }
+  }
+  .x-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 24px;
+    padding: 0 10px;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .x-del {
+    color: #c92a2a;
+  }
+  .x-undo {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    left: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: 7px;
+    background: #24292f;
+    color: #fff;
+    animation: x-up 0.22s ease-out;
+  }
+  @keyframes x-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+  .x-undo span {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .x-undo .x-link {
+    color: #a9bcff;
+  }
+  .x-mqbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 28px;
+    padding: 0 8px;
+    background: #fff7e6;
+    color: #7a4d00;
+  }
+  .x-mqbar svg {
+    flex: none;
+    width: 14px;
+    height: 14px;
+  }
+  .x-mq {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .x-track {
+    display: inline-flex;
+    gap: 28px;
+    padding-right: 28px;
+    white-space: nowrap;
+    animation: x-run 16s linear infinite;
+  }
+  .x-mq > div {
+    display: inline-flex;
+    width: max-content;
+  }
+  @keyframes x-run {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  .x-mq:hover .x-track,
+  .x-mq:focus-within .x-track,
+  .x-mq.pause .x-track {
+    animation-play-state: paused;
+  }
+  .x-pause {
+    flex: none;
+    color: #7a4d00;
+    font-size: 11px;
+  }
+  .x-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 28px;
+    padding: 0 10px;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .x-bell {
+    display: flex;
+  }
+  .x-center {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+  .x-msg {
+    display: grid;
+    grid-template-columns: 8px minmax(0, 1fr) auto;
+    gap: 6px;
+    align-items: center;
+    width: 100%;
+    height: 26px;
+    padding: 0 10px;
+    text-align: left;
+  }
+  .x-msg:hover {
+    background: #f6f7fb;
+  }
+  .x-msg i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3b5bdb;
+  }
+  .x-msg.read i {
+    background: none;
+  }
+  .x-msg.read span {
+    color: #5b616e;
+  }
+  .x-msg span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .x-msg time {
+    color: #5b616e;
+    font-size: 11px;
+  }
+  .x-warn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+    padding: 4px 8px;
+    border-left: 3px solid #f08c00;
+    border-radius: 4px;
+    background: #fff4e0;
+    color: #6b4300;
+    line-height: 16px;
+  }
+  .x-warn.ok {
+    border-left-color: #2b8a3e;
+    background: #e6f6ea;
+    color: #1d5e2b;
+  }
+  .x-warn span {
+    flex: 1;
+    min-width: 0;
+  }
+  .x-form {
+    display: flex;
+    gap: 6px;
+  }
+  .x-form input {
+    flex: 1;
+    min-width: 0;
+    height: 26px;
+    padding: 0 6px;
+    border: 1px solid #cdd2da;
+    border-radius: 6px;
+    background: #fff;
+    color: inherit;
+    font: inherit;
+  }
+  .x-site {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 26px;
+    padding: 2px 8px;
+    background: #c92a2a;
+    color: #fff;
+    line-height: 16px;
+  }
+  .x-site span {
+    flex: 1;
+    min-width: 0;
+  }
+  .x-site button {
+    flex: none;
+    width: 18px;
+    height: 18px;
+  }
+  .x-site button:focus-visible {
+    outline-color: #fff;
+  }
+  .x-nav {
+    display: flex;
+    gap: 12px;
+    height: 26px;
+    padding: 0 10px;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .x-nav button {
+    color: #5b616e;
+  }
+  .x-nav [aria-current] {
+    color: #2b45b0;
+    font-weight: 600;
+    box-shadow: inset 0 -2px #3b5bdb;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .x-toast,
+    .x-undo,
+    .x-track {
+      animation: none;
+    }
+    .x-mq {
+      overflow-x: auto;
+    }
+    .x-pause {
+      display: none;
+    }
+  }
+</style>
+
+<script type="module">
+import { pick } from '../../_shared/pick.ts';
+
+const svg = (d) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const BELL = svg('<path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15zM10 21h4"/>');
+const CHAT = svg('<path d="M4 5h16v11H9l-5 4z"/>');
+const CHECK = svg('<path d="M9 6h11M9 12h11M9 18h11M4 6h.5M4 12h.5M4 18h.5"/>');
+const GEAR = svg('<circle cx="12" cy="12" r="3.2"/><path d="M12 3v3m0 12v3M3 12h3m12 0h3"/>');
+const HORN = svg('<path d="M4 10v4h3l8 4V6l-8 4zM18 9.5a3.5 3.5 0 0 1 0 5"/>');
+
+const COLORS = ['#a7b8f3', '#7f96ec', '#5b77e3', '#3b5bdb', '#f0a020', '#ee7b16', '#e03131'];
+const wrap = (lv, inner) =>
+  `<div class="x"><div class="x-lv" aria-hidden="true">${COLORS.map((c, i) => `<i class="${i < lv ? 'on' : ''}" style="--c:${COLORS[lv - 1]}"></i>`).join('')}</div>${inner}</div>`;
+
+function badges(el) {
+  const note = el.querySelector('.x-note');
+  el.querySelectorAll('[data-b]').forEach((b) =>
+    b.addEventListener('click', () => {
+      b.querySelector('.x-dot, .x-num')?.remove();
+      b.setAttribute('aria-label', b.dataset.b);
+      note.textContent = `${b.dataset.b}已看过，角标清掉`;
+    }),
+  );
+}
+
+function toast(el) {
+  const box = el.querySelector('.x-app');
+  const live = el.querySelector('[role=status]');
+  let timer;
+  const show = () => {
+    box.querySelector('.x-toast')?.remove();
+    clearTimeout(timer);
+    const t = Object.assign(document.createElement('div'), { className: 'x-toast', textContent: '✓ 链接已复制' });
+    box.append(t);
+    live.textContent = '链接已复制';
+    timer = setTimeout(() => t.remove(), 2600);
+  };
+  el.querySelector('.x-btn').addEventListener('click', show);
+  show();
+}
+
+const FILES = ['季度复盘.pptx', '门店巡检表.xlsx', '活动海报.png'];
+
+function undo(el) {
+  const box = el.querySelector('.x-app');
+  const list = el.querySelector('[data-list]');
+  let rows = [...FILES];
+  let last = null;
+  let timer = null;
+  let left = 0;
+  let bar = null;
+  const stop = () => {
+    clearInterval(timer);
+    bar?.remove();
+    bar = null;
+  };
+  const render = () => {
+    list.innerHTML = rows
+      .map((f) => `<div class="x-row"><span>${f}</span><button type="button" class="x-del" aria-label="删除 ${f}">删除</button></div>`)
+      .join('') || '<p class="x-note" style="padding:8px 10px">文件都删完了</p>';
+  };
+  const del = (name) => {
+    const at = rows.indexOf(name);
+    stop();
+    rows.splice(at, 1);
+    last = [name, at];
+    left = 8;
+    render();
+    bar = document.createElement('div');
+    bar.className = 'x-undo';
+    bar.setAttribute('role', 'status');
+    bar.innerHTML = `<span>已删除 ${name}</span><button type="button" class="x-link">撤销</button><b>${left}s</b>`;
+    box.append(bar);
+    let hold = false;
+    bar.addEventListener('pointerenter', () => (hold = true));
+    bar.addEventListener('pointerleave', () => (hold = false));
+    bar.addEventListener('focusin', () => (hold = true));
+    bar.addEventListener('focusout', () => (hold = false));
+    bar.querySelector('button').addEventListener('click', () => {
+      rows.splice(last[1], 0, last[0]);
+      stop();
+      render();
+    });
+    timer = setInterval(() => {
+      if (!box.isConnected) return clearInterval(timer);
+      if (hold) return;
+      left -= 1;
+      bar.querySelector('b').textContent = `${left}s`;
+      if (left <= 0) stop();
+    }, 1000);
+  };
+  list.addEventListener('click', (e) => {
+    const b = e.target.closest('.x-del');
+    if (b) del(b.closest('.x-row').firstElementChild.textContent);
+  });
+  render();
+  del(FILES[1]);
+}
+
+function marquee(el) {
+  const mq = el.querySelector('.x-mq');
+  const btn = el.querySelector('.x-pause');
+  btn.addEventListener('click', () => {
+    const on = mq.classList.toggle('pause');
+    btn.textContent = on ? '继续' : '暂停';
+    btn.setAttribute('aria-pressed', String(on));
+  });
+}
+
+function center(el) {
+  const bell = el.querySelector('.x-bell');
+  const panel = el.querySelector('.x-center');
+  const num = el.querySelector('.x-num');
+  const all = el.querySelector('.x-link');
+  const sync = () => {
+    const n = el.querySelectorAll('.x-msg:not(.read)').length;
+    num.textContent = n;
+    num.hidden = !n;
+    bell.setAttribute('aria-label', `消息中心，${n} 条未读`);
+  };
+  panel.addEventListener('click', (e) => {
+    e.target.closest('.x-msg')?.classList.add('read');
+    sync();
+  });
+  all.addEventListener('click', () => {
+    el.querySelectorAll('.x-msg').forEach((m) => m.classList.add('read'));
+    sync();
+  });
+  bell.addEventListener('click', () => {
+    panel.hidden = !panel.hidden;
+    bell.setAttribute('aria-expanded', String(!panel.hidden));
+  });
+  sync();
+}
+
+function warn(el) {
+  const banner = el.querySelector('.x-warn');
+  const input = el.querySelector('input');
+  const go = el.querySelector('.x-link');
+  go.addEventListener('click', () => input.focus());
+  el.querySelector('.x-btn').addEventListener('click', () => {
+    if (!input.value.trim()) {
+      banner.querySelector('span').textContent = '税号还是空的，这条提示会一直留着';
+      return input.focus();
+    }
+    banner.className = 'x-warn ok';
+    banner.textContent = '税号已补全，提示消失，可以开票了';
+  });
+}
+
+const PAGES = { 首页: '今日待办 6 项', 订单: '进行中的订单 14 笔', 报表: '本周报表已生成' };
+
+function site(el) {
+  const bar = el.querySelector('.x-site');
+  const page = el.querySelector('[data-page]');
+  const tabs = [...el.querySelectorAll('.x-nav button')];
+  tabs.forEach((t) =>
+    t.addEventListener('click', () => {
+      tabs.forEach((x) => x.removeAttribute('aria-current'));
+      t.setAttribute('aria-current', 'page');
+      page.textContent = PAGES[t.textContent];
+    }),
+  );
+  bar.querySelector('button').addEventListener('click', () => {
+    bar.remove();
+    tabs[0].focus();
+  });
+}
+
+export default function demo(root) {
+  pick(
+    root,
+    [
+      {
+        name: '角标',
+        fit: '第 1 档：有新东西，等用户自己来看',
+        html: wrap(
+          1,
+          `<div class="x-app"><div class="x-icons">
+            <button type="button" data-b="消息" aria-label="消息，3 条未读"><span class="x-ic">${CHAT}<i class="x-num">3</i></span>消息</button>
+            <button type="button" data-b="待办" aria-label="待办，有新内容"><span class="x-ic">${CHECK}<i class="x-dot"></i></span>待办</button>
+            <button type="button" data-b="设置" aria-label="设置"><span class="x-ic">${GEAR}</span>设置</button></div>
+            <p class="x-note" role="status" style="padding:0 10px;text-align:center">不打断，点进去才清掉</p></div>`,
+        ),
+        init: badges,
+      },
+      {
+        name: '轻提示',
+        fit: '第 2 档：告诉结果，几秒后自己消失',
+        html: wrap(
+          2,
+          `<div class="x-app"><div class="x-body" style="padding-top:40px"><i class="x-sk" style="width:80%"></i><button type="button" class="x-btn">复制链接</button></div><span role="status" style="position:absolute;top:0;opacity:0"></span></div>`,
+        ),
+        init: toast,
+      },
+      {
+        name: '带撤销',
+        fit: '第 3 档：操作能反悔，给个撤销',
+        html: wrap(3, `<div class="x-app"><div data-list></div></div>`),
+        init: undo,
+      },
+      {
+        name: '滚动公告',
+        fit: '第 4 档：几条公告轮着看，悬停暂停',
+        html: wrap(
+          4,
+          `<div class="x-app"><div class="x-mqbar">${HORN}<div class="x-mq" data-clip tabindex="0" role="region" aria-label="公告"><div>
+            <span class="x-track"><span>新版报表上线</span><span>周五下午系统升级</span><span>春季活动报名开始</span></span>
+            <span class="x-track" aria-hidden="true"><span>新版报表上线</span><span>周五下午系统升级</span><span>春季活动报名开始</span></span>
+            </div></div><button type="button" class="x-pause" aria-pressed="false">暂停</button></div>
+            <div class="x-body"><i class="x-sk" style="width:86%"></i><i class="x-sk" style="width:64%"></i><i class="x-sk" style="width:74%"></i></div></div>`,
+        ),
+        init: marquee,
+      },
+      {
+        name: '消息中心',
+        fit: '第 5 档：要留痕，随时能回头翻',
+        html: wrap(
+          5,
+          `<div class="x-app"><div class="x-head"><button type="button" class="x-bell" aria-expanded="true" aria-label="消息中心"><span class="x-ic" style="width:18px;height:18px">${BELL.replace('<svg', '<svg style="width:18px;height:18px"')}<i class="x-num"></i></span></button><button type="button" class="x-link">全部已读</button></div>
+            <div class="x-center">
+              <button type="button" class="x-msg"><i></i><span>陈砚提到了你</span><time>刚刚</time></button>
+              <button type="button" class="x-msg"><i></i><span>合同待你审批</span><time>10:24</time></button>
+              <button type="button" class="x-msg read"><i></i><span>周报已生成</span><time>昨天</time></button></div></div>`,
+        ),
+        init: center,
+      },
+      {
+        name: '页内警告',
+        fit: '第 6 档：卡住当前任务，处理完才消失',
+        html: wrap(
+          6,
+          `<div class="x-app"><div class="x-body"><div class="x-warn" role="status"><span>发票缺税号，补全后才能开票</span><button type="button" class="x-link">去补全</button></div>
+            <div class="x-form"><input aria-label="税号" placeholder="填写税号"><button type="button" class="x-btn">保存</button></div></div></div>`,
+        ),
+        init: warn,
+      },
+      {
+        name: '全站通知条',
+        fit: '第 7 档：人人要知道，换页也还在',
+        html: wrap(
+          7,
+          `<div class="x-app"><div class="x-site" role="status"><span>今晚 23:00 起停机维护 30 分钟</span><button type="button" aria-label="关闭通知">×</button></div>
+            <div class="x-nav">${Object.keys(PAGES).map((p, i) => `<button type="button" ${i ? '' : 'aria-current="page"'}>${p}</button>`).join('')}</div>
+            <div class="x-body"><span data-page>${PAGES.首页}</span></div></div>`,
+        ),
+        init: site,
+      },
+    ],
+    '提示强度',
+  );
+}
+</script>

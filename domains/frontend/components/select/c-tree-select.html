@@ -1,0 +1,122 @@
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.s{padding:10px 14px;font-size:12px;line-height:18px}
+.w{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%;height:100%;max-width:620px}
+.l{min-width:0;min-height:0;display:flex;flex-direction:column;gap:4px}
+.box{flex:none;display:flex;align-items:center;gap:4px;height:32px;padding:0 6px 0 4px;overflow:hidden;background:#fff;border:1px solid #c9ced6;border-radius:6px}
+.tg{flex:none;display:inline-flex;align-items:center;gap:2px;height:24px;padding:0 2px 0 8px;border-radius:4px;background:#eef0f3;white-space:nowrap}
+.tg em{font-style:normal;color:#5b616e;font-size:11px;font-variant-numeric:tabular-nums}
+.tg button{display:grid;place-items:center;width:18px;height:18px;padding:0;border:0;border-radius:3px;background:none;color:#5b616e;cursor:pointer}
+.tg button:hover{background:#d5d9e0;color:#1f2329}
+.plus{flex:none;padding:0 6px;line-height:24px;border-radius:4px;background:#eef0f3;color:#5b616e}
+.ph{color:#8a909c}
+.tree{flex:1;min-height:0;overflow:auto;margin:0;padding:4px;list-style:none;background:#fff;border:1px solid #e3e6eb;border-radius:6px}
+.tree ul{margin:0;padding:0;list-style:none}
+[aria-expanded=false]>ul{display:none}
+li{outline:none}
+.row{display:flex;align-items:center;gap:6px;height:26px;padding-right:6px;border-radius:4px;white-space:nowrap;cursor:pointer;user-select:none}
+.row:hover{background:#f5f6f8}
+li:focus-visible>.row{outline:2px solid #3b5bdb;outline-offset:-2px}
+.tw{flex:none;display:grid;place-items:center;width:16px;height:16px;color:#5b616e}
+.tw svg{transform:rotate(-90deg);transition:transform .16s}
+[aria-expanded=true]>.row .tw svg{transform:none}
+.cb{flex:none;display:grid;place-items:center;width:14px;height:14px;border:1.5px solid #8a909c;border-radius:3px;background:#fff}
+.cb svg{display:none;width:10px;height:10px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+[aria-checked=true]>.row .cb,[aria-checked=mixed]>.row .cb{background:#3b5bdb;border-color:#3b5bdb}
+[aria-checked=true]>.row .yes{display:block}
+[aria-checked=mixed]>.row .mix{display:block}
+.nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.ct{flex:none;color:#5b616e;font-size:11px;font-variant-numeric:tabular-nums}
+.sd{display:none;min-width:0;flex-direction:column;gap:4px}
+.sd b{font-weight:600}
+.sd code{flex:1;min-height:0;overflow:auto;padding:8px;background:#fff;border:1px solid #e3e6eb;border-radius:6px;font:11px/17px ui-monospace,Menlo,monospace;white-space:pre-wrap;word-break:break-all}
+@container (min-width:560px){.s{padding:14px 20px}
+.w{grid-template-columns:minmax(0,1fr) 220px}
+.sd{display:flex}
+}
+@media (prefers-reduced-motion:reduce){.tw svg{transition:none}
+}
+</style>
+
+<div class="s"><div class="w"><div class="l"><div class="box" role="group" aria-label="已选范围"></div><ul class="tree" role="tree" aria-label="选择部门和小组" aria-multiselectable="true"></ul></div><div class="sd"><b>提交给后端的值</b><code></code><p class="help" role="status"></p></div></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const seq = (name, n) => Array.from({ length: n }, (_, i) => `${name} ${i + 1} 组`);
+  const D = [
+    { id: 'sales', n: '华东销售', c: ['上海组', '杭州组', '南京组', '苏州组', '合肥组', '宁波组', '无锡组', '温州组'] },
+    { id: 'cs', n: '客服中心', c: [...seq('在线', 8), ...seq('电话', 6), ...seq('质检', 3), ...seq('培训', 3)] },
+    { id: 'rd', n: '研发中心', c: ['前端组', '后端组', '测试组', '运维组', '数据组', '设计组'] },
+    { id: 'fin', n: '财务部', c: ['应收组', '应付组', '税务组'] },
+  ];
+  const XS = '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg>';
+  const CH = '<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>';
+  const CB = '<span class="cb"><svg class="yes" viewBox="0 0 12 12"><path d="m2.5 6.2 2.3 2.3 4.7-5"/></svg><svg class="mix" viewBox="0 0 12 12"><path d="M3 6h6"/></svg></span>';
+  const box = root.querySelector('.box'), tree = root.querySelector('.tree'), code = root.querySelector('code'), st = root.querySelector('[role=status]');
+  // 勾选只记叶子，部门的三态和标签都由它算出来
+  const on = new Set();
+  D[0].c.forEach((_, i) => on.add(`sales:${i}`));
+  D[1].c.forEach((_, i) => { if (i !== 2) on.add(`cs:${i}`); });
+  const got = (d) => d.c.filter((_, i) => on.has(`${d.id}:${i}`)).length;
+
+  tree.innerHTML = D.map((d, k) => `<li role="treeitem" data-d="${k}" aria-level="1" aria-expanded="${d.id === 'cs'}" tabindex="${k ? -1 : 0}"><div class="row" style="padding-left:2px"><span class="tw">${CH}</span>${CB}<span class="nm">${d.n}</span><span class="ct"></span></div><ul role="group">${d.c.map((c, i) => `<li role="treeitem" data-d="${k}" data-i="${i}" aria-level="2" tabindex="-1"><div class="row" style="padding-left:24px">${CB}<span class="nm">${c}</span></div></li>`).join('')}</ul></li>`).join('');
+  const all = [...tree.querySelectorAll('[role=treeitem]')];
+  const visible = () => all.filter((x) => x.offsetParent !== null);
+
+  const paint = () => {
+    all.forEach((li) => {
+      const d = D[+li.dataset.d];
+      if (li.dataset.i !== undefined) { li.setAttribute('aria-checked', String(on.has(`${d.id}:${li.dataset.i}`))); return; }
+      const n = got(d); li.setAttribute('aria-checked', n === d.c.length ? 'true' : n ? 'mixed' : 'false');
+      li.querySelector('.ct').textContent = n ? `${n}/${d.c.length}` : `${d.c.length}`;
+    });
+    const tags = D.filter(got);
+    box.innerHTML = tags.length ? tags.map((d) => { const n = got(d), full = n === d.c.length; return `<span class="tg" title="${d.n}：已选 ${n} 个小组">${d.n}${full ? '' : `<em>${n}/${d.c.length}</em>`}<button type="button" data-id="${d.id}" aria-label="移除 ${d.n}">${XS}</button></span>`; }).join('') + '<span class="plus" hidden></span>' : '<span class="ph">&nbsp;选择部门或小组</span>';
+    fit();
+    const inc = [], exc = [];
+    D.forEach((d) => {
+      const n = got(d), miss = d.c.filter((_, i) => !on.has(`${d.id}:${i}`)), has = d.c.filter((_, i) => on.has(`${d.id}:${i}`));
+      if (n === d.c.length) inc.push(`dept:${d.id}`); else if (n > d.c.length / 2) { inc.push(`dept:${d.id}`); exc.push(...miss.map((x) => `team:${x}`)); } else inc.push(...has.map((x) => `team:${x}`));
+    });
+    code.textContent = [...inc.map((x) => `包含 ${x}`), ...exc.map((x) => `排除 ${x}`)].join('\n') || '（未选）';
+    st.textContent = `已选 ${on.size} 个小组，收成 ${tags.length} 个标签。整部门传部门编号，之后新建的小组自动包含。`;
+  };
+  // 标签放不下时从后往前收进 +N，框高始终一行
+  const fit = () => {
+    const tags = [...box.querySelectorAll('.tg')], plus = box.querySelector('.plus'); let n = 0, names = [];
+    for (let i = tags.length - 1; i >= 1 && box.scrollWidth > box.clientWidth; i--) {
+      tags[i].hidden = true; names.unshift(tags[i].textContent); n++;
+      plus.hidden = false; plus.textContent = `+${n}`; plus.title = names.join('、');
+    }
+  };
+  const toggle = (li) => {
+    const d = D[+li.dataset.d];
+    if (li.dataset.i !== undefined) { const k = `${d.id}:${li.dataset.i}`; if (on.has(k)) on.delete(k); else on.add(k); } else {
+      const fill = got(d) !== d.c.length; d.c.forEach((_, i) => { if (fill) on.add(`${d.id}:${i}`); else on.delete(`${d.id}:${i}`); });
+    }
+    paint();
+  };
+  const go = (x) => { if (!x) return; all.forEach((v) => { v.tabIndex = -1; }); x.tabIndex = 0; x.focus(); };
+  const expand = (li, v) => li.setAttribute('aria-expanded', String(v));
+
+  tree.addEventListener('click', (e) => {
+    const li = e.target.closest('[role=treeitem]'); if (!li) return;
+    if (e.target.closest('.tw')) expand(li, li.getAttribute('aria-expanded') !== 'true'); else toggle(li);
+    go(li);
+  });
+  tree.addEventListener('keydown', (e) => {
+    const li = e.target.closest('[role=treeitem]'); if (!li) return; const vis = visible(), k = vis.indexOf(li), ex = li.getAttribute('aria-expanded');
+    const keys = { ArrowDown: () => go(vis[k + 1]), ArrowUp: () => go(vis[k - 1]), Home: () => go(vis[0]), End: () => go(vis.at(-1)),
+      ArrowRight: () => { if (ex === 'false') expand(li, true); else if (ex === 'true') go(li.querySelector('[role=treeitem]')); },
+      ArrowLeft: () => { if (ex === 'true') expand(li, false); else go(li.parentElement.closest('[role=treeitem]')); },
+      ' ': () => toggle(li), Enter: () => toggle(li) };
+    if (keys[e.key]) { e.preventDefault(); keys[e.key](); }
+  });
+  box.addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-id]'); if (!b) return;
+    const d = D.find((x) => x.id === b.dataset.id); d.c.forEach((_, i) => on.delete(`${d.id}:${i}`)); paint();
+    (box.querySelector('button') || tree.querySelector('[tabindex="0"]')).focus();
+  });
+  paint();
+}
+</script>

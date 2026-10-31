@@ -118,17 +118,19 @@ order: 40
 </div>
 
 <script type="module">
-  export default function demo(root) {
-    const msg = root.querySelector('.msg');
-    root.querySelector('.ctl').addEventListener('click', () => {
-      msg.textContent = '已重播';
-    });
-  }
+export default function demo(root) {
+  const msg = root.querySelector('.msg');
+  root.querySelector('.ctl').addEventListener('click', () => {
+    msg.textContent = '已重播';
+  });
+}
 </script>
 ```
 
 - 构建时这样拆：`<link rel="stylesheet" href="…">` 引入的共用样式放在最前，`<style>` 里的样式接在后面；`<script type="module">` 里 `export default function demo(root)` 是示例脚本；其余部分是示例结构。这三种标签照上面的样子写，不要加别的属性，否则认不出来。
 - 只有结构和样式、不需要脚本的示例，可以不写 `<script>`。
+- `export default` 必须顶格写：构建和校验都按行首匹配，缩进了示例就挂不上。
+- 「怎么选」这类“一种东西有几种做法”的条目用 `_shared/pick.ts`：`pick(root, [{ name, fit, html, init }])` 生成一排种类和当前种类的小样，样式用 `<link>` 引入 `_shared/pick.css`。
 - 示例在 Shadow DOM 里渲染，`demo(root)` 拿到的是影子根。示例自带底色和字体，不受网页主题影响。
 - 同一组示例共用的样式基底放在 `_shared/*.css`，用 `<link>` 引入；共用的小工具放在 `_shared/*.ts`，在脚本里 `import { fit } from '../../_shared/app-phone.ts'`（要写 `.ts` 后缀）。
 - 直接双击 `.html` 看不到效果（脚本要构建时才接上），写示例时用 `demo-harness` 或 `npm run dev` 看。
@@ -149,18 +151,18 @@ order: 40
 <link rel="stylesheet" href="../../../frontend/_shared/diagram.css" />
 
 <script type="module">
-  import { draw, tree } from '../../../frontend/_shared/diagram.ts';
-  export default function demo(root) {
-    draw(
-      root,
-      tree(`
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(
+    root,
+    tree(`
 src/
   app/          路由和全局 Provider
 * features/     按业务领域分
 `),
-      { title: '目录结构' },
-    );
-  }
+    { title: '目录结构' },
+  );
+}
 </script>
 ```
 

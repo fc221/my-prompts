@@ -1,0 +1,83 @@
+<link rel="stylesheet" href="../../_shared/interactions-base.css">
+<style>
+.st{display:flex;flex-direction:column;justify-content:center;gap:8px;padding:12px 18px;background:#0e1016;color:#f3f4f8}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.kick{min-width:0;color:#98a1b6;font-size:12px;white-space:nowrap}
+.re.ctl{flex:none;height:28px;padding:0 10px;font-size:12px}
+h3{margin:0;font-size:32px;line-height:1.2;font-weight:800}
+.g{position:relative;display:inline-block;border-radius:4px;color:inherit;text-decoration:none}
+.g:focus-visible{outline-color:#7dd3fc;outline-offset:4px}
+.m{display:inline-block}
+.g i{position:absolute;inset:0;font-style:normal;opacity:0;pointer-events:none;white-space:nowrap}
+.g .r{color:#ff3b6b;mix-blend-mode:screen}
+.g .c{color:#22e4ff;mix-blend-mode:screen}
+.g.on .m{animation:g-m .44s steps(1) both}
+.g.on .w{animation:g-w .44s steps(1) both}
+.g.on .r{animation:g-r .44s steps(1) both}
+.g.on .c{animation:g-c .44s steps(1) both}
+@keyframes g-m{0%{transform:translate(-3px,0);clip-path:polygon(0 0,100% 0,100% 34%,0 34%,0 58%,100% 58%,100% 100%,0 100%)}
+22%{transform:translate(4px,-1px);clip-path:polygon(0 0,100% 0,100% 62%,0 62%,0 84%,100% 84%,100% 100%,0 100%)}
+44%{transform:translate(-2px,1px) skewX(-7deg);clip-path:none}
+64%{transform:translate(2px,0);clip-path:polygon(0 0,100% 0,100% 18%,0 18%,0 38%,100% 38%,100% 100%,0 100%)}
+82%{transform:translate(-1px,0);clip-path:none}
+100%{transform:none;clip-path:none}
+}
+@keyframes g-w{0%{opacity:1;transform:translateX(11px);clip-path:inset(34% 0 42% 0)}
+22%{opacity:1;transform:translateX(-13px);clip-path:inset(62% 0 16% 0)}
+44%{opacity:0}
+64%{opacity:1;transform:translateX(8px);clip-path:inset(18% 0 62% 0)}
+82%,100%{opacity:0}
+}
+@keyframes g-r{0%{opacity:1;transform:translate(-6px,1px);clip-path:inset(0 0 48% 0)}
+22%{opacity:1;transform:translate(7px,0);clip-path:inset(46% 0 0 0)}
+44%{opacity:1;transform:translate(-5px,-1px);clip-path:none}
+64%{opacity:1;transform:translate(3px,1px);clip-path:inset(22% 0 30% 0)}
+82%{opacity:1;transform:translate(-2px,0);clip-path:none}
+100%{opacity:0;transform:none;clip-path:none}
+}
+@keyframes g-c{0%{opacity:1;transform:translate(6px,-1px);clip-path:inset(52% 0 0 0)}
+22%{opacity:1;transform:translate(-7px,1px);clip-path:inset(0 0 54% 0)}
+44%{opacity:1;transform:translate(5px,1px);clip-path:none}
+64%{opacity:1;transform:translate(-3px,0);clip-path:inset(60% 0 8% 0)}
+82%{opacity:1;transform:translate(2px,0);clip-path:none}
+100%{opacity:0;transform:none;clip-path:none}
+}
+.fs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:4px 0 0;padding:0;color:#98a1b6;font-size:11px;line-height:14px;list-style:none;text-align:center}
+.fx{position:relative;display:grid;place-items:center;height:36px;margin-bottom:3px;border-radius:6px;background:#1a1d28;color:#f3f4f8;font-size:18px;font-weight:800;overflow:hidden}
+.fx b{grid-area:1/1;font-weight:inherit}
+.fx .r{color:#ff3b6b;mix-blend-mode:screen}
+.fx .c{color:#22e4ff;mix-blend-mode:screen}
+@container (min-height:260px){.st{gap:14px;padding:20px 32px}
+.kick{font-size:13px}
+h3{font-size:58px}
+.fx{height:56px;font-size:28px}
+.fs{gap:10px;font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){.g i{display:none}
+.g.on .m{animation:none}
+}
+</style>
+
+<div class="st"><div class="hd"><span class="kick">MyPrompts 直播 · 第 12 场</span><button type="button" class="ctl re">重播</button></div><h3><a class="g" href="#"><span class="m">信号重新接通</span></a></h3><ul class="fs" aria-hidden="true"><li><span class="fx"><b style="transform:translateX(-3px) skewX(-9deg)">信号</b></span>错位</li><li><span class="fx"><b class="r" style="transform:translateX(-3px)">信号</b><b class="c" style="transform:translateX(3px)">信号</b></span>色偏</li><li><span class="fx"><b style="clip-path:polygon(0 0,100% 0,100% 42%,0 42%,0 62%,100% 62%,100% 100%,0 100%)">信号</b><b style="clip-path:inset(42% 0 38% 0);transform:translateX(5px)">信号</b></span>切片</li><li><span class="fx"><b>信号</b></span>归位</li></ul></div>
+
+<script type="module">
+export default function demo(root) {
+  const g = root.querySelector('.g'), m = g.querySelector('.m');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // 三份副本只在播放时出现，读屏和布局都只认原文
+  for (const k of ['w', 'r', 'c']) { const i = document.createElement('i'); i.className = k; i.textContent = m.textContent; i.setAttribute('aria-hidden', 'true'); g.append(i); }
+  let free = 0; // 下一次允许自动触发的时间，悬停来回划过也不连闪
+  const play = (force) => {
+    const now = performance.now();
+    if (still || (!force && now < free)) return;
+    free = now + 1600;
+    g.classList.remove('on'); void g.offsetWidth; g.classList.add('on');
+  };
+  g.addEventListener('animationend', (e) => { if (e.target === m) g.classList.remove('on'); });
+  g.addEventListener('pointerenter', () => play());
+  g.addEventListener('focus', () => play());
+  g.addEventListener('click', (e) => { e.preventDefault(); play(); });
+  root.querySelector('.re').addEventListener('click', () => play(true));
+  setTimeout(() => play(true), 200);
+}
+</script>
