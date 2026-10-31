@@ -1,0 +1,14 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, page({
+    pages: [
+      { label: '封面：@page :first 不要页眉页脚', blocks: ['gap', 'gap', 'gap', 'title:门店运营手册', 'text:2026 版 · 华东区', 'gap', 'img'] },
+      { head: '门店运营手册', foot: '第 2 页，共 86 页', label: '目录：target-counter 填页码', blocks: ['h:目录', 'toc:6'] },
+      { head: '门店运营手册 · 第 3 章 收银与对账', foot: '第 17 页，共 86 页', label: '正文：string-set 把章名带进页眉', blocks: ['title:第 3 章 收银与对账', 'p:4', 'table:4', 'p:3'] },
+    ],
+  }), { center: true, min: 0.3 });
+}
+</script>

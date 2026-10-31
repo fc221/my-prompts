@@ -1,0 +1,14 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['客服', '工单服务', '数据库'], [
+    [0, 1, '改派工单 8812'],
+    [1, 1, '有 ticket:assign 权限点'],
+    [1, 2, 'WHERE 带归属'],
+    [2, 1, '0 行：别部门的单', 'r'],
+    [1, 0, '统一返回 404', 'rx'],
+  ]), { title: '权限模型 · 查询带上 tenant_id 和可见部门' });
+}
+</script>

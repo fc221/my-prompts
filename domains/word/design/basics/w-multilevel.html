@@ -1,0 +1,52 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-wrap{display:flex;gap:16px;align-items:flex-start}
+.m-pg{width:330px;padding:24px 34px 20px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25);color:#111;font-family:"PingFang SC","SimHei",sans-serif}
+.m-h{display:flex;align-items:baseline;gap:.5em;margin:0;font-weight:700;white-space:nowrap}
+.m-h i{padding:0 2px;border-radius:2px;background:#e4e7ec;font-style:normal}
+.m-desk .m-l1{margin-top:4px;font-size:15px;line-height:1.7}
+.m-l2{font-size:13px;line-height:1.75}
+.m-l3{font-size:11.5px;line-height:1.75}
+.m-ln{display:grid;gap:5px;margin:3px 0 7px}
+.m-ln span{display:block;height:4px;border-radius:2px;background:#e3e6eb}
+.m-ln span:first-child{margin-left:2em}
+.m-tag{margin-left:auto;padding:0 6px;border-radius:9px;background:#e8f0fc;color:#2b579a;font:500 10px/16px system-ui,"PingFang SC",sans-serif}
+.m-dlg{width:232px;border:1px solid #c9ced6;border-radius:6px;background:#fff;color:#344054;font:11px/1.35 system-ui,"PingFang SC",sans-serif;overflow:hidden;box-shadow:0 6px 18px -8px rgba(16,24,40,.3)}
+.m-dlg>p{margin:0;padding:6px 10px;border-bottom:1px solid #e4e7ec;background:#f6f7f9;color:#101828;font-weight:650}
+.m-body{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;padding:9px 10px 10px}
+.m-lv{display:grid;align-content:start;border:1px solid #d0d5dd;border-radius:3px}
+.m-lv span{padding:2px 0;text-align:center;color:#667085}
+.m-lv span.on{background:#2b579a;color:#fff;font-weight:650}
+.m-f{display:grid;gap:6px}
+.m-f label{display:grid;gap:2px;color:#667085;font-size:10px}
+.m-f label b{display:flex;justify-content:space-between;padding:2px 6px;border:1px solid #d0d5dd;border-radius:3px;background:#fff;color:#101828;font-size:11px;font-weight:500}
+.m-f label b em{color:#98a2b3;font-style:normal}
+.m-f label b i{padding:0 2px;background:#e4e7ec;font-style:normal}
+.m-f .m-acc b{border-color:#2b579a;box-shadow:0 0 0 2px rgba(43,87,154,.15)}
+.m-ck{display:flex;align-items:center;gap:6px;color:#101828}
+.m-ck::before{content:"✓";display:grid;place-items:center;width:12px;height:12px;border-radius:2px;background:#2b579a;color:#fff;font-size:9px}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const ln = '<div class="m-ln"><span></span><span></span></div>';
+  const h = (lv, no, t, tag) => '<p class="m-h m-l' + lv + '"><i>' + no + '</i>' + t + (tag ? '<span class="m-tag">' + tag + '</span>' : '') + '</p>';
+  const page = h(1, '第1章', '项目概述') + h(2, '1.1', '建设背景') + ln + h(2, '1.2', '建设目标') + h(3, '1.2.1', '业务目标') + ln + h(3, '1.2.2', '技术指标') + ln
+    + h(1, '第2章', '总体设计') + h(2, '2.1', '系统架构', '换章从 1 起') + ln + h(3, '2.1.1', '部署方式');
+  const dlg = '<div class="m-dlg"><p>定义新多级列表 · 级别 2</p><div class="m-body"><div class="m-lv"><span>1</span><span class="on">2</span><span>3</span><span>4</span><span>5</span></div><div class="m-f">'
+    + '<label>输入编号的格式<b><span><i>1</i>.<i>1</i></span><em>灰底是域</em></b></label>'
+    + '<label>包含的级别编号来自<b>级别 1<em>▾</em></b></label>'
+    + '<label class="m-acc">将级别链接到样式<b>标题 2<em>▾</em></b></label>'
+    + '<label>重新开始列表的间隔<b>级别 1<em>▾</em></b></label>'
+    + '<span class="m-ck">正规形式编号</span>'
+    + '<label>编号之后 · 对齐 / 缩进位置<b>空格<em>0 厘米 / 0 厘米</em></b></label>'
+    + '</div></div></div>';
+  draw(root, '<div class="m-wrap"><div class="m-pg">' + page + '</div>' + dlg + '</div>', { center: true, min: 0.35 });
+}
+</script>

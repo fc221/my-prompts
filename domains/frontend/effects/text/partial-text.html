@@ -1,0 +1,79 @@
+<style>
+:host{display:block;height:100%}
+.st{position:relative;height:100%;overflow:hidden;container-type:size;display:flex;flex-direction:column;padding:14px 16px 12px;background:#f6f7fb;color:#151a2d;font:13px/1.5 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:2px solid #4f5bd5;outline-offset:2px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.top small{color:#596079;font-size:12px}
+.nv{display:flex;gap:6px}
+.ar{display:grid;place-items:center;width:30px;height:30px;padding:0 0 2px;border:1px solid #dfe2ec;border-radius:9px;background:#fff;color:#151a2d;font:17px/1 system-ui;cursor:pointer}
+.ar:hover{background:#eef0f7}
+.ar:active{background:#e4e7f2}
+.ln{margin:8px 0 0;color:#3a4160;font-size:16px;font-weight:600}
+.big{margin:0;font-size:34px;line-height:1.2;font-weight:700;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.big small{margin-left:4px;color:#3a4160;font-size:15px;font-weight:600;letter-spacing:0}
+.sl{position:relative;display:inline-block;overflow:hidden;vertical-align:bottom;white-space:pre}
+.sl .o{position:absolute;left:0;top:0}
+.bars{display:flex;align-items:flex-end;gap:6px;height:40px;margin-top:auto}
+.bars i{flex:1;border-radius:4px 4px 2px 2px;background:#dde1f0;transition:background-color .2s}
+.bars i.on{background:#4f5bd5}
+@container (min-height:260px){.st{padding:22px 28px 20px}
+.top small{font-size:13px}
+.ar{width:36px;height:36px}
+.ln{margin-top:16px;font-size:20px}
+.big{font-size:60px}
+.big small{font-size:20px;margin-left:8px}
+.bars{gap:10px;height:96px}
+}
+</style>
+
+<div class="st"><div class="top"><small>南山店 · 2027 年 · 接待人次</small><div class="nv"><button type="button" class="ar pv" aria-label="上个月">‹</button><button type="button" class="ar nx" aria-label="下个月">›</button></div></div><p class="ln" aria-hidden="true"><span class="sl mo">3 月</span>共接待</p><p class="big" aria-hidden="true"><span class="num"></span><small>位客人</small></p><div class="bars" aria-hidden="true"></div><p class="sr" role="status"></p></div>
+
+<script type="module">
+export default function demo(root) {
+  const M = [986, 1048, 1312, 1307, 1450, 2016]; // 1–6 月
+  const mo = root.querySelector('.mo'), num = root.querySelector('.num'), bars = root.querySelector('.bars'), sr = root.querySelector('[role=status]');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fmt = (n) => n.toLocaleString('en-US');
+  M.forEach((v) => { const b = document.createElement('i'); b.style.height = (v / Math.max(...M)) * 100 + '%'; bars.append(b); });
+  // 一个格子换内容：旧的移出、新的移入，宽度在新旧之间过渡；再次更新时先取消，直接从最新目标开始
+  const swap = (sl, ch, dir, done) => {
+    sl.getAnimations({ subtree: true }).forEach((a) => a.cancel());
+    const old = sl.dataset.v; sl.dataset.v = ch;
+    if (still || old === ch) { sl.textContent = ch; if (done) done(); return; }
+    sl.textContent = old; const w0 = sl.getBoundingClientRect().width;
+    sl.textContent = ch; const w1 = sl.getBoundingClientRect().width;
+    const o = document.createElement('span'), n = document.createElement('span');
+    o.className = 'o'; o.textContent = old; n.textContent = ch || '​'; sl.replaceChildren(o, n);
+    const opt = { duration: 260, easing: 'cubic-bezier(.2,0,0,1)' };
+    o.animate([{ transform: 'none', opacity: 1 }, { transform: `translateY(${-dir * 100}%)`, opacity: 0 }], { ...opt, fill: 'forwards' });
+    if (w0 !== w1) sl.animate([{ width: w0 + 'px' }, { width: w1 + 'px' }], opt);
+    n.animate([{ transform: `translateY(${dir * 100}%)`, opacity: 0 }, { transform: 'none', opacity: 1 }], opt).onfinish = () => { sl.textContent = ch; if (done) done(); };
+  };
+  const cell = (ch) => { const s = document.createElement('span'); s.className = 'sl'; s.dataset.v = ch; s.textContent = ch; return s; };
+  // 数字右对齐逐位比较，只翻变了的位；多出来的位从 0 宽展开，少掉的位收成 0 宽再删
+  const setNum = (str, dir) => {
+    [...num.children].forEach((s) => { if (s.dataset.v === '') s.remove(); });
+    const cur = [...num.children];
+    while (cur.length < str.length) { const s = cell(''); num.prepend(s); cur.unshift(s); }
+    const pad = cur.length - str.length;
+    cur.forEach((s, i) => { const ch = i < pad ? '' : str[i - pad]; if (s.dataset.v !== ch) swap(s, ch, dir, ch === '' ? () => s.remove() : null); });
+  };
+  let i = 2, tm = 0;
+  const sentence = () => `${i + 1} 月共接待 ${fmt(M[i])} 位客人`;
+  const go = (step) => {
+    const prev = M[i]; i = (i + step + M.length) % M.length;
+    swap(mo, `${i + 1} 月`, step);
+    setNum(fmt(M[i]), M[i] >= prev ? 1 : -1);
+    [...bars.children].forEach((b, k) => b.classList.toggle('on', k === i));
+    clearTimeout(tm); tm = setTimeout(() => { sr.textContent = sentence(); }, 500); // 停下 500ms 再播报一次
+  };
+  num.append(...[...fmt(M[i])].map(cell));
+  mo.dataset.v = mo.textContent;
+  bars.children[i].classList.add('on');
+  sr.textContent = sentence();
+  root.querySelector('.pv').addEventListener('click', () => go(-1));
+  root.querySelector('.nx').addEventListener('click', () => go(1));
+  setTimeout(() => { if (root.host.isConnected) go(1); }, 500);
+}
+</script>

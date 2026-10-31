@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-wrap{display:flex;gap:14px;align-items:flex-start}
+.m-pg{position:relative;flex:none;width:480px;padding:18px 32px 14px 52px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25);color:#111;font:11.5px/1.64 "Songti SC","SimSun",serif}
+.m-pg .m-title{margin:0 0 5px;text-align:center;font:700 17px/1.4 "PingFang SC","STHeiti","SimHei",sans-serif;letter-spacing:.2em}
+.m-pg .m-p{text-indent:2em}
+.m-pg .m-li{padding-left:2em}
+.m-pg .m-r{text-align:right}
+.m-pg [data-n]{position:relative}
+.m-pg [data-n]::before{content:attr(data-n);position:absolute;left:-36px;top:3px;width:15px;height:15px;border-radius:50%;background:#c2410c;color:#fff;font:600 9px/15px system-ui,sans-serif;text-align:center;text-indent:0}
+.m-sig{font:14px "STKaiti","KaiTi",serif;color:#1d3b8f}
+.m-tb{width:100%;margin-top:6px;border-collapse:collapse;table-layout:fixed;font-size:10.5px;line-height:1.45}
+.m-tb td{padding:4px 6px;border:1px solid #333;vertical-align:top}
+.m-tb .m-sg{height:44px}
+.m-tb small{display:block;margin-top:8px;color:#555;font-size:9.5px;text-align:right}
+.m-ann{display:grid;width:150px;padding-top:2px;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-ann p{margin:0;padding:4px 0}
+.m-ann b{display:block;color:#101828;font-size:11.5px}
+.m-ann i{display:inline-block;width:14px;height:14px;margin-right:5px;border-radius:50%;background:#c2410c;color:#fff;font:600 9px/14px system-ui,sans-serif;text-align:center;vertical-align:1px}
+.m-ann span{display:block;padding-left:19px;color:#667085}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, `<div class="m-wrap"><div class="m-pg">
+    <p class="m-title" data-n="1">转正申请</p>
+    <p>尊敬的会员运营部领导：</p>
+    <p class="m-p" data-n="2">我于 2026 年 5 月 6 日入职，任会员运营专员，试用期至 11 月 5 日。现申请于 2026 年 11 月 6 日起转为正式员工。</p>
+    <p class="m-p" data-n="3">试用期主要工作：</p>
+    <p class="m-li">1. 独立负责 3 家门店的会员活动，复购率由 34% 提升到 40%；</p>
+    <p class="m-li">2. 整理会员分层规则，沉睡会员唤醒短信转化率 4.8%；</p>
+    <p class="m-li">3. 完成 12 场店员培训，会员登记漏填率降到 2% 以下。</p>
+    <p class="m-p" data-n="4">不足是数据分析还依赖同事，接下来系统学习报表工具，12 月起独立出月度分析。</p>
+    <p class="m-r" data-n="5">申请人：<span class="m-sig">梁书瑶</span>　2026 年 10 月 22 日</p>
+    <table class="m-tb"><tr><td colspan="2" data-n="6">直属上级考核：评分 <u>　86　</u> 分　☑ 同意转正　□ 延长试用　□ 不予录用<small>签字：　　年　月　日</small></td></tr>
+      <tr><td class="m-sg">部门负责人<small>签字：　　年　月　日</small></td><td class="m-sg">人力资源部：转正日期、薪资调整<small>签字：　　年　月　日</small></td></tr></table>
+  </div><div class="m-ann">
+    <p><b><i>1</i>标题和称谓</b><span>转正申请 / 调岗申请，称谓顶格</span></p>
+    <p><b><i>2</i>申请事由</b><span>入职日期、岗位、试用期起止、转正日期</span></p>
+    <p><b><i>3</i>工作成果</b><span>3–4 条：任务、做法、结果数字</span></p>
+    <p><b><i>4</i>不足和改进</b><span>一段，写具体做法和时间</span></p>
+    <p><b><i>5</i>落款</b><span>试用期满前 1–2 周提交</span></p>
+    <p><b><i>6</i>审批栏</b><span>上级考核三选一 → 部门 → 人力资源部</span></p>
+    <p><b>调岗申请</b><span>现岗位、拟调岗位、胜任依据、交接安排；调出和调入部门都签</span></p>
+  </div></div>`, { center: true, min: 0.35 });
+}
+</script>

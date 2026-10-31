@@ -1,0 +1,44 @@
+<style>
+:host{container-type:size}
+.s{position:relative;height:100%;overflow:hidden;background:#fff;color:#000;font:13px/1.4 "Times New Roman",Times,"Songti SC",serif}
+.tag{position:absolute;left:12px;top:8px;margin:0;font:12px/1.2 ui-monospace,Menlo,monospace}
+.hd{position:absolute;left:8px;top:22px;right:0;margin:0;font-weight:400;line-height:.8}
+.hd span{display:block;white-space:nowrap}
+.l1{font-size:min(34cqh,25cqw);letter-spacing:-.04em}
+.l2{margin:-.36em 0 0 1.7em;color:#ff2a00;font-size:min(25cqh,18cqw);font-style:italic;mix-blend-mode:multiply}
+hr{position:absolute;left:-6px;top:61%;width:58%;margin:0;border:0;border-top:1px solid #000}
+.bd{position:absolute;left:12px;top:63%;width:min(186px,57%);margin:0;font-size:12px;line-height:1.45}
+.bd mark{background:#ffff00;color:#000}
+.ls{display:none}
+.act{position:absolute;right:28px;top:55%;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.act a{display:inline-flex;align-items:center;min-height:30px;padding:0 4px;margin-left:-4px;color:#0000ee;font-size:16px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.act a:hover{background:#0000ee;color:#fff}
+.act a:focus-visible,.act input:focus-visible{outline:3px solid #000;outline-offset:2px}
+.act label{display:flex;align-items:center;gap:4px;min-height:28px;cursor:pointer;font-size:12.5px}
+.act input{margin:0;width:14px;height:14px;cursor:pointer}
+.vt{position:absolute;right:0;top:0;bottom:0;margin:0;padding:8px 3px;border-left:1px solid #000;writing-mode:vertical-rl;font:11px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;background:#fff}
+@container (max-width:310px){.act{right:24px}
+.bd{width:50%}
+}
+@container (min-height:260px){.tag{left:20px;top:14px;font-size:13px}
+.hd{left:14px;top:34px}
+.l1{font-size:min(36cqh,20cqw)}
+.l2{font-size:min(24cqh,14cqw)}
+hr{top:63%;width:44%}
+.bd{left:20px;top:66%;width:250px;font-size:16px;line-height:1.5}
+.ls{display:block;position:absolute;left:300px;top:66%;margin:0;padding-left:18px;font-size:15px;line-height:1.5}
+.act{right:48px;top:44%;gap:8px}
+.act a{min-height:44px;font-size:20px}
+.act label{min-height:44px;font-size:15px}
+.vt{padding:14px 6px;font-size:12px}
+}
+</style>
+
+<div class="s"><p class="tag">№14 / 美院毕业展</p><h1 class="hd" data-clip><span class="l1">未完成</span><span class="l2">Unfinished</span></h1><hr><p class="bd">112 件<mark>没做完</mark>的作品，<br>11.08—11.23，<br>老纺织厂 3 号仓。</p><ul class="ls"><li>绘画 38 件</li><li>装置 21 件</li><li>影像 53 件</li></ul><div class="act"><a href="#visit">预约入场 →</a><label><input type="checkbox">开展前提醒我</label></div><p class="vt">2026.11.08—11.23</p></div>
+
+<script type="module">
+export default function demo(root) {
+  // 示例里不真的跳转
+  root.querySelector('.act a').addEventListener('click', (e) => e.preventDefault());
+}
+</script>

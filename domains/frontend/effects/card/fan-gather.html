@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="../../_shared/app-card-base.css">
+<link rel="stylesheet" href="../../_shared/app-card-photos.css">
+<style>
+.st{display:grid;place-items:center;padding:12px}
+.box{display:flex;flex-direction:column;align-items:center;gap:10px}
+.fan{position:relative;width:200px;height:112px}
+.pc{position:absolute;left:50%;bottom:0;width:78px;height:100px;margin-left:-39px;border:4px solid #fff;border-radius:10px;box-shadow:0 6px 14px rgba(31,35,41,.18);transform-origin:50% 100%}
+.pc:nth-child(1){transform:translateX(-18px) rotate(-15deg)}
+.pc:nth-child(2){transform:translateX(-6px) rotate(-5deg)}
+.pc:nth-child(3){transform:translateX(6px) rotate(5deg)}
+.pc:nth-child(4){transform:translateX(18px) rotate(15deg)}
+.tx{display:flex;flex-direction:column;align-items:center;line-height:1.35;white-space:nowrap}
+.tx b{font-size:15px;font-weight:600}
+.tx small{color:#5b616e;font-size:12px}
+.re{position:absolute;right:12px;bottom:12px}
+@container (min-height:260px){.box{gap:14px}
+.fan{width:260px;height:160px}
+.pc{width:112px;height:144px;margin-left:-56px;border-width:5px;border-radius:12px}
+.tx b{font-size:17px}
+}
+</style>
+
+<div class="st"><div class="box"><div class="fan" aria-hidden="true"><i class="pc ph1"></i><i class="pc ph2"></i><i class="pc ph3"></i><i class="pc ph6"></i></div><div class="tx"><b>十月 · 海与山</b><small>48 张照片 · 4 个地点</small></div></div><button type="button" class="ctl re">重播</button></div>
+
+<script type="module">
+export default function demo(root) {
+  const pcs = [...root.querySelectorAll('.pc')], tx = root.querySelector('.tx'), F = [[-18, -15], [-6, -5], [6, 5], [18, 15]];
+  const play = () => {
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    [...pcs, tx].forEach((el) => el.getAnimations().forEach((a) => a.cancel()));
+    pcs.forEach((p, i) => {
+      if (still) return p.animate([{ opacity: 0 }, { opacity: 1 }], 200);
+      const r = (Math.random() - 0.5) * 60, x = (Math.random() - 0.5) * 40;
+      p.animate([
+        { transform: `translate(${x}px,-240px) rotate(${r}deg)`, opacity: 0, easing: 'cubic-bezier(.5,0,.9,.6)' },
+        { transform: `translate(${x * 0.3}px,0px) rotate(${r * 0.4}deg)`, opacity: 1, offset: 0.5, easing: 'cubic-bezier(.3,1.4,.5,1)' },
+        { transform: `translateX(${F[i][0]}px) rotate(${F[i][1]}deg)`, opacity: 1 },
+      ], { duration: 480, delay: i * 60, fill: 'backwards' }); // 最后一张 180ms 起步，660ms 结束
+    });
+    tx.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: still ? 200 : 300, delay: still ? 0 : 360, easing: 'cubic-bezier(.2,0,0,1)', fill: 'backwards' });
+  };
+  root.querySelector('.re').onclick = play;
+  play();
+}
+</script>

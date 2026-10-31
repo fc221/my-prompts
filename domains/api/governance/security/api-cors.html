@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: '预检请求和响应', text: `
+OPTIONS /orders/ord_8F3k2
+Origin: <管理后台的源>
+Access-Control-Request-Method: PATCH
+Access-Control-Request-Headers: authorization, content-type
+
+204 No Content
+Access-Control-Allow-Origin: <同一个源，白名单精确匹配才回写>
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Methods: GET, POST, PATCH, DELETE
+Access-Control-Allow-Headers: Authorization, Content-Type, Idempotency-Key
+Access-Control-Max-Age: 7200
+Vary: Origin
+` }]), { title: 'CORS 预检 · 带凭证时都不能写 *' });
+}
+</script>

@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    stack([
+      { t: '端到端', items: ['Playwright'], note: '登录、下单、报销提交，5–15 条' },
+      { t: '组件', items: ['Testing Library', 'user-event'], note: 'getByRole 找元素，覆盖加载中、空、错误、成功', acc: true },
+      { t: '单元', items: ['Vitest'], note: '纯函数、金额日期格式化、store' },
+    ], { arrow: '越往下越多、越快' }),
+    tree(`
+src/features/orders/
+  order-list.tsx
+* order-list.test.tsx  放在被测文件旁
+src/test/
+  handlers.ts          MSW 拦截，和接口共用类型
+e2e/
+  place-order.spec.ts  从干净数据开始
+`),
+  ], { title: '按成本分层 · 不追覆盖率数字' });
+}
+</script>

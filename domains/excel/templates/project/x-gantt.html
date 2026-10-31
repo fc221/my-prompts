@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.xc.m-off{background:#eef0f3}
+.xc.m-pl{background:#cfe0f7}
+.xc.m-dn{background:#2a6fdb}
+.xc.m-ms{background:#d9480f;color:#fff;justify-content:center}
+.xc.m-td{background:#e5484d;color:#fff}
+</style>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  // 时间轴 2026-10-26（周一）起 14 天；今天 10-30
+  const days = Array.from({ length: 14 }, (_, i) => new Date(2026, 9, 26 + i));
+  const label = (d) => String(d.getDate());
+  const md = (d) => (d.getMonth() + 1) + '-' + String(d.getDate()).padStart(2, '0');
+  const idx = (s) => days.findIndex((d) => md(d) === s);
+  const tasks = [
+    ['1', '选址签约', '林晓雯', '10-26', 2, '10-27', 1, '完成'],
+    ['2', '证照办理', '苏沐阳', '10-26', 3, '10-28', 0.8, '延期'],
+    ['3', '装修设计', '韩若楠', '10-28', 4, '11-02', 0.6, '进行中'],
+    ['4', '设备采购', '周启航', '10-29', 5, '11-04', 0.2, '进行中'],
+    ['5', '招聘培训', '唐一鸣', '11-02', 5, '11-06', 0, '未开始'],
+    ['6', '◆ 试营业', '林晓雯', '11-06', 1, '11-06', 0, '未开始'],
+  ];
+  const col = (i) => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[i];
+  const marks = { H3: 'bad', B3: 'bad' };
+  days.forEach((d, i) => { if (d.getDay() % 6 === 0) marks[col(8 + i) + '1'] = 'off'; });
+  marks[col(8 + idx('10-30')) + '1'] = 'td';
+  const rows = tasks.map(([no, name, who, s, dur, e, p, st], r) => {
+    const a = idx(s), b = idx(e), done = Math.round((b - a + 1) * p);
+    const cells = days.map((d, i) => {
+      const at = col(8 + i) + (r + 2);
+      if (name.startsWith('◆') && i === a) { marks[at] = 'ms'; return '◆'; }
+      if (i >= a && i <= b) marks[at] = i < a + done ? 'dn' : 'pl';
+      else if (d.getDay() % 6 === 0) marks[at] = 'off';
+      return '';
+    });
+    return [no, name, who, s, String(dur), e, '▮' + Math.round(p * 100) + ' ' + Math.round(p * 100) + '%', st, ...cells];
+  });
+  draw(root, sheet({
+    head: ['编号', '任务', '负责人', '开始', '工期', '结束', '进度', '状态', ...days.map(label)],
+    widths: [32, 66, 48, 42, 32, 42, 54, 46, ...days.map(() => 22)],
+    rows,
+    fx: ['F4', '=WORKDAY(D4,E4-1,节假日)'],
+    marks,
+    tabs: ['甘特', '变更记录', '参数'],
+    freeze: true,
+  }), { title: '甘特图 · 10-26 起，横条全由条件格式画，红色表头是今天', min: 0.45 });
+}
+</script>

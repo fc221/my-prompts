@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '库存不足', note: '抛业务异常，带错误码' }, { t: '统一出口', note: '记 INFO，不告警', acc: true }, { t: '409', note: '用户看得懂的提示' }],
+    [{ t: '数据库超时', note: '包装时带上 cause', bad: true }, { t: '统一出口', note: '记 ERROR 带堆栈', acc: true }, { t: '500', note: '通用提示 + trace_id', bad: true }],
+  ], { lanes: ['业务异常', '系统异常'] }), { title: '错误处理 · 错误码如 ORDER_STOCK_INSUFFICIENT' });
+}
+</script>

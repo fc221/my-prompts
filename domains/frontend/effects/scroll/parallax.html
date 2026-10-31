@@ -1,0 +1,18 @@
+<style>
+:host{display:block;height:100%}
+.page{height:100%;overflow:auto;background:#0f172a}
+.hero{position:relative;height:220px;overflow:hidden}
+.far,.near{position:absolute;left:50%;border-radius:50%}
+.far{width:260px;height:260px;margin-left:-130px;top:20px;background:radial-gradient(circle,#6366f1,transparent 70%);opacity:.6}
+.near{width:90px;height:90px;margin-left:30px;top:90px;background:#f472b6}
+b{position:absolute;bottom:14px;left:16px;font:600 14px system-ui;color:#e2e8f0}
+.rest{height:400px}
+</style>
+
+<div class="page"><div class="hero"><i class="far"></i><i class="near"></i><b>向下滚动</b></div><div class="rest"></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const page = root.querySelector('.page'), far = root.querySelector('.far'), near = root.querySelector('.near'); if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; page.addEventListener('scroll', () => requestAnimationFrame(() => { const y = page.scrollTop; far.style.transform = 'translateY(' + y * .6 + 'px)'; near.style.transform = 'translateY(' + y * .15 + 'px)'; }));
+}
+</script>

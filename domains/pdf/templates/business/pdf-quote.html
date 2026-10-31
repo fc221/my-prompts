@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const head = 'BJ-20261029-0012 · 陈女士 · 有效期至 2026-11-28';
+  draw(root, page({
+    pages: [
+      { head, foot: '第 {p} / {n} 页', label: '第 1 页：报价信息、客户、分组明细', blocks: ['title:报价单', 'kv:3', 'h:客户信息', 'kv:2', 'h:客厅', 'table:4', 'text:客厅小计 ¥ 12,600.00', 'h:厨房', 'table:3'] },
+      { head, foot: '第 {p} / {n} 页', label: '末页：汇总、条款、双方确认', blocks: ['table:2:续', 'total:¥ 38,600.00', 'text:含 6% 增值税 · 人民币叁万捌仟陆佰元整', 'h:报价说明与条款', 'p:4', 'sign'] },
+    ],
+    notes: ['有效期至 = 报价日 + 30 天', '写明含不含税、安装、运费', '确认区整块不分页'],
+  }), { center: true, min: 0.3 });
+}
+</script>

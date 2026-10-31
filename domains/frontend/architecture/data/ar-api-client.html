@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '调用方', items: ['useOrderList', 'OrderListPanel'], note: '只调 API 函数，不写路径' },
+    { t: 'API 函数', items: ['listOrders', 'getOrder', 'cancelOrder'], note: 'src/api/orders.ts，接受 signal' },
+    { t: 'client.ts', items: ['加头', '解包 data', '归一 ApiError', '401 回调'], note: '唯一出口：超时 10 秒，带 X-Request-Id', acc: true },
+  ], { arrow: 'src/api 以外不出现 fetch' }), { title: '请求层封装 · 只有一个出口' });
+}
+</script>

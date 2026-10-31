@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '基础令牌', items: ['blue-1 … blue-12', 'space-1 = 4px'], note: '色阶和尺度，组件不直接引用' },
+    { t: '语义令牌', items: ['color-text-muted', 'color-bg-hover', 'radius-md'], note: '暗色在 [data-theme="dark"] 覆盖同名变量', acc: true },
+    { t: '组件令牌', items: ['button-height-md'], note: '只给要单独调的组件' },
+    { t: '组件', items: ['var(--color-bg-hover)'], note: '不写 #333、13px 这类裸值' },
+  ], { arrow: '语义令牌引用色阶' }), { title: '设计令牌 · 组件只引后两层' });
+}
+</script>

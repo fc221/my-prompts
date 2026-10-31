@@ -1,0 +1,15 @@
+{
+  // 内容文件（domains/**）的类型检查：条目字段、布局示意图的 kind 等按 src/types.ts 严格检查；
+  // 示例里的 DOM 脚本放宽（不要求处处判空、标类型），写起来和普通网页脚本一样
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "strict": false,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "types": []
+  },
+  "include": ["domains/**/*.ts", "src/adapter/**/*.ts", "src/types.ts"]
+}

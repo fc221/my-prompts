@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '收到 SIGTERM' }, { t: '就绪置失败', note: '/readyz 返回 503', acc: true }, { t: '等摘流量', note: '5–10 秒' }, { t: '停收新连接', note: '消费者停止拉取' }],
+    [{ t: '处理完在途', note: '请求和已拉取的消息' }, { t: '关闭连接池', note: '刷出日志和指标' }, { t: '退出', acc: true }],
+    [{ t: '被强制杀掉', note: '整个过程超过 30 秒', bad: true, via: '没走完' }],
+  ]), { title: '优雅停机 · /livez 不查依赖，只看进程' });
+}
+</script>

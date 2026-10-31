@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: 'GET', items: ['读取，无副作用', '安全 · 幂等 · 可缓存'] },
+    { t: 'POST', items: ['创建或触发动作，201 + Location', '不幂等 · 凭 Idempotency-Key'], acc: true },
+    { t: 'PUT', items: ['整体替换', '幂等'] },
+    { t: 'PATCH', items: ['部分更新', '设值幂等，“减 1”不幂等'] },
+    { t: 'DELETE', items: ['删除', '幂等 · 再删可回 404'] },
+    { t: '自动重试', items: ['GET HEAD PUT DELETE', '带键的 POST · 最多 3 次'], dash: true },
+  ], { cols: 3, note: '幂等看服务端状态：第二次 DELETE 回 404，但不再回滚库存' }), { title: '方法与幂等' });
+}
+</script>

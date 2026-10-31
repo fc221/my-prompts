@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: 'useOrderList', note: "键 ['orders', 'list', …]" }, { t: '命中缓存', note: '先显示，不等请求', acc: true }, { t: '后台刷新', note: 'staleTime 30 秒', via: '已过期' }],
+    [{ t: '取消订单', note: 'mutation' }, { t: "失效 ['orders']", note: '按前缀匹配', via: '成功后', acc: true }, { t: '详情和列表一起刷新' }],
+  ]), { title: '服务端状态缓存 · 读走缓存，写完失效' });
+}
+</script>

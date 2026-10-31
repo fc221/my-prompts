@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.tree{width:100%;max-width:300px;max-height:100%;overflow:auto;margin:0;padding:4px;list-style:none;background:#fff;border:1px solid #e3e6eb;border-radius:8px}
+.tree ul{margin:0;padding:0;list-style:none}
+[aria-expanded=false]>ul{display:none}
+li{outline:none}
+.row{display:flex;align-items:center;gap:4px;height:28px;padding-right:8px;border-radius:4px;white-space:nowrap;cursor:pointer;user-select:none}
+.row:hover{background:#f5f6f8}
+[aria-selected=true]>.row{background:#edf1ff;color:#3b5bdb}
+li:focus-visible>.row{outline:2px solid #3b5bdb;outline-offset:-2px}
+.tw{flex:none;display:grid;place-items:center;width:16px;height:16px;color:#5b616e}
+.tw svg{transform:rotate(-90deg);transition:transform .16s}
+[aria-expanded=true]>.row .tw svg{transform:none}
+.nm{overflow:hidden;text-overflow:ellipsis}
+@media (prefers-reduced-motion:reduce){.tw svg{transition:none}
+}
+</style>
+
+<div class="s"><ul class="tree" role="tree" aria-label="文档目录"></ul></div>
+
+<script type="module">
+export default function demo(root) {
+  const D = [{ n: '产品文档', o: 1, c: [{ n: '快速开始' }, { n: '接口参考', c: [{ n: '认证与签名' }, { n: '错误码' }] }] }, { n: '设计规范', c: [{ n: '颜色' }, { n: '字体与排版' }] }, { n: '更新日志' }];
+  const CH = '<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>';
+  const tree = root.querySelector('.tree');
+  const html = (arr, lv) => arr.map((x) => `<li role="treeitem" aria-level="${lv}" ${x.c ? `aria-expanded="${!!x.o}"` : ''} aria-selected="${x.n === '快速开始'}" tabindex="-1"><div class="row" style="padding-left:${(lv - 1) * 20 + 4}px"><span class="tw">${x.c ? CH : ''}</span><span class="nm">${x.n}</span></div>${x.c ? `<ul role="group">${html(x.c, lv + 1)}</ul>` : ''}</li>`).join('');
+  tree.innerHTML = html(D, 1);
+  tree.querySelector('[role=treeitem]').tabIndex = 0;
+  const items = () => [...tree.querySelectorAll('[role=treeitem]')].filter((x) => x.offsetParent !== null);
+  const go = (x) => { if (!x) return; tree.querySelectorAll('[role=treeitem]').forEach((v) => { v.tabIndex = -1; }); x.tabIndex = 0; x.focus(); };
+  const select = (li) => { tree.querySelectorAll('[aria-selected=true]').forEach((v) => v.setAttribute('aria-selected', 'false')); li.setAttribute('aria-selected', 'true'); };
+  const toggle = (li) => { const ex = li.getAttribute('aria-expanded'); if (ex) li.setAttribute('aria-expanded', String(ex !== 'true')); };
+  tree.addEventListener('click', (e) => { const li = e.target.closest('[role=treeitem]'); if (!li) return; e.stopPropagation(); if (li.hasAttribute('aria-expanded')) toggle(li); else select(li); go(li); });
+  tree.addEventListener('keydown', (e) => {
+    const li = e.target.closest('[role=treeitem]'); if (!li) return; const vis = items(), k = vis.indexOf(li), ex = li.getAttribute('aria-expanded');
+    const keys = { ArrowDown: () => go(vis[k + 1]), ArrowUp: () => go(vis[k - 1]), Home: () => go(vis[0]), End: () => go(vis[vis.length - 1]),
+      ArrowRight: () => { if (ex === 'false') toggle(li); else if (ex === 'true') go(li.querySelector('[role=treeitem]')); },
+      ArrowLeft: () => { if (ex === 'true') toggle(li); else go(li.parentElement.closest('[role=treeitem]')); },
+      Enter: () => (ex ? toggle(li) : select(li)), ' ': () => (ex ? toggle(li) : select(li)) };
+    if (keys[e.key]) { e.preventDefault(); keys[e.key](); }
+  });
+}
+</script>

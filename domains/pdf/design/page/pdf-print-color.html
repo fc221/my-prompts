@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const blocks = ['img', 'title:秋季会员日', 'text:2026-11-15 至 11-17 · 全部门店', 'p:4', 'qr'];
+  draw(root, [
+    page({ pages: [{ label: '屏幕版：sRGB，不加出血', blocks }] }),
+    page({
+      bleed: true,
+      margin: true,
+      pages: [{ label: '印刷版：CMYK，虚线内是安全区', blocks }],
+      notes: ['文档 = 成品 + 6mm，A4 为 216×303mm', '文字、二维码离裁切线 ≥ 5mm', '黑字 K100，总墨量 ≤ 300%'],
+    }),
+  ], { title: '交印刷厂：CMYK + 每边出血 3mm', center: true, min: 0.3 });
+}
+</script>

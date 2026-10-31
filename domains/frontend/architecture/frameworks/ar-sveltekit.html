@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+* routes/                   页面层，目录即路由
+*   (app)/                  括号分组，不进 URL
+      +layout.server.ts     受保护分组在这里检查
+      orders/
+        +page.svelte        页面
+        +page.server.ts     服务端 load 和表单 actions
+        +page.ts            通用 load，两端都跑
+    api/orders/+server.ts   GET、POST 接口
+* lib/                      用 #lib 引用，写扩展名
+    features/orders/
+    server/                 客户端引入直接构建报错
+  hooks.server.ts           handle 把登录态放进 locals
+static/
+vite.config.ts              sveltekit() 插件里写配置
+`), { title: 'SvelteKit 3 + Svelte 5' });
+}
+</script>

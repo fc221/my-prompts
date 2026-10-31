@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;max-width:660px}
+.x3{display:none!important}
+@container (min-width:560px){.g{grid-template-columns:repeat(3,minmax(0,1fr))}
+.x3{display:flex!important}
+}
+.cd{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid #e3e6eb;border-radius:12px;overflow:hidden;transition:box-shadow .16s,border-color .16s}
+.cd:hover{border-color:#c9ced6;box-shadow:0 4px 12px rgba(31,35,41,.08)}
+.cd:focus-within{outline:2px solid #3b5bdb;outline-offset:2px}
+.cv{aspect-ratio:3/1;display:grid;place-items:center}
+.bd{flex:1;display:flex;flex-direction:column;gap:2px;padding:10px 12px 12px}
+h4{margin:0;font-size:14px;line-height:22px;font-weight:600}
+h4 a{color:#1f2329;text-decoration:none}
+h4 a::after{content:"";position:absolute;inset:0}
+h4 a:focus-visible{outline:none}
+p{margin:0;font-size:12px;line-height:20px;color:#5b616e;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.mt{margin-top:auto;padding-top:4px;font-size:12px;line-height:20px;color:#5b616e;font-variant-numeric:tabular-nums}
+@container (min-height:260px){p{-webkit-line-clamp:2}
+.cv{aspect-ratio:2/1}
+}
+@media (prefers-reduced-motion:reduce){.cd{transition:none}
+}
+</style>
+
+<div class="s"><div class="g"><article class="cd"><div class="cv" style="background:#e4e9ff;color:#3b5bdb"><svg viewBox="0 0 16 16" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="2" width="10" height="12" rx="1.5"/><path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3"/></svg></div><div class="bd"><h4><a href="#">项目周报模板</a></h4><p>每周进度、风险和下周计划，一页写完</p><span class="mt">使用 1.2 万次</span></div></article><article class="cd"><div class="cv" style="background:#e3f4ec;color:#12805c"><svg viewBox="0 0 16 16" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="6" r="2.5"/><path d="M3.5 13.5a4.5 4.5 0 0 1 9 0"/></svg></div><div class="bd"><h4><a href="#">客户访谈记录</a></h4><p>问题清单、原话摘录和结论</p><span class="mt">使用 8,410 次</span></div></article><article class="cd x3"><div class="cv" style="background:#fdefe3;color:#b54708"><svg viewBox="0 0 16 16" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></div><div class="bd"><h4><a href="#">发布检查清单</a></h4><p>上线前逐项核对，避免漏项</p><span class="mt">使用 5,032 次</span></div></article></div></div>
+
+<script type="module">
+export default function demo(root) {
+  root.addEventListener('click', (e) => { if (e.target.closest('a')) e.preventDefault(); });
+}
+</script>

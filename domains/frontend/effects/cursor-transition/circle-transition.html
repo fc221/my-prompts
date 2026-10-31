@@ -1,0 +1,14 @@
+<style>
+.zone{position:relative;height:100%;display:grid;place-items:center;background:#fff;overflow:hidden}
+.layer{position:absolute;inset:0;background:#0f1115;clip-path:circle(0 at var(--x,50%) var(--y,50%));transition:clip-path .45s cubic-bezier(.2,0,0,1)}
+.zone.dark .layer{clip-path:circle(150% at var(--x,50%) var(--y,50%))}
+button{position:relative;font:600 14px system-ui;padding:9px 16px;border-radius:999px;border:1px solid #d9dbe0;background:#fff;cursor:pointer}
+</style>
+
+<div class="zone"><div class="layer"></div><button>切换主题</button></div>
+
+<script type="module">
+export default function demo(root) {
+  const z = root.querySelector('.zone'); root.querySelector('button').addEventListener('click', (e) => { const r = z.getBoundingClientRect(); const x = e.clientX ? e.clientX - r.left : r.width / 2, y = e.clientY ? e.clientY - r.top : r.height / 2; z.style.setProperty('--x', x + 'px'); z.style.setProperty('--y', y + 'px'); z.classList.toggle('dark'); });
+}
+</script>

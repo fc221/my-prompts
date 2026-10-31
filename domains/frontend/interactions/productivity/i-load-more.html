@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="../../_shared/interactions-base.css">
+<style>
+.st{padding:10px 12px}
+.box{display:flex;flex-direction:column;gap:8px;max-width:520px;height:100%;margin:0 auto}
+.top{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.seg{display:flex;padding:2px;border-radius:8px;background:#e9ecf1}
+.seg button{height:26px;padding:0 10px;border:0;border-radius:6px;background:none;color:#5b616e;font-size:12px;white-space:nowrap}
+.seg button[aria-checked=true]{background:#fff;color:#1f2329;font-weight:600;box-shadow:0 1px 2px rgba(31,35,41,.12)}
+.sc{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;background:#fff;border:1px solid #e3e6eb;border-radius:10px}
+.list{margin:0;padding:0 12px;list-style:none}
+.list li{display:flex;align-items:center;gap:8px;height:30px;border-bottom:1px solid #e3e6eb}
+.list li.new{animation:fl .8s}
+@keyframes fl{from{background:#edf1ff}
+}
+.no{flex:none;width:22px;color:#8a909c;font-size:12px;font-variant-numeric:tabular-nums}
+.list b{flex:1;min-width:0;overflow:hidden;font-weight:500;text-overflow:ellipsis;white-space:nowrap}
+.list small{color:#5b616e;font-size:12px}
+.foot{display:flex;align-items:center;justify-content:center;gap:8px;min-height:40px;color:#5b616e;font-size:12px}
+.foot button{height:28px;padding:0 12px;border:1px solid #e3e6eb;border-radius:999px;background:#fff;font-size:12px}
+.foot button:hover{border-color:#c3c9d4}
+.foot .retry{border-color:#f3c3be;color:#d92d20}
+@container (min-width:560px){.list li{height:38px}
+}
+</style>
+
+<div class="st"><div class="box"><div class="top"><div class="seg" role="radiogroup" aria-label="加载方式"><button type="button" role="radio" aria-checked="true" data-m="btn">按钮加载</button><button type="button" role="radio" aria-checked="false" data-m="auto">滚动自动加载</button></div><label class="sw"><input type="checkbox" class="fail"><i aria-hidden="true"></i>模拟失败</label></div><div class="sc"><ul class="list"></ul><div class="foot" role="status"></div></div></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const T = ['新版结算页上线复盘', '如何写好空状态文案', '表格列宽的取舍', '一次弱网排查记录', '移动端表单的减法', '图表配色的五条规则', '加载指示的时机', '从需求到验收的清单', '撤销比确认更好用', '快捷键设计小记', '筛选状态写进地址栏', '拖拽排序的键盘替代'];
+  const sc = root.querySelector('.sc'), list = root.querySelector('.list'), foot = root.querySelector('.foot'), fail = root.querySelector('.fail'), segs = [...root.querySelectorAll('.seg button')];
+  const PAGE = 3; let n = 0, mode = 'btn', loading = false, failed = false;
+  const append = () => { for (let i = 0; i < PAGE && n < T.length; i++, n++) { const li = document.createElement('li'); if (n >= PAGE) li.className = 'new'; li.innerHTML = `<span class="no">${n + 1}</span><b>${T[n]}</b><small>${(n * 7) % 50 + 2} 分钟前</small>`; list.append(li); } };
+  const drawFoot = () => {
+    foot.replaceChildren();
+    const btn = (text, cls) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = text; if (cls) b.className = cls; b.onclick = load; foot.append(b); };
+    if (loading) { foot.innerHTML = '<i class="sp" aria-hidden="true"></i>正在加载…'; return; }
+    if (failed) return btn('加载失败，点击重试', 'retry');
+    if (n >= T.length) { foot.textContent = `没有更多了 · 共 ${T.length} 条`; return; }
+    if (mode === 'btn') btn(`加载更多（还剩 ${T.length - n} 条）`);
+  };
+  const nearBottom = () => foot.getBoundingClientRect().top - sc.getBoundingClientRect().bottom < 120; // 与观察器的 rootMargin 一致
+  const load = () => {
+    if (loading || n >= T.length) return; // 同一时间只发一个请求
+    loading = true; failed = false; drawFoot();
+    setTimeout(() => {
+      if (!root.host.isConnected) return;
+      loading = false; if (fail.checked) failed = true; else append();
+      drawFoot(); if (mode === 'auto' && !failed && nearBottom()) load(); // 加载完哨兵还在可视区就继续
+    }, 700);
+  };
+  new IntersectionObserver((es) => { if (es[0].isIntersecting && mode === 'auto' && !failed && root.host.isConnected) load(); }, { root: sc, rootMargin: '0px 0px 120px 0px' }).observe(foot);
+  const setMode = (m) => { mode = m; segs.forEach((b) => { b.setAttribute('aria-checked', String(b.dataset.m === m)); b.tabIndex = b.dataset.m === m ? 0 : -1; }); n = 0; failed = false; list.replaceChildren(); append(); sc.scrollTop = 0; drawFoot(); if (m === 'auto' && nearBottom()) load(); }; // 切到自动模式时哨兵可能已在可视区，观察器不会再触发
+  segs.forEach((b) => { b.onclick = () => setMode(b.dataset.m); });
+  root.querySelector('.seg').addEventListener('keydown', (e) => { if (['ArrowLeft', 'ArrowRight'].includes(e.key)) { e.preventDefault(); const m = mode === 'btn' ? 'auto' : 'btn'; setMode(m); segs.find((b) => b.dataset.m === m).focus(); } });
+  setMode('btn');
+}
+</script>

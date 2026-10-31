@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const steps = flow([
+    [{ t: '模板 v3', note: '定义名称 门店名、统计月；第 8 行是样板行' }, { t: '按门店分组', note: '10 月订单' }, { t: '逐店填充', note: '每份重新读模板', acc: true }, { t: '另存', note: '门店对账单_春熙路店_2026-10.xlsx' }, { t: '打包 zip', note: '附生成清单' }],
+    [{ t: '单店失败', note: '缺数据、超出预留行', bad: true, via: '出错时' }, { t: '记录原因', note: '写进生成清单' }, { t: '继续下一家', note: '最后汇总失败数' }],
+  ]);
+  const py = code([{ t: 'openpyxl：按名字找格子，样板行复制样式', text: `
+def put(wb, name, value):                       # 按定义名称找格子
+    title, ref = next(wb.defined_names[name].destinations)
+    wb[title][ref.replace('$', '')] = value
+
+for store, rows in by_store.items():
+    wb = load_workbook('templates/门店对账单_v3.xlsx')   # 每份重新读模板
+    ws = wb['对账单']
+    put(wb, '门店名', store); put(wb, '统计月', '2026-10')
+    for i, r in enumerate(rows):
+        for c, v in enumerate([r.day, r.no, r.memo, r.amount], start=1):
+            src, dst = ws.cell(8, c), ws.cell(8 + i, c, v)   # 第 8 行是样板行
+            dst.font, dst.border, dst.fill = copy(src.font), copy(src.border), copy(src.fill)
+            dst.number_format = src.number_format
+    wb.save(f'out/门店对账单_{safe(store)}_2026-10.xlsx')
+` }]);
+  draw(root, steps + '<div style="height:10px"></div>' + py, { title: '模板填充 · 版式归模板，代码只填数', min: 0.45 });
+}
+</script>

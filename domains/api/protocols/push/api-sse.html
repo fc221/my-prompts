@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['浏览器 EventSource', '服务端'], [
+    [0, 1, 'GET /order-events'],
+    [1, 0, '200 text/event-stream', 'r'],
+    [1, 0, 'id: 41 · event: status', 'r'],
+    [0, 0, '断线 → 按 retry 3 秒后重连'],
+    [0, 1, 'GET · Last-Event-ID: 41'],
+    [1, 0, '补发 id 42 之后的事件', 'r'],
+    [1, 0, ': ping（每 15 秒保活）', 'r'],
+  ]), { title: 'SSE 断线续传 · 带 Last-Event-ID 补发' });
+}
+</script>

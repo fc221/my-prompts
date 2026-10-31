@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const head = '年度保洁服务合同 · HT-2026-0158';
+  const foot = '第 {p} 页 / 共 {n} 页';
+  draw(root, page({
+    pages: [
+      { head, foot, label: '首页：抬头 → 双方信息 → 前言 → 条款', blocks: ['title:年度保洁服务合同', 'text:编号 HT-2026-0158 · 模板 V3.2', 'h:甲方', 'kv:3', 'h:乙方', 'kv:3', 'p:3', 'h:第一条 服务内容与标准', 'p:3'] },
+      { head, foot, label: '末页：附件清单 →（以下无正文）→ 签署', blocks: ['h:第三条 费用与支付', 'text:人民币 86,400.00 元（大写：捌万陆仟肆佰元整）', 'p:2', 'h:附件清单', 'p:2', 'text:（以下无正文）', 'h:甲方', 'sign', 'h:乙方', 'sign'] },
+    ],
+    notes: ['条款编号 第一条 → 1.1 →（1）', '大小写金额由同一个数生成', '签署块不分页，单独成页时写“本页无正文”'],
+  }), { center: true, min: 0.3 });
+}
+</script>

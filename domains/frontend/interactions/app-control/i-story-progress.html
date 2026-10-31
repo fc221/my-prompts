@@ -1,0 +1,94 @@
+<link rel="stylesheet" href="../../_shared/app-control-base.css">
+<style>
+.st{display:grid;place-items:center;padding:8px;background:#e9ecf1}
+.sv{position:relative;width:min(100%,300px);height:100%;border-radius:14px;overflow:hidden;color:#fff;background:var(--bg);touch-action:none;user-select:none;-webkit-user-select:none;outline-offset:-3px;transition:background .3s}
+.sv.pull{transition:none}
+.sv.back{transition:transform .22s ease-out,background .3s}
+.art{position:absolute;right:-18px;top:34%;width:120px;height:120px;border-radius:36px;background:rgba(255,255,255,.14);transform:rotate(18deg)}
+.art::after{content:"";position:absolute;inset:28px;border-radius:24px;background:rgba(255,255,255,.18)}
+.bars{position:absolute;left:10px;right:10px;top:8px;z-index:2;display:flex;gap:4px;transition:opacity .2s}
+.bars i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.35);overflow:hidden}
+.bars b{display:block;height:100%;background:#fff;transform-origin:left;transform:scaleX(0)}
+.bars i.seen b{transform:none}
+.top{position:absolute;left:12px;right:6px;top:15px;z-index:2;display:flex;align-items:center;gap:4px;transition:opacity .2s}
+.top span{flex:1;min-width:0;font-size:12px;font-weight:600}
+.ib{display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.2);color:#fff}
+.ib svg{width:16px;height:16px;fill:currentColor}
+.body{position:absolute;left:0;right:0;bottom:0;display:grid;gap:2px;padding:14px 16px 16px;background:linear-gradient(transparent,rgba(0,0,0,.28));transition:opacity .2s}
+.body h3{margin:0;font-size:19px;line-height:1.3}
+.body p{margin:0;font-size:12px;opacity:.92}
+.hold .bars,.hold .top,.hold .body{opacity:0}
+.end{position:absolute;inset:0;z-index:3;display:grid;place-content:center;justify-items:center;gap:8px;background:rgba(10,14,24,.55);font-weight:600}
+@container (max-height:220px){.body h3{font-size:17px}
+}
+</style>
+
+<div class="st">
+  <div class="sv" tabindex="0" aria-roledescription="连播" aria-label="本周更新，←/→ 翻页，空格暂停">
+    <i class="art" aria-hidden="true"></i>
+    <div class="bars" aria-hidden="true"></div>
+    <div class="top"><span>本周更新</span><button type="button" class="ib pz" aria-label="暂停"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg></button><button type="button" class="ib cl" aria-label="关闭"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.2 3.1 8 6.9l3.8-3.8 1.1 1.1L9.1 8l3.8 3.8-1.1 1.1L8 9.1l-3.8 3.8-1.1-1.1L6.9 8 3.1 4.2z"/></svg></button></div>
+    <div class="body"><h3></h3><p></p></div>
+    <div class="end" hidden><span class="et">看完了</span><button type="button" class="ctl">重新播放</button></div>
+  </div>
+  <p class="sr" role="status"></p>
+</div>
+
+<script type="module">
+const S = [
+  ['没网也能看地图', '出发前下载区域，地铁里照样导航', 'linear-gradient(160deg,#2f6fb3,#1b3d6e)'],
+  ['清单可以一起编辑', '邀请家人，谁买了什么一目了然', 'linear-gradient(160deg,#2f8f6b,#155240)'],
+  ['夜里自动变暗', '深色模式跟随系统，睡前不刺眼', 'linear-gradient(160deg,#5b4bb7,#2a2163)'],
+  ['搜索快了一倍', '输入拼音首字母也能找到', 'linear-gradient(160deg,#c2552b,#7a2a12)'],
+];
+const DUR = 5000, PLAY = '<path d="M5 3l8 5-8 5z"/>', PAUSE = '<path d="M4 3h3v10H4zM9 3h3v10H9z"/>';
+export default function demo(root) {
+  const sv = root.querySelector('.sv'), barsEl = root.querySelector('.bars'), h3 = root.querySelector('h3'), p = root.querySelector('.body p'), pz = root.querySelector('.pz'), end = root.querySelector('.end'), et = root.querySelector('.et'), msg = root.querySelector('[role=status]');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  barsEl.innerHTML = S.map(() => '<i><b></b></i>').join('');
+  const bars = [...barsEl.children];
+  let i = 0, anim = null, paused = false, held = false, closed = false;
+  const stopped = () => paused || held || closed || document.hidden;
+  const go = (n) => {
+    anim?.cancel(); anim = null; i = Math.max(0, Math.min(S.length - 1, n)); end.hidden = true;
+    const [t, d, bg] = S[i]; h3.textContent = t; p.textContent = d; sv.style.setProperty('--bg', bg);
+    bars.forEach((b, j) => b.classList.toggle('seen', j < i || (still && j === i)));
+    msg.textContent = `第 ${i + 1} 张，共 ${S.length} 张：${t}`;
+    if (still) return;
+    anim = bars[i].firstChild.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: DUR, easing: 'linear', fill: 'forwards' });
+    anim.onfinish = () => { if (!root.host.isConnected) return; if (i < S.length - 1) go(i + 1); else { et.textContent = '看完了'; end.hidden = false; } };
+    if (stopped()) anim.pause();
+  };
+  const sync = () => { if (anim && anim.playState !== 'finished') stopped() ? anim.pause() : anim.play(); };
+  const setPaused = (v) => { paused = v; pz.innerHTML = `<svg viewBox="0 0 16 16" aria-hidden="true">${v ? PLAY : PAUSE}</svg>`; pz.setAttribute('aria-label', v ? '继续' : '暂停'); sync(); msg.textContent = v ? '已暂停' : '继续播放'; };
+  const close = () => { closed = true; sync(); et.textContent = '已关闭'; end.hidden = false; };
+  pz.onclick = () => setPaused(!paused);
+  root.querySelector('.cl').onclick = close;
+  root.querySelector('.end .ctl').onclick = () => { closed = false; setPaused(false); go(0); sv.focus(); };
+  // 点按翻页 / 按住暂停 / 下拉关闭
+  let x0 = 0, y0 = 0, dy = 0, down = false, pulling = false, timer = 0;
+  sv.addEventListener('pointerdown', (e) => { if (e.target.closest('button') || !end.hidden || e.button > 0) return; down = true; pulling = false; x0 = e.clientX; y0 = e.clientY; dy = 0; sv.setPointerCapture(e.pointerId); timer = setTimeout(() => { held = true; sv.classList.add('hold'); sync(); }, 200); });
+  sv.addEventListener('pointermove', (e) => {
+    if (!down) return; const dx = e.clientX - x0; dy = e.clientY - y0;
+    if (!pulling && dy > 8 && dy > Math.abs(dx)) { pulling = true; clearTimeout(timer); held = true; sync(); sv.classList.add('pull'); }
+    if (pulling) sv.style.transform = `translateY(${Math.max(0, dy) * 0.6}px)`;
+  });
+  const up = (e) => {
+    if (!down) return; down = false; clearTimeout(timer);
+    if (pulling) { sv.classList.remove('pull'); sv.classList.add('back'); sv.style.transform = ''; setTimeout(() => sv.classList.remove('back'), 240); held = false; if (dy > 70) close(); else sync(); return; }
+    if (held) { held = false; sv.classList.remove('hold'); sync(); return; }
+    if (e.type === 'pointercancel') return;
+    const r = sv.getBoundingClientRect(); go(e.clientX - r.left < r.width / 3 ? i - (i > 0 ? 1 : 0) : i + 1 < S.length ? i + 1 : i);
+  };
+  sv.addEventListener('pointerup', up); sv.addEventListener('pointercancel', up);
+  sv.addEventListener('keydown', (e) => {
+    if (e.target !== sv) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); if (i + 1 < S.length) go(i + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(i - 1); }
+    else if (e.key === ' ') { e.preventDefault(); setPaused(!paused); }
+  });
+  const vis = () => { if (!root.host.isConnected) return document.removeEventListener('visibilitychange', vis); sync(); };
+  document.addEventListener('visibilitychange', vis);
+  go(0);
+}
+</script>

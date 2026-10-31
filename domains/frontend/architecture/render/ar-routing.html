@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+/                   全局守卫：登录和权限只查这一处
+  login             未登录跳 /login?redirect=原路径
+* orders/           父布局：侧栏、顶栏、页签
+    new
+*   :id/            先校验格式，不合法直接 404
+      edit          /orders/:id/edit
+  stores/
+    :storeId/
+      staff         层级控制在 4 段以内
+  403               已登录但无权限
+  404               兜底：未匹配，或 :id 查不到
+`), { title: '资源名复数 + kebab-case · 改路径配 301' });
+}
+</script>

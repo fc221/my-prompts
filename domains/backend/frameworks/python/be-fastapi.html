@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+app/
+  main.py            创建应用、注册路由和异常处理
+  core/
+    config.py        Settings，pydantic-settings
+    db.py            engine 和会话
+* orders/            按业务分包
+    router.py
+    schemas.py       OrderCreate、OrderRead
+    service.py       会话作为参数传入
+    models.py        SQLAlchemy 2.0
+*   dependencies.py  SessionDep = Annotated[…]
+alembic/versions/    autogenerate 后人工检查
+tests/               同样的包结构
+`), { title: 'FastAPI · 按业务分包' });
+}
+</script>

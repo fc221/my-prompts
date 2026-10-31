@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="../../_shared/interactions-base.css">
+<style>
+.st{padding:16px 18px}
+.box{max-width:440px;margin:0 auto;display:grid;gap:10px}
+.post{display:grid;gap:6px;padding:14px 16px;border:1px solid #e3e6eb;border-radius:12px;background:#fff}
+.post p{margin:0;color:#5b616e}
+.acts{display:flex;gap:8px;margin-top:4px}
+.act{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:1px solid #e3e6eb;border-radius:999px;background:#fff;color:#5b616e}
+.act .ic{display:inline-block;font-size:16px;line-height:1}
+.act .n{font-variant-numeric:tabular-nums;min-width:3ch;text-align:left}
+.like[aria-pressed=true]{color:#e11d48;border-color:#fecdd3;background:#fff1f2}
+.save[aria-pressed=true]{color:#d97706;border-color:#fde68a;background:#fffbeb}
+.pop{animation:pp .25s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pp{50%{transform:scale(1.25)}
+}
+.msg{margin:0;min-height:20px;color:#b42318;font-size:12px}
+</style>
+
+<div class="st"><div class="box"><article class="post"><b>十月经营复盘：复购率提升到 42%</b><p>小程序订单首次超过门店，退款率下降 0.4 个百分点……</p><div class="acts"><button type="button" class="act like" aria-pressed="false" data-n="128"><span class="ic">♡</span><span class="n">128</span><span class="sr">点赞</span></button><button type="button" class="act save" aria-pressed="false" data-n="36"><span class="ic">☆</span><span class="n">36</span><span class="sr">收藏</span></button></div></article><label class="sw"><input type="checkbox" class="fail"><i></i>模拟请求失败</label><p class="msg" role="status"></p></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const fail = root.querySelector('.fail'), msg = root.querySelector('.msg'), still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  root.querySelectorAll('.act').forEach((b) => { const like = b.classList.contains('like'), ic = b.querySelector('.ic'), n = b.querySelector('.n'); let server = false, timer;
+    const paint = (on) => { const base = +b.dataset.n; b.setAttribute('aria-pressed', String(on)); ic.textContent = like ? (on ? '♥' : '♡') : (on ? '★' : '☆'); n.textContent = base + (on ? 1 : 0); if (!still) { ic.classList.remove('pop'); void ic.offsetWidth; ic.classList.add('pop'); } };
+    b.addEventListener('click', () => { const on = b.getAttribute('aria-pressed') !== 'true'; paint(on); msg.textContent = ''; clearTimeout(timer); timer = setTimeout(() => { if (fail.checked) { paint(server); msg.textContent = (like ? '点赞' : '收藏') + '失败，已恢复'; } else server = on; }, 500); }); });
+}
+</script>

@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '顶栏导航', items: ['纯 HTML'] },
+    { t: '搜索框', items: ['client:load', '首屏立即要用'], acc: true },
+    { t: '购物车数量', items: ['client:idle', '订阅共享 store'], acc: true },
+    { t: '商品介绍正文', items: ['纯 HTML，不带 JS'] },
+    { t: '评论区', items: ['client:visible', '首屏以下'], acc: true },
+    { t: '页脚', items: ['纯 HTML'] },
+  ], { cols: 3, note: '只给交互的几块水合；水合前原生表单也能提交' }), { title: '孤岛 · 一个商品详情页' });
+}
+</script>

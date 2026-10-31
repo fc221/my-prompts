@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+* src/main/java/com/mall/
+    MallApplication.java   主类放根包，扫描它和子包
+*   order/                 按功能分包
+      OrderController.java  接收、校验、转 DTO
+      OrderService.java     业务和事务
+      OrderRepository.java  JpaRepository 或 Mapper
+      dto/                  CreateOrderRequest 等 record
+    member/
+    common/                 异常、统一返回、工具
+    config/                 配置类
+  src/main/resources/
+    application.yml         公共配置
+    application-prod.yml    只放差异
+*   db/migration/           V1__init.sql
+`), { title: 'Spring Boot · 按功能分包' });
+}
+</script>

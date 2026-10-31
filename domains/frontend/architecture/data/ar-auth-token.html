@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['订单页', '请求层', '后端'], [
+    [0, 1, '同时发出 3 个请求'],
+    [1, 2, '带内存里的令牌'],
+    [2, 1, '401 × 3', 'rx'],
+    [1, 2, '刷新一次（Cookie）'],
+    [2, 1, '新访问令牌', 'r'],
+    [1, 2, '重放 3 个请求'],
+    [1, 0, '正常返回', 'r'],
+  ]), { title: '登录态与令牌 · 同时 401 只刷新一次' });
+}
+</script>

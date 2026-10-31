@@ -1,0 +1,133 @@
+<link rel="stylesheet" href="../../_shared/app-card-base.css">
+<style>
+.st{display:flex;flex-direction:column;gap:8px;padding:10px 12px;background:linear-gradient(#fbfaff,#f1f0fa)}
+.hd{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.hd b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hd small{flex:none;color:#6b6880;font-size:12px;font-variant-numeric:tabular-nums}
+.ar{position:relative;flex:1;min-height:0;border-radius:16px;background:radial-gradient(circle at 50% 50%,#fff 0 40%,#f6f5fc 75%);box-shadow:inset 0 0 0 1px #e7e5f3;overflow:hidden}
+.b{position:absolute;left:0;top:0;display:grid;place-items:center;padding:0;border:1px solid hsl(var(--h) 55% 82%);border-radius:50%;background:hsl(var(--h) 80% 94%);color:hsl(var(--h) 45% 26%);font-weight:600;line-height:1;white-space:nowrap;touch-action:none;user-select:none;-webkit-user-select:none;will-change:transform}
+.b[aria-pressed=true]{border-color:transparent;background:hsl(var(--h) 60% 46%);color:#fff;box-shadow:0 6px 14px -6px hsl(var(--h) 60% 30%)}
+.b.dg{z-index:2;cursor:grabbing;box-shadow:0 10px 22px -8px rgba(40,30,80,.45)}
+.b:focus-visible{z-index:3;outline-offset:3px}
+</style>
+
+<div class="st"><div class="hd"><b>选几个你感兴趣的</b><small class="cnt" role="status">已选 2 个</small></div><div class="ar" role="group" aria-label="兴趣标签：拖动可以推开别的标签，方向键推一下"></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const ar = root.querySelector('.ar'), cnt = root.querySelector('.cnt');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const T = [['摄影', 38, 215], ['露营', 34, 145], ['咖啡', 32, 25], ['爵士乐', 30, 265], ['骑行', 36, 190], ['烘焙', 28, 38], ['桌游', 30, 330], ['徒步', 33, 100], ['花艺', 27, 350]];
+  ar.innerHTML = T.map(([n, , h], i) => `<button type="button" class="b" aria-pressed="${i === 2 || i === 4}" style="--h:${h}">${n}</button>`).join('');
+  const P = [...ar.children].map((el, i) => ({ el, base: T[i][1], r: 0, m: 1, x: 0, y: 0, vx: 0, vy: 0 }));
+  let W = 0, H = 0, raf = 0, last = 0, calm = 0, born = 0, drag = null, dragged = false;
+  // 半径按区域面积缩放：圆的总面积约占区域的四成
+  const layout = () => {
+    const w = ar.clientWidth, h = ar.clientHeight;
+    if (!w || !h) return;
+    const k = Math.min(1.25, Math.sqrt((0.42 * w * h) / P.reduce((s, p) => s + Math.PI * p.base * p.base, 0)));
+    P.forEach((p) => {
+      if (W) { p.x *= w / W; p.y *= h / H; }
+      p.r = p.base * k; p.m = p.r * p.r;
+      Object.assign(p.el.style, { width: p.r * 2 + 'px', height: p.r * 2 + 'px', fontSize: Math.max(11, Math.min(15, p.r * 0.44)) + 'px' });
+    });
+    W = w; H = h;
+  };
+  const wall = (p) => {
+    if (p.x < p.r) { p.x = p.r; if (p.vx < 0) p.vx *= -0.5; } else if (p.x > W - p.r) { p.x = W - p.r; if (p.vx > 0) p.vx *= -0.5; }
+    if (p.y < p.r) { p.y = p.r; if (p.vy < 0) p.vy *= -0.5; } else if (p.y > H - p.r) { p.y = H - p.r; if (p.vy > 0) p.vy *= -0.5; }
+  };
+  const hit = (a, b) => {
+    let dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy);
+    const min = a.r + b.r + 2;
+    if (d >= min) return;
+    if (d < 0.01) { dx = 0.01; dy = 0; d = 0.01; }
+    const wa = drag?.p === a ? 0 : 1 / a.m, wb = drag?.p === b ? 0 : 1 / b.m, w = wa + wb;
+    if (!w) return;
+    const nx = dx / d, ny = dy / d, o = min - d;
+    a.x -= nx * o * wa / w; a.y -= ny * o * wa / w; b.x += nx * o * wb / w; b.y += ny * o * wb / w;
+    const vn = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
+    if (vn >= 0) return;
+    const J = -(1 + (vn < -30 ? 0.5 : 0)) * vn / w; // 慢速贴着时不反弹，挤成一团也不抖
+    a.vx -= J * wa * nx; a.vy -= J * wa * ny; b.vx += J * wb * nx; b.vy += J * wb * ny;
+  };
+  const sub = (h, skip) => {
+    const f = Math.exp(-2.3 * h);
+    for (const p of P) {
+      if (p === skip || p === drag?.p) continue;
+      p.vx = (p.vx + (W / 2 - p.x) * 1.4 * h) * f; p.vy = (p.vy + (H / 2 - p.y) * 1.4 * h) * f;
+      const s = Math.hypot(p.vx, p.vy); if (s > 1500) { p.vx *= 1500 / s; p.vy *= 1500 / s; }
+      p.x += p.vx * h; p.y += p.vy * h;
+    }
+    for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) if (P[i] !== skip && P[j] !== skip) hit(P[i], P[j]);
+    P.forEach(wall);
+  };
+  const draw = () => P.forEach((p) => { p.el.style.transform = `translate(${(p.x - p.r).toFixed(1)}px,${(p.y - p.r).toFixed(1)}px)`; });
+  // 不播动画时：直接推进到静止再画一次
+  const settle = (skip) => { for (let i = 0; i < 600; i++) sub(1 / 120, skip); P.forEach((p) => { if (p !== drag?.p) p.vx = p.vy = 0; }); draw(); };
+  const tick = (now) => {
+    raf = 0;
+    if (!root.host.isConnected) return;
+    let dt = Math.min(4 / 120, (now - last) / 1000); last = now;
+    while (dt > 1e-6) { const h = Math.min(1 / 120, dt); sub(h); dt -= h; }
+    draw();
+    calm = drag || P.some((p) => Math.hypot(p.vx, p.vy) > 4) ? 0 : calm + 1;
+    // 唤醒后最多跑 8 秒强制休眠，防止极端挤压时一直微抖
+    if (calm < 20 && now - born < 8000) raf = requestAnimationFrame(tick);
+    else P.forEach((p) => { p.vx = p.vy = 0; });
+  };
+  const wake = () => {
+    if (still) return settle();
+    calm = 0; born = performance.now();
+    if (!raf) { last = born; raf = requestAnimationFrame(tick); }
+  };
+  const count = () => { cnt.textContent = `已选 ${P.filter((p) => p.el.getAttribute('aria-pressed') === 'true').length} 个`; };
+  const local = (e) => { const r = ar.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  P.forEach((p) => {
+    const el = p.el;
+    el.addEventListener('pointerdown', (e) => {
+      if (e.button > 0) return;
+      const [x, y] = local(e);
+      drag = { p, id: e.pointerId, sx: x, sy: y, ox: p.x - x, oy: p.y - y, lx: x, ly: y, lt: e.timeStamp, on: false };
+      dragged = false;
+    });
+    el.addEventListener('pointermove', (e) => {
+      if (!drag || drag.p !== p) return;
+      const [x, y] = local(e);
+      if (!drag.on) { if (Math.hypot(x - drag.sx, y - drag.sy) < 6) return; drag.on = true; el.classList.add('dg'); try { el.setPointerCapture(drag.id); } catch {} }
+      const dt = Math.max(8, e.timeStamp - drag.lt) / 1000;
+      p.vx = p.vx * 0.3 + ((x - drag.lx) / dt) * 0.7; p.vy = p.vy * 0.3 + ((y - drag.ly) / dt) * 0.7;
+      drag.lx = x; drag.ly = y; drag.lt = e.timeStamp;
+      p.x = x + drag.ox; p.y = y + drag.oy; wall(p);
+      if (still) settle(); else wake(); // 被拖的球按住不动，别的球让开
+    });
+    const up = () => {
+      if (!drag || drag.p !== p) return;
+      const on = drag.on; drag = null; el.classList.remove('dg');
+      if (!on) { p.vx = p.vy = 0; return; }
+      dragged = true; wake();
+    };
+    el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+    el.addEventListener('click', () => {
+      if (dragged) { dragged = false; return; }
+      el.setAttribute('aria-pressed', String(el.getAttribute('aria-pressed') !== 'true')); count();
+    });
+    el.addEventListener('keydown', (e) => {
+      const d = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+      if (!d) return;
+      e.preventDefault();
+      if (still) { p.x += d[0] * 24; p.y += d[1] * 24; wall(p); drag = { p }; settle(); drag = null; return; }
+      p.vx += d[0] * 520; p.vy += d[1] * 520; wake();
+    });
+  });
+  // 初始：除了最后一个，其余先在中间挤好；最后一个放在右边，挂载后被甩进人群
+  layout();
+  P.forEach((p, i) => { const a = i * 2.4, s = 14 * Math.sqrt(i + 1); p.x = W / 2 + Math.cos(a) * s * 2; p.y = H / 2 + Math.sin(a) * s; });
+  const t = P[P.length - 1];
+  settle(t);
+  t.x = W - t.r - 4; t.y = H * 0.32; draw();
+  new ResizeObserver(() => { const w = W; layout(); if (w && W !== w) { P.forEach(wall); wake(); } }).observe(ar);
+  if (!still) setTimeout(() => { if (!root.host.isConnected) return; t.vx = -1100; t.vy = 140; wake(); }, 450);
+  else settle();
+}
+</script>

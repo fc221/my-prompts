@@ -1,0 +1,40 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-tag{margin:0 0 5px!important;font-size:11.5px;font-weight:650}
+.m-no{color:#b42318}
+.m-ok{color:#05603a}
+</style>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const tag = (t, ok) => '<p class="m-tag ' + (ok ? 'm-ok' : 'm-no') + '">' + t + '</p>';
+  draw(root, [
+    tag('✗ 二维表：月份当表头、合并单元格、夹小计', false) + sheet({
+      head: ['门店', '品类', '1 月', '2 月', '3 月'],
+      widths: [52, 44, 54, 54, 54],
+      rows: [
+        ['滨江店', '咖啡', '4,860', '5,120', '5,980'],
+        ['', '烘焙', '2,310', '2,460', '2,750'],
+        ['', '小计', '7,170', '7,580', '8,730'],
+        ['西湖店', '咖啡', '3,920', '4,050', '4,410'],
+        ['', '烘焙', '1,880', '1,940', '2,120'],
+      ],
+      marks: { C1: 'warn', D1: 'warn', E1: 'warn', A3: 'warn', A4: 'warn', A6: 'warn', B4: 'bad', C4: 'bad', D4: 'bad', E4: 'bad' },
+    }),
+    tag('✓ 一维表：一行一条记录', true) + sheet({
+      head: ['月份', '门店', '品类', '销售额'],
+      widths: [58, 52, 44, 72],
+      rows: [
+        ['2026-01', '滨江店', '咖啡', '4,860.00'],
+        ['2026-01', '滨江店', '烘焙', '2,310.00'],
+        ['2026-01', '西湖店', '咖啡', '3,920.00'],
+        ['2026-01', '西湖店', '烘焙', '1,880.00'],
+        ['2026-02', '滨江店', '咖啡', '5,120.00'],
+      ],
+      freeze: true,
+      tabs: ['销售明细', '汇总'],
+    }),
+  ], { title: '一维表 · 小计和二维报表交给透视表生成', min: 0.45 });
+}
+</script>

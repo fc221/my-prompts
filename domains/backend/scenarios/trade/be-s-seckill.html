@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '前端', note: '置灰 · 地址开抢才下发' }, { t: '网关限流', note: 'SKU 令牌桶 · 用户 1 次/秒' }, { t: 'Redis 预扣', note: 'Lua：限购 + 库存 + 扣减', acc: true }, { t: '队列异步下单', note: '条件扣库 + 唯一约束' }],
+    [{ t: '超限 · 售罄 · 已抢过', note: '429 或直接返回', bad: true, via: '被挡下' }, { t: '下单失败 · 未支付', note: 'INCR 回补，只一次', bad: true }, { t: '活动后对账', note: '剩余 + 已下单 + 回补 = 初始' }],
+  ]), { title: '秒杀四层削峰' });
+}
+</script>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>提示词知识库</title>
+    <meta name="claude:viewport-fit-sides" content="cover" />
+    <meta name="description" content="按领域整理的规范要点与可复制提示词" />
+    <style>
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0 0 auto;
+        height: env(safe-area-inset-top, 0px);
+        z-index: 25;
+        background: var(--surface-page, #f6f7f9);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <noscript>这个页面需要开启 JavaScript。</noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

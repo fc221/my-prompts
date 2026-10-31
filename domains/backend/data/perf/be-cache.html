@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['商品服务', 'Redis', '数据库'], [
+    [0, 1, 'GET 详情 10086'],
+    [1, 0, '未命中', 'r'],
+    [0, 2, '查库'],
+    [0, 1, 'SET，TTL 30 分钟'],
+    [0, 2, '改价：提交事务'],
+    [0, 1, '提交后 DEL 键'],
+    [1, 0, '失败 → 重试队列', 'rx'],
+  ]), { title: 'Cache-Aside · 先提交数据库，再删缓存' });
+}
+</script>

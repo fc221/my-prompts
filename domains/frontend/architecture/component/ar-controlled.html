@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['用户', '退款弹窗', '父组件'], [
+    [0, 1, '按 Esc'],
+    [1, 2, 'onOpenChange(false)'],
+    [2, 2, '有未保存内容，先拦下'],
+    [2, 1, 'open 仍为 true', 'r'],
+    [0, 1, '点“放弃修改”'],
+    [1, 2, 'onOpenChange(false)'],
+    [2, 1, 'open=false，关闭', 'r'],
+  ]), { title: '受控 · 值在父组件，子组件只上报' });
+}
+</script>

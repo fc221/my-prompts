@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+  app/                入口、全局 provider、路由、错误边界
+  pages/              只组装领域组件，OrderListPage
+* features/           按业务领域分，对外只走 index.ts
+*   orders/
+      components/     OrderCard.tsx、OrderCard.test.tsx
+      api.ts          本领域的请求函数
+      queries.ts      查询键和查询
+      index.ts        对外出口
+    members/
+  components/ui/      无业务的基础组件
+  api/                client.ts、错误分类、生成的类型
+  stores/             跨页面的全局状态
+  lib/                日期、金额等纯函数
+  config/             环境配置
+`));
+}
+</script>

@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '商品 catalog/', items: ['商品 = SPU、SKU 资料'] },
+    { t: '交易 trading/', items: ['商品 = 下单时的快照', '待支付、已支付、已完成'], acc: true },
+    { t: '库存 inventory/', items: ['商品 = 仓位和数量'] },
+    { t: 'api/', items: ['每个上下文的对外契约', '别人只引用这里的类型'] },
+    { t: 'shared-kernel/', items: ['只放 Money、ID'] },
+    { t: '跨上下文 join 表', items: ['只传 ID 和契约字段'], dash: true },
+  ], { cols: 3, note: '边界按业务能力划，每块能由一个团队独立修改、独立发布' }), { title: '限界上下文 · 同一个“商品”三种模型' });
+}
+</script>

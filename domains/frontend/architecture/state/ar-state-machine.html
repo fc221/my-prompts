@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: 'idle', items: ['START → uploading'] },
+    { t: 'uploading', items: ['UPLOADED → processing', 'FAIL → failed', 'CANCEL → idle'], acc: true },
+    { t: 'processing', items: ['DONE → done', 'after 超时 → failed'] },
+    { t: 'done', items: ['带 fileUrl'] },
+    { t: 'failed', items: ['带 error', 'RETRY → uploading'] },
+    { t: '其他事件', items: ['原样返回', 'uploading 时再点 START 无效'], dash: true },
+  ], { cols: 3, note: '一个 status 替代 isLoading、isError、isSuccess' }), { title: '上传流程 · 状态 + 事件 → 下一个状态' });
+}
+</script>

@@ -1,0 +1,12 @@
+<style>
+:host{display:block;height:100%}
+.page{height:100%;overflow:auto;background:#fff}
+nav{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;padding:12px 16px;font:600 14px system-ui;color:#18181b;background:rgba(255,255,255,.7);-webkit-backdrop-filter:blur(12px) saturate(1.4);backdrop-filter:blur(12px) saturate(1.4);border-bottom:1px solid rgba(0,0,0,.06)}
+nav span{font-weight:500;color:#3f4147}
+.content{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px 16px 200px}
+.content i{height:70px;border-radius:10px;background:linear-gradient(135deg,#ffb27a,#f472b6)}
+.content i:nth-child(2n){background:linear-gradient(135deg,#60a5fa,#a78bfa)}
+.content i:nth-child(3n){background:linear-gradient(135deg,#34d399,#fde047)}
+</style>
+
+<div class="page"><nav>MyPrompts<span>产品　定价　文档</span></nav><div class="content"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>

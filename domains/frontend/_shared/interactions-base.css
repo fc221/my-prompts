@@ -1,0 +1,113 @@
+.st {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #f5f6f8;
+  color: #1f2329;
+  font:
+    13px/1.5 system-ui,
+    -apple-system,
+    'PingFang SC',
+    'Microsoft YaHei',
+    sans-serif;
+  container-type: size;
+  -webkit-tap-highlight-color: transparent;
+}
+[hidden] {
+  display: none !important;
+}
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}
+:focus-visible {
+  outline: 2px solid #3b5bdb;
+  outline-offset: 2px;
+}
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.sp {
+  display: inline-block;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #c9ced6;
+  border-top-color: #3b5bdb;
+  border-radius: 50%;
+  animation: kbsp 0.8s linear infinite;
+}
+@keyframes kbsp {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.sw {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #5b616e;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.sw input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+.sw i {
+  position: relative;
+  flex: none;
+  width: 28px;
+  height: 16px;
+  border-radius: 999px;
+  background: #c9ced6;
+  transition: background 0.16s;
+}
+.sw i::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.16s;
+}
+.sw input:checked + i {
+  background: #d92d20;
+}
+.sw input:checked + i::after {
+  transform: translateX(12px);
+}
+.sw input:focus-visible + i {
+  outline: 2px solid #3b5bdb;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .sp {
+    animation-duration: 0.8s !important;
+    animation-iteration-count: infinite !important;
+  }
+}

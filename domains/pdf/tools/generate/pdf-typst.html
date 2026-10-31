@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: 'data.json', note: '订单系统导出' }, { t: 'main.typ', note: 'json() 读成字典', acc: true, via: '读入' }, { t: 'typst compile', note: '--font-path fonts', acc: true }, { t: 'out.pdf', note: '几页几十毫秒' }],
+    [{ t: '找不到中文字体', note: '只给警告，照样编译', bad: true }, { t: '收集编译警告', note: '字体警告判这份失败' }, { t: '记录单号', note: '继续跑其他的' }],
+  ]), { title: 'Typst · 模板 + 数据批量编译' });
+}
+</script>

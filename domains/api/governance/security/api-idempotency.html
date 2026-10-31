@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: '第一次提交', text: `
+POST /orders
+Idempotency-Key: 6f1c2b9e-4a7d-…
+
+201 Created
+Location: /orders/ord_8F3k2
+
+"id": "ord_8F3k2",
+"status": "PENDING_PAYMENT"
+` },
+    { t: '超时重试 · 同一个键', text: `
+POST /orders
+Idempotency-Key: 6f1c2b9e-4a7d-…
+
+201 Created
+Idempotent-Replayed: true
+Location: /orders/ord_8F3k2
+
+"id": "ord_8F3k2",
+"status": "PENDING_PAYMENT"
+// 不再建单，原样返回第一次的响应
+` },
+  ]), { title: '幂等键 · 同一个键返回同样的结果' });
+}
+</script>

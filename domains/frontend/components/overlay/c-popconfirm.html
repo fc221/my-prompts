@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="../../_shared/components-overlay.css">
+<style>
+.s{place-items:start center;align-content:start;gap:10px}
+.list{width:100%;max-width:440px;background:#fff;border:1px solid #e3e6eb;border-radius:10px}
+.row{display:flex;align-items:center;gap:10px;height:52px;padding:0 10px 0 14px}
+.row+.row{border-top:1px solid #e3e6eb}
+.av{width:30px;height:30px;flex:none;border-radius:50%;background:#edf1ff;color:#3b5bdb;display:grid;place-items:center;font-size:12px;font-weight:600}
+.nm{flex:1;display:grid;font-size:13px;line-height:1.35}
+small{font-size:12px;color:#5b616e}
+.anc{position:relative}
+.pc{position:absolute;right:0;top:calc(100% + 10px);z-index:3;width:240px;padding:12px;background:#fff;border:1px solid #e3e6eb;border-radius:10px;box-shadow:0 8px 24px rgba(15,17,22,.14);transform-origin:top right}
+.pc::before{content:"";position:absolute;top:-6px;right:18px;width:10px;height:10px;background:#fff;border-left:1px solid #e3e6eb;border-top:1px solid #e3e6eb;transform:rotate(45deg)}
+.pc p{font-size:13px}
+.ac{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+.out{display:flex;align-items:center;gap:4px}
+</style>
+
+<div class="s"><div class="list"><div class="row"><span class="av">周</span><span class="nm">周一鸣<small>编辑者</small></span><span class="anc"><button class="b t sm rm" aria-expanded="false" aria-controls="pc">移除</button><div class="pc pop-in" id="pc" role="dialog" aria-labelledby="pct" hidden><p id="pct">将周一鸣移出项目？移出后他无法再查看项目内容。</p><div class="ac"><button class="b sm" data-no>取消</button><button class="b d sm" data-yes>移除</button></div></div></span></div><div class="row"><span class="av">林</span><span class="nm">林知<small>所有者</small></span><span class="muted">不可移除</span></div></div><p class="muted out" role="status"></p></div>
+
+<script type="module">
+import { pop } from '../../_shared/components-overlay.ts';
+
+export default function demo(root) {
+  const rm = root.querySelector('.rm'), pc = root.querySelector('.pc'), row = rm.closest('.row'), out = root.querySelector('.out');
+  const set = pop(root, rm, pc);
+  pc.querySelector('[data-no]').addEventListener('click', () => set(false, true));
+  pc.querySelector('[data-yes]').addEventListener('click', () => { set(false); row.hidden = true; out.innerHTML = '已将周一鸣移出项目 <button class="b t sm">恢复示例</button>'; out.querySelector('button').focus(); });
+  out.addEventListener('click', (e) => { if (e.target.closest('button')) { row.hidden = false; out.textContent = ''; rm.focus(); } });
+}
+</script>

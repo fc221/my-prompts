@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '加新列', note: '允许 NULL' }, { t: '双写', note: '新旧列都写' }, { t: '回填', note: '每批 1000 行' }, { t: '切读', note: '核对后读新列', acc: true }],
+    [{ t: '确认旧列', note: '没有任何读写' }, { t: '删旧列', note: '连同相关代码', acc: true }, { t: '新列加 NOT NULL', note: '回填完成之后' }],
+  ], { lanes: ['发布 1', '发布 2'] }), { title: '先加后删 · 新旧两版代码同时在跑' });
+}
+</script>

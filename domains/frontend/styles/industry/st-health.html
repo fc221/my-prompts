@@ -1,0 +1,68 @@
+<style>
+:host{container-type:size}
+.s{height:100%;display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding:10px;overflow:hidden;background:#f5f8fa;color:#1d2b36;font:12px/1.5 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}
+.cd{display:flex;flex-direction:column;gap:8px;min-width:0;padding:10px 12px 12px;border-radius:14px;background:#fff;box-shadow:0 1px 3px rgba(16,40,60,.08)}
+header{display:flex;align-items:center;gap:8px;white-space:nowrap}
+header b{font-size:14px;font-weight:600}
+.ic{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#e3eef7}
+.ic svg{width:12px;fill:#0a5c99}
+header span{color:#4a5a67}
+.ok{margin-left:auto;padding:0 8px;border-radius:999px;background:#ecfdf3;color:#067647;font-weight:600}
+ul{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-around;margin:0;padding:0;list-style:none}
+li{display:grid;grid-template-columns:minmax(0,1fr) auto 52px;grid-template-areas:"k v st" "r v st";align-items:center;column-gap:10px;padding:2px 0;white-space:nowrap}
+li+li{border-top:1px solid #e6ecf0}
+.k{grid-area:k;font-weight:600}
+.r{grid-area:r;color:#4a5a67;font-size:11px}
+.v{grid-area:v;font-size:16px;font-weight:600}
+.v small{margin-left:2px;color:#4a5a67;font-size:11px;font-weight:400}
+.st{grid-area:st;justify-self:end;display:inline-flex;align-items:center;gap:2px;padding:0 6px;border-radius:6px;font-weight:600}
+.hi{background:#fef3f2;color:#b42318}
+.nm{background:#ecfdf3;color:#067647}
+li.more{display:none}
+a{display:flex;align-items:center;justify-content:center;height:34px;border-radius:10px;background:#0a5c99;color:#fff;font-size:13px;font-weight:600;text-decoration:none;transition:background-color .15s ease-out}
+a:hover{background:#084b7d}
+a:focus-visible{outline:3px solid #0a5c99;outline-offset:2px}
+.dr{display:none}
+.dr .who{display:flex;align-items:center;gap:10px}
+.av{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#e3eef7;color:#0a5c99;font-size:18px;font-weight:600}
+.dr p{margin:0;color:#4a5a67}
+.dr b{color:#1d2b36;font-size:15px;font-weight:600}
+.fee{display:flex;justify-content:space-between;padding:8px 0;border-block:1px solid #e6ecf0}
+.fee b{font-size:14px}
+.dr a{background:#fff;border:1px solid #0a5c99;color:#0a5c99}
+.dr a:hover{background:#eef5fb}
+.dr .sos{padding:6px 8px;border-radius:8px;background:#fef3f2;color:#b42318}
+@container (min-height:260px){.s{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);padding:16px;gap:14px;font-size:14px}
+.cd{padding:16px 18px;gap:12px}
+header b{font-size:17px}
+.ic{width:28px;height:28px}
+.ic svg{width:15px}
+li{grid-template-columns:minmax(0,1fr) auto 64px;padding:4px 0}
+.r{font-size:12px}
+.v{font-size:20px}
+.v small{font-size:12px}
+li.more{display:grid}
+a{height:44px;font-size:15px}
+.dr{display:flex}
+}
+@media (prefers-reduced-motion:reduce){a{transition:none}
+}
+</style>
+
+<div class="s">
+  <section class="cd" aria-label="体检报告摘要">
+    <header><i class="ic" aria-hidden="true"><svg viewBox="0 0 16 16"><rect x="6" y="1" width="4" height="14" rx="1"/><rect x="1" y="6" width="14" height="4" rx="1"/></svg></i><b>体检报告</b><span>2026-10-12</span><span class="ok">已出报告</span></header>
+    <ul>
+      <li><span class="k">空腹血糖</span><span class="r">参考 3.9–6.1</span><span class="v">6.4<small>mmol/L</small></span><span class="st hi">↑ 偏高</span></li>
+      <li><span class="k">总胆固醇</span><span class="r">参考 &lt; 5.2</span><span class="v">4.6<small>mmol/L</small></span><span class="st nm">✓ 正常</span></li>
+      <li class="more"><span class="k">血压</span><span class="r">参考 &lt; 140/90</span><span class="v">118/76<small>mmHg</small></span><span class="st nm">✓ 正常</span></li>
+    </ul>
+    <a href="#">咨询医生解读报告</a>
+  </section>
+  <aside class="cd dr" aria-label="解读医生">
+    <div class="who"><span class="av" aria-hidden="true">王</span><p><b>王静怡</b> 主任医师<br>内分泌科 · 市第一人民医院</p></div>
+    <div class="fee"><span>图文问诊</span><b>¥39 / 次</b></div>
+    <a href="#">查看执业资质</a>
+    <p class="sos">胸痛、呼吸困难等紧急情况请立即拨打 120</p>
+  </aside>
+</div>

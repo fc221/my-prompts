@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '订单服务', items: ['订单库', '发 OrderPlaced'], acc: true },
+    { t: '库存服务', items: ['库存库', '锁定 / 释放'] },
+    { t: '会员服务', items: ['会员库', '积分账户'] },
+    { t: '支付服务', items: ['支付库', '回调验签'] },
+    { t: '通知服务', items: ['无库', '订阅事件发短信'] },
+    { t: '共享数据库', items: ['各服务不直接读别人的表'], dash: true },
+  ], { cols: 3, note: '按业务能力拆，每个服务独占自己的库，跨服务走接口或事件' }), { title: '微服务拆分' });
+}
+</script>

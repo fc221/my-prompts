@@ -1,0 +1,30 @@
+{
+  "name": "knowledge-base",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "imports": {
+    "#kb": "./src/adapter/index.ts"
+  },
+  "description": "提示词知识库：按领域整理的规范要点与可复制提示词",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run typecheck && vite build",
+    "typecheck": "vue-tsc --noEmit && tsc -p tsconfig.domains.json",
+    "check": "node scripts/validate.mjs",
+    "format": "prettier --write .",
+    "preview": "vite preview",
+    "artifact": "npm run build && node scripts/fragment.mjs"
+  },
+  "dependencies": {
+    "vue": "^3.5.44"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.10",
+    "prettier": "3.9.10",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.5",
+    "vite-plugin-singlefile": "^2.3.4",
+    "vue-tsc": "^3.3.13"
+  }
+}

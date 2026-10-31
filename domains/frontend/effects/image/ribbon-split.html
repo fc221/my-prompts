@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="../../_shared/app-card-base.css">
+<link rel="stylesheet" href="../../_shared/app-card-photos.css">
+<style>
+.st{padding:10px;background:#e9e6e1}
+.rb{--p:0;--w:300px;position:relative;height:100%;border-radius:12px;overflow:hidden;background:radial-gradient(120% 100% at 50% 0%,#f7f3ec,#e4ddd1);touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.rb.drag{cursor:grabbing}
+.sp{position:absolute;inset:0;transform:scale(calc(1 - var(--p) * .12));transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.sp i{position:absolute;top:0;bottom:0;left:calc(var(--i) * var(--w) / 7);width:calc(var(--w) / 7 + 1px);background-size:var(--w) 100%;background-position:calc(var(--i) * var(--w) / -7) 0;box-shadow:0 6px 14px rgba(40,28,16,calc(var(--p) * .25));transform:perspective(520px) translate(calc((var(--i) - 3) * var(--p) * var(--w) * .02),calc(var(--y) * var(--p) * 100%)) rotateY(calc(var(--r) * var(--p) * 16deg));transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s}
+.sp i::after{content:"";position:absolute;inset:0;background:rgba(10,12,18,.24);opacity:calc(var(--p) * (var(--r) + 1) / 2);transition:opacity .45s}
+.sp b{position:absolute;left:0;right:0;bottom:12%;z-index:1;color:#fff;font-size:11px;font-weight:600;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.55);opacity:calc(var(--p) * 2 - 1);transition:opacity .3s}
+.rb.drag .sp,.rb.drag .sp i,.rb.drag .sp i::after,.rb.drag .sp b{transition:none}
+.tt{position:absolute;left:10px;top:10px;margin:0;padding:2px 9px;border-radius:999px;background:rgba(16,18,24,.55);color:#fff;font-size:12px;line-height:18px;white-space:nowrap;pointer-events:none}
+.hint{position:absolute;left:10px;bottom:10px;margin:0;padding:2px 8px;border-radius:6px;background:rgba(255,255,255,.85);color:#3a3f48;font-size:11px;line-height:18px;white-space:nowrap;pointer-events:none}
+.tg{position:absolute;right:18px;bottom:18px}
+.tg.ctl{height:28px;padding:0 12px;font-size:12px}
+@container (min-height:260px){.st{padding:14px}
+.sp b{font-size:14px}
+.tt{left:14px;top:14px;padding:3px 11px;font-size:13px}
+.hint{left:14px;bottom:14px;font-size:12px}
+.tg{right:26px;bottom:26px}
+.tg.ctl{height:32px;padding:0 14px;font-size:13px}
+}
+</style>
+
+<div class="st"><div class="rb" role="img" aria-label="专题封面：湖边的群山，分为 7 章"><div class="sp" aria-hidden="true"></div><p class="tt" aria-hidden="true">专题 · 沿湖七日</p><p class="hint" aria-hidden="true">向右拖动拆开</p></div><button type="button" class="ctl tg" aria-pressed="false">拆开</button><p class="sr" role="status"></p></div>
+
+<script type="module">
+export default function demo(root) {
+  const rb = root.querySelector('.rb'), sp = rb.querySelector('.sp'), tg = root.querySelector('.tg'), hint = rb.querySelector('.hint'), msg = root.querySelector('[role=status]');
+  [-0.1, 0.07, -0.04, 0.11, -0.08, 0.05, -0.12].forEach((y, i) => { // 每条预设的高低，奇偶条反向转
+    const el = document.createElement('i'); el.className = 'ph1'; el.style.cssText = `--i:${i};--y:${y};--r:${i % 2 ? 1 : -1}`;
+    el.innerHTML = `<b>${String(i + 1).padStart(2, '0')}</b>`; sp.append(el);
+  });
+  // 背景偏移按整张图的像素宽度算，拼回时各条严丝合缝
+  const size = () => rb.style.setProperty('--w', rb.clientWidth + 'px');
+  size(); new ResizeObserver(size).observe(rb);
+  let p = 0, open = false, x0 = 0, p0 = 0;
+  const set = (v) => { p = Math.max(0, Math.min(1, v)); rb.style.setProperty('--p', p.toFixed(3)); };
+  const settle = (o) => {
+    rb.classList.remove('drag'); set(o ? 1 : 0);
+    tg.setAttribute('aria-pressed', String(o)); tg.textContent = o ? '拼回' : '拆开'; hint.textContent = o ? '向左拖动拼回' : '向右拖动拆开';
+    if (o !== open) msg.textContent = o ? '已拆成 7 条，每条一章' : '已拼回原图';
+    open = o;
+  };
+  rb.addEventListener('pointerdown', (e) => { rb.setPointerCapture(e.pointerId); x0 = e.clientX; p0 = p; rb.classList.add('drag'); });
+  rb.addEventListener('pointermove', (e) => { if (rb.hasPointerCapture(e.pointerId)) set(p0 + (e.clientX - x0) / (rb.clientWidth * 0.5)); });
+  rb.addEventListener('pointerup', () => settle(p >= 0.5));
+  rb.addEventListener('pointercancel', () => settle(false)); // 被系统接管（竖向滚动）：拼回原图
+  root.addEventListener('keydown', (e) => { if (e.key === 'Escape') settle(false); });
+  tg.addEventListener('click', () => settle(!open));
+  setTimeout(() => settle(true), 400);
+}
+</script>

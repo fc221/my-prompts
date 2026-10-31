@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '画黑色矩形', note: '或方块批注', bad: true }, { t: 'pdftotext', note: '选中复制也一样' }, { t: '原文照样提出', note: '110105…1234 还在', bad: true }],
+    [{ t: '删掉原文', note: '文字、图片、矢量', acc: true }, { t: '清页面外', note: '元数据、批注、书签' }, { t: '完整重写', note: '不留增量旧版本' }, { t: '命中 0 才交付', note: '逐个搜原值', acc: true }],
+  ], { lanes: ['只盖黑框', '真正删除'] }), { title: '脱敏 · 盖黑框不等于删除' });
+}
+</script>

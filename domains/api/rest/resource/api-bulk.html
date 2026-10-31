@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+POST /tickets/batch-close
+Idempotency-Key: 5c0e8a41-…
+
+"items": [
+  { "id": "tk_101" },
+  { "id": "tk_102" },
+  { "id": "tk_207" }
+]
+`, `
+200 OK
+
+"results": [
+  { "index": 0, "status": 200,
+    "id": "tk_101" },
+  { "index": 1, "status": 200, … },
+  { "index": 2, "status": 403,
+    "error": { "code": "FORBIDDEN",
+      "message": "不是本门店的工单" } }
+],
+"succeeded": 2, "failed": 1
+`), { title: '逐条批量 · 每条结果单独返回' });
+}
+</script>

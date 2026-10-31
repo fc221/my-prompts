@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-wrap{display:flex;gap:14px;align-items:flex-start}
+.m-pg{position:relative;flex:none;width:470px;padding:18px 32px 14px 36px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25);color:#111;font:11px/1.55 "Songti SC","SimSun",serif}
+.m-pg .m-title{text-align:center;font:700 16px/1.4 "PingFang SC","STHeiti","SimHei",sans-serif}
+.m-pg .m-meta{display:flex;justify-content:space-between;margin:2px 0 6px;padding-bottom:3px;border-bottom:1px solid #999;color:#444;font-size:10px}
+.m-pg .m-h1{margin-top:4px;font:700 11.5px/1.55 "PingFang SC","STHeiti","SimHei",sans-serif}
+.m-pg .m-li{display:flex;gap:6px;align-items:baseline;padding-left:1em}
+.m-st{flex:none;min-width:58px;padding:0 4px;border-radius:3px;font:600 9.5px/1.6 system-ui,"PingFang SC",sans-serif;text-align:center}
+.m-ok{background:#e7f6ec;color:#1f7a3d}
+.m-go{background:#e8f0ff;color:#1d4ed8}
+.m-late{background:#fdecec;color:#b42318}
+.m-new{background:#f2f4f7;color:#475467}
+.m-tb{width:100%;margin-top:2px;border-collapse:collapse;font-size:10px;line-height:1.4}
+.m-tb th,.m-tb td{padding:2px 5px;border:1px solid #444;text-align:right;font-weight:400;font-variant-numeric:tabular-nums}
+.m-tb th{background:#eef0f3;font-family:"PingFang SC","SimHei",sans-serif;font-weight:600}
+.m-tb th:first-child,.m-tb td:first-child,.m-tb .m-l{text-align:left}
+.m-tb .m-dn{color:#b42318}
+.m-ann{display:grid;width:150px;padding-top:4px;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-ann p{margin:0;padding:5px 0 5px 12px;border-left:2px solid #7c3aed}
+.m-ann b{display:block;color:#101828;font-size:11.5px}
+.m-ann span{color:#667085}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, `<div class="m-wrap"><div class="m-pg">
+    <p class="m-title">运营部周报（第 44 周）</p>
+    <p class="m-meta"><span>周期：2026.10.26–11.01</span><span>填报人：彭磊</span></p>
+    <p class="m-h1">一、本周完成（对照上周计划）</p>
+    <p class="m-li"><span class="m-st m-ok">已完成</span><span>会员日物料配送 42 家门店，签收率 100%</span></p>
+    <p class="m-li"><span class="m-st m-go">进行中 70%</span><span>店员排班系统培训，已完成 29 家</span></p>
+    <p class="m-li"><span class="m-st m-late">延期</span><span>滨江店收银切换，网络改造未完成，改到 11-06</span></p>
+    <p class="m-li"><span class="m-st m-new">新增</span><span>配合消防检查，整改 3 处通道堆放</span></p>
+    <p class="m-h1">二、关键数据</p>
+    <table class="m-tb"><tr><th>指标</th><th>本周</th><th>上周</th><th>环比</th><th class="m-l">说明</th></tr>
+      <tr><td>到店客流（人次）</td><td>48,620</td><td>44,890</td><td>+8.3%</td><td class="m-l">会员日预热</td></tr>
+      <tr><td>客单价（元）</td><td>86.5</td><td>88.2</td><td class="m-dn">−1.9%</td><td class="m-l">满减拉低客单</td></tr></table>
+    <p class="m-h1">三、问题与需要的支持</p>
+    <table class="m-tb"><tr><th>问题</th><th class="m-l">需要谁支持</th><th>期望日期</th></tr>
+      <tr><td>滨江店网络改造排期</td><td class="m-l">IT 部 许鹏</td><td>11-04</td></tr></table>
+    <p class="m-h1">四、下周计划</p>
+    <p class="m-li">1. 会员日两天执行和日报汇总（彭磊，11-15）　2. 排班培训收尾（柯蕾，11-06）</p>
+  </div><div class="m-ann">
+    <p><b>表头</b><span>周次和起止日期都写，填报人</span></p>
+    <p><b>本周完成</b><span>按上周计划逐条对照</span></p>
+    <p><b>状态</b><span>颜色之外写文字，黑白打印也能分辨</span></p>
+    <p><b>关键数据</b><span>本周、上周、带符号环比，异常写原因</span></p>
+    <p><b>问题与支持</b><span>需要谁、哪天前</span></p>
+    <p><b>下周计划</b><span>事项、负责人、日期，下周拿来对照</span></p>
+  </div></div>`, { center: true, min: 0.35 });
+}
+</script>

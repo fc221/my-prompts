@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="../../_shared/app-card-base.css">
+<style>
+.st{--bg:#0b1030;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:14px 18px;background:var(--bg);color:#e9e4f2}
+.fx{position:absolute;width:0;height:0}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.kk{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#b8b0cc;font-size:12px;letter-spacing:.08em}
+.btns{display:flex;gap:6px;flex:none}
+.hd{align-self:center;width:fit-content;margin:0 0 0 -.06em;padding:0 .06em;font-size:min(18cqw,30cqh);line-height:1.15;font-weight:900;letter-spacing:.04em;color:#ff8b24}
+/* 不支持滤镜时：普通渐变字 */
+@supports ((-webkit-background-clip:text) or (background-clip:text)){.hd{color:transparent;background:linear-gradient(90deg,#c42379,#ff8b24 60%,#fff5de);-webkit-background-clip:text;background-clip:text}
+/* 滤镜版：字形里是重复的灰度横向渐变（底部略亮），由滤镜映射成热成像色带 */
+.hd.on{background:linear-gradient(90deg,#3c3c3c,#f4f4f4 50%,#3c3c3c) 0 0/1.6em 100% repeat-x,linear-gradient(0deg,#fff,#9a9a9a);background-blend-mode:multiply;-webkit-background-clip:text;background-clip:text;filter:url(#thermal)}
+}
+.cap{margin:0;color:#b8b0cc;font-size:12px;white-space:nowrap}
+.cap b{color:#ffd6a8;font-weight:600}
+@container (min-height:260px){.st{padding:20px 28px}
+.kk,.cap{font-size:13.5px}
+}
+@media (forced-colors:active){.hd,.hd.on{background:none;filter:none;color:CanvasText}
+}
+</style>
+
+<div class="st"><svg class="fx" aria-hidden="true"><filter id="thermal" x="-10%" y="-25%" width="120%" height="150%" color-interpolation-filters="sRGB"><feFlood flood-color="#000" result="bk"/><feMerge result="flat"><feMergeNode in="bk"/><feMergeNode in="SourceGraphic"/></feMerge><feGaussianBlur in="flat" stdDeviation="6" result="glow"/><feComposite in="flat" in2="glow" operator="arithmetic" k2=".6" k3="1" result="heat"/><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7"/><feColorMatrix values="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1" result="nz"/><feComposite in="heat" in2="nz" operator="arithmetic" k1=".28" k2=".86"/><feComponentTransfer><feFuncR type="table"/><feFuncG type="table"/><feFuncB type="table"/></feComponentTransfer></filter></svg><div class="top"><span class="kk">城市夜跑 · 七月场</span><div class="btns"><button type="button" class="ctl">暂停</button><button type="button" class="ctl">换色带</button></div></div><h3 class="hd">燃到终点</h3><p class="cap">21:00 鸣枪 · 滨江步道 10 km · 体感 <b>34°C</b></p><p class="sr" role="status"></p></div>
+
+<script type="module">
+// 两套色带：亮度 0 → 1 依次对应的颜色；第一个颜色同时是背景色，滤镜区域的边缘才看不出来
+const PAL = [
+  { name: '铁红', c: ['#0b1030', '#3b1580', '#c42379', '#ff8b24', '#fff5de'] },
+  { name: '彩虹', c: ['#061230', '#1f4fd8', '#16c0a6', '#d9e83c', '#ff5733', '#fff1ea'] },
+];
+export default function demo(root) {
+  const st = root.querySelector('.st'), hd = root.querySelector('.hd'), [pp, pal] = root.querySelectorAll('.ctl'), msg = root.querySelector('[role=status]');
+  const fn = [...root.querySelectorAll('feFuncR, feFuncG, feFuncB')], still = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let pi = 0, run = false, raf = 0, x = 0, last = 0;
+  const usePal = (i) => {
+    const c = PAL[i].c.map((h) => [1, 3, 5].map((k) => (parseInt(h.slice(k, k + 2), 16) / 255).toFixed(3)));
+    fn.forEach((f, ch) => f.setAttribute('tableValues', c.map((v) => v[ch]).join(' ')));
+    st.style.setProperty('--bg', PAL[i].c[0]);
+  };
+  // 流动只改一个值：字形底图的横向位置（约 0.5em / 秒，1.6em 一个周期）
+  const tick = (t) => {
+    if (!root.host.isConnected || !run) { raf = 0; return; }
+    x = (x + Math.min(0.05, (t - last) / 1000) * 0.5) % 1.6; last = t;
+    hd.style.backgroundPosition = x.toFixed(3) + 'em 0, 0 0';
+    raf = requestAnimationFrame(tick);
+  };
+  const play = (on) => {
+    run = on; pp.textContent = on ? '暂停' : '播放';
+    if (on && !raf) { last = performance.now(); raf = requestAnimationFrame(tick); }
+  };
+  pp.addEventListener('click', () => {
+    if (still()) return (msg.textContent = '已开启减少动态效果：保持静态一帧');
+    play(!run); msg.textContent = run ? '热成像流动中' : '已暂停';
+  });
+  pal.addEventListener('click', () => { pi = (pi + 1) % PAL.length; usePal(pi); msg.textContent = '色带：' + PAL[pi].name; });
+  if (!CSS.supports('filter', 'url(#thermal)')) { pp.hidden = pal.hidden = true; return; }
+  usePal(0); hd.classList.add('on');
+  hd.style.backgroundPosition = '0.5em 0, 0 0';
+  if (still()) play(false); else { x = 0.5; play(true); }
+}
+</script>

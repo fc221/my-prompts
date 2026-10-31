@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-fit .dg-col:first-child{flex:none}
+</style>
+
+<div class="dg m-fit"></div>
+
+<script type="module">
+import { draw, sheet, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    sheet({
+      head: ['订单号', '门店', '商品', '数量', '单价', '金额'],
+      widths: [66, 60, 64, 38, 50, 64],
+      rows: [
+        ['DD260101', '滨江店 ▾', '经典拿铁', '12', '26.00', '312.00'],
+        ['DD260102', '西湖店 ▾', '冷萃咖啡', '8', '28.00', '224.00'],
+        ['DD260103', '滨江店 ▾', '可颂', '20', '12.00', '240.00'],
+        ['DD260104', '湖滨店 ▾', '美式', '15', '22.00', '330.00'],
+      ],
+      foot: ['汇总', '', '', '55', '', '1,106.00'],
+      fx: ['F4', '=[@数量]*[@单价]'],
+      marks: { F2: 'acc', F3: 'acc', F4: 'acc', F5: 'acc' },
+      tabs: ['订单', '门店表', '商品表', '汇总'],
+      freeze: true,
+    }),
+    boxes([
+      { t: '整列', items: ['订单[金额]'] },
+      { t: '本行', items: ['[@金额]'] },
+      { t: '连续几列', items: ['订单[[日期]:[金额]]'] },
+      { t: '向右拖不平移', items: ['订单[[金额]:[金额]]'] },
+      { t: '跨表汇总', items: ['=SUMIFS(订单[金额],订单[门店],A2)'], acc: true },
+      { t: '汇总行', items: ['=SUBTOTAL(109,[金额])'] },
+    ], { cols: 2 }),
+  ], { title: '超级表“订单” · 计算列整列同一公式，新行自动带出', min: 0.45 });
+}
+</script>

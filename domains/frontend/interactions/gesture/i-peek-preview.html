@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="../../_shared/interactions-base.css">
+<style>
+.st{padding:10px 12px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.hd{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 8px}
+.hd b{font-size:13px}
+.hd small{color:#5b616e;font-size:12px}
+.g{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.t:nth-child(n+11){display:none}
+.t{position:relative;aspect-ratio:1;padding:0;border:0;border-radius:10px;background:linear-gradient(160deg,hsl(var(--h) 60% 78%),hsl(calc(var(--h) + 30) 55% 52%));box-shadow:0 1px 2px rgba(16,24,40,.12);transition:transform .16s,box-shadow .16s;touch-action:manipulation}
+.t::after{content:"";position:absolute;left:14%;right:14%;bottom:16%;height:28%;border-radius:50% 50% 8px 8px;background:rgba(255,255,255,.35)}
+.t.lift{z-index:3;transform:scale(1.04);box-shadow:0 12px 28px rgba(16,24,40,.35)}
+.t.press{transform:scale(.97)}
+.mask{position:absolute;inset:0;z-index:2;background:rgba(18,22,30,.28);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .16s}
+.mask.on{opacity:1;pointer-events:auto}
+.menu{position:absolute;z-index:4;width:132px;margin:0;padding:4px;list-style:none;border-radius:12px;background:#fff;box-shadow:0 10px 30px rgba(16,24,40,.25)}
+.menu button{display:flex;align-items:center;width:100%;height:30px;padding:0 10px;border:0;border-radius:8px;background:none;text-align:left;font-size:13px}
+.menu button:hover,.menu button:focus-visible{background:#f1f3f6}
+.menu .dg{color:#c4320a}
+.msg{margin:8px 0 0;min-height:18px;color:#5b616e;font-size:12px}
+@container (min-width:560px){.g{grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.t:nth-child(n+11){display:block}
+.menu{width:160px}
+.menu button{height:40px}
+}
+@media (prefers-reduced-motion:reduce){.t.lift,.t.press{transform:none}
+.mask{-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+</style>
+
+<div class="st">
+  <p class="hd"><b>最近照片</b><small>长按或右键照片</small></p>
+  <div class="g"></div>
+  <p class="msg" role="status"></p>
+  <div class="mask"></div>
+  <ul class="menu" role="menu" aria-label="照片操作" hidden></ul>
+</div>
+
+<script type="module">
+const HUES = [18, 200, 140, 280, 40, 330, 100, 220, 0, 170, 260, 60];
+const ACTS = [['收藏', ''], ['分享', ''], ['移到相册', ''], ['删除', 'dg']];
+export default function demo(root) {
+  const st = root.querySelector('.st'), g = root.querySelector('.g'), mask = root.querySelector('.mask'), menu = root.querySelector('.menu'), msg = root.querySelector('.msg');
+  g.innerHTML = HUES.map((h, i) => `<button type="button" class="t" style="--h:${h}" aria-label="照片 ${i + 1}" aria-haspopup="menu"></button>`).join('');
+  menu.innerHTML = ACTS.map(([t, c]) => `<li role="none"><button type="button" role="menuitem" class="${c}" tabindex="-1">${t}</button></li>`).join('');
+  const items = [...menu.querySelectorAll('button')];
+  let cur = null, timer = 0, x0 = 0, y0 = 0, lifted = false;
+  const place = (t) => {
+    const s = st.getBoundingClientRect(), r = t.getBoundingClientRect(), mw = menu.offsetWidth, mh = menu.offsetHeight, gap = 6;
+    const L = r.left - s.left, T = r.top - s.top, R = r.right - s.left, B = r.bottom - s.top;
+    const clampX = (v) => Math.max(8, Math.min(s.width - mw - 8, v)), clampY = (v) => Math.max(8, Math.min(s.height - mh - 8, v));
+    let x, y;
+    if (B + gap + mh <= s.height - 8) { x = clampX(L); y = B + gap; }
+    else if (T - gap - mh >= 8) { x = clampX(L); y = T - gap - mh; }
+    else if (R + gap + mw <= s.width - 8) { x = R + gap; y = clampY(T); }
+    else { x = Math.max(8, L - gap - mw); y = clampY(T); }
+    menu.style.left = x + 'px'; menu.style.top = y + 'px';
+  };
+  const open = (t, focus) => {
+    close(false); cur = t; t.classList.remove('press'); t.classList.add('lift'); mask.classList.add('on'); menu.hidden = false; place(t);
+    navigator.vibrate?.(10);
+    if (focus) items[0].focus();
+  };
+  const close = (back = true) => {
+    if (!cur) return; const t = cur; cur = null; t.classList.remove('lift'); mask.classList.remove('on'); menu.hidden = true;
+    if (back && root.activeElement && (menu.contains(root.activeElement) || root.activeElement === t)) t.focus();
+  };
+  g.addEventListener('pointerdown', (e) => {
+    const t = e.target.closest('.t'); if (!t || e.button > 0) return;
+    x0 = e.clientX; y0 = e.clientY; lifted = false; t.classList.add('press');
+    timer = setTimeout(() => { lifted = true; open(t, false); }, 450);
+  });
+  g.addEventListener('pointermove', (e) => { if (timer && Math.hypot(e.clientX - x0, e.clientY - y0) > 8) { clearTimeout(timer); timer = 0; g.querySelector('.press')?.classList.remove('press'); } });
+  const up = () => { clearTimeout(timer); timer = 0; g.querySelector('.press')?.classList.remove('press'); };
+  g.addEventListener('pointerup', up); g.addEventListener('pointercancel', up);
+  g.addEventListener('click', (e) => {
+    const t = e.target.closest('.t'); if (!t) return;
+    if (lifted) { lifted = false; return; }
+    msg.textContent = `示例：这里会打开${t.getAttribute('aria-label')}`;
+  });
+  g.addEventListener('contextmenu', (e) => { const t = e.target.closest('.t'); if (!t) return; e.preventDefault(); if (cur !== t) open(t, false); });
+  g.addEventListener('keydown', (e) => { const t = e.target.closest('.t'); if (t && (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10'))) { e.preventDefault(); open(t, true); } });
+  mask.addEventListener('click', () => close());
+  menu.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b || !cur) return; msg.textContent = `已${b.textContent}：${cur.getAttribute('aria-label')}`; close(); });
+  menu.addEventListener('keydown', (e) => {
+    const i = items.indexOf(root.activeElement), n = items.length;
+    const to = { ArrowDown: (i + 1) % n, ArrowUp: (i - 1 + n) % n, Home: 0, End: n - 1 }[e.key];
+    if (to !== undefined) { e.preventDefault(); items[to].focus(); } else if (e.key === 'Escape' || e.key === 'Tab') { e.preventDefault(); close(); }
+  });
+  st.addEventListener('keydown', (e) => { if (e.key === 'Escape' && cur) close(); });
+  // 挂载后演示：托起第 2 张
+  setTimeout(() => { if (root.host.isConnected && !cur) open(g.children[1], false); }, 500);
+}
+</script>

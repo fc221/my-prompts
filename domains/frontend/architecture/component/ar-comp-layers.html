@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    stack([
+      { t: '页面', items: ['OrderListPage'], note: '只拼区块' },
+      { t: '区块', items: ['OrderListPanel'], note: '取数据，管加载和出错', acc: true },
+      { t: '业务组件', items: ['OrderStatusTag'], note: '收数据，抛 onRefund' },
+      { t: '基础组件', items: ['Button', 'Input'], note: '不读 store、不发请求' },
+    ], { arrow: '只能从上往下引用' }),
+    tree(`
+src/
+  pages/            页面
+  features/orders/
+*   OrderListPanel  区块
+    components/     业务组件
+  components/ui/    基础组件
+`),
+  ]);
+}
+</script>

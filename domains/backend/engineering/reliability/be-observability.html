@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['订单服务', '库存服务', '支付服务'], [
+    [0, 0, '入口读取或生成 trace_id'],
+    [0, 1, 'traceparent 头'],
+    [1, 0, '扣库存 35ms', 'r'],
+    [0, 2, 'traceparent 继续传'],
+    [2, 0, '支付 820ms，慢在这', 'rx'],
+    [0, 0, '日志带 trace_id、span_id'],
+  ]), { title: '链路追踪 · 一次下单，每段一个 span' });
+}
+</script>

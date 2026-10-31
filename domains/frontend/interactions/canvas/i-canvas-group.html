@@ -1,0 +1,148 @@
+<link rel="stylesheet" href="../../_shared/interactions-base.css">
+<style>
+.st{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;background:#f3f4f7}
+.bd{position:relative;overflow:hidden;background-image:radial-gradient(#cfd4dc 1px,transparent 1.4px);background-size:20px 20px;touch-action:none;user-select:none}
+.bd:focus-visible{outline-offset:-3px}
+.cd{position:absolute;left:0;top:0;z-index:2;display:flex;flex-direction:column;justify-content:center;width:var(--cw);height:var(--ch);padding:0 9px;border:1px solid rgba(16,24,40,.08);border-radius:6px;background:var(--c);box-shadow:0 1px 3px rgba(16,24,40,.12);color:#1f2329;text-align:left;cursor:grab}
+.cd b{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd small{color:rgba(31,35,41,.62);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd,.sel,.gp,.tb,.mq{transition:none}
+.cd.hit{box-shadow:0 0 0 2px #3b5bdb}
+.cd[aria-pressed=true]{box-shadow:0 0 0 2px #3b5bdb,0 4px 10px rgba(59,91,219,.18)}
+.mq{position:absolute;z-index:4;border:1px solid #3b5bdb;background:rgba(59,91,219,.08);pointer-events:none}
+.mq span{position:absolute;right:0;top:100%;margin-top:3px;padding:0 6px;border-radius:4px;background:#3b5bdb;color:#fff;font-size:11px;line-height:18px;white-space:nowrap}
+.sel{position:absolute;z-index:1;border:1.5px dashed #3b5bdb;border-radius:9px;pointer-events:none}
+.gp{position:absolute;z-index:0;border:1px solid #bac8ff;border-radius:12px;background:rgba(59,91,219,.05);pointer-events:none}
+.gp.below span{top:auto;bottom:-20px}
+.gp span{position:absolute;left:8px;top:-9px;padding:0 6px;border-radius:4px;background:#dbe4ff;color:#2f4ac0;font-size:11px;font-weight:600;line-height:17px;white-space:nowrap}
+.tb{position:absolute;z-index:5;display:flex;padding:2px;border:1px solid #e3e6eb;border-radius:8px;background:#fff;box-shadow:0 4px 12px rgba(16,24,40,.12)}
+.tb button{height:24px;padding:0 8px;border:0;border-radius:6px;background:none;color:#1f2329;font-size:12px;white-space:nowrap}
+.tb button:hover{background:#f5f6f8}
+.tb .gb{color:#3b5bdb;font-weight:600}
+.ft{display:flex;align-items:center;height:28px;padding:0 12px;border-top:1px solid #e3e6eb;background:#fff}
+.msg{margin:0;min-width:0;color:#5b616e;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cur{position:absolute;left:0;top:0;z-index:6;display:none;width:16px;height:16px;pointer-events:none;transition:transform .35s cubic-bezier(.3,.7,.3,1)}
+.cur.quick{transition:none}
+.bd{--cw:76px;--ch:36px}
+@container (min-width:560px){.bd{--cw:116px;--ch:52px}
+.cd{padding:0 12px}
+.cd b{font-size:13px}
+.ft{height:32px;padding:0 16px}
+}
+</style>
+
+<div class="st"><div class="bd" tabindex="-1" role="group" aria-label="读书会选题墙：空白处拖出选框多选，Shift+点击加选，Ctrl 或 ⌘+G 编组"><div class="mq" hidden><span></span></div><div class="sel" hidden></div><div class="tb" hidden><button type="button" class="gb">编组</button><button type="button" class="cx">取消</button></div><svg class="cur" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 1.5l10.5 6.8-4.6.9-2.1 4.6z" fill="#1f2329" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg></div><div class="ft"><p class="msg" role="status">在空白处拖出选框，Shift+点击加选</p></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const bd = root.querySelector('.bd'), mq = root.querySelector('.mq'), selEl = root.querySelector('.sel'), tb = root.querySelector('.tb'), gb = root.querySelector('.gb'), msg = root.querySelector('.msg'), cur = root.querySelector('.cur');
+  const DATA = [['城市漫步', '提议 · 小周', '#fff3bf', 0, 0.05], ['旧书交换', '提议 · 阿楠', '#ffdeeb', 0.4, 0], ['播客共读', '提议 · 林林', '#d0ebff', 0.12, 0.6], ['夜读接力', '提议 · 大宇', '#d3f9d8', 0.8, 0.1], ['作者见面', '提议 · 小周', '#ffdeeb', 1, 0.52], ['旧书交换', '提议 · 晴晴', '#fff3bf', 1, 1]];
+  const cards = DATA.map(([t, s, c, fx, fy], id) => {
+    const el = document.createElement('button'); el.type = 'button'; el.className = 'cd'; el.style.setProperty('--c', c); el.setAttribute('aria-pressed', 'false');
+    el.innerHTML = `<b>${t}</b><small>${s}</small>`; bd.insertBefore(el, mq); return { id, el, t, fx, fy, x: 0, y: 0 };
+  });
+  let sel = new Set(), groups = [], gn = 0, drag = null, stop = false, bw = 0, bh = 0, cw = 0, ch = 0;
+  const groupOf = (id) => groups.find((g) => g.ids.has(id));
+  const rect = (ids) => { const cs = [...ids].map((i) => cards[i]); const l = Math.min(...cs.map((c) => c.x)), t = Math.min(...cs.map((c) => c.y)); return { l, t, r: Math.max(...cs.map((c) => c.x)) + cw, b: Math.max(...cs.map((c) => c.y)) + ch }; };
+  const box = (el, r, pad) => { el.style.cssText = `left:${r.l - pad}px;top:${r.t - pad}px;width:${r.r - r.l + pad * 2}px;height:${r.b - r.t + pad * 2}px`; };
+  const render = () => {
+    cards.forEach((c) => { c.el.style.transform = `translate(${c.x}px,${c.y}px)`; c.el.setAttribute('aria-pressed', String(sel.has(c.id))); });
+    bd.querySelectorAll('.gp').forEach((g) => g.remove());
+    groups.forEach((g) => { const el = document.createElement('div'), r = rect(g.ids); el.className = 'gp' + (r.t < 20 ? ' below' : ''); el.innerHTML = `<span>${g.name}</span>`; box(el, r, 10); bd.prepend(el); }); // 顶部放不下标签时放到框下方
+    selEl.hidden = tb.hidden = !sel.size;
+    if (!sel.size) return;
+    const r = rect(sel); box(selEl, r, 5);
+    const g = groupOf([...sel][0]), same = g && g.ids.size === sel.size && [...sel].every((i) => g.ids.has(i));
+    gb.textContent = same ? '解组' : '编组'; gb.hidden = sel.size < 2 && !same;
+    const tw = tb.offsetWidth || 90, th = 30, left = Math.max(4, Math.min(bw - tw - 4, r.r - tw + 5));
+    tb.style.left = left + 'px'; tb.style.top = (r.t - 12 - th >= 0 ? r.t - 12 - th : r.b + 12 + th <= bh ? r.b + 12 : Math.max(4, r.t)) + 'px';
+  };
+  const say = (t) => { msg.textContent = t ?? (sel.size ? `已选 ${sel.size} 张 · 拖动任一张一起移动，Ctrl/⌘+G 编组` : '在空白处拖出选框，Shift+点击加选'); };
+  const pick = (id) => groupOf(id)?.ids ?? new Set([id]);
+  const doGroup = () => {
+    if (gb.textContent === '解组') { groups = groups.filter((g) => !g.ids.has([...sel][0])); render(); say(`已解组，仍选中 ${sel.size} 张`); return; }
+    if (sel.size < 2) return;
+    groups.forEach((g) => sel.forEach((i) => g.ids.delete(i))); groups = groups.filter((g) => g.ids.size > 1); // 不做嵌套
+    groups.push({ name: `分组 ${++gn}`, ids: new Set(sel) }); render(); say(`已编组：分组 ${gn}（${sel.size} 张）`);
+  };
+  const moveSel = (dx, dy) => { // 整组同一位移，碰到边缘停住
+    const r = rect(sel); dx = Math.max(-r.l, Math.min(bw - r.r, dx)); dy = Math.max(-r.t, Math.min(bh - r.b, dy));
+    sel.forEach((i) => { cards[i].x += dx; cards[i].y += dy; }); render();
+  };
+  const local = (e) => { const r = bd.getBoundingClientRect(), f = bd.clientWidth / r.width; return [(e.clientX - r.left) * f, (e.clientY - r.top) * f]; };
+  // 框选：完全框住才算选中
+  const boxMove = (x0, y0, x, y, base) => {
+    const l = Math.min(x0, x), t = Math.min(y0, y), r = Math.max(x0, x), b = Math.max(y0, y);
+    mq.hidden = false; mq.style.cssText = `left:${l}px;top:${t}px;width:${r - l}px;height:${b - t}px`;
+    const hits = cards.filter((c) => c.x >= l && c.y >= t && c.x + cw <= r && c.y + ch <= b).map((c) => c.id);
+    cards.forEach((c) => c.el.classList.toggle('hit', hits.includes(c.id)));
+    mq.firstChild.textContent = `已框住 ${hits.length} 张`; return new Set([...base, ...hits.flatMap((i) => [...pick(i)])]);
+  };
+  const boxEnd = (next) => { mq.hidden = true; cards.forEach((c) => c.el.classList.remove('hit')); sel = next; render(); say(); };
+
+  bd.addEventListener('pointerdown', (e) => {
+    if (e.button || e.target.closest('.tb')) return; stop = true; cur.style.display = 'none';
+    const [x, y] = local(e), c = cards.find((k) => k.el === e.target.closest('.cd'));
+    try { bd.setPointerCapture(e.pointerId); } catch {}
+    if (c) {
+      const was = sel.has(c.id);
+      if (e.shiftKey) { const ids = pick(c.id); ids.forEach((i) => (was ? sel.delete(i) : sel.add(i))); } else if (!was) sel = new Set(pick(c.id));
+      drag = { k: 'move', x, y, lx: x, ly: y, c, was, moved: false, shift: e.shiftKey }; render(); say();
+    } else drag = { k: 'box', x, y, base: e.shiftKey ? new Set(sel) : new Set(), moved: false };
+  });
+  bd.addEventListener('pointermove', (e) => {
+    if (!drag) return; const [x, y] = local(e);
+    if (!drag.moved && Math.hypot(x - drag.x, y - drag.y) < 4) return; drag.moved = true;
+    if (drag.k === 'box') drag.next = boxMove(drag.x, drag.y, x, y, drag.base);
+    else if (sel.size) { moveSel(x - drag.lx, y - drag.ly); drag.lx = x; drag.ly = y; }
+  });
+  const end = () => {
+    if (!drag) return; const d = drag; drag = null;
+    if (d.k === 'box') boxEnd(d.moved ? d.next : new Set());
+    else if (!d.moved && d.was && !d.shift) { sel = new Set(pick(d.c.id)); render(); say(); } // 在多选里点一张：只留它
+    else if (d.moved) say(`已移动 ${sel.size} 张`);
+  };
+  bd.addEventListener('pointerup', end); bd.addEventListener('pointercancel', end);
+  cards.forEach((c) => c.el.addEventListener('click', (e) => { // 键盘空格 / 回车切换选中
+    if (e.detail) return; const ids = pick(c.id), on = !sel.has(c.id); ids.forEach((i) => (on ? sel.add(i) : sel.delete(i))); render(); say();
+  }));
+  gb.addEventListener('click', doGroup);
+  root.querySelector('.cx').addEventListener('click', () => { sel = new Set(); render(); say(); bd.focus(); });
+  root.addEventListener('keydown', (e) => {
+    if (e.target.closest?.('input,textarea,[contenteditable]')) return; // 编辑文字时不拦截
+    const mod = e.ctrlKey || e.metaKey, k = e.key.toLowerCase(), c = cards.find((x) => x.el === root.activeElement);
+    if (mod && k === 'a') { e.preventDefault(); sel = new Set(cards.map((x) => x.id)); render(); say(); }
+    else if (mod && k === 'g') { e.preventDefault(); if (e.shiftKey) { groups = groups.filter((g) => ![...sel].some((i) => g.ids.has(i))); render(); say('已解组'); } else if (gb.textContent === '编组') doGroup(); }
+    else if (e.key === 'Escape' && sel.size) { e.preventDefault(); sel = new Set(); render(); say(); }
+    else if (c && e.key.startsWith('Arrow')) {
+      e.preventDefault(); if (!sel.has(c.id)) sel = new Set(pick(c.id));
+      const s = e.shiftKey ? 40 : 8; moveSel({ ArrowLeft: -s, ArrowRight: s }[e.key] || 0, { ArrowUp: -s, ArrowDown: s }[e.key] || 0); say(`已移动 ${sel.size} 张`);
+    }
+  });
+
+  const layout = (init) => { // 首次按比例摆放；之后尺寸变化只把卡片夹回画布内
+    bw = bd.clientWidth; bh = bd.clientHeight; cw = cards[0].el.offsetWidth; ch = cards[0].el.offsetHeight;
+    cards.forEach((c) => { if (init) { c.x = Math.round(8 + c.fx * (bw - cw - 16)); c.y = Math.round(8 + c.fy * (bh - ch - 16)); } c.x = Math.max(0, Math.min(bw - cw, c.x)); c.y = Math.max(0, Math.min(bh - ch, c.y)); }); render();
+  };
+  // 挂载后演示一次：拖框框住左边三张（第四张只碰到一角，不选），再编组
+  const auto = async () => {
+    const wait = (ms) => new Promise((r) => setTimeout(r, still ? 0 : ms)), live = () => root.host.isConnected && !stop;
+    const r = rect([0, 1, 2]), x0 = Math.max(2, r.l - 6), y0 = Math.max(2, r.t - 4), x1 = r.r + 10, y1 = Math.min(bh - 2, r.b + 4);
+    const at = (x, y) => { cur.style.transform = `translate(${x - 2}px,${y - 1}px)`; };
+    cur.classList.add('quick'); at(x1 + 30, y0 + 20); cur.style.display = 'block'; void cur.offsetWidth; cur.classList.remove('quick');
+    await wait(80); if (!live()) return; at(x0, y0); await wait(420);
+    let next = new Set();
+    for (let i = 1; i <= 6; i++) { if (!live()) return; const x = x0 + ((x1 - x0) * i) / 6, y = y0 + ((y1 - y0) * i) / 6; if (!still) cur.classList.add('quick'); at(x, y); next = boxMove(x0, y0, x, y, new Set()); await wait(60); }
+    cur.classList.remove('quick'); await wait(200); if (!live()) return; boxEnd(next); await wait(500); if (!live()) return;
+    const t = gb.getBoundingClientRect(), b = bd.getBoundingClientRect(); at(t.left - b.left + t.width / 2, t.top - b.top + t.height / 2); await wait(420); if (!live()) return;
+    doGroup(); await wait(400); if (live()) cur.style.display = 'none';
+  };
+  let first = true;
+  const ro = new ResizeObserver(() => {
+    if (!root.host.isConnected) { ro.disconnect(); return; }
+    layout(first); if (first) { first = false; setTimeout(() => { if (!stop && root.host.isConnected) auto(); }, 300); }
+  });
+  ro.observe(bd);
+}
+</script>

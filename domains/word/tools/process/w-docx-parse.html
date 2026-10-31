@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg{--sec:#0891b2}
+</style>
+
+<div class="dg"></div>
+
+<script type="module">
+import { draw, tree, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const t = tree(`
+合同_0012.docx/          zip 包
+  [Content_Types].xml
+  word/
+  * document.xml         正文：段落、表格、编号引用
+    styles.xml           样式（标题 1–3 等）
+    numbering.xml        编号格式，条款号从这里推算
+    header1.xml          页眉
+    comments.xml         批注
+    footnotes.xml        脚注
+    media/               图片 image1.png…
+  docProps/
+    app.xml              页数、字数（保存时写入）
+`);
+  const c = code([{ t: '提取结果 · 按文档顺序', text: `
+[
+  { "type": "heading", "level": 1,
+    "text": "第五条 付款方式" },
+  { "type": "para", "no": "5.1",
+    "path": "第五条 付款方式",
+    "text": "甲方在货物验收合格后 30 日内……" },
+  { "type": "table", "title": "表 1 分期付款",
+    "rows": [["期次", "比例", "时间"],
+             ["首付", "30%", "签约后 5 日"]] },
+  { "type": "field", "name": "合同金额",
+    "value": "1,286,400.00", "from": "第三条 3.1" }
+]
+` }]);
+  draw(root, [t, c], { title: 'docx 是一个 zip 包 · 编号要从 numbering.xml 推算', min: 0.45 });
+}
+</script>

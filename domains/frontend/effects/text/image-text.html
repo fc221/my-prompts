@@ -1,0 +1,49 @@
+<style>
+:host{display:block;height:100%}
+.st{position:relative;height:100%;overflow:hidden;container-type:size;display:flex;flex-direction:column;justify-content:center;padding:0 22px 6px;background:#f5f3ef;color:#1c2540;font:13px/1.5 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.kk{margin:0;color:#5e6478;font-size:12px;letter-spacing:.08em}
+.big{width:fit-content;margin:0;font-size:96px;line-height:1.08;font-weight:900;letter-spacing:.02em;color:#3b4690}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){.big{color:transparent;background-image:var(--img);background-size:170% 100%;background-position:0% 50%;-webkit-background-clip:text;background-clip:text}
+}
+.big.pan{animation:pan 3.2s cubic-bezier(.2,0,0,1) forwards}
+@keyframes pan{from{background-position:0% 50%}
+to{background-position:60% 50%}
+}
+.cap{display:flex;align-items:center;gap:8px;margin:4px 0 0;color:#454c63;font-size:12px}
+.cap i{width:8px;height:8px;border-radius:50%;background:var(--dot)}
+.info{display:none}
+.nx{position:absolute;right:14px;bottom:14px}
+.st[data-s="0"]{--dot:#e8577e;--img:conic-gradient(from 160deg at 34% 30%,rgba(255,255,255,.5) 0 18deg,transparent 0),conic-gradient(from 122deg at 74% 46%,#232c6b 0 116deg,transparent 0),conic-gradient(from 126deg at 34% 30%,#3d4a9a 0 108deg,transparent 0),radial-gradient(circle at 54% 28%,#ffe08a 0 5%,rgba(255,224,138,0) 13%),linear-gradient(180deg,#ff8a5c 0%,#e8577e 45%,#6b5bd6 100%)}
+.st[data-s="1"]{--dot:#3fe0a8;--img:conic-gradient(from 112deg at 62% 64%,#070d26 0 136deg,transparent 0),radial-gradient(38% 50% at 28% 36%,rgba(90,255,190,.95),rgba(90,255,190,0) 70%),radial-gradient(34% 46% at 60% 24%,rgba(130,140,255,.9),rgba(130,140,255,0) 70%),radial-gradient(28% 40% at 86% 42%,rgba(70,220,255,.75),rgba(70,220,255,0) 70%),radial-gradient(circle at 12% 14%,#fff 0 .6%,transparent 1%),radial-gradient(circle at 44% 10%,#fff 0 .5%,transparent .9%),linear-gradient(180deg,#121a44,#1f2c66)}
+.st[data-s="2"]{--dot:#1fa3a8;--img:linear-gradient(180deg,transparent 60%,#127a86 60%,#0a4656 100%),conic-gradient(from 108deg at 40% 40%,#1f6b5b 0 144deg,transparent 0),conic-gradient(from 124deg at 80% 34%,#3c9c86 0 112deg,transparent 0),radial-gradient(circle at 62% 24%,#fff2b0 0 5%,rgba(255,242,176,0) 12%),linear-gradient(180deg,#3fb2d6,#2a86b8)}
+@media (forced-colors:active){.big{background:none;color:CanvasText}
+}
+@container (max-width:310px){.big{font-size:88px}
+}
+@container (min-height:280px){.st{padding:0 44px 10px}
+.kk{font-size:13px}
+.big{font-size:168px;line-height:1.05}
+.cap{font-size:13px}
+.info{position:absolute;right:44px;top:50%;display:grid;gap:10px;margin:0;padding:16px 18px;border-radius:14px;background:#fff;box-shadow:0 6px 20px rgba(28,37,64,.08);transform:translateY(-50%)}
+.info div{display:grid;gap:0}
+.info dt{color:#5e6478;font-size:12px}
+.info dd{margin:0;font-size:15px;font-weight:600}
+.nx{right:24px;bottom:20px}
+}
+@media (prefers-reduced-motion:reduce){.big.pan{animation:none;background-position:30% 50%}
+}
+</style>
+
+<div class="st" data-s="0"><p class="kk">冬季专题 · 阿勒泰 7 日</p><h3 class="big">雪国</h3><p class="cap"><i aria-hidden="true"></i><span class="sn">晨光雪山</span><span>· 12 月 18 日出发</span></p><dl class="info"><div><dt>行程</dt><dd>7 天 6 晚</dd></div><div><dt>路线</dt><dd>禾木 → 喀纳斯</dd></div><div><dt>剩余名额</dt><dd>4 席</dd></div></dl><button type="button" class="ctl nx">换一张</button><p class="sr" role="status"></p></div>
+
+<script type="module">
+export default function demo(root) {
+  const st = root.querySelector('.st'), big = root.querySelector('.big'), sn = root.querySelector('.sn'), msg = root.querySelector('[role=status]'), N = ['晨光雪山', '极光夜', '湖面'];
+  let s = 0;
+  // 只移动字里的图片：重新挂上平移动画，字形不动
+  const pan = () => { big.classList.remove('pan'); void big.offsetWidth; big.classList.add('pan'); };
+  root.querySelector('.nx').addEventListener('click', () => { s = (s + 1) % N.length; st.dataset.s = String(s); sn.textContent = N[s]; pan(); msg.textContent = '标题图片换成：' + N[s]; });
+  pan();
+}
+</script>

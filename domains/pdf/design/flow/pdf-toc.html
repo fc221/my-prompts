@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    page({ pages: [{ label: '目录页：target-counter 取页码', blocks: ['title:目录', 'toc:6', 'gap', 'p:2'] }] }),
+    tree(`
+阅读器书签/
+  一、核心结论
+* 二、销售分析/    h1 章
+    2.1 门店排名    h2 · #sec-2-1
+    2.2 品类结构
+  三、门店分析/
+    3.1 新开门店    h3 以下不进书签
+`),
+  ], { title: '目录、书签都从 h1–h3 生成', center: true, min: 0.3 });
+}
+</script>

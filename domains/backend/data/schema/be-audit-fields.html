@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: '会员表的公共列和唯一约束', text: `
+-- 公共列由框架填充，系统任务写 0
+created_at, created_by, updated_at, updated_by,
+-- 删除标记：NULL 表示未删除
+deleted_at TIMESTAMPTZ NULL, deleted_by BIGINT,
+-- PostgreSQL：已删除会员的手机号不再占唯一
+CREATE UNIQUE INDEX uk_member_phone ON member
+  (tenant_id, phone) WHERE deleted_at IS NULL;
+-- MySQL 没有部分索引：删除时 delete_token 写该行 id
+UNIQUE (tenant_id, phone, delete_token)
+` }]), { title: '软删除 · 唯一约束避开已删除行' });
+}
+</script>

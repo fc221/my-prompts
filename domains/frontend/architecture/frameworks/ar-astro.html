@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+* pages/                  文件路由，.astro、.md、.mdx
+    index.astro
+*   blog/[...slug].astro  getStaticPaths 从集合生成
+  layouts/                BaseLayout.astro：head、SEO
+  components/             交互组件才加 client:*
+* content.config.ts       defineCollection、glob()、zod
+* content/blog/           Markdown / MDX 正文
+  assets/                 要优化的图片
+  actions/index.ts        defineAction 处理表单
+  styles/
+public/                   favicon、robots.txt 原样输出
+astro.config.mjs
+`), { title: 'Astro 6 内容站 · 默认零 JS' });
+}
+</script>

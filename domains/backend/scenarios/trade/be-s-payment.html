@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['订单', '支付服务', '支付渠道', '对账任务'], [
+    [0, 1, '创建支付单'],
+    [1, 2, '渠道下单'],
+    [2, 1, '通知（会重复）', 'r'],
+    [1, 1, '条件更新 · 重复即忽略'],
+    [2, 1, '通知丢失', 'rx'],
+    [1, 2, '主动查单补掉单'],
+    [3, 2, 'T+1 逐笔比对'],
+  ]), { title: '通知、查单、日终对账三道保险' });
+}
+</script>

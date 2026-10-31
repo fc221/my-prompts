@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+POST /orders
+Content-Type: application/json
+
+"storeId": "s_1024",
+"deliveryType": "DELIVERY",
+"remak": "少放辣",
+"items": [ …, …,
+  { "skuId": "sku_77", "quantity": 0 } ]
+`, `
+422 Unprocessable Content
+
+"errors": [
+  { "field": "items[2].quantity",
+    "code": "OUT_OF_RANGE",
+    "message": "数量 1–999" },
+  { "field": "address",
+    "code": "REQUIRED", … },
+  { "field": "remak",
+    "code": "UNKNOWN_FIELD", … }
+]
+`), { title: '入参校验 · 一次返回全部字段错误' });
+}
+</script>

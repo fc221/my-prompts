@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '没有可量化的理由', items: ['→ 团队在生产跑熟的那套', '至少 2 人排过障'], acc: true },
+    { t: '单实例上万长连接', items: ['推送、IM、网关', '→ Go、Node.js、Rust、Java 21、ASP.NET Core'] },
+    { t: 'CPU 密集、P99 几十毫秒', items: ['→ Go、Rust、Java、ASP.NET Core'] },
+    { t: '机器学习、数据处理多', items: ['→ Python'] },
+    { t: '政企、信创适配', items: ['→ Java，生态最全'] },
+    { t: '单文件、镜像小、冷启动快', items: ['→ Go 或 Rust'] },
+    { t: '快速做完整业务', items: ['→ 全家桶：Spring Boot、Django、Rails、Laravel、NestJS'] },
+    { t: '只做 API、网关、BFF', items: ['→ 轻量：FastAPI、Express / Fastify、Gin、Axum'] },
+    { t: '只有 1 人会或都没用过', items: ['→ 排期加 2–4 周样板项目', '排不出时间就不选'] },
+  ], { cols: 3, note: '同一团队后端语言不超过 2 种，结论写成一页决策记录' }), { title: '后端选型 · 判断条件 → 推荐' });
+}
+</script>

@@ -1,0 +1,100 @@
+<style>
+  :host {
+    container-type: size;
+  }
+  .s {
+    position: relative;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: #e8edf7;
+    color: #14213d;
+    font:
+      12px/1.4 system-ui,
+      "PingFang SC",
+      sans-serif;
+  }
+  .s > i {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(4px);
+  }
+  .b1 {
+    width: 46%;
+    aspect-ratio: 1;
+    left: 6%;
+    top: -24%;
+    background: #ff9f7a;
+  }
+  .b2 {
+    width: 40%;
+    aspect-ratio: 1;
+    right: 6%;
+    bottom: -30%;
+    background: #4fc3b0;
+  }
+  .b3 {
+    width: 24%;
+    aspect-ratio: 1;
+    left: 38%;
+    top: 44%;
+    background: #7aa7ff;
+  }
+  .g {
+    position: relative;
+    width: min(240px, 72%);
+    display: grid;
+    gap: 4px;
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.55);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 12px 32px rgba(20, 33, 61, 0.15);
+  }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    color: #2a3655;
+  }
+  .g b {
+    font-size: clamp(28px, 18cqh, 52px);
+    line-height: 1;
+    font-weight: 600;
+  }
+  .g p {
+    margin: 0;
+    color: #2a3655;
+  }
+  .wk {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.8);
+    text-align: center;
+    color: #2a3655;
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .g {
+      background: #f6f8fc;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+</style>
+
+<div class="s">
+  <i class="b1"></i><i class="b2"></i><i class="b3"></i>
+  <div class="g">
+    <div class="top"><span>上海 · 徐汇</span><span>14:30</span></div>
+    <b>23°</b>
+    <p>多云转晴 · 湿度 62%</p>
+    <div class="wk">
+      <span>周六<br />25°</span><span>周日<br />21°</span
+      ><span>周一<br />19°</span>
+    </div>
+  </div>
+</div>

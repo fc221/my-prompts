@@ -1,0 +1,122 @@
+<link rel="stylesheet" href="../../_shared/app-control-base.css">
+<style>
+.st{display:flex;justify-content:center;gap:14px;padding:10px 12px 0;background:linear-gradient(155deg,#ecf3f1,#d7e3df)}
+.dev{position:relative;flex:none;width:188px;height:calc(100% + 30px);padding:5px 5px 0;border-radius:30px 30px 0 0;background:#15171c;box-shadow:0 20px 40px -18px rgba(15,40,35,.5)}
+.scr{position:relative;display:flex;flex-direction:column;height:100%;overflow:hidden;border-radius:25px 25px 0 0;background:#fff}
+.sbar{position:relative;z-index:20;flex:none;display:flex;justify-content:space-between;align-items:center;height:24px;padding:0 16px 0 18px;font-size:10px;font-weight:600}
+.sbar::after{content:"";position:absolute;left:50%;top:6px;width:44px;height:13px;margin-left:-22px;border-radius:7px;background:#15171c}
+.bat{width:18px;height:9px;padding:1px;border:1.3px solid currentColor;border-radius:3px}
+.bat::before{content:"";display:block;width:65%;height:100%;border-radius:1px;background:currentColor}
+.nav{position:relative;z-index:2;flex:none;display:flex;align-items:baseline;gap:6px;padding:2px 12px 6px;background:#fff;box-shadow:0 1px 0 #eef0f3}
+.nav h3{margin:0;font-size:15px}
+.nav small{color:#6b7280;font-size:10.5px}
+.vp{position:relative;flex:1;min-height:0;overflow:hidden auto;overscroll-behavior:contain;scrollbar-width:none;background:#f3f6f5;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.vp:focus-visible{outline-offset:-2px}
+.top{position:absolute;left:0;right:0;top:8px;color:#8a9a95;font-size:10px;text-align:center;opacity:0}
+.ct{display:grid;gap:5px;margin:0;padding:6px 8px 40px;list-style:none;transition:none}
+.ct li{display:grid;grid-template-columns:32px minmax(0,1fr);align-items:center;gap:6px;padding:5px 8px 5px 6px;border-radius:10px;background:#fff}
+.ct time{color:#4b5563;font:600 10.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace}
+.ct span{display:grid;padding-left:7px;border-left:3px solid var(--c)}
+.ct b,.ct small{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.ct b{font-size:11.5px}
+.ct small{color:#6b7280;font-size:10px}
+.side{display:flex;flex:0 1 220px;flex-direction:column;gap:8px;min-width:0;padding:4px 0 12px}
+.side .ctl{align-self:flex-start;height:28px;padding:0 10px;font-size:12px}
+.cap{display:none;margin:0;color:#5b616e;font-size:12px}
+.seg{display:flex;padding:2px;border-radius:8px;background:#dde7e3}
+.seg button{flex:1;min-width:0;height:24px;padding:0 4px;border:0;border-radius:6px;background:none;color:#4b5563;font-size:11px;white-space:nowrap}
+.seg [aria-pressed=true]{background:#fff;color:#111827;font-weight:600;box-shadow:0 1px 2px rgba(17,24,39,.12)}
+.ro{display:grid;grid-template-columns:auto minmax(0,1fr);gap:1px 6px;align-items:baseline;margin:0;color:#4b5563;font-size:11px}
+.ro b{color:#111827;font:600 13px/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+.ch{display:none;width:100%;max-width:200px;height:auto}
+.ch text{fill:#6b7280;font-size:9px}
+.msg{margin:0;color:#374151;font-size:11.5px;line-height:1.5}
+@container (max-width:310px){.st{gap:10px;padding:10px 10px 0}
+.dev{width:170px}
+.msg{font-size:11px}
+}
+@container (min-width:560px){.st{gap:32px}
+.dev{width:236px}
+.cap,.ch{display:block}
+.ct li{padding:7px 8px 7px 6px}
+.ct b{font-size:12.5px}
+.ro b{font-size:15px}
+.msg{font-size:12.5px}
+.side .ctl{order:1}
+}
+</style>
+
+<div class="st"><div class="dev"><div class="scr"><div class="sbar" aria-hidden="true"><span>07:52</span><span class="bat"></span></div><div class="nav"><h3>今日日程</h3><small>10月28日 周三</small></div><div class="vp" tabindex="0" aria-label="今日日程，可拖动或用方向键滚动"><p class="top" aria-hidden="true">今天没有更早的安排了</p><ul class="ct"></ul></div></div></div><div class="side"><button type="button" class="ctl rp">重播</button><p class="cap">在列表顶部继续往下拉，或在底部继续往上拉</p><div class="seg" role="group" aria-label="越界方式"><button type="button" aria-pressed="true" data-m="band">阻尼</button><button type="button" aria-pressed="false" data-m="hard">硬停</button></div><p class="ro"><span>多拉</span><b class="ov">0px</b><span>露出</span><b class="sh">0px</b></p><svg class="ch" viewBox="0 0 200 110" aria-hidden="true"><path d="M24 92H192M24 92V8" stroke="#c4cdd0" fill="none"/><path d="M24 92 80 12" stroke="#9aa4a8" stroke-dasharray="3 3" fill="none"/><path class="cv" stroke="#0f766e" stroke-width="2" fill="none"/><circle class="pk" r="3.5" fill="#fff" stroke="#0f766e" stroke-width="1.5" opacity="0"/><circle class="pt" r="3.5" fill="#0f766e"/><text x="84" y="16">1 : 1 跟手</text><text x="150" y="105">手指多拉</text><text x="2" y="8">露出</text></svg><p class="msg" role="status"></p></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const vp = root.querySelector('.vp'), ct = root.querySelector('.ct'), tip = root.querySelector('.top'), ov = root.querySelector('.ov'), shw = root.querySelector('.sh'), msg = root.querySelector('.msg');
+  const cv = root.querySelector('.cv'), pt = root.querySelector('.pt'), pk = root.querySelector('.pk');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DAY = [['08:30', '晨跑', '滨江步道', '#10b981'], ['09:30', '周会', '3 楼大会议室', '#6366f1'], ['11:00', '和设计对稿', '线上', '#f59e0b'], ['12:30', '午饭', '楼下面馆', '#ef4444'], ['14:00', '面试 · 前端岗', '1 号会议室', '#6366f1'], ['15:30', '牙医复诊', '和平路诊所', '#0ea5e9'], ['17:00', '接孩子', '实验小学东门', '#f97316'], ['19:30', '羽毛球', '体育中心 6 号场', '#10b981']];
+  ct.innerHTML = DAY.map(([t, b, s, c]) => `<li><time>${t}</time><span style="--c:${c}"><b>${b}</b><small>${s}</small></span></li>`).join('');
+  // 真实位置用原生 scrollTop（滚轮、键盘、滚动条天然只在范围内），越界部分用加长的上 / 下内边距画出来；
+  // .ct 设了 transition: none，否则减少动态效果的全局过渡会让内边距慢一拍、量到的高度不对
+  const PT = 6, PB = 40;
+  let raw = 0, extra = 0, hard = false, d = null, tok = 0, tm = [];
+  const M = () => vp.clientHeight / 4 * (still ? 0.5 : 1); // 上限：容器高度的 1/4，减少动态效果时减半
+  const max = () => Math.max(0, ct.offsetHeight - extra - vp.clientHeight);
+  const R = (o) => (hard ? 0 : M() * (1 - Math.exp(-0.6 * o / M()))); // 起步约 0.6 倍、越拉越慢、到不了上限
+  const inv = (v) => (hard || v <= 0 ? 0 : -(M() / 0.6) * Math.log(1 - Math.min(v, M() * 0.999) / M()));
+  const over = () => (raw < 0 ? -raw : raw > max() ? raw - max() : 0);
+  const paint = () => {
+    const m = max(), o = over(), r = R(o);
+    extra = o ? r : 0; ct.style.paddingTop = PT + (raw < 0 ? r : 0) + 'px'; ct.style.paddingBottom = PB + (raw > m ? r : 0) + 'px';
+    vp.scrollTop = raw < 0 ? 0 : raw > m ? m + r : raw; tip.style.opacity = raw < 0 ? String(Math.min(1, r / 24)) : '0';
+    ov.textContent = Math.round(o) + 'px'; shw.textContent = Math.round(r) + 'px';
+    // 图：横轴手指多拉、纵轴露出，单位都是上限 M
+    pt.setAttribute('cx', String(24 + Math.min(168, o / M() * 56))); pt.setAttribute('cy', String(92 - r / M() * 80));
+  };
+  const curve = () => { let s = 'M24 92'; for (let i = 1; i <= 30; i++) { const o = (i / 30) * 3 * M(); s += ` L${(24 + (o / M()) * 56).toFixed(1)} ${(92 - (R(o) / M()) * 80).toFixed(1)}`; } cv.setAttribute('d', s); };
+  const back = (done) => { // 从当前越界量缓出回到边界
+    const id = ++tok, lo = raw < 0, b = lo ? 0 : max(), from = R(over()), ms = still ? 0 : 320, t0 = performance.now();
+    const f = (t) => {
+      if (id !== tok || !root.host.isConnected) return;
+      const k = ms ? Math.min(1, (t - t0) / ms) : 1, v = from * Math.pow(1 - k, 3);
+      raw = lo ? -inv(v) : b + inv(v); paint();
+      if (k < 1) requestAnimationFrame(f); else { raw = b; paint(); done?.(); }
+    };
+    requestAnimationFrame(f);
+  };
+  vp.addEventListener('pointerdown', (e) => {
+    if (e.button > 0) return;
+    tok++; // 回弹途中按下：raw 由画面上的位置反推，接着拖不跳
+    d = { y0: e.clientY, r0: raw };
+    try { vp.setPointerCapture(e.pointerId); } catch {}
+  });
+  vp.addEventListener('pointermove', (e) => { if (!d) return; raw = d.r0 - (e.clientY - d.y0); paint(); });
+  const up = () => {
+    if (!d) return;
+    const o = over(), r = R(o); d = null;
+    if (!o) return;
+    pk.setAttribute('cx', pt.getAttribute('cx')); pk.setAttribute('cy', pt.getAttribute('cy')); pk.setAttribute('opacity', '1');
+    msg.textContent = hard ? `多拉了 ${Math.round(o)}px，内容一动不动，像撞墙` : `多拉 ${Math.round(o)}px，内容只露出 ${Math.round(r)}px，松手回到${raw < 0 ? '顶部' : '底部'}`;
+    back();
+  };
+  vp.addEventListener('pointerup', up); vp.addEventListener('pointercancel', up);
+  vp.addEventListener('scroll', () => { if (!d && !extra) raw = vp.scrollTop; }); // 滚轮、键盘滚动后同步真实位置
+  root.querySelectorAll('.seg button').forEach((b) => b.addEventListener('click', () => {
+    hard = b.dataset.m === 'hard'; root.querySelectorAll('.seg button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    curve(); pk.setAttribute('opacity', '0'); paint(); msg.textContent = hard ? '已切到“硬停”，点重播对比' : '已切到“阻尼”';
+  }));
+  // 自动演示：在顶部继续往下拉 150px，停一下，松手弹回
+  const play = () => {
+    tm.forEach(clearTimeout); tm = []; tok++; d = null; raw = 0; paint(); pk.setAttribute('opacity', '0'); msg.textContent = '';
+    const r = vp.getBoundingClientRect(), x = r.left + r.width / 2, y0 = r.top + 20;
+    const fire = (type, y) => vp.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerId: 9, button: 0, clientX: x, clientY: y }));
+    const at = (fn, t) => tm.push(setTimeout(() => { if (root.host.isConnected) fn(); }, t));
+    at(() => fire('pointerdown', y0), 300);
+    for (let k = 1; k <= 20; k++) at(() => fire('pointermove', y0 + 150 * k / 20), 300 + k * 30);
+    at(() => fire('pointerup', y0 + 150), 300 + 21 * 30 + 260);
+  };
+  new ResizeObserver(() => { curve(); if (!d) { raw = Math.max(0, Math.min(max(), raw)); paint(); } }).observe(vp);
+  root.querySelector('.rp').addEventListener('click', play);
+  curve(); paint();
+  tm.push(setTimeout(() => { if (root.host.isConnected) play(); }, 60));
+}
+</script>

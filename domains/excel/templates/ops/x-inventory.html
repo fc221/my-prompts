@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, sheet, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const marks = {};
+  [2, 4].forEach((r) => 'ABCDEFGHIJ'.split('').forEach((c) => { marks[c + r] = 'bad'; }));
+  Object.assign(marks, { G6: 'bad', I6: 'bad', A6: 'b', I5: 'warn' });
+  draw(root, flow([
+    { t: '商品表', note: '编码、安全库存' },
+    { t: '入库表 · 出库表', note: '按编码记明细', acc: true },
+    { t: '库存表', note: 'SUMIFS 汇总' },
+    { t: '预警清单', note: 'FILTER 需补货' },
+  ]) + '<div style="height:8px"></div>' + sheet({
+    head: ['编码', '名称', '单位', '期初', '入库合计', '出库合计', '当前库存', '安全库存', '状态', '建议采购'],
+    widths: [52, 84, 36, 40, 58, 58, 58, 58, 56, 58],
+    rows: [
+      ['SP-001', '云南咖啡豆', '袋', '20', '40', '47', '13', '15', '需补货', '47'],
+      ['SP-002', '全脂牛奶', '箱', '30', '120', '118', '32', '25', '正常', '0'],
+      ['SP-003', '燕麦奶', '箱', '12', '24', '30', '6', '10', '需补货', '30'],
+      ['SP-004', '12oz 纸杯', '条', '80', '0', '18', '62', '20', '积压', '0'],
+      ['SP-005', '香草糖浆', '瓶', '6', '6', '13', '-1', '4', '负库存', '0'],
+    ],
+    fx: ['E2', '=SUMIFS(入库[数量],入库[编码],[@编码])'],
+    marks,
+    tabs: ['库存', '入库', '出库', '预警清单', '盘点', '商品表'],
+    freeze: true,
+  }), { title: '进销存 · 当前库存 = 期初 + 入库 − 出库，低于安全库存进预警', min: 0.45 });
+}
+</script>

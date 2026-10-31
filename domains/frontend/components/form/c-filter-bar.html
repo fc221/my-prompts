@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.fb{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;width:100%;max-width:720px}
+.fi{display:inline-flex;align-items:center;gap:8px}
+.fi>span:first-child{color:#5b616e;white-space:nowrap}
+.sel select{width:112px}
+.fi .inp{width:132px}
+input::-webkit-search-cancel-button{-webkit-appearance:none}
+.acts{display:inline-flex;gap:8px}
+.go{position:relative}
+.go.dirty::after{content:"";position:absolute;top:-4px;right:-4px;width:8px;height:8px;border:2px solid #f5f6f8;border-radius:50%;background:#b54708}
+.more svg{transition:transform .16s}
+.more[aria-expanded=true] svg{transform:rotate(180deg)}
+.st{flex-basis:100%;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.more svg{transition:none}
+}
+@container (max-width:320px){.sel select{width:96px}
+}
+</style>
+
+<div class="s"><div class="fb" role="search" aria-label="筛选订单"><label class="fi"><span>状态</span><span class="sel"><select><option>全部</option><option>待付款</option><option>待发货</option><option>已完成</option></select></span></label><label class="fi"><span>时间</span><span class="sel"><select><option>近 7 天</option><option>近 30 天</option><option>本月</option></select></span></label><label class="fi xh" hidden><span>渠道</span><span class="sel"><select><option>全部</option><option>小程序</option><option>官网</option></select></span></label><label class="fi"><span>订单号</span><input class="inp" type="search" placeholder="输入订单号" spellcheck="false"></label><div class="acts"><button type="button" class="btn pri go">查询</button><button type="button" class="btn rs">重置</button><button type="button" class="btn txt more" aria-expanded="false"><span>展开</span><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button></div><p class="help st" role="status">共 128 条</p></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const go = root.querySelector('.go'), st = root.querySelector('.st'), more = root.querySelector('.more'), xh = root.querySelector('.xh'), lab = more.querySelector('span'), ctl = [...root.querySelectorAll('select,input')];
+  const dirty = (on) => { go.classList.toggle('dirty', on); if (on) go.setAttribute('aria-label', '查询（条件已修改，尚未应用）'); else go.removeAttribute('aria-label'); };
+  const ml = () => { const open = !xh.hidden, n = xh.querySelector('select').selectedIndex > 0 ? 1 : 0; lab.textContent = open ? '收起' : n ? `展开（${n}）` : '展开'; more.setAttribute('aria-expanded', String(open)); };
+  ctl.forEach((el) => el.addEventListener('input', () => dirty(true)));
+  go.addEventListener('click', () => { dirty(false); st.textContent = `共 ${20 + Math.floor(Math.random() * 90)} 条 · 已回到第 1 页`; });
+  root.querySelector('.rs').addEventListener('click', () => { ctl.forEach((el) => { if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = ''; }); dirty(false); st.textContent = '共 128 条'; ml(); });
+  more.addEventListener('click', () => { xh.hidden = !xh.hidden; ml(); });
+}
+</script>

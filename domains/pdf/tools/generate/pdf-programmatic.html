@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: 'pdf-lib 套打结业证书', text: `
+const pdf = await PDFDocument.load(底版)
+pdf.registerFontkit(fontkit)
+const font = await pdf.embedFont(字体, { subset: true })
+const page = pdf.getPage(0)  // A4 = 595.28 × 841.89 pt
+// 原点在左下角；每个字段的坐标框写在 fields.json
+for (const f of fields) {
+  const t = row[f.key]; let size = f.size
+  while (font.widthOfTextAtSize(t, size) > f.w && size > 8) size--
+  page.drawText(t, { x: f.x, y: f.y, size, font })
+}
+` }]), { title: '代码直接绘制 · 按坐标写字' });
+}
+</script>

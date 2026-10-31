@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="../../_shared/components-overlay.css">
+<style>
+.pg{display:flex;align-items:center;gap:10px;padding:14px 16px;background:#fff;border:1px solid #e3e6eb;border-radius:10px}
+.name{font-size:15px;margin-right:8px}
+.mask{padding:8px}
+.dlg{width:min(400px,100%)}
+.hd{display:flex;align-items:center;gap:8px;padding:12px 12px 2px 20px}
+h3{flex:1;font-size:16px}
+.bd{padding:6px 20px 0}
+input{width:100%;height:36px;padding:0 10px;border:1px solid #e3e6eb;border-radius:8px;font-size:14px}
+input:focus{outline:none;border-color:#3b5bdb;box-shadow:0 0 0 3px #edf1ff}
+input[aria-invalid="true"]{border-color:#d92d20}
+.err{margin-top:4px;font-size:12px;color:#d92d20}
+.ft{display:flex;justify-content:flex-end;gap:8px;padding:14px 20px 16px}
+</style>
+
+<div class="s"><div class="pg"><span class="muted">当前项目</span><b class="name">年度预算</b><button class="b open">重命名</button></div><div class="mask" role="dialog" aria-modal="true" aria-labelledby="dt"><form class="panel dlg" novalidate><div class="hd"><h3 id="dt">重命名项目</h3><button type="button" class="x" aria-label="关闭" data-close>×</button></div><div class="bd"><input aria-label="项目名称" maxlength="20" aria-describedby="de"><p class="err" id="de" hidden>名称不能为空</p></div><div class="ft"><button type="button" class="b" data-close>取消</button><button class="b p">保存</button></div></form></div></div>
+
+<script type="module">
+import { modal } from '../../_shared/components-overlay.ts';
+
+export default function demo(root) {
+  const f = root.querySelector('form'), inp = f.querySelector('input'), err = f.querySelector('.err'), name = root.querySelector('.name'), btn = root.querySelector('.open');
+  const bad = (on) => { err.hidden = !on; on ? inp.setAttribute('aria-invalid', 'true') : inp.removeAttribute('aria-invalid'); };
+  const m = modal(root, root.querySelector('.mask'), { first: 'input', onClose: () => bad(false) }); // 含输入：点遮罩不关闭
+  btn.addEventListener('click', () => { inp.value = name.textContent; m.open(btn); inp.select(); });
+  f.addEventListener('submit', (e) => { e.preventDefault(); const v = inp.value.trim(); if (!v) { bad(true); inp.focus(); return; } name.textContent = v; m.close(); });
+}
+</script>

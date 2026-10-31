@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+  manage.py
+  config/            配置包
+    settings/        base.py、dev.py、prod.py、test.py
+    urls.py
+* orders/            业务 app，按业务能力划分
+    models.py
+    serializers.py   DRF 入参校验
+    views.py         只鉴权、校验、调 services
+  * services.py      写操作，transaction.atomic
+    admin.py
+    urls.py
+    migrations/      makemigrations 生成
+    tests/
+  members/           同样结构的业务 app
+`), { title: 'Django · 配置包加业务 app' });
+}
+</script>

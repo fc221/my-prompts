@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="../../_shared/app-card-base.css">
+<link rel="stylesheet" href="../../_shared/app-card-photos.css">
+<style>
+.row{display:flex;gap:4px;height:100%;padding:10px}
+.sp{position:relative;flex:1 1 0;min-width:0;min-height:0;border-radius:10px;overflow:hidden;color:#fff;text-decoration:none;filter:grayscale(1) brightness(.85);transition:flex-grow .4s cubic-bezier(.2,.8,.2,1),filter .4s}
+.sp::after{content:"";position:absolute;inset:40% 0 0;background:linear-gradient(transparent,rgba(12,14,20,.62))}
+.sp.on{flex-grow:4;filter:none}
+.no{position:absolute;left:50%;top:8px;z-index:1;transform:translateX(-50%);font-size:11px;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.on .no{left:10px;transform:none}
+.cap{position:absolute;left:10px;right:10px;bottom:10px;z-index:1;display:grid;visibility:hidden;opacity:0;white-space:nowrap;transition:opacity .2s,visibility 0s .2s}
+.on .cap{visibility:visible;opacity:1;transition:opacity .25s .15s,visibility 0s}
+.cap b{font-size:14px}
+.cap small{font-size:11px;opacity:.85}
+@container (min-height:260px){.row{gap:6px;padding:14px}
+.cap b{font-size:17px}
+.cap small{font-size:12px}
+}
+/* 收起的条窄于 32px 时改成上下排列（5 条：容器宽 < 256px） */
+@container (max-width:256px){.row{flex-direction:column}
+}
+</style>
+
+<div class="st"><div class="row" role="list"></div><p class="sr" role="status"></p></div>
+
+<script type="module">
+const ITEMS = [['海岸线', '18 张 · 清晨'], ['山间小站', '12 张 · 雨后'], ['旧城巷口', '24 张 · 黄昏'], ['麦田边', '9 张 · 正午'], ['夜航', '15 张 · 深夜']];
+export default function demo(root) {
+  const row = root.querySelector('.row'), msg = root.querySelector('[role=status]');
+  ITEMS.forEach(([t, d], i) => {
+    const a = document.createElement('a');
+    a.className = `sp ph${i + 1}`; a.href = '#'; a.setAttribute('role', 'listitem'); a.setAttribute('aria-label', `${t}，${d}`);
+    a.innerHTML = `<span class="no" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span><span class="cap" aria-hidden="true"><b>${t}</b><small>${d}</small></span>`;
+    row.append(a);
+  });
+  const strips = [...row.children];
+  const set = (a) => strips.forEach((s) => s.classList.toggle('on', s === a));
+  let type = 'mouse';
+  row.addEventListener('pointerdown', (e) => { type = e.pointerType; });
+  row.addEventListener('keydown', () => { type = 'key'; });
+  row.addEventListener('pointerover', (e) => { const a = e.target.closest('.sp'); if (a && e.pointerType === 'mouse') set(a); });
+  row.addEventListener('focusin', (e) => set(e.target.closest('.sp')));
+  row.addEventListener('click', (e) => {
+    const a = e.target.closest('.sp'); if (!a) return;
+    e.preventDefault(); // 示例里不跳转
+    if (type === 'touch' && !a.classList.contains('on')) { set(a); return; } // 触屏：第一次点只展开
+    set(a); msg.textContent = `进入「${a.querySelector('b').textContent}」`;
+  });
+  set(strips[0]);
+  setTimeout(() => root.host.isConnected && set(strips[2]), 500);
+}
+</script>

@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '单元', items: ['大量', '毫秒级'], note: '领域规则和分支，不连库和网络，1 分钟内跑完', acc: true },
+    { t: '集成', items: ['适量', 'Testcontainers', 'WireMock'], note: '同版本 MySQL、Redis，从空库跑迁移', acc: true },
+    { t: '契约', items: ['Pact', '提供方 CI 验证'] },
+    { t: '端到端', items: ['少量', '下单到支付成功'], note: '预发布环境跑，不挡每次提交' },
+  ], { arrow: '越往下越少、越慢' }), { title: '后端测试分层' });
+}
+</script>

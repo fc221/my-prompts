@@ -1,0 +1,128 @@
+<link rel="stylesheet" href="../../_shared/interactions-base.css">
+<style>
+.st{padding:10px 12px}
+.box{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:6px;max-width:640px;height:100%;margin:0 auto;padding:8px 12px 10px;border:1px solid #e3e6eb;border-radius:12px;background:#fff}
+.hd{display:flex;align-items:center;gap:8px;min-width:0}
+.hd small{flex:none;color:#5b616e;font-size:12px}
+.rg{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-variant-numeric:tabular-nums}
+.bt{display:inline-flex;align-items:center;justify-content:center;flex:none;height:26px;min-width:28px;padding:0 10px;border:1px solid #d0d5dd;border-radius:7px;background:#fff;color:#1f2329;font-size:12px;font-weight:500;white-space:nowrap;box-shadow:0 1px 2px rgba(16,24,40,.05)}
+.bt:hover{background:#f5f6f8}
+.bt:disabled{opacity:.45;cursor:default;background:#fff}
+.ch{position:relative;min-height:0;touch-action:pan-y;user-select:none;cursor:crosshair;border-radius:4px}
+.ch:focus-visible{outline-offset:3px}
+svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.gl{stroke:#eceef2}
+.ax{fill:#5b616e;font-size:11px;font-variant-numeric:tabular-nums}
+.bar{fill:#3b5bdb;transition:opacity .16s}
+.bar.off{opacity:.28}
+.band{fill:rgba(59,91,219,.08);stroke:#3b5bdb;stroke-width:1;cursor:grab}
+.drag .band{cursor:grabbing}
+.hl{position:absolute;top:0;bottom:16px;width:16px;margin-left:-8px;cursor:ew-resize;display:flex;align-items:center;justify-content:center;border-radius:4px}
+.hl::before{content:"";width:6px;height:22px;border:1px solid #3b5bdb;border-radius:3px;background:#fff;box-shadow:0 1px 2px rgba(16,24,40,.18)}
+.ft{display:flex;gap:14px;min-width:0;color:#5b616e;font-size:12px;white-space:nowrap;overflow:hidden;transition:opacity .16s}
+.ft b{color:#1f2329;font-weight:600;font-variant-numeric:tabular-nums}
+.ft.stale{opacity:.45}
+@container (max-width:320px){.hd .u{display:none}
+}
+@container (max-width:290px){.hd small{display:none}
+.ft{gap:10px}
+}
+@container (min-width:560px){.box{padding:12px 16px}
+.rg{font-size:14px}
+}
+</style>
+
+<div class="st"><div class="box"><div class="hd"><small>每日订单<span class="u">（单）</span></small><b class="rg">10 月全部 31 天</b><button type="button" class="bt clr" disabled>清除</button></div><div class="ch" tabindex="0" role="group" aria-label="10 月面包店每日订单柱状图。按 Enter 选一段，之后用两端把手调整"><svg aria-hidden="true"></svg><span class="hl" data-k="a" role="slider" tabindex="0" aria-label="起始日期" aria-valuemin="1" aria-valuemax="31" hidden></span><span class="hl" data-k="b" role="slider" tabindex="0" aria-label="结束日期" aria-valuemin="1" aria-valuemax="31" hidden></span></div><div class="ft" role="status"></div></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const N = 31, still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  // 2025 年 10 月 1 日是周三；周末和 15–21 日的促销周单量更高
+  const D = Array.from({ length: N }, (_, i) => { const wd = (3 + i) % 7; return Math.round(50 + (wd === 0 || wd === 6 ? 18 : 0) + (i >= 14 && i <= 20 ? 24 : 0) + rnd() * 12 - 6); });
+  const MAX = Math.ceil(Math.max(...D) / 20) * 20;
+  const day = (i) => '10-' + String(i + 1).padStart(2, '0');
+  const ch = root.querySelector('.ch'), svg = root.querySelector('svg'), rg = root.querySelector('.rg'), ft = root.querySelector('.ft'), clr = root.querySelector('.clr');
+  const [ha, hb] = root.querySelectorAll('.hl');
+  const NS = 'http://www.w3.org/2000/svg', mk = (t, a) => { const n = document.createElementNS(NS, t); for (const k in a) n.setAttribute(k, a[k]); svg.append(n); return n; };
+  let W = 0, H = 0, L = 28, T = 6, R = 0, B = 0, step = 0, sel = null, drag = null, stop = false, bars = [], band = null;
+
+  const draw = () => {
+    svg.replaceChildren(); R = W - 2; B = H - 16; step = (R - L) / N;
+    [0, 0.5, 1].forEach((f) => { const y = B - (B - T) * f; mk('line', { class: 'gl', x1: L, x2: R, y1: y, y2: y }); mk('text', { class: 'ax', x: L - 6, y: y + 4, 'text-anchor': 'end' }).textContent = MAX * f; });
+    const bw = Math.max(2, step * 0.66);
+    bars = D.map((v, i) => mk('rect', { class: 'bar', x: L + i * step + (step - bw) / 2, y: B - (v / MAX) * (B - T), width: bw, height: (v / MAX) * (B - T), rx: Math.min(2, bw / 2) }));
+    [0, 7, 14, 21, 28].forEach((i) => { mk('text', { class: 'ax', x: L + (i + 0.5) * step, y: H - 2, 'text-anchor': 'middle' }).textContent = day(i); });
+    band = mk('rect', { class: 'band', y: T - 2, height: B - T + 2 });
+    paint();
+  };
+  const paint = () => { // 只画选区和范围文字（预览），不动汇总
+    const [a, b] = sel || [0, N - 1];
+    bars.forEach((r, i) => r.classList.toggle('off', !!sel && (i < a || i > b)));
+    band.style.display = sel ? '' : 'none';
+    if (sel) { band.setAttribute('x', L + a * step); band.setAttribute('width', (b - a + 1) * step); }
+    rg.textContent = sel ? `${day(a)} 至 ${day(b)} · ${b - a + 1} 天` : '10 月全部 31 天';
+    [[ha, a, L + a * step], [hb, b, L + (b + 1) * step]].forEach(([h, v, x]) => { h.hidden = !sel; h.style.left = x + 'px'; h.setAttribute('aria-valuenow', v + 1); h.setAttribute('aria-valuetext', day(v)); });
+    clr.disabled = !sel;
+  };
+  const commit = () => { // 松手 / 按键后才真正筛选
+    const [a, b] = sel || [0, N - 1], part = D.slice(a, b + 1), sum = part.reduce((s, v) => s + v, 0), top = a + part.indexOf(Math.max(...part));
+    ft.classList.remove('stale');
+    ft.innerHTML = `<span class="sr">${sel ? `${day(a)} 至 ${day(b)}` : '全部 31 天'}：</span><span>合计 <b>${sum.toLocaleString()}</b> 单</span><span>日均 <b>${Math.round(sum / part.length)}</b></span><span>最高 <b>${day(top)}</b></span>`;
+  };
+  const clear = () => { sel = null; paint(); commit(); };
+  const idx = (e) => { const r = ch.getBoundingClientRect(), x = (e.clientX - r.left) * (ch.clientWidth / r.width); return Math.max(0, Math.min(N - 1, Math.floor((x - L) / step))); };
+
+  ch.addEventListener('pointerdown', (e) => {
+    if (e.button) return; stop = true;
+    const k = e.target.dataset?.k, i = idx(e);
+    drag = { mode: k || (e.target === band ? 'move' : 'new'), i, x: e.clientX, s0: sel && [...sel], moved: false };
+    try { ch.setPointerCapture(e.pointerId); } catch {}
+  });
+  ch.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    if (!drag.moved && Math.abs(e.clientX - drag.x) < 4) return;
+    drag.moved = true; ch.classList.add('drag'); ft.classList.add('stale');
+    const i = idx(e), [a0, b0] = drag.s0 || [i, i];
+    if (drag.mode === 'new') sel = [Math.min(drag.i, i), Math.max(drag.i, i)];
+    else if (drag.mode === 'a') sel = [Math.min(i, b0), b0];
+    else if (drag.mode === 'b') sel = [a0, Math.max(i, a0)];
+    else { const w = b0 - a0, a = Math.max(0, Math.min(N - 1 - w, a0 + i - drag.i)); sel = [a, a + w]; }
+    paint();
+  });
+  const end = () => {
+    if (!drag) return; const d = drag; drag = null; ch.classList.remove('drag');
+    if (d.moved) commit(); else if (d.mode === 'new') clear();
+  };
+  ch.addEventListener('pointerup', end); ch.addEventListener('pointercancel', end);
+
+  [ha, hb].forEach((h) => h.addEventListener('keydown', (e) => {
+    const s = e.shiftKey ? 7 : 1, d = { ArrowLeft: -s, ArrowRight: s, ArrowDown: -s, ArrowUp: s, Home: -N, End: N }[e.key];
+    if (d === undefined || !sel) return; e.preventDefault();
+    const [a, b] = sel; sel = h.dataset.k === 'a' ? [Math.max(0, Math.min(b, a + d)), b] : [a, Math.min(N - 1, Math.max(a, b + d))];
+    paint(); commit();
+  }));
+  ch.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sel) { e.preventDefault(); clear(); ch.focus(); }
+    else if ((e.key === 'Enter' || e.key === ' ') && e.target === ch && !sel) { e.preventDefault(); sel = [7, 13]; paint(); commit(); ha.focus(); }
+  });
+  clr.addEventListener('click', () => { clear(); ch.focus(); });
+
+  // 挂载后演示一次：从 15 日拖到 21 日
+  const auto = () => {
+    if (still) { sel = [14, 20]; paint(); commit(); return; }
+    let b = 14; ft.classList.add('stale');
+    const t = setInterval(() => {
+      if (!root.host.isConnected || stop) { clearInterval(t); return; }
+      sel = [14, b]; paint(); if (b++ === 20) { clearInterval(t); commit(); }
+    }, 70);
+  };
+  let first = true;
+  const ro = new ResizeObserver(() => {
+    if (!root.host.isConnected) { ro.disconnect(); return; }
+    W = ch.clientWidth; H = ch.clientHeight; svg.setAttribute('viewBox', `0 0 ${W} ${H}`); draw();
+    if (first) { first = false; commit(); setTimeout(() => { if (!stop && root.host.isConnected) auto(); }, 400); }
+  });
+  ro.observe(ch);
+}
+</script>

@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const steps = flow([
+    { t: '提交导出', note: '立即返回任务号' },
+    { t: '游标分批读', note: 'id > 上一批 · 每批 5000', via: '后台' },
+    { t: '流式写入', note: '逐行 commit，内存不涨', acc: true },
+    { t: '满 100 万行换表', note: '明细_1 → 明细_2' },
+    { t: '存对象存储', note: '链接 24 小时有效' },
+  ]);
+  const js = code([{ t: 'ExcelJS 流式写入 + 自动分表', text: `
+const wb = new ExcelJS.stream.xlsx.WorkbookWriter({ stream: out, useStyles: true })
+const PER_SHEET = 1_000_000                     // 上限 1,048,576 行含表头，取整好核对
+let ws, n = 0, part = 0
+const nextSheet = () => {
+  if (ws) ws.commit()
+  ws = wb.addWorksheet('明细_' + ++part, { views: [{ state: 'frozen', ySplit: 1 }] })
+  ws.columns = COLUMNS                        // 每张表都带表头
+  n = 0
+}
+nextSheet()
+for await (const batch of readByCursor('id', 5000)) {   // 按主键游标，不深翻页
+  for (const o of batch) {
+    if (n === PER_SHEET) nextSheet()
+    ws.addRow([o.no, o.paidAt, o.store, o.amount]).commit()
+    n++
+  }
+}
+ws.commit()
+await wb.commit()
+` }]);
+  draw(root, steps + '<div style="height:10px"></div>' + js, { title: '大数据量导出 · 后台任务 + 流式写入 + 分表', min: 0.45 });
+}
+</script>

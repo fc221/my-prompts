@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg{--sec:#0891b2}
+.m-wrap{display:flex;gap:14px;align-items:center}
+.m-pg{width:250px;padding:16px 20px 14px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 10px 22px -10px rgba(16,24,40,.25);color:#111;font-family:"Songti SC","SimSun",serif}
+.dg .m-t{margin:0 0 10px;text-align:center;font:700 13px/1.4 "PingFang SC","SimHei",sans-serif;letter-spacing:.3em}
+.dg .m-p{margin:0 0 5px;font-size:9px;line-height:1.75}
+.dg .m-p.i{text-indent:2em}
+.dg .m-p.r{text-align:right}
+.m-v{padding:0 3px;border-radius:3px;background:#fff1c2;color:#8a5a00;font:600 8.5px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:nowrap}
+.m-lb{display:block;margin:0 0 6px;color:#0e7490;font:600 10px/1.3 system-ui,"PingFang SC",sans-serif}
+.m-mid{display:grid;gap:8px;width:336px}
+.m-ar{text-align:center;color:#98a2b3;font:13px/1 system-ui}
+.m-ar b{display:block;margin-top:2px;color:#475467;font:500 10px/1.3 ui-monospace,Menlo,monospace}
+.m-files{display:grid;gap:5px}
+.m-f{display:flex;align-items:center;gap:7px;padding:5px 8px;border:1px solid #d0d5dd;border-radius:6px;background:#fff;font:10.5px/1.3 system-ui,"PingFang SC",sans-serif;color:#101828;white-space:nowrap}
+.m-f i{display:grid;place-items:center;width:16px;height:18px;border-radius:2px;background:#2b579a;color:#fff;font:700 8px/1 system-ui;font-style:normal}
+.m-f em{margin-left:auto;color:#067647;font-style:normal;font-size:10px}
+.m-f.bad{border-color:#f1b5ad;background:#fff4f2}
+.m-f.bad em{color:#b42318}
+</style>
+
+<div class="dg"></div>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const v = (s) => '<span class="m-v">{{ ' + s + ' }}</span>';
+  const tpl = '<div><span class="m-lb">模板.docx · 版式在 Word 里排好</span><div class="m-pg"><p class="m-t">录用通知书</p>'
+    + '<p class="m-p">' + v('name') + '：</p>'
+    + '<p class="m-p i">经面试评估，我司决定录用您为 ' + v('dept') + ' ' + v('title') + '，月薪 ' + v('salary') + ' 元（大写 ' + v('salary_cn') + '）。</p>'
+    + '<p class="m-p i">请于 ' + v('start_date') + ' 到岗报到，试用期 ' + v('probation') + '。</p>'
+    + '<p class="m-p r">MyPrompts 有限公司<br>人力资源部</p></div></div>';
+  const data = sheet({
+    head: ['工号', 'name', 'dept', 'salary', 'start_date'],
+    widths: [46, 50, 54, 66, 76],
+    rows: [['A1023', '林知夏', '运营部', '12,000.00', '2026-11-03'], ['A1024', '许乐', '商品部', '9,500.00', '2026-11-10'], ['A1025', '周敏', '门店部', '8,800.00', '']],
+    marks: { E4: 'bad' },
+    tabs: ['名单', '说明'],
+  });
+  const files = [['录用通知_A1023_林知夏.docx', '✓'], ['录用通知_A1024_许乐.docx', '✓'], ['第 4 行 start_date 为空', '已跳过', 'bad']];
+  const mid = '<div class="m-mid"><span class="m-lb">offers.xlsx · 列名对应变量名</span>' + data + '<p class="m-ar">↓<b>render(row, autoescape=True)</b></p><div class="m-files">'
+    + files.map(([n, s, c]) => '<p class="m-f' + (c ? ' ' + c : '') + '"><i>W</i>' + n + '<em>' + s + '</em></p>').join('') + '</div></div>';
+  draw(root, '<div class="m-wrap">' + tpl + mid + '</div>', { center: true, min: 0.4 });
+}
+</script>

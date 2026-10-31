@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['App', '认证服务', 'Redis'], [
+    [0, 1, '手机号 + 密码'],
+    [1, 1, 'Argon2id 校验密码'],
+    [1, 2, '只存刷新令牌的哈希'],
+    [1, 0, '返回两个令牌', 'r'],
+    [0, 1, '用刷新令牌换新的'],
+    [1, 0, '新的一对，旧的作废', 'r'],
+    [0, 1, '重放旧令牌 → 全吊销', 'x'],
+  ]), { title: '登录认证 · 访问令牌 15 分钟，刷新令牌每次轮换' });
+}
+</script>

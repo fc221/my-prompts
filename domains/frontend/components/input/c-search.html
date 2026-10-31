@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.w{width:100%;max-width:300px;display:flex;flex-direction:column;gap:8px}
+.sb{position:relative;display:flex}
+.sb .inp{flex:1;padding:0 36px}
+input::-webkit-search-cancel-button{-webkit-appearance:none}
+.mg{position:absolute;left:12px;top:8px;display:flex;color:#5b616e;pointer-events:none}
+.clr{position:absolute;right:4px;top:4px;display:grid;place-items:center;width:24px;height:24px;padding:0;border:0;border-radius:4px;background:none;color:#8a909c;cursor:pointer}
+.clr:hover{color:#1f2329;background:#f5f6f8}
+.sp{position:absolute;right:12px;top:9px;width:14px;height:14px;border:2px solid #e3e6eb;border-top-color:#3b5bdb;border-radius:50%;animation:r .8s linear infinite}
+@keyframes r{to{transform:rotate(1turn)}
+}
+@media (prefers-reduced-motion:reduce){.sp{animation-duration:1.6s}
+}
+.list{list-style:none;margin:0;padding:4px;height:92px;overflow:auto;background:#fff;border:1px solid #e3e6eb;border-radius:8px}
+.list li{display:flex;align-items:center;justify-content:space-between;height:28px;padding:0 8px;border-radius:4px}
+.list li:hover{background:#f5f6f8}
+.list small{font-size:12px;color:#5b616e}
+mark{background:#edf1ff;color:#3b5bdb}
+.list .none{height:auto;flex-direction:column;align-items:flex-start;padding:8px;color:#5b616e;font-size:13px}
+.none:hover{background:none}
+.t{height:24px;padding:0;border:0;background:none;color:#3b5bdb;cursor:pointer}
+</style>
+
+<div class="s"><div class="w"><div class="sb"><span class="mg"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg></span><input class="inp" type="search" enterkeyhint="search" placeholder="搜索姓名或部门，试试“设计”" aria-label="搜索成员"><span class="sp" hidden></span><button class="clr" type="button" aria-label="清除搜索" hidden><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button></div><ul class="list"></ul><p class="sr" role="status"></p></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const P = [['王小明', '设计部'], ['李雪', '研发部'], ['张伟', '研发部'], ['陈静', '市场部'], ['赵磊', '设计部'], ['刘洋', '运营部']];
+  const i = root.querySelector('input'), ul = root.querySelector('.list'), x = root.querySelector('.clr'), sp = root.querySelector('.sp'), st = root.querySelector('[role=status]'); let t;
+  const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const hl = (s, q) => (q && s.includes(q) ? esc(s).replace(esc(q), () => '<mark>' + esc(q) + '</mark>') : esc(s));
+  const draw = () => {
+    const q = i.value.trim(), hit = P.filter((p) => !q || p.join(' ').includes(q)); sp.hidden = true; x.hidden = !i.value;
+    ul.innerHTML = hit.length ? hit.map(([n, d]) => `<li><span>${hl(n, q)}</span><small>${hl(d, q)}</small></li>`).join('') : `<li class="none">没有找到“${esc(q)}”相关成员<button type="button" class="t">清除搜索</button></li>`;
+    st.textContent = q ? `找到 ${hit.length} 位成员` : '';
+  };
+  const clear = () => { i.value = ''; draw(); i.focus(); };
+  i.addEventListener('input', () => { clearTimeout(t); x.hidden = true; sp.hidden = !i.value; t = setTimeout(draw, 300); });
+  i.addEventListener('keydown', (e) => { if (e.key === 'Escape' && i.value) { e.preventDefault(); clear(); } });
+  x.addEventListener('click', clear);
+  ul.addEventListener('click', (e) => { if (e.target.closest('.t')) clear(); });
+  draw();
+}
+</script>

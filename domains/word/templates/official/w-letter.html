@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-wrap{display:flex;gap:14px;align-items:flex-start}
+.m-pg{position:relative;flex:none;width:436px;padding:22px 40px 14px 46px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25);color:#111;font:12.5px/1.72 "STFangsong","FangSong","Songti SC",serif}
+.m-pg .m-org{text-align:center;color:#d4000f;font:700 24px/1.2 "STSong","Songti SC","SimSun",serif;letter-spacing:.08em}
+.m-dl{height:5px;margin:5px -14px 0;border-top:2.4px solid #d4000f;border-bottom:1px solid #d4000f}
+.m-dl.m-b{margin-top:12px;border-top-width:1px;border-bottom-width:2.4px}
+.m-pg .m-no{margin-top:6px;text-align:right}
+.m-pg .m-title{margin:12px 0 8px;text-align:center;font:700 16px/1.45 "STSong","Songti SC","SimSun",serif}
+.m-pg .m-p{text-indent:2em}
+.m-pg .m-sign{margin-top:6px;padding-right:4em;text-align:right;line-height:1.6}
+.m-pg .m-note{padding-left:2em;line-height:1.6}
+.m-ann{display:grid;width:150px;padding-top:6px;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-ann p{margin:0;padding:5px 0 5px 12px;border-left:2px solid #d4000f}
+.m-ann b{display:block;color:#101828;font-size:11.5px}
+.m-ann span{color:#667085}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, `<div class="m-wrap"><div class="m-pg">
+    <p class="m-org">××市文化和旅游局</p>
+    <div class="m-dl"></div>
+    <p class="m-no">×文旅函〔2026〕8号</p>
+    <p class="m-title">××市文化和旅游局关于商请借用<br>市体育中心东广场的函</p>
+    <p>××市体育局：</p>
+    <p class="m-p">为丰富市民周末文化生活，我局拟于 11 月 14 日至 15 日举办秋季非遗市集，设摊位 80 个，预计日均客流 1.5 万人次。市体育中心东广场交通便利、场地开阔，适合举办此次活动。</p>
+    <p class="m-p">现商请贵局支持借用东广场两天（含 13 日晚布展），场地清洁和安保费用由我局承担，活动结束后恢复原状。</p>
+    <p class="m-p">请予函复。</p>
+    <p class="m-sign">××市文化和旅游局<br>2026 年 10 月 26 日</p>
+    <p class="m-note">（联系人：何静，电话：××××××××）</p>
+    <div class="m-dl m-b"></div>
+  </div><div class="m-ann">
+    <p><b>发文机关标志</b><span>红色小标宋，距上页边 30mm</span></p>
+    <p><b>上方双线</b><span>上粗下细，线长 170mm</span></p>
+    <p><b>发文字号</b><span>双线下，顶格居右，代字带“函”</span></p>
+    <p><b>主送</b><span>不相隶属的对方单位</span></p>
+    <p><b>事项</b><span>时间、费用、请对方做什么</span></p>
+    <p><b>结语</b><span>请予函复 / 特此函告 / 特此函复</span></p>
+    <p><b>下方双线</b><span>上细下粗，距下页边 20mm</span></p>
+    <p><b>页码</b><span>首页不显示</span></p>
+  </div></div>`, { center: true, min: 0.35 });
+}
+</script>

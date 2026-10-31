@@ -1,0 +1,103 @@
+<link rel="stylesheet" href="../../_shared/app-control-base.css">
+<style>
+.st{display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:#fff;--rh:24px}
+.hd{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:7px 14px 6px;border-bottom:1px solid #eef0f3}
+.hd b{font-size:13px}
+.hd small{color:#5b616e;font-size:12px;white-space:nowrap}
+.ls{position:relative;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;user-select:none;scrollbar-width:thin}
+.rows{position:relative;display:grid;grid-template-columns:44px minmax(0,1fr);padding:6px 0 4px}
+.tl{height:var(--rh);padding:0 6px 0 12px;color:#5b616e;font-size:11px;line-height:1;font-variant-numeric:tabular-nums;transform:translateY(-5px)}
+.sl{display:block;height:var(--rh);padding:0 8px;border:0;border-top:1px solid #eef0f3;border-radius:0;background:none;color:#5b616e;font-size:11px;text-align:left;cursor:pointer}
+.sl:focus-visible{outline-offset:-2px}
+.sl.busy{background:repeating-linear-gradient(135deg,#f5f6f8 0 4px,#e9ecf1 4px 8px);cursor:not-allowed}
+.blk{position:absolute;left:46px;right:6px;top:0;z-index:1;display:flex;align-items:center;padding:0 8px;border:1.5px solid #3b5bdb;border-radius:6px;background:rgba(59,91,219,.14);color:#2f4ac0;font-size:12px;font-weight:600;white-space:nowrap;pointer-events:none;transition:top .12s,height .12s}
+.blk.bad{border-color:#d92d20;background:rgba(217,45,32,.12);color:#b42318}
+.hdl{position:absolute;left:50%;width:32px;height:14px;margin-left:-16px;pointer-events:auto;touch-action:none;cursor:ns-resize}
+.hdl::after{content:"";position:absolute;left:8px;right:8px;top:5px;height:4px;border-radius:2px;background:currentColor}
+.hdl.t{top:-8px}
+.hdl.b{bottom:-8px}
+.ft{display:flex;align-items:center;gap:8px;padding:6px 10px 6px 14px;border-top:1px solid #eef0f3}
+.sum{flex:1;min-width:0;margin:0;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.go{flex:none;height:28px;padding:0 14px;border:0;border-radius:8px;background:#3b5bdb;color:#fff;font-size:12px;font-weight:600}
+.go[aria-disabled=true]{background:#e3e6eb;color:#5b616e;cursor:not-allowed}
+@container (min-width:560px){.st{--rh:26px}
+.hd{padding:9px 16px 8px}
+.ft{padding:8px 12px 8px 16px}
+.go{height:30px}
+}
+</style>
+
+<div class="st">
+  <div class="hd"><b>预约 3 号会议室</b><small>周四 · 30 分钟一格</small></div>
+  <div class="ls"><div class="rows" role="group" aria-label="时间格：↑/↓ 移动，Enter 选中，Shift+↑/↓ 扩展，Esc 清除"><div class="blk" hidden><span class="lb"></span><i class="hdl t" aria-hidden="true"></i><i class="hdl b" aria-hidden="true"></i></div></div></div>
+  <div class="ft"><p class="sum" role="status">按住拖动选择时间段</p><button type="button" class="go" aria-disabled="true">预约</button></div>
+</div>
+
+<script type="module">
+const START = 9 * 60, N = 16; // 09:00–17:00
+const BUSY = { 5: '部门例会', 6: '部门例会', 10: '候选人面谈', 11: '候选人面谈' };
+const hm = (i) => { const m = START + i * 30; return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`; };
+export default function demo(root) {
+  const ls = root.querySelector('.ls'), rows = root.querySelector('.rows'), blk = root.querySelector('.blk'), lb = root.querySelector('.lb'), sum = root.querySelector('.sum'), go = root.querySelector('.go');
+  for (let i = 0; i < N; i++) {
+    const tl = document.createElement('span'); tl.className = 'tl'; tl.textContent = i % 2 ? '' : hm(i); tl.setAttribute('aria-hidden', 'true');
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'sl' + (BUSY[i] ? ' busy' : ''); b.tabIndex = -1; b.dataset.i = i;
+    b.textContent = BUSY[i] && !BUSY[i - 1] ? BUSY[i] : ''; b.setAttribute('aria-label', `${hm(i)}–${hm(i + 1)} ${BUSY[i] ? '已占用：' + BUSY[i] : '空闲'}`);
+    rows.append(tl, b);
+  }
+  const slots = [...rows.querySelectorAll('.sl')];
+  let sel = null, anchor = 0, fi = 2, mode = null, booked = false;
+  slots[fi].tabIndex = 0;
+  const rh = () => slots[0].getBoundingClientRect().height;
+  const conflicts = () => sel ? [...new Set(slots.slice(sel.a, sel.b + 1).map((s) => BUSY[s.dataset.i]).filter(Boolean))] : [];
+  const text = () => { const c = conflicts(); return `${hm(sel.a)}–${hm(sel.b + 1)} · ${c.length ? `与「${c.join('」「')}」冲突` : `${(sel.b - sel.a + 1) / 2} 小时`}`; };
+  const render = (announce) => {
+    slots.forEach((s, i) => s.setAttribute('aria-pressed', String(!!sel && i >= sel.a && i <= sel.b)));
+    blk.hidden = !sel; const bad = conflicts().length > 0;
+    go.setAttribute('aria-disabled', String(!sel || bad));
+    if (!sel) { if (announce) sum.textContent = '已清除，按住拖动选择时间段'; return; }
+    const h = slots[0].offsetHeight; blk.style.top = slots[0].offsetTop + sel.a * h + 'px'; blk.style.height = (sel.b - sel.a + 1) * h + 'px';
+    blk.classList.toggle('bad', bad); lb.textContent = text();
+    if (announce) sum.textContent = bad ? `${text()}，请调整` : `已选 ${text()}`;
+  };
+  const range = (p, q) => ({ a: Math.min(p, q), b: Math.max(p, q) });
+  const rowAt = (y) => Math.max(0, Math.min(N - 1, Math.floor((y - slots[0].getBoundingClientRect().top) / rh())));
+  const focusSlot = (i) => { slots[fi].tabIndex = -1; fi = Math.max(0, Math.min(N - 1, i)); slots[fi].tabIndex = 0; slots[fi].focus(); };
+
+  // 鼠标按住拖选；手指点一格选中，再拖把手调整（列表本身照常滚动）
+  rows.addEventListener('pointerdown', (e) => {
+    if (e.button) return; const h = e.target.closest('.hdl'), s = e.target.closest('.sl');
+    if (h && sel) mode = h.classList.contains('t') ? 'top' : 'bot';
+    else if (s && e.pointerType !== 'touch') { mode = 'sel'; anchor = +s.dataset.i; sel = { a: anchor, b: anchor }; render(false); }
+    else return;
+    stopAuto(); booked = false; e.preventDefault(); try { rows.setPointerCapture(e.pointerId); } catch {}
+  });
+  rows.addEventListener('pointermove', (e) => {
+    if (!mode) return; const i = rowAt(e.clientY), r = ls.getBoundingClientRect();
+    if (e.clientY < r.top + 16) ls.scrollTop -= 8; else if (e.clientY > r.bottom - 16) ls.scrollTop += 8; // 拖到边缘自动滚动
+    sel = mode === 'sel' ? range(anchor, i) : mode === 'top' ? { a: Math.min(i, sel.b), b: sel.b } : { a: sel.a, b: Math.max(i, sel.a) };
+    render(false);
+  });
+  const end = () => { if (!mode) return; mode = null; render(true); };
+  rows.addEventListener('pointerup', end); rows.addEventListener('pointercancel', end);
+  rows.addEventListener('click', (e) => { const s = e.target.closest('.sl'); if (!s || e.pointerType !== 'touch') return; stopAuto(); booked = false; anchor = +s.dataset.i; sel = { a: anchor, b: anchor }; render(true); });
+  rows.addEventListener('keydown', (e) => {
+    const s = e.target.closest('.sl'); if (!s) return; const i = +s.dataset.i;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault(); stopAuto(); const j = i + (e.key === 'ArrowDown' ? 1 : -1);
+      if (e.shiftKey) { if (!sel) anchor = i; focusSlot(j); sel = range(anchor, fi); booked = false; render(true); } else focusSlot(j);
+    } else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); stopAuto(); anchor = i; sel = { a: i, b: i }; booked = false; render(true); }
+    else if (e.key === 'Escape' && sel) { e.preventDefault(); sel = null; render(true); }
+  });
+  go.addEventListener('click', () => {
+    if (go.getAttribute('aria-disabled') === 'true') { sum.textContent = sel ? `${text()}，请调整` : '先选择一个时间段'; return; }
+    if (booked) return; booked = true; sum.textContent = `已预约 ${hm(sel.a)}–${hm(sel.b + 1)}`;
+  });
+
+  // 自动演示：从 10:00 拖到 11:30
+  let auto = true; const tms = [];
+  function stopAuto() { auto = false; tms.forEach(clearTimeout); }
+  ls.scrollTop = 2 * slots[0].offsetHeight - 6;
+  [2, 3, 4].forEach((b, k) => tms.push(setTimeout(() => { if (!auto || !root.host.isConnected) return; anchor = 2; sel = { a: 2, b }; render(k === 2); if (k === 2) auto = false; }, 300 + k * 160)));
+}
+</script>

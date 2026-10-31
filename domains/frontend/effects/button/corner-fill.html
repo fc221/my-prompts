@@ -1,0 +1,14 @@
+<style>
+:host{display:grid;place-items:center;height:100%;background:#f7f5f2}
+.card{position:relative;display:block;width:220px;padding:20px;border-radius:14px;background:#fff;color:#18181b;text-decoration:none;overflow:hidden;font-family:system-ui;isolation:isolate}
+.card::before{content:"";position:absolute;inset:0;background:#18181b;clip-path:circle(0 at calc(100% - 26px) 26px);transition:clip-path .45s cubic-bezier(.2,0,0,1);z-index:-1}
+.card:hover::before,.card:focus-visible::before{clip-path:circle(150% at calc(100% - 26px) 26px)}
+b{display:block;font-size:17px}
+small{color:inherit;opacity:.7}
+i{position:absolute;right:16px;top:12px;font-style:normal;transition:transform .45s}
+.card:hover,.card:focus-visible{color:#fff}
+.card:hover i,.card:focus-visible i{transform:rotate(45deg)}
+.card{transition:color .3s}
+</style>
+
+<a class="card" href="#"><b>功能总览</b><small>查看全部功能</small><i>↗</i></a>

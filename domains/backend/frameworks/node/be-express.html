@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+* app.ts                 buildApp()，只注册不监听
+  server.ts              listen，处理 SIGTERM
+  config.ts              启动时校验环境变量
+* modules/               按功能分模块
+    orders/
+      orders.routes.ts
+      orders.schema.ts   zod 或 JSON Schema
+      orders.service.ts  工厂函数接收 repo、logger
+      orders.repo.ts
+      orders.test.ts     inject() 或 supertest
+  lib/                   数据库、日志
+`), { title: 'Express / Fastify · 构建和监听分开' });
+}
+</script>

@@ -1,0 +1,84 @@
+<style>
+.st{--e:cubic-bezier(.2,0,0,1);position:relative;height:100%;display:flex;flex-direction:column;gap:10px;padding:10px 14px 12px;background:#eef1f5;color:#1f2329;font:12px/1.4 system-ui,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid #3b5bdb;outline-offset:2px}
+p{margin:0}
+.msg{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.top{display:flex;align-items:center;gap:8px}
+.seg{display:flex;padding:2px;border-radius:8px;background:#e1e5eb}
+.seg button{height:24px;padding:0 10px;border:0;border-radius:6px;background:none;color:#5b616e;white-space:nowrap}
+.seg [aria-pressed=true]{background:#fff;color:#1f2329;font-weight:600;box-shadow:0 1px 2px rgba(16,24,40,.12)}
+.top .ctl{margin-left:auto;height:28px;padding:0 10px;font-size:12px}
+.card{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:10px 14px;border-radius:16px;background:#fff;box-shadow:0 0 0 1px rgba(15,23,42,.06),0 2px 6px -2px rgba(15,23,42,.08)}
+.meta{display:flex;align-items:baseline;gap:8px;min-width:0}
+.meta b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
+.meta span{flex:none;color:#5b616e;font-variant-numeric:tabular-nums}
+.prog{height:4px;border-radius:2px;background:#eceff3}
+.prog i{display:block;width:0;height:100%;border-radius:2px;background:#3b5bdb}
+.bar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.ib{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;padding:0;border:0;background:none;color:#5b616e}
+.ib:focus-visible{outline:none}
+.ib:focus-visible .ic{outline:2px solid #3b5bdb;outline-offset:2px}
+.ic{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#f1f3f6;color:#1f2329;transition:background-color .2s,color .2s}
+.ib:hover .ic{background:#e7eaef}
+.ic svg{grid-area:1/1;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:opacity .2s var(--e),transform .2s var(--e),filter .2s var(--e)}
+.ic .fill{fill:currentColor;stroke:none}
+/* 两个图标叠在同一格：隐藏的那个缩到 0.6、淡出、微糊 */
+.ic .b,[data-on=true] .ic .a{opacity:0;transform:scale(.6);filter:blur(2px)}
+[data-on=true] .ic .b{opacity:1;transform:none;filter:none}
+.lb{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}
+.cp[data-on=true] .ic{background:#e7f6ee;color:#16855a}
+.fav[data-on=true] .ic{background:#fdecee;color:#e5484d}
+.hard .ic svg,.hard .ic{transition:none}
+@container (min-height:260px){.st{gap:12px;padding:14px 18px}
+.card{flex:none;width:min(100%,460px);margin:auto;padding:18px 22px;gap:14px}
+.meta b{font-size:15px}
+.ic{width:44px;height:44px}
+.lb{font-size:12px}
+.msg{position:static;width:auto;height:auto;overflow:visible;clip-path:none;color:#5b616e}
+}
+@media (prefers-reduced-motion:reduce){.ic svg,.ic{transition:none}
+}
+</style>
+
+<div class="st"><div class="top"><div class="seg" role="group" aria-label="切换方式"><button type="button" aria-pressed="false" data-m="hard">生硬</button><button type="button" aria-pressed="true" data-m="soft">柔和</button></div><button type="button" class="ctl go">演示一遍</button></div><div class="card"><div class="meta"><b>周五读书会 · 第 12 期录音</b><span class="tm">00:00 / 42:18</span></div><div class="prog" aria-hidden="true"><i></i></div><div class="bar"><button type="button" class="ib cp" data-on="false"><span class="ic"><svg class="a" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg><svg class="b" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="lb">复制链接</span></button><button type="button" class="ib pl" data-on="false"><span class="ic"><svg class="a" viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M8 5.6v12.8a1 1 0 0 0 1.5.86l10.2-6.4a1 1 0 0 0 0-1.72L9.5 4.74A1 1 0 0 0 8 5.6z"/></svg><svg class="b" viewBox="0 0 24 24" aria-hidden="true"><rect class="fill" x="6.5" y="5" width="4" height="14" rx="1.2"/><rect class="fill" x="13.5" y="5" width="4" height="14" rx="1.2"/></svg></span><span class="lb">播放</span></button><button type="button" class="ib mu" data-on="false" aria-pressed="false"><span class="ic"><svg class="a" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9.2a4 4 0 0 1 0 5.6M18.2 6.6a7.6 7.6 0 0 1 0 10.8"/></svg><svg class="b" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg></span><span class="lb">静音</span></button><button type="button" class="ib fav" data-on="false" aria-pressed="false"><span class="ic"><svg class="a" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.5s-7-4.3-7-9.6A3.9 3.9 0 0 1 12 7.6a3.9 3.9 0 0 1 7 2.3c0 5.3-7 9.6-7 9.6z"/></svg><svg class="b" viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M12 19.5s-7-4.3-7-9.6A3.9 3.9 0 0 1 12 7.6a3.9 3.9 0 0 1 7 2.3c0 5.3-7 9.6-7 9.6z"/></svg></span><span class="lb">收藏</span></button></div></div><p class="msg" role="status"></p></div>
+
+<script type="module">
+export default function demo(root) {
+  const $ = (q, el = root) => el.querySelector(q), st = $('.st'), msg = $('.msg');
+  const cp = $('.cp'), pl = $('.pl'), mu = $('.mu'), fav = $('.fav'), tm = $('.tm'), prog = $('.prog i');
+  const on = (b) => b.dataset.on === 'true';
+  const flip = (b, v = !on(b)) => { b.dataset.on = String(v); return v; };
+  const say = (t) => { msg.textContent = t; };
+  const total = 42 * 60 + 18;
+  let sec = 0, back, tms = [];
+  const paint = () => {
+    const f = (s) => String(s / 60 | 0).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+    tm.textContent = `${f(sec)} / ${f(total)}`; prog.style.width = (sec / total * 100).toFixed(2) + '%';
+  };
+  // 复制：换成对勾，2 秒后自动换回；期间再点重新计时
+  cp.addEventListener('click', () => {
+    flip(cp, true); $('.lb', cp).textContent = '已复制'; say('已复制录音链接');
+    clearTimeout(back);
+    back = setTimeout(() => { flip(cp, false); $('.lb', cp).textContent = '复制链接'; }, 2000);
+  });
+  // 播放 / 暂停：名称跟着换
+  pl.addEventListener('click', () => { const v = flip(pl); $('.lb', pl).textContent = v ? '暂停' : '播放'; say(v ? '开始播放' : '已暂停'); });
+  // 静音、收藏是开关：名称不变，用 aria-pressed
+  mu.addEventListener('click', () => { const v = flip(mu); mu.setAttribute('aria-pressed', String(v)); say(v ? '已静音' : '已取消静音'); });
+  fav.addEventListener('click', () => { const v = flip(fav); fav.setAttribute('aria-pressed', String(v)); say(v ? '已收藏' : '已取消收藏'); });
+  const iv = setInterval(() => { if (!root.host.isConnected) return clearInterval(iv); if (on(pl) && sec < total) { sec++; paint(); } }, 1000);
+  root.querySelectorAll('.seg button').forEach((b) => b.addEventListener('click', () => {
+    st.classList.toggle('hard', b.dataset.m === 'hard');
+    root.querySelectorAll('.seg button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    say(b.dataset.m === 'hard' ? '已切到生硬：图标瞬间替换' : '已切到柔和：旧图标缩小淡出，新图标放大淡入');
+  }));
+  // 依次点一遍四个按钮
+  const play = () => {
+    tms.forEach(clearTimeout);
+    tms = [cp, pl, mu, fav].map((b, i) => setTimeout(() => { if (root.host.isConnected) b.click(); }, 300 + i * 360));
+  };
+  $('.go').addEventListener('click', play);
+  paint(); play();
+}
+</script>

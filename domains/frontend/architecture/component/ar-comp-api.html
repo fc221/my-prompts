@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: '改前：同义不同名，布尔越加越多', text: `
+<RefundDialog
+  visible={show}
+  showFooter
+  hideIcon
+  isCompact
+  footerText="确认退款"
+/>
+` },
+    { t: '改后：统一命名，可选区域用 children', text: `
+<RefundDialog
+  open={open}
+  onOpenChange={setOpen}
+  size="sm">
+  <RefundDialog.Footer>
+    <Button variant="danger">
+      确认退款
+    </Button>
+  </RefundDialog.Footer>
+</RefundDialog>
+` },
+  ]), { title: '组件接口 · open / size / variant' });
+}
+</script>

@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg{--sec:#0891b2}
+.m-col{display:grid;gap:10px;width:600px}
+</style>
+
+<div class="dg"></div>
+
+<script type="module">
+import { draw, flow, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const f = flow([
+    [{ t: '整理 docx', note: '更新域、清修订和批注' }, { t: '检查字体', note: 'fc-list :lang=zh' }, { t: 'soffice 转换', note: '每进程独立配置目录', acc: true }, { t: '核对页数', note: 'app.xml 的 Pages = pdfinfo' }],
+    [{ t: '缺字体被替换', note: '行宽变 → 分页、目录页码变', bad: true, via: '页数对不上' }, { t: '装字体后重转', note: 'pdffonts 看嵌入字体', via: '修正' }, { t: '写进 report.csv', note: '文件名、页数、耗时、结果' }],
+  ]);
+  const c = code([{ t: '命令', text: `
+soffice --headless --convert-to pdf --outdir out/ in/*.docx
+
+# 并行时每个进程用自己的配置目录，单个文件 60 秒超时
+soffice -env:UserInstallation=file:///tmp/lo-2 --headless \\
+  --convert-to pdf --outdir out/ in/batch2/*.docx
+
+pdfinfo out/合同_0012.pdf | grep Pages    # 和 docx 里记录的页数对比
+pdffonts out/合同_0012.pdf                 # 嵌入的应是宋体、黑体等原字体
+` }]);
+  draw(root, '<div class="m-col">' + f + c + '</div>', { title: '批量转 PDF · 先装字体，转完核对页数', min: 0.45 });
+}
+</script>

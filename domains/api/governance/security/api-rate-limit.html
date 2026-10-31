@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+GET /orders?storeId=s_1024
+X-Api-Key: sk_live_…8f3a
+`, `
+429 Too Many Requests
+Retry-After: 42
+RateLimit-Policy: "default";q=600;w=60
+RateLimit: "default";r=0;t=42
+Content-Type: application/problem+json
+
+"status": 429,
+"code": "RATE_LIMITED",
+"detail": "每分钟 600 次已用完，42 秒后恢复"
+`), { title: '限流 · 429 带 RateLimit 和 Retry-After' });
+}
+</script>

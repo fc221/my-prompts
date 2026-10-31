@@ -1,0 +1,46 @@
+.ph1 {
+  background:
+    radial-gradient(circle at 74% 26%, #fff7dc 0 6%, transparent 6.5%),
+    linear-gradient(transparent 66%, #80b4c9 66%, #5b91ab),
+    conic-gradient(from 138deg at 66% 40%, #8ca7ba 0 84deg, transparent 0),
+    conic-gradient(from 132deg at 30% 26%, #5c7a91 0 96deg, transparent 0), linear-gradient(#b8d5ea, #eaf2f5 70%);
+}
+.ph2 {
+  background:
+    linear-gradient(90deg, transparent 30%, rgba(255, 224, 160, 0.6) 30% 70%, transparent 70%) 50% 70%/30% 3px no-repeat,
+    linear-gradient(90deg, transparent 30%, rgba(255, 224, 160, 0.45) 30% 70%, transparent 70%) 50% 82%/20% 3px
+      no-repeat,
+    linear-gradient(transparent 60%, #43628b 60%, #22385c),
+    radial-gradient(circle at 50% 60%, #ffe2a0 0 12%, transparent 12.5%),
+    linear-gradient(#f29a6c, #f8c48d 50%, #fde4b4 60%);
+}
+.ph3 {
+  background:
+    radial-gradient(ellipse 70% 40% at 20% 100%, #4d8758 0 99%, transparent 100%),
+    radial-gradient(ellipse 80% 46% at 86% 100%, #69a468 0 99%, transparent 100%),
+    conic-gradient(from 162deg at 70% 36%, #3b6c53 0 36deg, transparent 0),
+    conic-gradient(from 162deg at 82% 46%, #335f48 0 36deg, transparent 0),
+    conic-gradient(from 162deg at 58% 50%, #40755a 0 36deg, transparent 0), linear-gradient(#cfe6dc, #f1f4e3);
+}
+.ph4 {
+  background:
+    radial-gradient(ellipse 90% 50% at 15% 105%, #c8754c 0 99%, transparent 100%),
+    radial-gradient(ellipse 100% 56% at 86% 100%, #e09a68 0 99%, transparent 100%),
+    radial-gradient(circle at 68% 32%, #fff3d6 0 7%, transparent 7.5%), linear-gradient(#f0bd9a, #fbe5cd);
+}
+.ph5 {
+  background:
+    radial-gradient(circle at 76% 24%, #f7f2d6 0 6%, transparent 6.5%),
+    radial-gradient(circle at 18% 18%, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle at 42% 10%, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle at 58% 30%, #fff 0 1px, transparent 1.5px),
+    conic-gradient(from 128deg at 36% 52%, #1e2a4c 0 104deg, transparent 0),
+    conic-gradient(from 140deg at 74% 60%, #2c3c67 0 80deg, transparent 0), linear-gradient(#323e6d, #8f7fb6);
+}
+.ph6 {
+  background:
+    radial-gradient(ellipse 120% 50% at 50% 104%, #d8709b 0 99%, transparent 100%),
+    radial-gradient(ellipse 80% 40% at 10% 74%, #9cc680 0 99%, transparent 100%),
+    radial-gradient(ellipse 70% 36% at 92% 72%, #86b56c 0 99%, transparent 100%),
+    radial-gradient(circle at 30% 24%, #fff4c9 0 5%, transparent 5.5%), linear-gradient(#cde7f5, #f7f1e6);
+}

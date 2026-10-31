@@ -1,0 +1,62 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-wrap{display:flex;gap:14px;align-items:flex-start}
+.m-pg{position:relative;flex:none;width:436px;padding:24px 40px 20px 46px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25);color:#111;font:12.5px/1.72 "STFangsong","FangSong","Songti SC",serif}
+.m-pg .m-title{margin:0 0 8px;text-align:center;font:700 16px/1.45 "STSong","Songti SC","SimSun",serif}
+.m-pg .m-p{text-indent:2em}
+.m-pg .m-h1{text-indent:2em;font:700 12.5px/1.72 "PingFang SC","STHeiti","SimHei",sans-serif}
+.m-pg .m-att{margin-top:6px;padding-left:2em}
+.m-pg .m-sign{margin-top:6px;padding-right:4em;text-align:right;line-height:1.6}
+.m-pg2{width:236px;margin-top:36px;padding:20px 22px 18px}
+.m-pg .m-ak{font:700 12.5px/1.6 "PingFang SC","STHeiti","SimHei",sans-serif}
+.m-pg .m-t2{margin:16px 0 8px;text-align:center;font:700 14px/1.4 "STSong","Songti SC","SimSun",serif}
+.m-tb{width:100%;border-collapse:collapse;font-size:11px;line-height:1.4}
+.m-tb th,.m-tb td{height:24px;padding:0 3px;border:1px solid #333;text-align:center;font-weight:400}
+.m-tb th{font-family:"PingFang SC","STHeiti","SimHei",sans-serif;font-weight:600}
+.m-pg .m-tip{margin-top:6px;font-size:11px;line-height:1.5}
+.dg.narrow .m-pg2{display:none}
+.m-ann{display:grid;width:148px;padding-top:16px;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-ann p{margin:0;padding:5px 0 5px 12px;border-left:2px solid #d4000f}
+.m-ann b{display:block;color:#101828;font-size:11.5px}
+.m-ann span{color:#667085}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, `<div class="m-wrap"><div class="m-pg">
+    <p class="m-title">××市教育局关于召开 2026 年秋季<br>学校安全工作会议的通知</p>
+    <p>各区县教育局，局属各学校：</p>
+    <p class="m-p">为做好冬季校园安全防范工作，决定召开 2026 年秋季学校安全工作会议。现将有关事项通知如下：</p>
+    <p class="m-h1">一、会议时间和地点</p>
+    <p class="m-p">11 月 6 日（星期五）上午 9:00，市教育局 302 会议室。</p>
+    <p class="m-h1">二、参会人员</p>
+    <p class="m-p">各区县教育局分管负责同志；局属各学校分管校长。</p>
+    <p class="m-h1">三、会议议程</p>
+    <p class="m-p">通报秋季安全检查情况；部署冬季消防和交通安全工作。</p>
+    <p class="m-h1">四、有关要求</p>
+    <p class="m-p">请于 11 月 3 日 17:00 前报送参会回执。联系人：周敏，电话：××××××××。</p>
+    <p class="m-att">附件：参会回执</p>
+    <p class="m-sign">××市教育局<br>2026 年 10 月 28 日</p>
+  </div><div class="m-pg m-pg2">
+    <p class="m-ak">附件</p>
+    <p class="m-t2">参会回执</p>
+    <table class="m-tb"><tr><th>单位</th><th>姓名</th><th>职务</th><th>手机号码</th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></table>
+    <p class="m-tip">11 月 3 日 17:00 前报局安全处。</p>
+  </div><div class="m-ann">
+    <p><b>标题</b><span>机关＋关于＋事由＋通知，2 号小标宋</span></p>
+    <p><b>主送机关</b><span>同类用顿号，不同类用逗号</span></p>
+    <p><b>开头</b><span>目的和依据，“通知如下：”收尾</span></p>
+    <p><b>事项</b><span>一、黑体分条；时间写到星期和几点</span></p>
+    <p><b>要求</b><span>截止时间、报送方式、联系人</span></p>
+    <p><b>附件说明</b><span>正文下空一行，左空二字</span></p>
+    <p><b>附件页</b><span>“附件”3 号黑体顶格，另起一页</span></p>
+    <p><b>落款</b><span>右空四字，印章压署名和日期</span></p>
+  </div></div>`, { center: true, min: 0.35 });
+}
+</script>

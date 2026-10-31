@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-tag{margin:0 0 5px!important;font-size:11.5px;font-weight:650}
+.m-no{color:#b42318}
+.m-ok{color:#05603a}
+.m-gap{height:10px}
+</style>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const tag = (t, ok) => '<p class="m-tag ' + (ok ? 'm-ok' : 'm-no') + '">' + t + '</p>';
+  const spec = (ok) => ({
+    head: ['门店', '目标', '实际', '达成率', '店长'],
+    widths: [54, 74, 74, 60, 56],
+    rows: [
+      ['滨江店', '80,000.00', '86,400.00', '108.0%', '周敏'],
+      ['城东店', '', '12,600.00', ok ? '' : '#DIV/0!', ok ? '待任命' : '#N/A'],
+      ['西湖店', '60,000.00', '51,300.00', '85.5%', '林涛'],
+    ],
+    fx: ok ? ['D3', '=IF(B3=0,"",C3/B3)'] : ['D3', '=C3/B3'],
+    marks: ok ? { E3: 'warn' } : { D3: 'bad', E3: 'bad' },
+  });
+  draw(root, tag('✗ 新店没有目标、没有店长', false) + sheet(spec(false)) + '<div class="m-gap"></div>' + tag('✓ 分母用 IF 判断，查不到用 IFNA 给默认值', true) + sheet(spec(true)), { title: '错误值处理 · 店长列 =IFNA(VLOOKUP(A3,门店表!A:C,3,FALSE),"待任命")', min: 0.45 });
+}
+</script>

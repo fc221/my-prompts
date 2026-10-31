@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.ls{align-items:stretch;padding:12px}
+.w{list-style:none;width:100%;max-width:440px;margin:0 auto;padding:0;overflow:auto;background:#fff;border:1px solid #e3e6eb;border-radius:8px}
+li+li{border-top:1px solid #e3e6eb}
+.it{position:relative;display:flex;align-items:flex-start;gap:12px;width:100%;padding:12px 16px 12px 20px;border:0;background:none;text-align:left;cursor:pointer}
+.it:hover{background:#f5f6f8}
+.it:focus-visible{outline-offset:-2px}
+.av{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;color:#fff;font-size:14px}
+.tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.tx b{font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tx small{font-size:12px;line-height:20px;color:#5b616e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+time{flex:none;font-size:12px;line-height:22px;color:#5b616e;font-variant-numeric:tabular-nums}
+.un .it::before{content:"";position:absolute;left:8px;top:20px;width:6px;height:6px;border-radius:50%;background:#3b5bdb}
+.un b{font-weight:600}
+</style>
+
+<div class="s ls"><ul class="w"><li class="un"><button type="button" class="it"><span class="av" style="background:#3b5bdb">王</span><span class="tx"><b><span class="sr">未读，</span>王小明 提交了退款申请</b><small>订单 SO-20931，金额 ¥1,299.00，原因：尺码不合适</small></span><time>14:32</time></button></li><li class="un"><button type="button" class="it"><span class="av" style="background:#0b7285">系</span><span class="tx"><b><span class="sr">未读，</span>报表导出完成</b><small>10 月销售明细.xlsx 已生成，7 天内可下载</small></span><time>13:05</time></button></li><li><button type="button" class="it"><span class="av" style="background:#b54708">李</span><span class="tx"><b>李雪 评论了你的方案</b><small>“首页的筛选区可以再收一收，常用的露出三个就够”</small></span><time>昨天</time></button></li><li><button type="button" class="it"><span class="av" style="background:#12805c">陈</span><span class="tx"><b>陈静 邀请你加入项目</b><small>官网改版 · 设计组</small></span><time>10-21</time></button></li></ul></div>
+
+<script type="module">
+export default function demo(root) {
+  root.querySelector('.w').addEventListener('click', (e) => { const li = e.target.closest('li'); if (li && li.classList.contains('un')) { li.classList.remove('un'); li.querySelector('.sr').remove(); } });
+}
+</script>

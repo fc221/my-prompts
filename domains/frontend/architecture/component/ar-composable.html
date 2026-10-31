@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '组件', items: ['登录页', '绑定手机号弹窗'], note: '只管调用、显示、弹提示和跳路由' },
+    { t: 'Hook', items: ['useCountdown(60)', '→ { left, start }'], note: '状态 + 定时器，卸载时清理', acc: true },
+    { t: '已装的库', items: ['VueUse', 'usehooks-ts'], note: '有现成的先用，不为几行新装库' },
+  ], { arrow: '每调用一次是一份独立状态' }), { title: '逻辑复用 · 第 3 次出现再抽' });
+}
+</script>

@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: 'PostgreSQL · 报销单表', text: `
+-- 每张业务表带 tenant_id，唯一索引以它开头
+ALTER TABLE expense ADD UNIQUE (tenant_id, expense_no);
+-- 数据库兜底：漏写条件也读不到别家数据
+ALTER TABLE expense ENABLE ROW LEVEL SECURITY;
+ALTER TABLE expense FORCE ROW LEVEL SECURITY;
+CREATE POLICY tenant_iso ON expense USING (
+  tenant_id = current_setting('app.tenant_id')::bigint);
+-- 租户取自令牌；SET LOCAL 随事务结束失效
+BEGIN; SET LOCAL app.tenant_id = '1024';
+` }]), { title: '多租户 · 共享表加行级安全' });
+}
+</script>

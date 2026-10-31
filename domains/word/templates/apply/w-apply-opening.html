@@ -1,0 +1,55 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-wrap{display:flex;gap:14px;align-items:flex-start}
+.m-pg{position:relative;flex:none;width:480px;padding:18px 30px 14px 52px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25);color:#111;font:11.5px/1.62 "Songti SC","SimSun",serif}
+.m-pg .m-h1{margin-top:4px;font:700 12.5px/1.6 "PingFang SC","STHeiti","SimHei",sans-serif}
+.m-pg .m-h1:first-child{margin-top:0}
+.m-pg .m-p{text-indent:2em}
+.m-pg sup{font-size:8px;line-height:0;color:#1d4ed8}
+.m-tb{width:100%;margin-top:3px;border-collapse:collapse;font-size:10.5px;line-height:1.4}
+.m-tb th,.m-tb td{padding:2px 5px;border:1px solid #333;text-align:left;font-weight:400}
+.m-tb th{background:#f1f1f1;font-family:"PingFang SC","SimHei",sans-serif;font-weight:600}
+.m-tb td:first-child{white-space:nowrap;font-variant-numeric:tabular-nums}
+.m-pg .m-ref{padding-left:2em;text-indent:-2em;font-size:10.5px;line-height:1.5}
+.m-op{width:100%;margin-top:6px;border-collapse:collapse;table-layout:fixed;font-size:10.5px;line-height:1.4}
+.m-op td{height:46px;padding:3px 5px;border:1px solid #333;vertical-align:top}
+.m-op small{display:block;margin-top:6px;color:#555;font-size:9.5px;text-align:right}
+.m-pg [data-n]{position:relative}
+.m-pg [data-n]::before{content:attr(data-n);position:absolute;left:-36px;top:3px;width:15px;height:15px;border-radius:50%;background:#c2410c;color:#fff;font:600 9px/15px system-ui,sans-serif;text-align:center;text-indent:0}
+.m-ann{display:grid;width:150px;padding-top:2px;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-ann p{margin:0;padding:4px 0}
+.m-ann b{display:block;color:#101828;font-size:11.5px}
+.m-ann i{display:inline-block;width:14px;height:14px;margin-right:5px;border-radius:50%;background:#c2410c;color:#fff;font:600 9px/14px system-ui,sans-serif;text-align:center;vertical-align:1px}
+.m-ann span{display:block;padding-left:19px;color:#667085}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, `<div class="m-wrap"><div class="m-pg">
+    <p class="m-h1" data-n="1">二、国内外研究现状</p>
+    <p class="m-p">已有研究多从订单密度和配送半径解释社区团购的履约时效<sup>[1-2]</sup>，对自提点运营差异关注较少<sup>[3]</sup>。本题以自提点为对象，补上这一环。</p>
+    <p class="m-h1" data-n="2">六、进度安排</p>
+    <table class="m-tb"><tr><th>起止时间</th><th>任务</th><th>阶段成果</th></tr>
+      <tr><td>2026.11–12</td><td>文献整理，设计问卷</td><td>文献综述、问卷</td></tr>
+      <tr><td>2027.01–02</td><td>调研 40 个自提点，回收问卷</td><td>数据集（有效问卷 ≥ 300 份）</td></tr>
+      <tr><td>2027.03–04</td><td>建模分析，撰写初稿</td><td>论文初稿</td></tr>
+      <tr><td>2027.05</td><td>修改定稿，准备答辩</td><td>定稿、答辩材料</td></tr></table>
+    <p class="m-h1" data-n="3">八、参考文献</p>
+    <p class="m-ref">[1] 王立新, 陈晓. 社区团购履约时效的影响因素研究[J]. ××学报, 2024, 43(6): 45-52.</p>
+    <p class="m-ref">[2] 刘畅. 末端配送网络优化方法[M]. 北京: ××出版社, 2023: 88-96.</p>
+    <table class="m-op"><tr><td data-n="4">指导教师意见<small>签字：　　年　月　日</small></td><td>评审小组意见：□ 通过 □ 修改后通过 □ 不通过<small>组长签字：　　年　月　日</small></td></tr></table>
+  </div><div class="m-ann">
+    <p><b><i>1</i>研究现状</b><span>先述后评，用缺口引出本题；上标 [1] 顺序编码</span></p>
+    <p><b><i>2</i>进度安排</b><span>起止时间连续，每段有阶段成果</span></p>
+    <p><b><i>3</i>参考文献</b><span>GB/T 7714 著录，五号字，悬挂缩进</span></p>
+    <p><b><i>4</i>意见栏</b><span>导师签字，评审小组三选一</span></p>
+    <p><b>前面几章</b><span>封面 → 选题背景与意义 → 研究内容和方法 → 技术路线图</span></p>
+  </div></div>`, { center: true, min: 0.35 });
+}
+</script>

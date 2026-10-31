@@ -1,0 +1,13 @@
+<style>
+:host{display:grid;align-items:center;height:100%;background:#fff}
+.m{display:flex;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent);mask-image:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent)}
+.row{display:flex;gap:40px;padding-right:40px;flex:none;animation:mq 18s linear infinite}
+.m:hover .row{animation-play-state:paused}
+span{font:600 18px system-ui;color:#3f4147;white-space:nowrap}
+@keyframes mq{to{transform:translateX(-100%)}
+}
+@media (prefers-reduced-motion:reduce){.row{animation:none}
+}
+</style>
+
+<div data-clip class="m"><div class="row"><span>NORTHWIND</span><span>Acme</span><span>星河</span><span>Lumen</span><span>南风</span><span>Orbit</span></div><div class="row" aria-hidden="true"><span>NORTHWIND</span><span>Acme</span><span>星河</span><span>Lumen</span><span>南风</span><span>Orbit</span></div></div>

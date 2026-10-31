@@ -1,0 +1,58 @@
+<style>
+:host{container-type:size}
+.s{--k:#1a1a1a;position:relative;height:100%;display:flex;align-items:center;padding:14px 20px;overflow:hidden;background:#fff8ec;color:var(--k);font:12px/1.6 system-ui,"PingFang SC",sans-serif}
+.d{position:absolute;pointer-events:none}
+.d path,.d polygon{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.sq{right:5%;top:10%;width:24%}
+.sq path{stroke:#2ec4d6;stroke-width:5}
+.tri{right:3%;bottom:6%;width:14%;animation:spin 10s linear infinite}
+.tri polygon{fill:#ffd23f;stroke:var(--k);stroke-width:3}
+.dot{right:10%;top:36%;width:16%;aspect-ratio:1;border:3px solid var(--k);border-radius:50%;background:radial-gradient(circle,var(--k) 22%,transparent 26%) 0 0/9px 9px,#ff6f91;animation:float 6s ease-in-out infinite alternate}
+.zz{display:none;left:40px;bottom:12px;width:150px;height:12px;background:linear-gradient(135deg,#a98bff 25%,transparent 25%) -6px 0/12px 12px,linear-gradient(225deg,#a98bff 25%,transparent 25%) -6px 0/12px 12px}
+.half{left:-27px;top:-27px;width:54px;aspect-ratio:1;border:3px solid var(--k);border-radius:50%;background:#2ec4d6}
+.stp{right:24%;bottom:-8px;width:11%;aspect-ratio:1;border:3px solid var(--k);background:repeating-linear-gradient(45deg,var(--k) 0 3px,#fff 3px 8px);animation:float 8s ease-in-out infinite alternate-reverse}
+.card{position:relative;max-width:min(60%,330px);padding:12px 16px 14px;border:3px solid var(--k);background:#fff;box-shadow:8px 8px 0 #a98bff,8px 8px 0 3px var(--k)}
+.ey{display:inline-block;padding:0 10px;border:2px solid var(--k);border-radius:999px;background:#ff6f91;font-weight:800}
+h1{margin:6px 0 4px;font:900 clamp(22px,14cqh,48px)/1.15 Poppins,"Noto Sans SC","PingFang SC",system-ui,sans-serif;white-space:nowrap}
+h1 span{padding:0 4px;background:#ffd23f}
+p{margin:0 0 10px;color:#3a3a3a;white-space:nowrap}
+.more{display:none}
+a{display:inline-flex;align-items:center;height:32px;padding:0 16px;border:3px solid var(--k);border-radius:999px;background:#a98bff;box-shadow:3px 3px 0 var(--k);color:var(--k);font-weight:800;text-decoration:none;transition:transform .16s,box-shadow .16s}
+a:hover{transform:translateY(-3px);box-shadow:4px 6px 0 var(--k)}
+a:active{transform:none;box-shadow:3px 3px 0 var(--k)}
+a:focus-visible{outline:3px dashed #2ec4d6;outline-offset:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{to{transform:translateY(-10%)}}
+@container (max-width:300px){.zz,.stp,.dot{display:none}
+.card{max-width:66%;box-shadow:6px 6px 0 #a98bff,6px 6px 0 3px var(--k)}
+.sq{width:22%}
+}
+@container (min-height:260px){.s{padding:24px 40px}
+.card{padding:20px 26px 22px}
+.ey{font-size:13px}
+p{font-size:14px;margin-bottom:16px}
+a{height:40px;padding:0 22px;font-size:14px}
+.half{width:90px;left:-45px;top:-45px}
+.zz{display:block}
+.more{display:inline}
+}
+@media (prefers-reduced-motion:reduce){.tri,.dot,.stp{animation:none}
+a{transition:none}
+a:hover{transform:none}
+}
+</style>
+
+<div class="s">
+  <i class="d half" aria-hidden="true"></i>
+  <svg class="d sq" viewBox="0 0 100 30" aria-hidden="true"><path d="M4 18C14 4 22 4 30 16S46 28 54 16 70 4 78 16 92 26 96 14"/></svg>
+  <i class="d dot" aria-hidden="true"></i>
+  <svg class="d tri" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,8 94,88 6,88"/></svg>
+  <i class="d zz" aria-hidden="true"></i>
+  <i class="d stp" aria-hidden="true"></i>
+  <div class="card">
+    <span class="ey">周末快闪</span>
+    <h1>色彩<span>派对</span></h1>
+    <p>11.23–24 · 静安<span class="more"> · 免费入场</span></p>
+    <a href="#">预约入场</a>
+  </div>
+</div>

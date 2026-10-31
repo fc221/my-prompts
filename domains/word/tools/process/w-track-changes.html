@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-all{display:grid;gap:10px;width:600px}
+.m-rb{display:flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #c9ced6;border-radius:6px;background:#fff;font:10.5px/1.3 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-rb span{padding:3px 8px;border:1px solid #e4e7ec;border-radius:4px;white-space:nowrap}
+.m-rb span.on{border-color:#2b579a;background:#e8f0fc;color:#1d3f75;font-weight:650}
+.m-rb i{width:1px;height:16px;background:#e4e7ec}
+.m-rb em{margin-left:auto;color:#667085;font-style:normal}
+.m-doc{display:grid;grid-template-columns:minmax(0,1fr) 196px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25)}
+.m-pg{padding:16px 22px 16px 30px;color:#111;font-family:"Songti SC","SimSun",serif}
+.m-desk .m-h{margin:0 0 4px;font:700 12px/1.6 "PingFang SC","SimHei",sans-serif}
+.m-desk .m-p{position:relative;margin:0 0 6px;font-size:11px;line-height:1.85}
+.m-p.ch::before{content:"";position:absolute;left:-14px;top:3px;bottom:3px;border-left:1.5px solid #344054}
+.m-del{color:#c2410c;text-decoration:line-through}
+.m-ins{color:#c2410c;text-decoration:underline;text-underline-offset:2px}
+.m-ins.b{color:#1d4ed8}
+.m-an{position:relative;padding:3px 0;background:#eaf1fb;border-bottom:1.5px dashed #5b8def}
+.m-mg{display:grid;align-content:start;gap:8px;padding:16px 10px 12px;border-left:1px solid #eaecf0;background:#f8f9fb;font:10px/1.4 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-c{position:relative;padding:6px 8px;border:1px solid #c9d6ea;border-radius:5px;background:#fff}
+.m-c b{display:flex;justify-content:space-between;margin-bottom:2px;color:#101828;font-size:10px}
+.m-c b em{color:#98a2b3;font-weight:400;font-style:normal}
+.m-c.r{margin-left:12px;border-color:#e4e7ec}
+.m-c.d{border-color:#f4c9a8;background:#fff8f2}
+.m-c.d b{color:#c2410c}
+.m-c.ok{opacity:.75}
+.m-c.ok b::after{content:"已解决";color:#067647;font-weight:600}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const rb = '<div class="m-rb"><span class="on">修订 · 开</span><span>所有标记 ▾</span><i></i><span>新建批注</span><span>上一处</span><span>下一处</span><span>接受 ▾</span><span>拒绝 ▾</span><i></i><span>比较 ▾</span><em>用户名：采购部 林</em></div>';
+  const page = '<div class="m-pg"><p class="m-h">第五条　付款方式</p>'
+    + '<p class="m-p ch">5.1　甲方在货物验收合格后 <span class="m-del">7 个工作日</span><span class="m-ins">30 日</span>内，凭乙方开具的增值税专用发票支付货款。</p>'
+    + '<p class="m-p ch">5.2　乙方逾期交货的，每逾期一日按合同总价的 <span class="m-del">0.5%</span><span class="m-ins">0.3%</span> 支付违约金<span class="m-ins b">，累计不超过合同总价的 10%</span>。</p>'
+    + '<p class="m-p">5.3　甲方付款前，乙方应提供 <span class="m-an">与发票金额一致的送货单</span> 原件。</p>'
+    + '<p class="m-h">第六条　质量保证</p><p class="m-p">6.1　质保期自验收合格之日起计算，为期 12 个月。</p></div>';
+  const mg = '<div class="m-mg">'
+    + '<div class="m-c d"><b>采购部 林<em>10-14 15:02</em></b>删除了：7 个工作日</div>'
+    + '<div class="m-c"><b>法务部 王律<em>10-15 09:20</em></b>违约金上限建议写明，避免无限累计。</div>'
+    + '<div class="m-c r"><b>采购部 林<em>答复</em></b>同意，已加“累计不超过 10%”。</div>'
+    + '<div class="m-c ok"><b>乙方 周经理 </b>送货单是否可用电子版？</div></div>';
+  draw(root, '<div class="m-all">' + rb + '<div class="m-doc">' + page + mg + '</div></div>', { center: true, min: 0.4 });
+}
+</script>

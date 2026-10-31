@@ -1,0 +1,27 @@
+<style>
+.s{height:100%;display:grid;place-items:center;padding:12px 16px;background:#fff;color:#1f2329;font:12px/1.2 system-ui,"PingFang SC",sans-serif}
+.w{width:100%;max-width:560px;display:grid;gap:8px}
+.r{display:flex;align-items:center;gap:12px}
+.r span{flex:0 0 72px;color:#5b616e;white-space:nowrap}
+.t{position:relative;flex:1;height:16px;border-radius:8px;background:#eef0f4}
+.m{position:absolute;top:0;bottom:0;left:0;width:calc(88% - 16px);transform:translateX(-100%)}
+.m i{position:absolute;left:100%;top:0;width:16px;height:16px;border-radius:50%;background:#3b5bdb}
+.ln i{background:#a8adb7}
+.on .m{transform:none;transition:transform var(--d) var(--e)}
+button{justify-self:end;height:28px;padding:0 12px;border:1px solid #c9ced6;border-radius:6px;background:#fff;color:#1f2329;font:inherit;cursor:pointer}
+button:hover{background:#f5f6f8}
+button:focus-visible{outline:2px solid #3b5bdb;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.on .m{transition-duration:0s}
+}
+</style>
+
+<div class="s"><div class="w"><div class="r" style="--e:cubic-bezier(.2,0,0,1);--d:960ms"><span>标准 240ms</span><div class="t"><div class="m"><i></i></div></div></div><div class="r" style="--e:cubic-bezier(0,0,.2,1);--d:960ms"><span>进入 240ms</span><div class="t"><div class="m"><i></i></div></div></div><div class="r" style="--e:cubic-bezier(.4,0,1,1);--d:640ms"><span>退出 160ms</span><div class="t"><div class="m"><i></i></div></div></div><div class="r" style="--e:cubic-bezier(.34,1.4,.64,1);--d:960ms"><span>回弹 240ms</span><div class="t"><div class="m"><i></i></div></div></div><div class="r ln" style="--e:linear;--d:960ms"><span>线性 对照</span><div class="t"><div class="m"><i></i></div></div></div><button type="button">重播 · 放慢 4 倍</button></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const w = root.querySelector('.w');
+  const play = () => { w.classList.remove('on'); void w.offsetWidth; w.classList.add('on'); };
+  root.querySelector('button').onclick = play;
+  setTimeout(play, 300);
+}
+</script>

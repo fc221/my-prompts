@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+  main.ts                  全局 ValidationPipe 和过滤器
+  app.module.ts            只 imports 各业务模块
+* orders/                  一个业务一个 Module
+*   orders.module.ts       providers 声明，exports 暴露 Service
+    orders.controller.ts   构造函数注入 Service
+    orders.service.ts      @Injectable()
+    dto/
+      create-order.dto.ts  class-validator 装饰器
+      update-order.dto.ts  PartialType 生成
+    entities/              order.entity.ts
+    orders.service.spec.ts
+  common/                  过滤器、拦截器、守卫
+test/                      e2e
+`), { title: 'NestJS · 一个业务一个 Module' });
+}
+</script>

@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+app/
+  models/
+*   order.rb                模型单数，validates 写规则
+  controllers/
+*   orders_controller.rb    控制器复数，params.expect
+  services/
+    create_order.rb         只有一个公开的 call
+  jobs/                     继承 ApplicationJob
+config/
+  routes.rb                 resources :orders
+  environments/             development.rb、production.rb
+db/
+  migrate/
+  schema.rb                 和迁移一起提交
+`), { title: 'Rails · 照约定命名' });
+}
+</script>

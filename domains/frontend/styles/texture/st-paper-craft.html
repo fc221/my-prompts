@@ -1,0 +1,38 @@
+<style>
+:host{container-type:size}
+.s{position:relative;height:100%;overflow:hidden;background:#f6efe4;color:#3b3127;font:12px/1.6 system-ui,"PingFang SC",sans-serif}
+.sun{position:absolute;right:16%;top:12%;width:16cqh;height:16cqh;border-radius:50%;background:#f2b8a2;box-shadow:0 3px 4px rgba(80,60,30,.16),inset 0 -2px 3px rgba(80,60,30,.08);animation:pop .5s cubic-bezier(.2,.8,.3,1.2) both}
+.ly{position:absolute;left:-2%;width:104%;bottom:0;height:var(--h);fill:var(--c);filter:drop-shadow(0 -2px 2px rgba(80,60,30,.18)) drop-shadow(0 3px 4px rgba(80,60,30,.12));animation:pop .5s var(--d) cubic-bezier(.2,.8,.3,1.2) both}
+.nw{position:absolute;left:7%;top:10%;width:min(196px,58%);filter:drop-shadow(0 1px 1px rgba(80,60,30,.1)) drop-shadow(0 8px 12px rgba(80,60,30,.16));transform:rotate(-2deg);animation:pop .5s .32s cubic-bezier(.2,.8,.3,1.2) both}
+.nt{padding:12px 14px 14px;border-radius:3px;background:linear-gradient(135deg,transparent 50%,#e6dac6 50%) 100% 100%/14px 14px no-repeat,#fffdf8;clip-path:polygon(0 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%)}
+.tp{position:absolute;left:50%;top:-8px;width:56px;height:16px;background:repeating-linear-gradient(45deg,rgba(255,255,255,.35) 0 3px,transparent 3px 7px),rgba(242,184,162,.65);transform:translateX(-50%) rotate(4deg);clip-path:polygon(0 0,4% 25%,0 50%,4% 75%,0 100%,100% 100%,96% 75%,100% 50%,96% 25%,100% 0);z-index:1}
+small{color:#6b5d4f}
+h1{margin:2px 0 4px;font:700 clamp(17px,10cqh,32px)/1.25 "LXGW WenKai","Kaiti SC","STKaiti","KaiTi","PingFang SC",serif}
+p{margin:0 0 10px;color:#6b5d4f}
+button{position:relative;isolation:isolate;height:28px;padding:0 14px 0 22px;border:0;background:none;color:#fffdf8;font:inherit;font-weight:600;cursor:pointer;transform:rotate(-2deg);transition:transform .2s cubic-bezier(.2,.8,.3,1.2)}
+button::after{content:"";position:absolute;inset:0;z-index:-1;background:#3f6b55;clip-path:polygon(8px 0,100% 0,100% 100%,8px 100%,0 50%)}
+button::before{content:"";position:absolute;left:9px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:#fffdf8}
+button:hover{transform:translateY(-2px) rotate(0)}
+button:focus-visible{outline:2px solid #3b3127;outline-offset:2px}
+@keyframes pop{from{opacity:0;translate:0 8px}
+}
+@container (max-width:300px){.nw{width:64%;transform:none}
+}
+@container (min-height:260px){.nw{width:250px;left:9%;top:16%}
+.nt{padding:18px 20px 20px}
+small,p{font-size:13px}
+button{height:34px;font-size:14px;padding:0 18px 0 26px}
+}
+@media (prefers-reduced-motion:reduce){.sun,.ly,.nw{animation:none}
+button{transition:none}
+}
+</style>
+
+<div class="s">
+  <div class="sun" aria-hidden="true"></div>
+  <svg class="ly" style="--h:62%;--c:#d5e4d3;--d:0s" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40C30 10 60 8 92 30s58 8 84-12 64-22 92 2 32 26 32 26V100H0z"/></svg>
+  <svg class="ly" style="--h:46%;--c:#a9c7ae;--d:.08s" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 50c26-26 58-34 88-16s46 26 74 8 52-38 86-26 52 30 52 30V100H0z"/></svg>
+  <svg class="ly" style="--h:30%;--c:#7fa98a;--d:.16s" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 46c34-30 70-30 104-6s58 22 90 0 68-30 106 8V100H0z"/></svg>
+  <svg class="ly" style="--h:14%;--c:#3f6b55;--d:.24s" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40c40-26 80-24 120 0s70 22 100 2 60-20 80 0V100H0z"/></svg>
+  <div class="nw"><span class="tp" aria-hidden="true"></span><div class="nt"><small>山居手帐 · 秋季限定</small><h1>把秋天<br>折进口袋里</h1><p>纸雕书签 12 张 · ¥68</p><button type="button">加入购物袋</button></div></div>
+</div>

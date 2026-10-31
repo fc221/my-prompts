@@ -1,0 +1,6 @@
+package-lock.json
+
+# 条目正文会被原样复制成提示词，格式化会改掉缩进和空行
+domains/**/*.md
+# 示例由 vite.config.ts 按行首 export default 拆分，格式化会把它缩进
+domains/**/*.html

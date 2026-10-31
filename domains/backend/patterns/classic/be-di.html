@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, stack, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    stack([
+      { t: '组装处', items: ['src/bootstrap/'], note: '只在这里组装，按 sms.provider 选实现', acc: true },
+      { t: '依赖', items: ['OrderRepository', 'Clock', 'IdGenerator', 'aliyun_sms'] },
+      { t: '业务类', items: ['OrderService(repo, clock)'], note: '构造器注入，依赖字段只读' },
+    ], { arrow: '从外面传进来' }),
+    tree(`
+src/
+* bootstrap/        唯一组装处
+  order/
+    order_service   无容器 API
+  infra/sms/
+    aliyun_sms
+    tencent_sms     按配置二选一
+`),
+  ], { title: '依赖注入 · 组装只在一处' });
+}
+</script>

@@ -1,0 +1,154 @@
+.s {
+  color-scheme: light;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: #f5f6f8;
+  color: #1f2329;
+  font:
+    14px/22px system-ui,
+    'PingFang SC',
+    sans-serif;
+  container-type: size;
+}
+[hidden] {
+  display: none !important;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+}
+:focus-visible {
+  outline: 2px solid #3b5bdb;
+  outline-offset: 2px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 16px;
+  border: 1px solid #c9ced6;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:hover {
+  background: #f5f6f8;
+  border-color: #8a909c;
+}
+.pri {
+  background: #3b5bdb;
+  border-color: #3b5bdb;
+  color: #fff;
+}
+.pri:hover {
+  background: #3250c8;
+  border-color: #3250c8;
+}
+.txt {
+  background: none;
+  border-color: transparent;
+  color: #3b5bdb;
+  padding: 0 8px;
+}
+.txt:hover {
+  background: #edf1ff;
+  border-color: transparent;
+}
+.inp {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #c9ced6;
+  border-radius: 6px;
+  background: #fff;
+  min-width: 0;
+}
+.inp::placeholder {
+  color: #8a909c;
+}
+.inp:hover {
+  border-color: #8a909c;
+}
+.inp:focus-visible {
+  outline: none;
+  border-color: #3b5bdb;
+  box-shadow:
+    inset 0 0 0 1px #3b5bdb,
+    0 0 0 3px #dfe6ff;
+}
+.inp.err {
+  border-color: #d92d20;
+}
+.inp.err:focus-visible {
+  box-shadow:
+    inset 0 0 0 1px #d92d20,
+    0 0 0 3px #fdecea;
+}
+.lab {
+  font-weight: 500;
+}
+.help {
+  margin: 0;
+  font-size: 12px;
+  line-height: 20px;
+  color: #5b616e;
+}
+.bad {
+  color: #d92d20;
+}
+.warn {
+  color: #b54708;
+}
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.sel {
+  display: inline-grid;
+  align-items: center;
+}
+.sel > select,
+.sel::after {
+  grid-area: 1/1;
+}
+.sel > select {
+  appearance: none;
+  height: 32px;
+  padding: 0 32px 0 12px;
+  border: 1px solid #c9ced6;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+.sel > select:hover {
+  border-color: #8a909c;
+}
+.sel::after {
+  content: '';
+  justify-self: end;
+  margin: 0 15px 3px 0;
+  width: 6px;
+  height: 6px;
+  border: solid #5b616e;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+@container (max-height:240px) {
+  .xl {
+    display: none !important;
+  }
+}

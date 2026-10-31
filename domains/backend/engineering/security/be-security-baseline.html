@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '拼 SQL', items: ['参数化或 ORM 绑定', 'sort=created_at 走白名单映射'] },
+    { t: '拼命令行', items: ['参数数组，不经过 shell', '用户输入只当单个参数'] },
+    { t: '拼文件路径', items: ['路径由服务端生成', '规范化后校验仍在目标目录内'] },
+    { t: '拼 URL（SSRF）', items: ['只允许 http、https', '解析后拒绝内网和保留地址'] },
+  ], { cols: 2, note: '看到用户输入进入这四种拼接，就按框里的规则处理' }), { title: '安全底线 · 问题多出在拼接' });
+}
+</script>

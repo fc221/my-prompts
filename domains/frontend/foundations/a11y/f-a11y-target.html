@@ -1,0 +1,28 @@
+<style>
+.s{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;padding:16px;background:#fff;color:#1f2329;font:12px/1.4 system-ui,"PingFang SC",sans-serif}
+.r{display:flex;align-items:center;gap:20px;width:100%;max-width:440px}
+.g{display:flex;flex:none}
+small{line-height:1.4}
+.no{color:#d92d20}
+.ok{color:#12805c}
+svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.x{position:relative;gap:4px;width:148px;justify-content:center}
+.x i{display:grid;place-items:center;width:16px;height:16px;outline:1px dashed #d92d20}
+.x::after{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px;border-radius:50%;background:rgba(217,45,32,.16)}
+.o{gap:8px}
+.o button{width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:8px;background:transparent;color:#1f2329;outline:1px dashed #12805c;outline-offset:-1px;cursor:pointer}
+.o button svg{width:20px;height:20px}
+.o button:hover{background:#f0f2f5}
+.o button:focus-visible{outline:2px solid #3b5bdb;outline-offset:2px}
+</style>
+
+<div class="s"><div class="r"><div class="g x" aria-hidden="true"></div><small class="no">✗ 热区 16、间距 4：一个指尖盖住三个</small></div><div class="r"><div class="g o"></div><small class="ok">✓ 图标 20、热区 44、间距 8</small></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const ic = [['编辑', 'M4 20h4L19 9l-4-4L4 16z'], ['复制', 'M8 8h12v12H8zM16 8V4H4v12h4'], ['删除', 'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13']];
+  const svg = (d) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg>`;
+  root.querySelector('.x').innerHTML = ic.map(([, d]) => `<i>${svg(d)}</i>`).join('');
+  root.querySelector('.o').innerHTML = ic.map(([n, d]) => `<button type="button" aria-label="${n}">${svg(d)}</button>`).join('');
+}
+</script>

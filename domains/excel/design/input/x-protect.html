@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-fit .dg-col:first-child{flex:none}
+</style>
+
+<div class="dg m-fit"></div>
+
+<script type="module">
+import { draw, sheet, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const w = { B2: 'warn', C2: 'warn', D2: 'warn', B3: 'warn', C3: 'warn', D3: 'warn', B4: 'warn', C4: 'warn', D4: 'warn', B5: 'warn', C5: 'warn', D5: 'warn' };
+  draw(root, [
+    sheet({
+      head: ['费用项目', '预算', '实际', '说明', '差额', '状态'],
+      widths: [60, 74, 74, 66, 64, 46],
+      rows: [
+        ['房租', '6,000.00', '6,000.00', '10 月', '0.00', '正常'],
+        ['水电', '1,200.00', '1,486.50', '空调', '-286.50', '超支'],
+        ['物料', '3,500.00', '2,940.00', '', '560.00', '正常'],
+        ['推广', '2,000.00', '2,300.00', '国庆活动', '-300.00', '超支'],
+      ],
+      foot: ['合计', '12,700.00', '12,726.50', '', '-26.50', ''],
+      fx: ['E3', '=B3-C3'],
+      marks: Object.assign(w, { F3: 'bad', F5: 'bad' }),
+      tabs: ['费用申报', '说明'],
+      freeze: true,
+    }),
+    boxes([
+      { t: '① 解锁录入区', items: ['选中黄色区域 → Ctrl+1 → 保护 → 取消“锁定”'] },
+      { t: '② 隐藏公式（可选）', items: ['差额、状态列勾选“隐藏”'] },
+      { t: '③ 保护工作表', items: ['审阅 → 保护工作表，只允许选定单元格'], acc: true },
+      { t: '④ 检查', items: ['按 Tab 只在黄色格子间跳'] },
+    ], { cols: 1 }),
+  ], { title: '黄底可填 · 其余锁定 · 差额和状态是公式', min: 0.45 });
+}
+</script>

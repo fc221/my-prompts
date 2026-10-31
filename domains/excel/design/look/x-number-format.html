@@ -1,0 +1,38 @@
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-fit .dg-col:first-child{flex:none}
+</style>
+
+<div class="dg m-fit"></div>
+
+<script type="module">
+import { draw, sheet, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    sheet({
+      head: ['门店', '销售额', '环比', '毛利率', '更新日期'],
+      widths: [52, 60, 56, 54, 118],
+      rows: [
+        ['滨江店', '12.3万', '▲8.2%', '62.5%', '2026-10-05 星期一'],
+        ['西湖店', '9.8万', '[▼3.1%]', '58.0%', '2026-10-05 星期一'],
+        ['湖滨店', '7.4万', '▲1.6%', '60.2%', '2026-10-05 星期一'],
+        ['城西店', '5.1万', '[▼12.0%]', '55.4%', '2026-10-05 星期一'],
+      ],
+      fx: ['B2', '123456'],
+      tabs: ['月报', '明细'],
+    }),
+    boxes([
+      { t: '销售额', items: ['0!.0,"万"'], acc: true },
+      { t: '环比', items: ['▲0.0%;[红色]▼0.0%;0.0%'] },
+      { t: '毛利率', items: ['0.0%'] },
+      { t: '更新日期', items: ['yyyy-mm-dd aaaa'] },
+    ], { cols: 1 }),
+  ], { title: '数字格式 · B2 显示 12.3万，编辑栏里的值仍是 123456', min: 0.45 });
+  // 格式化后的数字在表格里靠右，负的环比标红
+  root.querySelectorAll('.xc').forEach((c) => {
+    const t = c.textContent;
+    if (/^\[▼.*\]$/.test(t)) { c.textContent = t.slice(1, -1); c.classList.add('m-bad'); }
+    if (/^[▲▼]?[\d.,]+(万|%)$/.test(c.textContent) || /星期/.test(t)) c.classList.add('r');
+  });
+}
+</script>

@@ -1,0 +1,113 @@
+<link rel="stylesheet" href="../../_shared/interactions-base.css">
+<style>
+.st{padding:10px 14px}
+.box{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:6px;height:100%;max-width:640px;margin:0 auto}
+.hd{display:flex;align-items:center;gap:8px;min-width:0}
+.hd>b{flex:none;font-size:13px}
+.pv{flex:1;min-width:0;overflow:hidden;color:#667085;font-size:12px;white-space:nowrap;text-overflow:ellipsis}
+.pv b{color:#3b5bdb}
+.hd .ctl{flex:none;height:28px;padding:0 10px;font-size:12px}
+.vp{position:relative;min-height:0;overflow:hidden;border:1px solid #e3e6eb;border-radius:14px;background:#fff;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.vp:active{cursor:grabbing}
+.vp:focus-visible{outline-offset:-2px}
+.vp::before{content:"";position:absolute;left:50%;bottom:5px;width:16px;height:3px;margin-left:-8px;border-radius:2px;background:#1f2329;opacity:.7}
+.track{position:absolute;left:0;top:24px;bottom:14px;display:flex;gap:10px;transition:none;will-change:transform}
+.sk{position:relative;flex:none;display:flex;flex-direction:column;gap:4px;width:64px;height:100%;padding:4px;border-radius:12px;background:#f4f5f7}
+.ui{position:relative;flex:1;min-height:0;border-radius:8px;background:var(--b);overflow:hidden}
+.ui::before{content:"";position:absolute;left:0;right:0;top:0;height:38%;background:linear-gradient(135deg,var(--a),var(--t))}
+.ui::after{content:"";position:absolute;left:18%;right:18%;bottom:12%;height:10px;border-radius:5px;background:var(--a)}
+.ui i{position:absolute;left:12%;right:30%;top:50%;height:4px;border-radius:2px;background:var(--t);opacity:.35;box-shadow:0 8px 0 0 var(--t)}
+.sk b{overflow:hidden;font-size:11px;font-weight:600;text-align:center;white-space:nowrap;text-overflow:ellipsis;transition:opacity .15s}
+.sk.out b{opacity:0}
+.sk[aria-selected=true]{background:#1f2329;color:#fff}
+.sk.pre{outline:2px dashed #3b5bdb;outline-offset:3px}
+.sk.pre::after{content:"松手停在这";position:absolute;left:50%;bottom:100%;margin-bottom:6px;padding:0 6px;border-radius:999px;background:#3b5bdb;color:#fff;font-size:10px;line-height:16px;white-space:nowrap;transform:translateX(-50%)}
+.ft{margin:0;min-height:18px;overflow:hidden;color:#475467;font-size:12px;white-space:nowrap;text-overflow:ellipsis}
+.ft em{color:#067647;font-style:normal;font-weight:600}
+@container (min-width:560px){.track{top:30px;bottom:16px;gap:14px}
+.sk{width:96px;padding:6px;gap:6px}
+.sk b{font-size:12px}
+.ui::after{height:14px;border-radius:7px}
+}
+</style>
+
+<div class="st"><div class="box"><div class="hd"><b>换个主题</b><span class="pv" aria-hidden="true"></span><button type="button" class="ctl rp">重播</button></div><div class="vp" tabindex="0" role="listbox" aria-label="主题，左右拖动或甩动，←/→ 切换"><div class="track"></div></div><p class="ft" role="status"></p></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const vp = root.querySelector('.vp'), track = root.querySelector('.track'), pv = root.querySelector('.pv'), ft = root.querySelector('.ft');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SK = [['雾蓝', '#5b7cfa', '#a5b8ff', '#eef2ff'], ['青柠', '#65a30d', '#bef264', '#f7fee7'], ['落日', '#ea580c', '#fbbf24', '#fff7ed'], ['墨夜', '#334155', '#94a3b8', '#e2e8f0'], ['樱粉', '#db2777', '#f9a8d4', '#fdf2f8'], ['薄荷', '#0d9488', '#5eead4', '#f0fdfa'], ['琥珀', '#b45309', '#fcd34d', '#fffbeb'], ['海盐', '#0369a1', '#7dd3fc', '#f0f9ff'], ['砂岩', '#a16207', '#e7c9a0', '#fdf8f0']];
+  track.innerHTML = SK.map(([n, a, t, b], i) => `<div class="sk" role="option" id="dp-${i}" aria-selected="false" style="--a:${a};--t:${t};--b:${b}"><span class="ui"><i></i></span><b>${n}</b></div>`).join('');
+  const cards = [...track.children], N = cards.length;
+  let x = 0, cur = 0, d = null, tok = 0, tm = [];
+  const step = () => cards[0].offsetWidth + parseFloat(getComputedStyle(track).columnGap);
+  const snapX = (i) => vp.clientWidth / 2 - cards[0].offsetWidth / 2 - i * step();
+  const idxAt = (v) => (snapX(0) - v) / step();
+  const put = (v) => {
+    x = v; track.style.transform = `translateX(${v}px)`;
+    const vr = vp.getBoundingClientRect(); // 被视口边缘切到的卡片先不显示名字（.track 设了 transition: none，否则减少动态效果的全局过渡会让这里量到旧位置）
+    cards.forEach((c) => { const r = c.getBoundingClientRect(); c.classList.toggle('out', r.left < vr.left || r.right > vr.right); });
+  };
+  // 唯一的“算落点”函数：拖动中的预览和松手后的吸附都调它
+  const land = (v, vel) => { const base = Math.round(idxAt(v)), i = Math.round(idxAt(v + vel * 250)); return Math.max(0, Math.min(N - 1, base - 3 > i ? base - 3 : Math.min(base + 3, i))); }; // 一次最多跳 3 项，首尾夹住
+  // 最近 100ms 的样本求平均速度；手指停住超过 120ms 视为 0
+  const vel = (now) => { const s = d?.s; if (!s || s.length < 2 || now - s[s.length - 1][0] > 120) return 0; const a = s[0], b = s[s.length - 1]; return b[0] > a[0] ? (b[1] - a[1]) / (b[0] - a[0]) : 0; };
+  const mark = (i) => { cards.forEach((c, k) => c.classList.toggle('pre', k === i)); pv.innerHTML = i < 0 ? '' : `松手停在：<b>${SK[i][0]}</b>`; };
+  const settle = (i, quiet) => {
+    cur = i; cards.forEach((c, k) => c.setAttribute('aria-selected', String(k === i))); vp.setAttribute('aria-activedescendant', 'dp-' + i);
+    if (!quiet) ft.textContent = `已选 第 ${i + 1} 项「${SK[i][0]}」`;
+  };
+  const glide = (i, said) => {
+    const id = ++tok, from = x, to = snapX(i), ms = still ? 0 : Math.max(220, Math.min(420, 220 + Math.abs(to - from) * 0.5)), t0 = performance.now();
+    const f = (t) => {
+      if (id !== tok || !root.host.isConnected) return;
+      const k = ms ? Math.min(1, (t - t0) / ms) : 1; put(from + (to - from) * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(f); else { mark(-1); cur = i; settle(i); if (said) ft.innerHTML = said; }
+    };
+    requestAnimationFrame(f);
+  };
+  const loop = () => { if (!d || !root.host.isConnected) return; d.p = land(x, vel(performance.now())); mark(d.p); requestAnimationFrame(loop); };
+  vp.addEventListener('pointerdown', (e) => {
+    if (e.button > 0) return;
+    tok++; d = { x0: e.clientX, v0: x, s: [[e.timeStamp, x]], first: null };
+    try { vp.setPointerCapture(e.pointerId); } catch {}
+    requestAnimationFrame(loop);
+  });
+  vp.addEventListener('pointermove', (e) => {
+    if (!d) return;
+    let v = d.v0 + e.clientX - d.x0; const hi = snapX(0), lo = snapX(N - 1);
+    if (v > hi) v = hi + (v - hi) * 0.35; else if (v < lo) v = lo + (v - lo) * 0.35; // 首尾加阻尼
+    put(v); d.s.push([e.timeStamp, v]);
+    while (d.s.length > 2 && e.timeStamp - d.s[0][0] > 100) d.s.shift();
+  });
+  const up = (e) => {
+    if (!d) return;
+    const i = land(x, vel(e.timeStamp)), p = d.p ?? i; d = null;
+    glide(i, `松手前预告「${SK[p][0]}」，停在第 ${i + 1} 项<em>「${SK[i][0]}」</em>${p === i ? '，一致' : ''}`);
+    mark(i);
+  };
+  vp.addEventListener('pointerup', up); vp.addEventListener('pointercancel', up);
+  vp.addEventListener('keydown', (e) => {
+    const i = { ArrowLeft: cur - 1, ArrowRight: cur + 1, Home: 0, End: N - 1 }[e.key];
+    if (i === undefined) return;
+    e.preventDefault(); const j = Math.max(0, Math.min(N - 1, i)); cur = j; glide(j);
+  });
+  new ResizeObserver(() => { if (!d) { tok++; put(snapX(cur)); } }).observe(vp);
+  // 自动演示：先慢慢拖（预告在旁边一张），再快速一甩（预告跳到 3 张以后），松手停在预告的那张
+  const play = () => {
+    tm.forEach(clearTimeout); tm = []; tok++; d = null; mark(-1); put(snapX(0)); settle(0, true); ft.textContent = '';
+    const r = vp.getBoundingClientRect(), y = r.top + r.height / 2; let px = r.left + r.width / 2 + 40;
+    const fire = (type, cx) => vp.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerId: 9, button: 0, clientX: cx, clientY: y }));
+    fire('pointerdown', px);
+    let t = 0;
+    for (let k = 0; k < 10; k++) tm.push(setTimeout(() => { if (root.host.isConnected && d) fire('pointermove', (px -= 4)); }, (t += 30)));
+    t += 260;
+    for (let k = 0; k < 5; k++) tm.push(setTimeout(() => { if (root.host.isConnected && d) fire('pointermove', (px -= 22)); }, (t += 16)));
+    tm.push(setTimeout(() => { if (root.host.isConnected && d) fire('pointerup', px); }, t + 16));
+  };
+  put(snapX(0)); settle(0, true);
+  root.querySelector('.rp').addEventListener('click', play);
+  tm.push(setTimeout(() => { if (root.host.isConnected) play(); }, 400));
+}
+</script>
