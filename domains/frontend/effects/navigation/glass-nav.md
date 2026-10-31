@@ -29,13 +29,24 @@ order: 10
 
 <style>
 :host{display:block;height:100%}
-.page{height:100%;overflow:auto;background:#fff}
-nav{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;padding:12px 16px;font:600 14px system-ui;color:#18181b;background:rgba(255,255,255,.7);-webkit-backdrop-filter:blur(12px) saturate(1.4);backdrop-filter:blur(12px) saturate(1.4);border-bottom:1px solid rgba(0,0,0,.06)}
+.page{height:100%;overflow:auto;scrollbar-width:none;background:#fff;color:#18181b;font:13px/1.4 system-ui,"PingFang SC",sans-serif}
+.page::-webkit-scrollbar{display:none}
+nav{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;padding:12px 16px;font-weight:600;font-size:14px;background:rgba(255,255,255,.7);-webkit-backdrop-filter:blur(12px) saturate(1.4);backdrop-filter:blur(12px) saturate(1.4);border-bottom:1px solid rgba(0,0,0,.06)}
 nav span{font-weight:500;color:#3f4147}
-.content{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px 16px 200px}
-.content i{height:70px;border-radius:10px;background:linear-gradient(135deg,#ffb27a,#f472b6)}
-.content i:nth-child(2n){background:linear-gradient(135deg,#60a5fa,#a78bfa)}
-.content i:nth-child(3n){background:linear-gradient(135deg,#34d399,#fde047)}
+.content{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:12px 16px 120px}
+figure{margin:0}
+.content i{display:block;height:84px;border-radius:12px;background:linear-gradient(135deg,#ffb27a,#f472b6)}
+.content figure:nth-child(2n) i{background:linear-gradient(135deg,#60a5fa,#a78bfa)}
+.content figure:nth-child(3n) i{background:linear-gradient(135deg,#34d399,#fde047)}
+figcaption{margin-top:5px;font-size:12px;color:#3f4147;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style>
 
-<div class="page"><nav>MyPrompts<span>产品　定价　文档</span></nav><div class="content"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+<div class="page"><nav>MyPrompts<span>产品　定价　文档</span></nav><div class="content"><figure><i></i><figcaption>春季系列</figcaption></figure><figure><i></i><figcaption>夜跑装备</figcaption></figure><figure><i></i><figcaption>露营套装</figcaption></figure><figure><i></i><figcaption>通勤背包</figcaption></figure><figure><i></i><figcaption>海岛假期</figcaption></figure><figure><i></i><figcaption>城市骑行</figcaption></figure></div></div>
+
+<script type="module">
+export default function demo(root) {
+  // 自动演示：往下滚一点，让第一排图片压到导航栏下面，透出磨砂效果
+  const page = root.querySelector('.page'), still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  setTimeout(() => { if (root.host.isConnected) page.scrollTo({ top: 64, behavior: still ? 'auto' : 'smooth' }); }, 300);
+}
+</script>

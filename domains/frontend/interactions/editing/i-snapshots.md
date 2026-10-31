@@ -44,7 +44,7 @@ order: 70
 .cv>.po{height:100%;max-width:100%;font-size:var(--fs,11px);box-shadow:0 2px 8px rgba(16,24,40,.16)}
 .po{--bg:#1f4d3a;--fg:#f2c14e;position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:.3em;aspect-ratio:3/4;padding:1em;border-radius:.4em;background:radial-gradient(circle at 74% 26%,var(--fg) 0 14%,transparent 14.5%),linear-gradient(160deg,var(--bg),color-mix(in srgb,var(--bg) 70%,#000));color:var(--fg);overflow:hidden;transition:background-color .15s}
 .po b{font-size:1.5em;line-height:1.15;letter-spacing:.04em;white-space:nowrap}
-.po small{font-size:.62em;line-height:1.3;opacity:.85;white-space:nowrap}
+.po small{font-size:.62em;line-height:1.3;opacity:.85}
 .po.ac{align-items:center;text-align:center;justify-content:center}
 .pn{display:flex;flex-direction:column;gap:6px;min-width:0;padding:6px 10px;background:#fff;border:1px solid #e3e6eb;border-radius:10px}
 .bn{display:flex;align-items:center;gap:4px;min-height:26px;font-size:12px}
@@ -74,6 +74,8 @@ fieldset:disabled button{cursor:not-allowed}
 .sn.add:hover i{border-color:#3b5bdb;color:#3b5bdb}
 .msg{margin:0;min-height:18px;color:#5b616e;font-size:12px;text-align:center}
 @media (prefers-reduced-motion:reduce){.po{transition:none}
+}
+@container (max-width:310px){.st{--fs:9px}
 }
 @container (min-height:250px){.st{gap:10px;padding:16px 24px;--fs:16px}
 .pn{gap:10px;padding:12px 14px}

@@ -42,7 +42,7 @@ order: 100
 <link rel="stylesheet" href="../../_shared/interactions-base.css">
 <style>
 .st{display:grid;place-items:center;padding:12px;background:linear-gradient(160deg,#dbeafe,#eef2ff)}
-.card{position:relative;display:grid;gap:8px;width:min(100%,420px);padding:12px 14px;border-radius:14px;background:#fff;box-shadow:0 8px 22px -12px rgba(30,50,110,.35)}
+.card{position:relative;display:grid;gap:8px;width:min(100% - 72px,420px);padding:12px 14px;border-radius:14px;background:#fff;box-shadow:0 8px 22px -12px rgba(30,50,110,.35)}
 .to{margin:0;color:#5a6276;font-size:12px}
 .to b{color:#1b2233;font-weight:600}
 .bd{margin:0;color:#1b2233;font-size:13px;line-height:1.5}
@@ -54,7 +54,7 @@ order: 100
 .ico svg{grid-area:1/1;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .ok{opacity:0;transform:scale(.6);transition:opacity .18s,transform .22s cubic-bezier(.3,1.4,.6,1)}
 .send[data-s=sent] .ok{opacity:1;transform:none}
-.pl{transition:fill .12s,stroke .12s;offset-path:path("M9 9C33 -15 50 -34 36 -74C22 -112 -30 -92 -12 -54C6 -16 160 -96 490 -420");offset-rotate:auto 45deg;offset-distance:0%;offset-anchor:center;z-index:3}
+.pl{transition:fill .12s,stroke .12s;offset-path:path("M9 9C21 -3 48 -18 62 -18C68.6 -18 74 -23.4 74 -30C74 -36.6 68.6 -42 62 -42C55.4 -42 50 -36.6 50 -30C50 -23.4 55.4 -18 62 -18C90 -18 220 -120 520 -430");offset-rotate:auto 45deg;offset-distance:0%;offset-anchor:center;z-index:3}
 .send[data-s=fly] .pl{fill:#fff;stroke:#2f5fe0}
 .send[data-s=sent] .pl{opacity:0}
 .lb{display:grid;justify-items:start}
@@ -71,7 +71,7 @@ order: 100
 }
 </style>
 
-<div class="st"><form class="card" aria-label="写给苏晚的消息"><p class="to">发给 <b>苏晚</b></p><p class="bd">周五的评审改到下午三点，材料放共享盘了。</p><div class="ft"><span>附件 1 个</span><button type="submit" class="send" data-s="idle" aria-label="发送"><span class="lb" aria-hidden="true"><span class="l0">发送</span><span class="l1">发送中</span><span class="l2">已发送</span></span><span class="ico" aria-hidden="true"><svg class="tr" viewBox="0 0 18 18"><mask id="sp-m" maskUnits="userSpaceOnUse" x="-120" y="-460" width="760" height="520"><path class="rv" d="M9 9C33 -15 50 -34 36 -74C22 -112 -30 -92 -12 -54C6 -16 160 -96 490 -420" fill="none" stroke="#fff" stroke-width="10" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></mask><path d="M9 9C33 -15 50 -34 36 -74C22 -112 -30 -92 -12 -54C6 -16 160 -96 490 -420" mask="url(#sp-m)" fill="none" stroke="#7c93d8" stroke-width="1.5" stroke-dasharray="2 6"/></svg><svg class="pl" viewBox="0 0 24 24"><path d="M21 3l-6.5 18-4-8.5L2 8.5zM21 3 10.5 12.5"/></svg><svg class="ok" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></div></form><p class="sr" role="status"></p></div>
+<div class="st"><form class="card" aria-label="写给苏晚的消息"><p class="to">发给 <b>苏晚</b></p><p class="bd">周五的评审改到下午三点，材料放共享盘了。</p><div class="ft"><span>附件 1 个</span><button type="submit" class="send" data-s="idle" aria-label="发送"><span class="lb" aria-hidden="true"><span class="l0">发送</span><span class="l1">发送中</span><span class="l2">已发送</span></span><span class="ico" aria-hidden="true"><svg class="tr" viewBox="0 0 18 18"><mask id="sp-m" maskUnits="userSpaceOnUse" x="-120" y="-460" width="760" height="520"><path class="rv" d="M9 9C21 -3 48 -18 62 -18C68.6 -18 74 -23.4 74 -30C74 -36.6 68.6 -42 62 -42C55.4 -42 50 -36.6 50 -30C50 -23.4 55.4 -18 62 -18C90 -18 220 -120 520 -430" fill="none" stroke="#fff" stroke-width="10" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></mask><path d="M9 9C21 -3 48 -18 62 -18C68.6 -18 74 -23.4 74 -30C74 -36.6 68.6 -42 62 -42C55.4 -42 50 -36.6 50 -30C50 -23.4 55.4 -18 62 -18C90 -18 220 -120 520 -430" mask="url(#sp-m)" fill="none" stroke="#7c93d8" stroke-width="1.5" stroke-dasharray="2 6"/></svg><svg class="pl" viewBox="0 0 24 24"><path d="M21 3l-6.5 18-4-8.5L2 8.5zM21 3 10.5 12.5"/></svg><svg class="ok" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></div></form><p class="sr" role="status"></p></div>
 
 <script type="module">
 export default function demo(root) {
@@ -86,10 +86,10 @@ export default function demo(root) {
     const flight = [request()];
     if (!still) {
       tr.classList.add('on');
-      // 前 62% 的时间走完起飞和翻圈（路程的 30%），剩下的时间加速飞出画面
+      // 前 62% 的时间走完起飞和翻圈（路程的 18%：先向右飞出卡片，在浅色背景上翻圈），剩下的时间加速飞出画面
       const opt = { duration: 780, fill: 'forwards' }, slow = 'cubic-bezier(.3,0,.5,1)', fast = 'cubic-bezier(.5,0,1,.6)';
-      const f = pl.animate([{ offsetDistance: '0%', transform: 'scale(1)', easing: slow }, { offsetDistance: '30%', transform: 'scale(1)', offset: 0.62, easing: fast }, { offsetDistance: '100%', transform: 'scale(.7)' }], opt);
-      rv.animate([{ strokeDashoffset: 1, easing: slow }, { strokeDashoffset: 0.7, offset: 0.62, easing: fast }, { strokeDashoffset: 0 }], opt);
+      const f = pl.animate([{ offsetDistance: '0%', transform: 'scale(1)', easing: slow }, { offsetDistance: '18%', transform: 'scale(1)', offset: 0.62, easing: fast }, { offsetDistance: '100%', transform: 'scale(.7)' }], opt);
+      rv.animate([{ strokeDashoffset: 1, easing: slow }, { strokeDashoffset: 0.82, offset: 0.62, easing: fast }, { strokeDashoffset: 0 }], opt);
       flight.push(f.finished);
     }
     await Promise.all(flight);
@@ -102,7 +102,8 @@ export default function demo(root) {
     pl.getAnimations().forEach((a) => a.cancel());
     rv.getAnimations().forEach((a) => a.cancel());
     set('idle');
-    if (!still) pl.animate([{ opacity: 0, transform: 'translate(-12px,8px)' }, { opacity: 1, transform: 'none' }], { duration: 240, easing: 'ease-out' }); // 恢复时新飞机从左下滑回
+    // 恢复时新飞机从左下滑回：先停 120ms 等“已发送”换回“发送”，再滑 240ms；位移不超过图标和文字的间距，不压到文字
+    if (!still) pl.animate([{ opacity: 0, transform: 'translate(-6px,10px)' }, { opacity: 0, transform: 'translate(-6px,10px)', offset: 1 / 3 }, { opacity: 1, transform: 'none' }], { duration: 360, easing: 'ease-out' });
   };
   form.addEventListener('submit', (e) => { e.preventDefault(); send(); });
   setTimeout(send, 100);

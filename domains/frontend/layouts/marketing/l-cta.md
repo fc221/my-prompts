@@ -34,28 +34,20 @@ order: 100
 ```js
 export const wire = {
   cols: '1fr',
-  rows: '1fr 220px 22%',
+  rows: '72px 1fr 18%',
   areas: ['prev', 'cta', 'foot'],
   boxes: {
-    prev: {
-      label: '上一节',
-      inner: {
-        cols: '1fr 1fr 1fr',
-        rows: '1fr',
-        areas: ['a b c'],
-        boxes: { a: '能力卡片', b: '能力卡片', c: '能力卡片' },
-      },
-    },
+    prev: { label: '上一节（只露一条）', kind: 'logos' },
     cta: { label: '整宽色块：号召 + 主按钮', acc: true },
     foot: { label: '页脚', dark: true },
   },
 };
 export const wireMobile = {
   cols: '1fr',
-  rows: '1fr auto 22%',
+  rows: '64px 1fr 18%',
   areas: ['prev', 'cta', 'foot'],
   boxes: {
-    prev: { label: '上一节', kind: 'card', text: '能力卡片' },
+    prev: { label: '上一节（只露一条）', kind: 'logos' },
     cta: { label: '号召 按钮', acc: true },
     foot: { label: '页脚', dark: true },
   },

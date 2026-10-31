@@ -33,20 +33,38 @@ order: 40
 ## 示例
 
 <style>
-.zone{height:100%;display:grid;place-items:center;background:#f4f5f7;perspective:1000px}
-.card{position:relative;width:220px;height:130px;border:0;padding:0;background:none;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,0,0,1);cursor:pointer;font:600 15px system-ui}
+.zone{height:100%;display:grid;place-items:center;background:#f4f5f7;perspective:1000px;font:13px/1.4 system-ui,"PingFang SC",sans-serif}
+.card{position:relative;width:250px;height:140px;border:0;padding:0;background:none;color:inherit;font:inherit;text-align:left;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,0,0,1);cursor:pointer}
 .card[aria-pressed=true]{transform:rotateY(180deg)}
-.f{position:absolute;inset:0;display:grid;place-items:center;border-radius:14px;backface-visibility:hidden}
-.front{background:#fff;color:#18181b;box-shadow:0 4px 16px rgba(0,0,0,.08)}
-.back{background:#18181b;color:#fff;transform:rotateY(180deg)}
+.f{position:absolute;inset:0;display:flex;border-radius:14px;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.front{flex-direction:column;justify-content:space-between;padding:14px 16px;background:linear-gradient(135deg,#14532d,#166534 55%,#2d8a4e);color:#ecfdf5;box-shadow:0 8px 20px -10px rgba(20,83,45,.6)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.br{font-size:12px;letter-spacing:.04em}
+.tier{padding:1px 8px;border-radius:999px;background:#fbbf24;color:#422006;font:700 11px/1.6 system-ui;font-style:normal}
+.name{font-size:20px;font-weight:700}
+.sm{font-size:11px;opacity:.85}
+.back{align-items:center;gap:14px;padding:14px 16px;background:#fff;color:#18181b;box-shadow:0 8px 20px -10px rgba(0,0,0,.25);transform:rotateY(180deg)}
+.qr{display:grid;flex:none;grid-template-columns:repeat(11,1fr);gap:1px;width:76px;height:76px;padding:4px;border:1px solid #e5e7eb;border-radius:6px;background:#fff}
+.qr i{background:#18181b;border-radius:1px}
+.qr i.o{background:none}
+.bk{display:grid;gap:2px;min-width:0;color:#6b7280;font-size:11px}
+.code{font:700 18px/1.2 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#18181b}
+.hint{margin-top:4px;color:#2563eb}
 @media (prefers-reduced-motion:reduce){.card{transition:none}
 }
 </style>
 
-<div class="zone"><button class="card" aria-pressed="false"><span class="f front">正面 · 点我翻转</span><span class="f back">背面 · 详细信息</span></button></div>
+<div class="zone"><button type="button" class="card" aria-pressed="false" aria-label="会员卡，点按翻面出示核销码"><span class="f front"><span class="row"><b class="br">MyPrompts 会员</b><em class="tier">金卡</em></span><span class="name">林晓</span><span class="row sm"><span>NO. 0426 8810</span><span>点按翻面出示核销码</span></span></span><span class="f back"><span class="qr" aria-hidden="true"></span><span class="bk"><b class="code">7K2Q 9ZT4</b><span>到店出示核销</span><span>有效期至 2027-03-31</span><span class="hint">点按翻回</span></span></span></button></div>
 
 <script type="module">
 export default function demo(root) {
-  const c = root.querySelector('.card'); c.onclick = () => c.setAttribute('aria-pressed', String(c.getAttribute('aria-pressed') !== 'true'));
+  const c = root.querySelector('.card'), qr = root.querySelector('.qr'), N = 11;
+  // 示意二维码：三个角的定位块 + 伪随机点阵
+  const box = (r, k) => [[0, 0], [0, N - 7], [N - 7, 0]].find(([y, x]) => r >= y && r < y + 7 && k >= x && k < x + 7);
+  const dot = (r, k) => { const b = box(r, k); if (!b) return (r * 7 + k * 13 + r * k) % 5 < 2; const [y, x] = b; return r === y || r === y + 6 || k === x || k === x + 6 || (r >= y + 2 && r <= y + 4 && k >= x + 2 && k <= x + 4); };
+  qr.innerHTML = Array.from({ length: N * N }, (_, i) => `<i class="${dot(Math.floor(i / N), i % N) ? '' : 'o'}"></i>`).join('');
+  c.onclick = () => c.setAttribute('aria-pressed', String(c.getAttribute('aria-pressed') !== 'true'));
+  // 自动演示：翻到背面出示核销码
+  setTimeout(() => { if (root.host.isConnected) c.setAttribute('aria-pressed', 'true'); }, 600);
 }
 </script>
