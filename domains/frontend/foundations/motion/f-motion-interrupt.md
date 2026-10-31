@@ -23,16 +23,16 @@ order: 30
 ## 要点
 
 - 开关状态只切一个类名或属性（aria-expanded、data-open），开和关的差别全写成 transition；用 JS 驱动时用 Web Animations，被打断就从当前进度 reverse() 或以当前值为起点新建动画，不要 cancel() 后重播
-- 打开：opacity 0→1，translateY(-4px) scale(.97) 回到原样，180–240ms，缓出曲线（先快后慢、收尾轻），不用 linear
-- 关闭用时约为打开的 60–70%（如开 220ms、关 150ms），曲线先慢后快
-- 退场只走一小段：位移 8–16px 或自身尺寸的 5–10%，同时淡出并加 blur(2–4px)；不要整块飞出屏幕，除非它真的被放到了别处（如移进回收站）
+- 打开：opacity 0→1，translateY(-4px) scale(.97) 回到原样，160–200ms，缓出曲线（先快后慢、收尾轻），不用 linear
+- 关闭用时约为打开的 60–70%（如开 180ms、关 120ms），曲线先慢后快
+- 退场只走一小段：位移 8–16px 或自身尺寸的 5–10%，同时淡出；只动 transform 和 opacity，不加 blur；不要整块飞出屏幕，除非它真的被放到了别处（如移进回收站）
 - visibility 跟着 opacity 走：打开时立刻 visible，关闭时延迟到过渡结束再 hidden，收起途中和收起后都点不到，Tab 和读屏也碰不到
 - 连点时以最后一次为准，aria-expanded 立即更新，不等动画；Esc 关闭并把焦点还给触发按钮
-- 减少动态效果时去掉位移、缩放和模糊，只留 120–160ms 的淡入淡出
+- 减少动态效果时去掉位移和缩放，只留 120–160ms 的淡入淡出
 
 ## 提示词
 
-把{产品}里会反复开关的{下拉、菜单、抽屉等组件}改成「可打断、轻退场」：开关状态只切 aria-expanded 或 data-open，动画全部用 CSS transition（JS 驱动的用 Web Animations，被打断时从当前进度反向，不从头重播），不用 @keyframes 做开关；打开 220ms，opacity 0→1、translateY(-4px) scale(.97) 回到原样，缓出曲线；关闭 150ms、先慢后快，只退 8–12px 并淡出、加 blur(3px)，不整块飞出屏幕；visibility 打开时立即可见，关闭时延迟到过渡结束再隐藏；连点时以最后一次为准，aria-expanded 立即更新；Esc 关闭并把焦点还给触发按钮；减少动态效果时只保留 150ms 淡入淡出。
+把{产品}里会反复开关的{下拉、菜单、抽屉等组件}改成「可打断、轻退场」：开关状态只切 aria-expanded 或 data-open，动画全部用 CSS transition（JS 驱动的用 Web Animations，被打断时从当前进度反向，不从头重播），不用 @keyframes 做开关；打开 180ms，opacity 0→1、translateY(-4px) scale(.97) 回到原样，缓出曲线；关闭 120ms、先慢后快，只退 8–12px 并淡出，只动 transform 和 opacity、不加 blur，不整块飞出屏幕；visibility 打开时立即可见，关闭时延迟到过渡结束再隐藏；连点时以最后一次为准，aria-expanded 立即更新；Esc 关闭并把焦点还给触发按钮；减少动态效果时只保留 150ms 淡入淡出。
 
 ## 示例
 
@@ -89,7 +89,7 @@ to{opacity:0;transform:translateY(-4px) scale(.97)}
 .toast svg{flex:none;width:16px;height:16px;fill:none;stroke:#6ee7b7;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .toast span{overflow:hidden;text-overflow:ellipsis}
 .fly.gone .toast{transform:translateX(calc(100% + 40px));transition:transform .42s var(--in)}
-.lite.gone .toast{opacity:0;transform:translateY(8px) scale(.98);filter:blur(3px);transition:opacity .15s var(--in),transform .15s var(--in),filter .15s var(--in)}
+.lite.gone .toast{opacity:0;transform:translateY(8px) scale(.98);transition:opacity .12s var(--in),transform .12s var(--in)}
 .bar{height:6px;border-radius:3px;background:#eef0f4}
 .bar i{display:block;width:var(--w);height:100%;border-radius:3px;background:var(--c)}
 .nt,.nt *{transition:none!important;animation:none!important}
