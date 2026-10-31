@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 先搜一下
+    url: https://fc221.github.io/my-prompts/
+    about: 在网站上按 ⌘K / Ctrl+K 搜索，确认条目是否已有

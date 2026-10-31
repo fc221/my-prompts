@@ -283,3 +283,16 @@ node scripts/validate.mjs --browser frontend.interactions --shots /tmp/kb-shots 
 ```
 
 `demo-harness` 把一条（或整个分类）的示例挂到卡片、窄卡片、详情三种尺寸，报告 JS 错误、文字被裁切和默认样式按钮，并给每个条目截图。`--tests` 可以写操作测试：`export default { 'i-example': async (root, sleep) => '状态描述' }`。
+
+## Issue 和 Pull Request
+
+**Issue**：选“问题反馈”或“内容建议”模板。提之前先在[网站](https://fc221.github.io/my-prompts/)上搜一下，确认条目是否已有。
+
+**Pull Request**：
+
+- 从 `main` 拉分支，一个 PR 只做一件事。比如只加一个分类的条目，不顺手重排别的内容。
+- 标题就是合并后的提交信息，写成“类型：说明”，类型有内容、修复、功能、文档、工程，如 `内容：新增工资条模板`、`修复：窄卡片标题被裁切`。
+- 只用 Squash 合并，合并后自动删除分支。分支里有几个提交都可以。
+- 提交信息不加 `Co-Authored-By`。
+- 改了示例或界面要附截图。
+- CI 会跑 `prettier --check`、`npm run check`、`npm run build`，全部通过才能合并。

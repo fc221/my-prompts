@@ -1,0 +1,35 @@
+name: 内容建议
+description: 想加的条目、分类或领域，或者现有内容该怎么改
+labels: [content]
+body:
+  - type: dropdown
+    id: domain
+    attributes:
+      label: 领域
+      options:
+        - 前端
+        - 后端
+        - API
+        - PDF
+        - Word
+        - Excel
+        - 新领域
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 类型
+      options:
+        - 新增条目
+        - 修改条目
+        - 新增分类或板块
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 内容
+      description: 要加或要改什么，用在什么场景
+    validations:
+      required: true

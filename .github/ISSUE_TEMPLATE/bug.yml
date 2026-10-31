@@ -1,0 +1,30 @@
+name: 问题反馈
+description: 页面显示不对、示例报错、提示词有误
+labels: [bug]
+body:
+  - type: input
+    id: where
+    attributes:
+      label: 出现在哪
+      description: 条目名称或页面地址
+      placeholder: 例如 工资条模板，或 https://fc221.github.io/my-prompts/#x-payroll
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 现在是什么样
+      description: 截图最直接
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 应该是什么样
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: 浏览器和系统
+      placeholder: 例如 Chrome 142 / macOS，或 Safari / iOS 26
