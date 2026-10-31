@@ -18,17 +18,18 @@ order: 20
 
 ## 要点
 
-- 放在表格底部右侧，最前面显示“共 1,284 条”
-- 页码按钮 32×32px（紧凑 24–28px），间距 4px；当前页主色描边或浅主色底，并设 aria-current="page"
-- 页数多时折叠：首页、当前页前后 1–2 页、末页，中间用“…”；“…”可点击前进或后退 5 页
-- 首页禁用“上一页”、末页禁用“下一页”；上一页 / 下一页有 aria-label
-- 每页条数 10 / 20 / 50 / 100 并记住选择；超过 10 页给跳页输入框，回车跳转，越界就地提示
-- 筛选、搜索、排序或每页条数变化后回到第 1 页；翻页时保留旧数据并显示区域加载，不清空成骨架
-- 用 nav aria-label="分页" 包住；窄屏只保留“上一页 · 3 / 20 · 下一页”
+- 用组件库的分页：Element Plus el-pagination（total、v-model:current-page、v-model:page-size、page-sizes、layout="total, sizes, prev, pager, next, jumper"、background）、Naive UI n-pagination（item-count、v-model:page、v-model:page-size、page-sizes、show-size-picker、show-quick-jumper，总数写在 prefix 插槽）、Ant Design Vue a-pagination（total、v-model:current、v-model:pageSize、pageSizeOptions、showSizeChanger、showQuickJumper、showTotal）；表格自带分页时直接用它的 pagination 属性（n-data-table、a-table），不再放一个
+- 放在表格底部右侧，最前面显示“共 1,284 条”（layout 里的 total / prefix 插槽 / showTotal）
+- 每页条数 10 / 20 / 50 / 100 要显式写：Element Plus page-sizes 默认是六档，Naive UI 默认只有 [10]，Ant Design Vue 默认总数超过 50 才显示切换器；记住用户的选择
+- 页数多时折叠成首页、当前页前后、末页加“…”是组件默认（pager-count / page-slot / showLessItems），不要改；超过 10 页才开跳页（layout 的 jumper / show-quick-jumper / showQuickJumper），越界就地提示
+- 当前页高亮、首末页禁用上一页 / 下一页由组件处理；相邻页码至少隔 8px，组件默认挤在一起时改它的间距变量
+- 总共不到一页时隐藏页码只显示总数（hide-on-single-page / hideOnSinglePage；Naive UI 的 n-data-table 用 paginate-single-page=false）
+- 筛选、搜索、排序或每页条数变化后回到第 1 页（在 size-change / on-update:page-size / showSizeChange 里把页码置 1）；翻页时保留旧数据并显示区域加载，不清空成骨架
+- 窄屏用简洁模式（Naive UI、Ant Design Vue 的 simple；Element Plus 改 layout="prev, pager, next" 并缩小 pager-count），只剩“上一页 · 3 / 20 · 下一页”
 
 ## 提示词
 
-在{用户表格}底部右侧加分页：最前面“共 {1,284} 条”，页码按钮 32×32px、间距 4px，当前页主色描边并设 aria-current="page"；页数多时显示首页、当前页前后 1 页、末页，中间“…”（点击跳 5 页）；首末页禁用对应方向按钮；右侧每页条数 10 / 20 / 50 / 100 下拉（记住选择）和跳页输入框，越界时提示；筛选或条数变化回到第 1 页；翻页保留旧数据并显示加载；用 nav aria-label="分页"；窄屏只显示“上一页 3 / 20 下一页”。
+在{用户表格}底部右侧加分页：用项目组件库自带的分页（Element Plus el-pagination layout="total, sizes, prev, pager, next, jumper" :page-sizes="[10, 20, 50, 100]"；Naive UI n-pagination item-count、show-size-picker、:page-sizes="[10, 20, 50, 100]"、show-quick-jumper，总数写在 prefix 插槽；Ant Design Vue a-pagination showTotal、showSizeChanger、:pageSizeOptions="['10', '20', '50', '100']"、showQuickJumper；表格自带 pagination 属性的直接用它），不手写页码。最前面“共 {1,284} 条”；页码折叠和首末页禁用用组件默认；每页条数记住选择；跳页越界时提示；筛选或条数变化回到第 1 页；翻页保留旧数据并显示加载；不到一页时隐藏页码只留总数；相邻页码至少隔 8px；窄屏用 simple 模式（Element Plus 改 layout="prev, pager, next"）。
 
 ## 示例
 

@@ -18,17 +18,17 @@ order: 30
 
 ## 要点
 
-- 列表项上下内边距 12px（双行 12–16px），左右与容器内边距一致；行间用 1px 分割线或 4–8px 间隔，二选一
-- 结构固定：前置（头像 32–40px 或图标 20px）→ 主文字 14–16px + 次要文字 12–14px 次要色 → 尾部（时间、状态、操作）
+- 用组件库的列表：Naive UI n-list + n-list-item（hoverable、clickable、show-divider，子项 prefix / suffix 插槽，内容用 n-thing 的 title、description、avatar / header-extra / action 插槽）、Ant Design Vue a-list + a-list-item + a-list-item-meta（dataSource、renderItem 插槽、itemLayout、split、loading、pagination、loadMore 插槽，子项 actions / extra 插槽，meta 的 title、description、avatar）；Element Plus 没有现成的列表，用 ul / li 自己排，空态用 el-empty、加载用 el-skeleton
+- 结构固定：前置（头像 32–40px 或图标 20px）→ 主文字 14–16px + 次要文字 12–14px 次要色 → 尾部（时间、状态、操作）；行内边距和分割线跟组件（show-divider / split），不另画
 - 主文字单行省略，次要文字最多两行；尾部不换行，时间用等宽数字
-- 整行可点时用一个链接或按钮包住主区域，悬停浅底；行内另有操作时不要嵌套可点元素
+- 整行可点时用一个链接或按钮包住主区域（Naive UI 开 clickable + hoverable），行内另有操作放 action / actions 插槽，不嵌套可点元素
 - 未读用左侧小圆点 + 加粗，并给读屏写“未读”，不只靠颜色
-- 长列表用分页或“加载更多”（底部转圈 + “正在加载…”，到底显示“没有更多了”）；空列表说明原因并给入口
-- 用 ul / li 语义；可选择的列表用复选框或 aria-selected
+- 长列表用分页或“加载更多”（Ant Design Vue 的 pagination 属性或 loadMore 插槽，Naive UI 在 footer 插槽放按钮）：加载中、到底“没有更多了”、失败重试三态；空列表说明原因并给入口（el-empty / n-empty / a-empty）
+- 可选择的列表把复选框放在 prefix 位置
 
 ## 提示词
 
-把{消息中心}做成列表：每项上下内边距 12px，左侧 36px 头像，中间标题（14px、单行省略）和摘要（12px 次要色、最多两行），右侧时间（等宽数字、不换行）；未读项左侧 6px 圆点并加粗标题，读屏读出“未读”；行间 1px 分割线，整行可点、悬停浅底、焦点可见，点开后标为已读；行尾“更多”菜单不嵌套在可点区内；底部“加载更多”有加载中、到底、失败重试三态；空列表显示说明；窄屏摘要缩为一行。
+把{消息中心}做成列表：用项目组件库自带的列表（Naive UI n-list hoverable clickable + n-list-item prefix / suffix 插槽 + n-thing title、description；Ant Design Vue a-list :dataSource + a-list-item + a-list-item-meta title、description、avatar；Element Plus 没有现成的，用 ul / li 排，空态 el-empty、加载 el-skeleton），不手写每行的布局。每项左侧 36px 头像，中间标题（14px、单行省略）和摘要（12px 次要色、最多两行），右侧时间（等宽数字、不换行）；未读项左侧小圆点并加粗标题，读屏读出“未读”；行间用组件的分割线，整行可点、悬停浅底、焦点可见，点开后标为已读；行尾“更多”菜单放操作插槽，不嵌套在可点区内；底部“加载更多”有加载中、到底、失败重试三态（Ant Design Vue 用 loadMore 插槽）；空列表用空状态组件说明；窄屏摘要缩为一行。
 
 ## 示例
 

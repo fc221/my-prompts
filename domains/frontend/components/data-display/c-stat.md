@@ -18,17 +18,18 @@ order: 50
 
 ## 要点
 
-- 结构固定：指标名（14px 次要色）→ 数值（24–32px、600、等宽数字）+ 单位（约数值一半大、基线对齐）→ 对比（变化值或百分比 + 箭头）
+- 用组件库的统计数值：Element Plus el-statistic（title、value、precision、suffix、group-separator、value-style）、Naive UI n-statistic（label、value、tabular-nums，prefix / suffix 插槽）、Ant Design Vue a-statistic（title、value、precision、suffix、groupSeparator、valueStyle）；对比那一行组件没有，在它下方自己写
+- 结构固定：指标名（14px 次要色）→ 数值（24–32px、600、等宽数字：Naive UI 开 tabular-nums，其余在 value-style / valueStyle 里设字号和 font-variant-numeric）+ 单位（放 suffix，约数值一半大、基线对齐）→ 对比（变化值或百分比 + 箭头）
 - 同级指标放进一个容器，用 1px 竖线等分，不每项一张带阴影的卡；同行等高
 - 涨跌同时用箭头或正负号和颜色；先按业务定义好坏：利好用成功色，利空用警告色，持平用中性色
-- 变化为零或无法比较显示“—”；上期为零写“新增 4”，不写“+100%”
-- 数值统一千分位和精度；缩写（12.8 万）时悬停或详情可看精确值；空值写“—”并说明含义
-- 共享的时间范围和对比周期在区块标题旁写一次；加载用骨架，单项失败只在该项内显示错误与重试
+- 变化为零照常写 0（“0%”或“持平”），上期为零写“新增 4”，不写“+100%”；只有没有上期数据、无法比较时才显示“—”
+- 数值统一千分位（group-separator / groupSeparator，Naive UI 自己格式化后传字符串）和精度（precision）；缩写（12.8 万）时悬停或详情可看精确值；空值写“—”并说明含义
+- 共享的时间范围和对比周期在区块标题旁写一次；加载用骨架（el-skeleton / n-skeleton / a-skeleton），单项失败只在该项内显示错误与重试
 - 窄屏两列或横向滑动，数值字号不小于 20px
 
 ## 提示词
 
-在{运营看板顶部}放 4 个统计指标：今日收入、订单数、转化率、退款率，放在同一个白底容器里用竖线等分，不每项一张卡；每项为指标名（14px 次要色）、数值（28px、600、等宽数字，单位一半大小、基线对齐）、对比“↑ 12.4%”；收入、订单上涨是利好用成功色，退款率上涨是利空用警告色，持平显示“—”；区块标题旁写一次“今日 · 较昨日同时段”；切换时间范围时用骨架过渡；单项失败只在该项内重试；窄屏两列。
+在{运营看板顶部}放 4 个统计指标：用项目组件库自带的统计数值（Element Plus el-statistic title、value、precision、suffix、group-separator；Naive UI n-statistic label、value、tabular-nums + suffix 插槽；Ant Design Vue a-statistic title、value、precision、suffix、groupSeparator），不手写数字排版。今日收入、订单数、转化率、退款率放在同一个白底容器里用竖线等分，不每项一张卡；每项为指标名（14px 次要色）、数值（28px、600、等宽数字，单位一半大小、基线对齐）、下方一行对比“↑ 12.4%”；收入、订单上涨是利好用成功色，退款率上涨是利空用警告色；持平写“0%”用中性色，上期为零写“新增 N”，没有上期数据才显示“—”；区块标题旁写一次“今日 · 较昨日同时段”；切换时间范围时用骨架过渡；单项失败只在该项内重试；窄屏两列，数值不小于 20px。
 
 ## 示例
 

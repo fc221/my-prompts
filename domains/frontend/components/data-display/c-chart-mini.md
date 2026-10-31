@@ -23,20 +23,21 @@ order: 112
 
 ## 要点
 
-- 布局：上排三张窄图，下排两张宽图；图用 SVG 的 viewBox 按格子缩放，文字放在 HTML 里，字号不低于 11px
-- 月度日历：7 列，周一开头，从当月 1 号的星期空格；圆点四档深浅对应活动时长，空白日也画浅灰点
-- 评分环：圆环底色加一段进度，分数写在环心；用 pathLength="100"，stroke-dasharray 直接写百分数，省去周长计算
-- 营养环：三层同心环各算各的完成度，三层间距相同；旁边写名字，窄的时候只留首字
-- 分段条：各段按时长比例，段间留 2px，下方写名称；颜色固定对应项目，换周不换色
-- 打卡格：按列排，一列一周，五档深浅，最后一列只到今天；格子 8 份、间隙 2 份，太小时减少周数
-- 进场：环从 0 画到目标值（850ms），条从左长出，日历和热力格按序弹出，单格错开 10–30ms，总时长 1.2 秒以内
-- 看数值：一个共用提示层，贴着图形上方，靠边时收回框内；写全“10 月 18 日 · 活动 85 分钟”
-- 键盘：每张图只占一个 Tab 位，聚焦后方向键在图内移动，Esc 收起；提示层用 role="status"；每张图的 aria-label 写一句摘要
-- 颜色之外也能读：环配文字、日历配提示；减少动态效果时取消进场，直接显示
+- 用项目的图表库（如 ECharts），下面是选型和配置要求；环、格子、分段条都有对应的系列，不自己画 SVG
+- 布局：上排三张窄图，下排两张宽图；每格一个实例，容器变化时调 resize()；标题和数字放在 HTML 里，字号不低于 12px
+- 月度日历：calendar 坐标系（range 当月，dayLabel.firstDay: 1 周一开头，cellSize 'auto'）+ heatmap 系列（coordinateSystem: 'calendar'），四档深浅用 visualMap 分段（type: 'piecewise'，不显示），空白日也画浅灰格
+- 评分环：gauge 系列（progress.show，roundCap，pointer.show: false，axisTick / splitLine / axisLabel 关掉），分数写在环心（detail 或 HTML 覆盖）
+- 营养环：同一个 gauge 放三条数据，progress.overlap: false 画成三层同心环，各算各的完成度；旁边写名字，窄的时候只留首字
+- 分段条：横向堆叠 bar（同名 stack，各段按时长比例，只给两端圆角），下方写名称；颜色固定对应项目，换周不换色
+- 打卡格：calendar + heatmap，一列一周，五档深浅，range 到今天为止；格子间隙用 calendar.itemStyle 的边框做 2px 留白；太窄时减少周数
+- 进场：环从 0 画到目标值，条从左长出，格子按索引用 animationDelay 错开，总时长 1.2 秒以内；减少动态效果时 animation: false 直接显示
+- 看数值：tooltip 固定格式“10 月 18 日 · 活动 85 分钟”，confine: true 不出卡片，用 position 回调放在图形下方或标题以外，不压住卡片标题；触屏点一下和悬停一样
+- 键盘：每张图只占一个 Tab 位，聚焦后方向键 dispatchAction showTip 在图内移动，Esc 收起；aria.enabled 并给每张图 aria.label.description 写一句摘要
+- 颜色之外也能读：环配文字、日历配提示
 
 ## 提示词
 
-给{健康 App 概览页}做一张「小型健康数据图」卡：上排三格、下排两格。① 月度日历：7 列周一开头，圆点按{活动时长}分四档深浅；② 评分环：环心写分数，pathLength="100"；③ 三层同心环表示{三项指标}完成度，旁边写名称，窄时只留首字；④ 分段条：按时长比例，段间 2px，下方写名称，颜色固定对应项目；⑤ 打卡格：按列排、一列一周、五档深浅，共{周数}周。进场：环 850ms 画到目标值，条从左长出，格子按序弹出，单格错开 10–30ms，总时长 1.2 秒内。悬停或点击图形时，共用提示层贴在图形上方显示日期和数值，靠边时收回框内；每张图一个 Tab 位，聚焦后方向键在图内移动、Esc 收起，提示层 role="status"，每张图用 aria-label 写一句摘要；图用 SVG viewBox 缩放，文字不小于 11px；减少动态效果时取消进场。
+给{健康 App 概览页}做一张「小型健康数据图」卡：用项目的图表库（如 ECharts），每格一个实例，不手画 SVG。上排三格、下排两格。① 月度日历：calendar 坐标系 range 当月、dayLabel.firstDay: 1，heatmap 系列 coordinateSystem: 'calendar'，按{活动时长}用 visualMap 分四档深浅，空白日浅灰；② 评分环：gauge 的 progress，pointer.show: false，环心写分数；③ 三层同心环表示{三项指标}完成度：gauge 放三条数据、progress.overlap: false，旁边写名称，窄时只留首字；④ 分段条：横向 stack 的 bar 按时长比例，下方写名称，颜色固定对应项目；⑤ 打卡格：calendar + heatmap，一列一周、五档深浅，共{周数}周。进场：环从 0 画到目标值，条从左长出，格子按索引用 animationDelay 错开，总时长 1.2 秒内；减少动态效果时 animation: false。悬停或点击时 tooltip 显示“日期 · 数值”，confine: true，用 position 回调让它不压住卡片标题；每张图一个 Tab 位，聚焦后方向键用 dispatchAction showTip 在图内移动、Esc 收起，aria.enabled 并写一句摘要；容器变化时调 resize()，文字不小于 12px。
 
 ## 示例
 
@@ -120,8 +121,10 @@ export default function demo(root) {
   let cur = null, auto = true;
   const show = (m) => {
     if (cur === m) return; cur?.classList.remove('act'); cur = m; m.classList.add('act'); tip.hidden = false; tip.textContent = m.dataset.t;
-    const r = m.getBoundingClientRect(), b = st.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight, y = r.top - b.top - h - 4;
-    tip.style.transform = `translate(${clamp(r.left - b.left + r.width / 2 - w / 2, 3, b.width - w - 3)}px,${y < 3 ? r.bottom - b.top + 4 : y}px)`;
+    const r = m.getBoundingClientRect(), b = st.getBoundingClientRect(), c = m.closest('.ch').getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+    // 提示层不压卡片标题：先试图形上方，放不下放图形下方，再不行贴图形区底边
+    const above = r.top - h - 4, below = r.bottom + 4, y = above >= c.top ? above : below + h <= c.bottom ? below : c.bottom - h - 2;
+    tip.style.transform = `translate(${clamp(r.left - b.left + r.width / 2 - w / 2, 3, b.width - w - 3)}px,${y - b.top}px)`;
   };
   const hide = () => { cur?.classList.remove('act'); cur = null; tip.hidden = true; };
   const hover = (e) => { auto = false; const m = e.target.closest?.('[data-t]:not(.tk)') ?? e.target.closest?.('.tk'); if (m) show(m.classList.contains('tk') ? m.nextElementSibling : m); else if (e.pointerType === 'mouse' && !dash.contains(root.activeElement)) hide(); };

@@ -23,8 +23,8 @@ order: 56
 
 ## 要点
 
-- 一行一条：字段、关系、值；换字段时关系和值控件跟着换（数字框、下拉、日期），值按字段类型校验
-- 条件之间用一个“满足全部 / 满足任一”切换；确实需要括号嵌套时再做条件分组
+- 用组件库的表单控件拼，没有现成的查询构造器：每行三个控件，字段和关系用 el-select / n-select / a-select，值按字段类型换成输入框、数字框、日期选择或选项下拉（Element Plus el-input、el-input-number、el-date-picker；Naive UI n-input、n-input-number、n-date-picker；Ant Design Vue a-input、a-input-number、a-date-picker），值按字段类型校验；范围关系写成“介于 A 至 B”
+- 条件之间用一个“满足全部 / 满足任一”切换，用按钮式单选（el-radio-group + el-radio-button / n-radio-group + n-radio-button / a-radio-group + a-radio-button）；确实需要括号嵌套时再做条件分组
 - 改条件不动结果，改过后查询按钮带待应用圆点；在值输入框按 Enter 等于点查询
 - 搜索框的关键词和高级条件同时生效，两者都写进结果说明；值为空的行跳过
 - 新增一行后焦点落到新行的字段；删除后焦点到下一行的删除按钮，没有就回到“+ 条件”
@@ -35,7 +35,7 @@ order: 56
 
 ## 提示词
 
-给{合同列表}加高级查询：默认只有一个搜索框，旁边“高级”按钮展开面板，有生效条件时写“高级（N）”；面板里每行是 字段下拉、关系下拉、值，字段有{字段，如 金额、到期日、负责人、状态}，换字段时关系和值控件跟着换；条件之间一个“满足全部 / 满足任一”切换；“+ 条件”加一行并聚焦新行，每行有删除按钮；改条件不影响结果，点“查询”或在输入框按 Enter 才生效，改过未查询时按钮带 8px 圆点；结果上方写“N 份合同 · 金额 ≥ 50 万，且 30 天内到期”；“保存”时起名，存条件本身，保存后出现在搜索框下方的常用条件里，点一下填入并查询；值为空的行不参与查询；0 条结果时建议放宽条件；查询条件写进 URL；窄屏每条条件竖排。
+给{合同列表}加高级查询：用项目组件库的表单控件拼（Element Plus el-select、el-input、el-input-number、el-date-picker、el-radio-group + el-radio-button；Naive UI n-select、n-input、n-input-number、n-date-picker、n-radio-group + n-radio-button；Ant Design Vue a-select、a-input、a-input-number、a-date-picker、a-radio-group + a-radio-button），布局和行为按下面的要求：默认只有一个搜索框，旁边“高级”按钮展开面板，有生效条件时写“高级（N）”；面板里每行是 字段下拉、关系下拉、值，字段有{字段，如 金额、到期日、负责人、状态}，换字段时关系和值控件跟着换，范围关系写“介于 A 至 B”；条件之间一个“满足全部 / 满足任一”按钮式单选；“+ 条件”加一行并聚焦新行，每行有删除按钮；改条件不影响结果，点“查询”或在输入框按 Enter 才生效，改过未查询时按钮带 8px 圆点；结果上方写“N 份合同 · 金额 ≥ 50 万，且 30 天内到期”；“保存”时起名，存条件本身，保存后出现在搜索框下方的常用条件里，点一下填入并查询；值为空的行不参与查询；0 条结果时建议放宽条件；查询条件写进 URL；窄屏每条条件竖排。
 
 ## 示例
 

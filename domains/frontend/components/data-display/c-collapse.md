@@ -18,16 +18,17 @@ order: 130
 
 ## 要点
 
-- 标题行高 44–48px，整行可点，右侧箭头展开时旋转 180°
-- 触发器是 button，带 aria-expanded 和 aria-controls；收起后内容 inert，不可聚焦
-- 高度用 grid-template-rows 从 0fr 到 1fr 过渡约 240ms，不用巨大的 max-height
-- 默认允许多项同时展开；只允许展开一项时要说明
-- 收起的分组里有已填写或出错的内容时，在标题上显示数量或错误标记
-- 减少动态效果时直接展开，不做高度动画
+- 用组件库的折叠面板：Element Plus el-collapse + el-collapse-item（v-model 数组、accordion、expand-icon-position，子项 name、title、disabled，title 插槽）、Naive UI n-collapse + n-collapse-item（expanded-names / default-expanded-names、accordion、arrow-placement、display-directive，子项 name、title，header-extra 插槽）、Ant Design Vue a-collapse + a-collapse-panel（v-model:activeKey、accordion、bordered、ghost、expandIconPosition，子项 key、header，extra 插槽、forceRender）；不手写 button 加高度动画
+- 整行可点、箭头旋转、键盘和读屏由组件负责；箭头位置全站统一（expand-icon-position / arrow-placement / expandIconPosition）
+- 默认允许多项同时展开；只允许展开一项时才开 accordion，并说明
+- 收起的内容是否保留：Naive UI display-directive 默认 if（收起即卸载），里面有表单字段要校验时改 show；Ant Design Vue 用 forceRender 提前渲染、destroyInactivePanel 卸载；Element Plus 一直渲染
+- 收起的分组里有已填写或出错的内容时，在标题右侧显示数量或错误标记（title / header-extra / extra 插槽），出错时把它的 name / key 加进展开列表自动展开
+- 页面里只有一组折叠时去掉外框：Ant Design Vue ghost，Naive UI 默认无框，Element Plus 用变量去掉上下边线
+- 减少动态效果时直接展开：组件跟随系统设置的不用管，不跟随的用全局样式关掉它的过渡
 
 ## 提示词
 
-用「折叠面板」组织{常见问题 / 高级设置}：标题行高 48px，整行可点，右侧箭头展开时旋转 180°；触发器是 button 并带 aria-expanded、aria-controls，收起后内容 inert 不可聚焦；高度用 grid-template-rows 0fr→1fr 过渡 240ms，不用大 max-height；默认允许多项同时展开；收起的分组里有已填或出错的内容时，在标题上显示数量或错误标记；必填项不要藏进折叠；减少动态效果时直接展开。
+用「折叠面板」组织{常见问题 / 高级设置}：用项目组件库自带的折叠面板（Element Plus el-collapse + el-collapse-item；Naive UI n-collapse + n-collapse-item；Ant Design Vue a-collapse + a-collapse-panel），不手写 button 和高度动画。默认允许多项同时展开，不开 accordion；箭头位置全站统一；收起的分组里有已填或出错的内容时，在标题右侧显示数量或错误标记（title / header-extra / extra 插槽），出错时把它加进展开列表自动展开；里面有表单字段时保持挂载（Naive UI display-directive="show"，Ant Design Vue forceRender）；必填项不要藏进折叠；减少动态效果时直接展开。
 
 ## 示例
 

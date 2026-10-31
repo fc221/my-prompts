@@ -18,18 +18,18 @@ order: 10
 
 ## 要点
 
-- 行高按密度：常规 48–56px、紧凑 36–40px；单元格左右 12–16px；表头次要色 600 字重（或 12px），不加重底色
-- 文本左对齐，数值和金额右对齐（表头同样右对齐）并用等宽数字；编号、日期、金额、状态、操作列不换行
-- 只留一列描述性文字可伸缩，最多两行后省略并能看全文；次要信息放主信息下一行，小一号次要色
-- 可排序列只在当前排序列常显方向箭头，其余悬停时显示；表头设 aria-sort
-- 勾选后表格上方出现批量操作栏“已选 3 条”，区分“全选本页”和“全选筛选结果”；表头全选框三态
-- 行操作最多露出 2 个文字按钮，其余收进“更多”；行内删除用中性色；宽表的操作列固定在右侧
-- 加载、空、错误分开：首次加载用骨架行（沿用表头和列宽），无数据给新建入口，无筛选结果给清除条件，失败给原因和重试
-- 宽表横向滚动限制在表格容器内，表头吸顶；零、未知、不适用分别写作 0、—、不适用
+- 用组件库的表格：Element Plus el-table + el-table-column（data、row-key、height、v-loading，列 prop、label、width、min-width、fixed、sortable、align）、Naive UI n-data-table（columns、data、loading、row-key、max-height、scroll-x、remote、pagination，列 key、title、width、fixed、sorter、ellipsis、align）、Ant Design Vue a-table（columns、dataSource、loading、rowKey、scroll、sticky、rowSelection，列 dataIndex、title、width、fixed、sorter、ellipsis、align）；不手写 table 标签
+- 密度用表格的 size 档（Element Plus size="small" 是紧凑，Naive UI size="small"，Ant Design Vue size="middle" 或 "small"），不自己改行高；表头次要色、不加重底色
+- 文本左对齐，数值和金额用列的 align="right" 右对齐（表头跟着右对齐）并用等宽数字；编号、日期、金额、状态、操作列给定宽 width 且不换行；只留一列描述性文字用 min-width 伸缩，溢出省略并能看全文（Element Plus show-overflow-tooltip、Naive UI ellipsis 配 tooltip、Ant Design Vue ellipsis）；次要信息放主信息下一行，小一号次要色
+- 排序走服务端时把排序交回去：Element Plus sortable="custom" + @sort-change，Naive UI remote + on-update:sorter，Ant Design Vue @change 的 sorter 参数；只在当前排序列常显方向箭头是组件默认，不要另画
+- 勾选用自带的选择列（Element Plus type="selection"，Naive UI type: 'selection'，Ant Design Vue rowSelection），勾选后表格上方出现批量操作栏“已选 3 条”，区分“全选本页”和“全选筛选结果”；跨页保留勾选（Element Plus reserve-selection + row-key、Naive UI checked-row-keys、Ant Design Vue preserveSelectedRowKeys）
+- 行操作最多露出 2 个文字按钮，其余收进“更多”；行内删除用中性色；宽表的操作列固定在右侧（fixed="right" / fixed: 'right'，Naive UI 固定列要给数字 width 并设 scroll-x）
+- 加载、空、错误分开：首次加载用骨架行（el-skeleton / n-skeleton / a-skeleton，沿用表头和列宽），翻页用表格的 loading（Element Plus 用 v-loading）不清空旧数据；无数据给新建入口、无筛选结果给清除条件、失败给原因和重试，写在 empty 插槽（Element Plus、Naive UI）或 emptyText 插槽（Ant Design Vue）里，不留组件默认的“暂无数据”
+- 宽表横向滚动限制在表格容器内，表头吸顶（Element Plus height、Naive UI max-height、Ant Design Vue scroll.y 或 sticky）；零、未知、不适用分别写作 0、—、不适用
 
 ## 提示词
 
-把{订单列表}做成数据表格：列依次为勾选、订单号、商品（可伸缩，最多两行）、金额（右对齐、等宽数字）、状态标签、下单时间、操作；行高 48px，单元格左右 12px，表头次要色 600 字重；金额和时间可排序，当前排序列显示箭头并设 aria-sort；勾选后上方出现批量栏“已选 N 条”；操作列露出“详情”“发货”，其余收进“更多”；首次加载用骨架行，空数据、无筛选结果、加载失败分别给说明和操作；窄屏表格在容器内横向滚动，首列固定。
+把{订单列表}做成数据表格：用项目组件库自带的表格（Element Plus el-table + el-table-column；Naive UI n-data-table 的 columns；Ant Design Vue a-table 的 columns），不手写 table。列依次为勾选（type="selection" / type: 'selection' / rowSelection）、订单号（定宽、不换行）、商品（min-width 伸缩，溢出省略可看全文）、金额（align="right"、等宽数字）、状态标签、下单时间、操作（fixed="right"，露出“详情”“发货”，其余收进“更多”）；密度用表格的 size 档，表头次要色不加底色；金额和时间排序走服务端（sortable="custom" + @sort-change / remote + on-update:sorter / @change 的 sorter）；勾选后上方出现批量栏“已选 N 条”，跨页保留勾选；首次加载用骨架行，翻页用 loading 不清空旧数据；空数据、无筛选结果、加载失败分别在 empty / emptyText 插槽里给说明和操作，不用默认的“暂无数据”；表头吸顶（height / max-height / scroll.y）；窄屏表格在容器内横向滚动，首列 fixed="left"（Naive UI 配 scroll-x 和列 width）。
 
 ## 示例
 

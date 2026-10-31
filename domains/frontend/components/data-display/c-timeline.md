@@ -18,16 +18,16 @@ order: 90
 
 ## 要点
 
-- 节点圆点 8–10px，竖线 2px 浅色，圆点中心对齐标题首行；节点之间 12–20px
+- 用组件库的时间线：Element Plus el-timeline + el-timeline-item（timestamp、placement、type、color、icon、hollow，dot 插槽）、Naive UI n-timeline + n-timeline-item（item-placement，子项 type、title、content、time、color、line-type，icon 插槽）、Ant Design Vue a-timeline + a-timeline-item（mode、reverse、pending，子项 color、label，dot 插槽）；不手写圆点和竖线
 - 每个节点：标题（14px 主色）+ 时间（12px 次要色、等宽数字）+ 可选说明；全列时间格式统一
-- 最新或当前节点主色实心，已完成灰色，异常用危险色并带图标；状态写在标题文字里，不只靠颜色
-- 默认倒序（最新在上）或正序，二选一并在标题处说明；超过 5–6 条折叠中间，提供“展开全部”
-- 用 ol 语义；展开按钮用 aria-expanded
-- 窄屏时间放到标题下方，不左右分栏
+- 最新或当前节点主色实心（Element Plus type="primary"，Naive UI type="info" 或 color 传主色，Ant Design Vue color="blue"），已完成灰色（Element Plus type="info"，Naive UI type="default"，Ant Design Vue color="gray"），异常用危险色并带图标（type="danger" / type="error" / color="red"，图标放 dot 或 icon 插槽）；状态写在标题文字里，不只靠颜色
+- 默认倒序（最新在上）或正序，二选一并在标题处说明：Ant Design Vue 有 reverse，其余把数组反过来；进行中的尾节点用 Ant Design Vue 的 pending
+- 超过 5–6 条折叠中间，提供“展开全部（N）”；组件没有现成的，自己切数据
+- 窄屏时间放到标题下方，不左右分栏（Ant Design Vue 不用 label 和 mode="alternate"）
 
 ## 提示词
 
-在{订单详情}里加物流时间线：倒序排列，2px 浅灰竖线串起节点，圆点 10px 与标题首行居中对齐，节点间距 16px；最新节点主色实心并写“派送中”，已完成节点灰色，异常节点危险色加感叹号图标并写原因；每个节点显示标题、时间（12px 次要色、等宽数字、MM-DD HH:mm）和说明；超过 5 条折叠中间并显示“展开全部（N）”，按钮设 aria-expanded；用 ol；窄屏时间放到标题下方。
+在{订单详情}里加物流时间线：用项目组件库自带的时间线（Element Plus el-timeline + el-timeline-item timestamp、type；Naive UI n-timeline + n-timeline-item title、content、time、type；Ant Design Vue a-timeline + a-timeline-item color、label），不手写圆点和竖线。倒序排列（Ant Design Vue 用 reverse，其余把数组倒过来）；最新节点主色并写“派送中”，已完成节点灰色，异常节点危险色加感叹号图标（dot / icon 插槽）并写原因；每个节点显示标题、时间（12px 次要色、等宽数字、MM-DD HH:mm）和说明；超过 5 条折叠中间并显示“展开全部（N）”，自己切数据；窄屏时间放到标题下方，不左右分栏。
 
 ## 示例
 

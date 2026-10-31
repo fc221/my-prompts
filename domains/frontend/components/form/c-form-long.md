@@ -18,17 +18,18 @@ order: 20
 
 ## 要点
 
-- 每张卡片一个主题，带标题和一句说明，卡内单列；卡片间距 24px、内边距 24px（窄屏 16px）；一组超过约 7 个字段就拆
-- 5 组及以上加吸顶锚点目录（宽 160–200px），滚动时高亮当前组，并标出有错误或必填未填的组
+- 用组件库的表单，一个 el-form / n-form / a-form 包住全部卡片，字段仍用 el-form-item prop、n-form-item path、a-form-item name 挂在同一个 model 上；不要按卡片拆成多个表单，否则提交时没法一次校验
+- 每张卡片一个主题，用 el-card / n-card / a-card 带标题和一句说明，卡内单列；卡片间距 24px、内边距 24px（窄屏 16px）；一组超过约 7 个字段就拆
+- 5 组及以上加吸顶锚点目录（Element Plus el-anchor + el-anchor-link、Naive UI n-anchor + n-anchor-link、Ant Design Vue a-anchor + a-anchor-link），宽 160–200px，滚动高亮由组件处理；有错误或必填未填的组在目录项上标出
 - 超过一屏用吸底操作栏：高 56–64px，背景通栏，内容与表单列同宽同左边缘；主按钮在最左，状态文字（“已保存草稿 · 14:32”）紧跟其后
-- 低频项收进末尾“高级设置”默认收起；有改动或错误时折叠标题显示数量，提交出错时自动展开
-- 提交按钮不禁用：点击后校验，滚动并聚焦第一个错误；3 个以上错误时顶部给可点击的错误汇总，目录对应项标红
+- 低频项收进末尾“高级设置”，用折叠面板（el-collapse / n-collapse / a-collapse）默认收起；里面的字段要保持挂载才会参与校验（Naive UI display-directive="show"，Ant Design Vue forceRender）；有改动或错误时折叠标题显示数量，提交出错时把它加进展开列表自动展开
+- 提交按钮不禁用：点击后调表单的 validate()，失败时滚动并聚焦第一个错误（Element Plus scroll-to-error、Ant Design Vue scrollToFirstError；Naive UI 在 validate 的回调里拿到 errors 自己滚）；3 个以上错误时顶部给可点击的错误汇总，目录对应项标红
 - 自动保存草稿，离开前提示未保存的修改；组标题设 scroll-margin-top，免得被吸顶栏挡住
 - 窄屏目录收成顶部横向滚动条，表单单列
 
 ## 提示词
 
-把{商品发布页}做成复杂长表单：字段按“基本信息 / 价格库存 / 图文详情 / 物流 / 售后”分成 5 张带标题的卡片，卡内单列，卡片间距 24px、内边距 24px；左侧 180px 吸顶锚点目录，滚动时高亮当前组并标出有错误的组；底部 56px 吸底操作栏，内容与表单列左对齐，“发布商品”主按钮在最左，旁边显示“已保存草稿 · 14:32”；提交时滚动并聚焦第一个错误，3 个以上错误时顶部给可点击汇总；自动保存草稿；窄屏目录改为顶部横向标签。
+把{商品发布页}做成复杂长表单：用项目组件库自带的表单，一个表单包住全部卡片（Element Plus el-form + el-form-item prop；Naive UI n-form + n-form-item path；Ant Design Vue a-form + a-form-item name），不按卡片拆成多个表单。字段按“基本信息 / 价格库存 / 图文详情 / 物流 / 售后”分成 5 张带标题的卡片，卡内单列，卡片间距 24px、内边距 24px；左侧 180px 吸顶锚点目录（el-anchor / n-anchor / a-anchor），滚动时高亮当前组并标出有错误的组；底部 56px 吸底操作栏，内容与表单列左对齐，“发布商品”主按钮在最左，旁边显示“已保存草稿 · 14:32”；提交时调 validate()，滚动并聚焦第一个错误（scroll-to-error / scrollToFirstError），3 个以上错误时顶部给可点击汇总；末尾“高级设置”用折叠面板默认收起，字段保持挂载，出错自动展开；自动保存草稿；窄屏目录改为顶部横向标签。
 
 ## 示例
 

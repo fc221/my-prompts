@@ -18,16 +18,17 @@ order: 60
 
 ## 要点
 
-- 标签次要色 12–14px，值主文字色 14px；标签在上（多列）或标签在左定宽（单列），全产品二选一
-- 宽屏 3 列、中屏 2 列、窄屏 1 列；列间 24px、行间 12–16px
-- 空值统一显示“—”，必要时说明含义；地址、备注这类长文本独占一行
+- 用组件库的描述列表：Element Plus el-descriptions + el-descriptions-item（column、direction="vertical" 是标签在上、border、size、title / extra，子项 label、span）、Naive UI n-descriptions + n-descriptions-item（column、label-placement="top" / "left"、bordered、size、title，子项 label、span）、Ant Design Vue a-descriptions + a-descriptions-item（column 可按断点写对象、layout="vertical"、bordered、size、title / extra，子项 label、span）；不手写 dl 网格
+- 标签在上（多列）或标签在左（单列），全产品二选一；标签次要色 12–14px、值 14px 跟组件默认，不逐个改
+- 宽屏 3 列、中屏 2 列、窄屏 1 列：Ant Design Vue 用 column 的响应式对象，Element Plus、Naive UI 按容器宽度切 column 的值
+- 空值统一显示“—”，必要时说明含义；0 照常显示；地址、备注这类长文本用 span 占满一行
 - 可复制的值（订单号、ID）旁放复制图标按钮并给“已复制”反馈；状态用标签；金额、时间用等宽数字
-- 用 dl / dt / dd 语义；分组时每组有 16px/600 的小标题
+- 分组时每组一个描述列表，用 title 做 16px/600 的小标题
 - 按组编辑时只把这一组切成输入框，其余保持只读，字段顺序不变
 
 ## 提示词
 
-把{订单详情抽屉的基本信息}做成描述列表：用 dl/dt/dd，标签在上（12px 次要色）、值在下（14px 主色），宽屏 3 列、中屏 2 列、窄屏 1 列，列间 24px、行间 12px；订单号旁有复制按钮，复制后显示“已复制”并播报；状态用标签；金额和时间用等宽数字；空值显示“—”；收货地址和备注独占一行；分组标题 16px/600；进入编辑时只把当前组切成表单，字段顺序不变。
+把{订单详情抽屉的基本信息}做成描述列表：用项目组件库自带的描述列表（Element Plus el-descriptions direction="vertical" :column + el-descriptions-item label / span；Naive UI n-descriptions label-placement="top" :column + n-descriptions-item label / span；Ant Design Vue a-descriptions layout="vertical" + column 按断点写对象 + a-descriptions-item label / span），不手写 dl。标签在上、值在下，宽屏 3 列、中屏 2 列、窄屏 1 列；订单号旁有复制按钮，复制后显示“已复制”并播报；状态用标签；金额和时间用等宽数字；空值显示“—”，0 照常显示；收货地址和备注用 span 占满一行；每组一个描述列表，title 做分组标题；进入编辑时只把当前组切成表单，字段顺序不变。
 
 ## 示例
 

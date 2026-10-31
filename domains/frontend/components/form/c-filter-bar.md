@@ -18,18 +18,19 @@ order: 50
 
 ## 要点
 
-- 排版全产品二选一：标签在控件左侧的行内筛选（后台默认），或标签在上方的网格（此时按钮行 align-items: end，对齐控件底边）
-- 同类控件统一宽度档：下拉 160–240px，搜索框 240–320px；控件间距 12–16px，换行后左边缘对齐
-- 默认露出最常用的 3–4 个条件；“展开 / 收起”是带箭头的文字按钮，收起时显示被藏条件里已设置的数量“展开（2）”
-- “查询”与控件等高放在最后，“重置”用次按钮或文字按钮
+- 用组件库的表单、选择器、按钮拼，布局和行为按下面的要求：Element Plus el-form inline + el-form-item + el-select / el-date-picker / el-input + el-button，Naive UI n-form inline 或 n-grid + n-form-item-gi + n-select / n-date-picker / n-input + n-button，Ant Design Vue a-form layout="inline" 或 a-row / a-col + a-form-item + a-select / a-range-picker / a-input + a-button；不手写一排 label 加控件
+- 排版全产品二选一：标签在控件左侧的行内筛选（后台默认，el-form inline / n-form inline / a-form layout="inline"），或标签在上方的网格（label-position="top" / label-placement="top" / layout="vertical"，此时按钮行对齐控件底边）
+- 同类控件统一宽度档：下拉 160–240px，搜索框 240–320px，给控件设宽度，不让表单项撑满；控件间距 12–16px，换行后左边缘对齐
+- 默认露出最常用的 3–4 个条件；“展开 / 收起”是带箭头的文字按钮，收起时显示被藏条件里已设置的数量“展开（2）”：Naive UI 的 n-grid 自带 collapsed 和 collapsed-rows，按钮放在 suffix 的格子里；Element Plus、Ant Design Vue 自己记一个展开状态，v-show 多出的表单项
+- “查询”主按钮和控件用同一个 size、放在最后，“重置”用次按钮或文字按钮：Element Plus、Ant Design Vue 调 resetFields()，Naive UI 把 model 赋回初始值，重置后立即查询
 - 选完即查还是点查询，按数据量和查询速度定，见「筛选的查询时机」
 - 要点“查询”才生效时，改了条件后查询按钮给出待应用标记；筛选变化后回到第 1 页
-- 已应用的条件在表格上方显示为可单独清除的标签；区分“没有数据”和“没有符合筛选的结果”
-- 窄屏每个条件一行（标签定宽 4.5em + 控件撑满），或整体收进“筛选”抽屉
+- 已应用的条件在表格上方显示为可单独清除的标签（el-tag / n-tag / a-tag 开 closable）；区分“没有数据”和“没有符合筛选的结果”
+- 窄屏每个条件一行（标签定宽 + 控件撑满），或整体收进“筛选”抽屉（el-drawer / n-drawer / a-drawer）
 
 ## 提示词
 
-给{订单列表}做筛选区：标签在控件左侧的行内排版，“状态”“下单时间”两个下拉各宽 180px，“订单号”搜索框宽 260px，间距 12px，放不下时整组换行且左对齐；末尾“查询”主按钮与控件等高，“重置”次按钮，“展开（{已设置数}）”文字按钮带箭头；控件统一高 32px，下拉自绘箭头离边框 10px；改了条件未查询时查询按钮显示待应用标记；查询后回到第 1 页；窄屏每个条件独占一行，标签定宽。
+给{订单列表}做筛选区：用项目组件库的表单、选择器、按钮拼（Element Plus el-form inline + el-select / el-date-picker / el-input + el-button；Naive UI n-grid + n-form-item-gi + n-select / n-date-picker / n-input，展开收起用它的 collapsed、collapsed-rows，按钮放 suffix 格；Ant Design Vue a-form layout="inline" + a-select / a-range-picker / a-input + a-button），不手写控件。标签在控件左侧的行内排版，“状态”“下单时间”两个控件各宽 180px，“订单号”搜索框宽 260px，间距 12px，放不下时整组换行且左对齐；控件和按钮用同一个 size；末尾“查询”主按钮，“重置”次按钮（resetFields 或把 model 赋回初始值后立即查询），“展开（{已设置数}）”文字按钮带箭头；改了条件未查询时查询按钮显示待应用标记；查询后回到第 1 页；已应用条件在表格上方显示为可关闭的标签；窄屏每个条件独占一行，标签定宽。
 
 ## 示例
 

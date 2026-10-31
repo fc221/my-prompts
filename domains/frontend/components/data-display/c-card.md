@@ -18,16 +18,17 @@ order: 40
 
 ## 要点
 
-- 内边距 16–24px（小卡片 12px），卡片间距 16px，圆角 12px；普通卡片用 1px 浅边框或背景差，不加阴影
-- 结构统一：封面（固定比例 16:9 或 4:3）→ 标题（16px/600，最多两行）→ 描述（14px 次要色，最多 2–3 行）→ 元信息 / 操作，操作对齐到底部
-- 整卡可点时只放一个主链接（标题），用伪元素扩大点击区；卡内其他按钮层级在它之上，不嵌套交互元素
-- 可点击卡片悬停加 1 级阴影或边框加深，焦点环完整包住卡片
-- 网格用 repeat(auto-fill, minmax(260px, 1fr))，同行等高，窄屏单列
-- 图片加载失败显示占位色块和图标；加载中用与卡片同形的骨架
+- 用组件库的卡片：Element Plus el-card（shadow、header / footer 插槽、body-style）、Naive UI n-card（title、cover / header-extra / footer / action 插槽、hoverable、bordered、size）、Ant Design Vue a-card（cover 插槽、a-card-meta 的 title / description / avatar、actions 插槽、hoverable、bordered、size、loading）；不手写一个 div 加阴影
+- 普通卡片用 1px 浅边框或背景差，不加阴影：Element Plus 默认 shadow="always"，要显式改成 never；Naive UI、Ant Design Vue 默认有边框无阴影；可点击卡片才开 hoverable 或 shadow="hover"
+- 结构统一：封面（cover 插槽，固定比例 16:9 或 4:3；Element Plus 没有 cover 插槽，图片放默认插槽最上方并用 body-style 清零内边距）→ 标题（16px/600，最多两行）→ 描述（14px 次要色，最多 2–3 行）→ 元信息 / 操作（footer / action / actions 插槽，对齐到底部）
+- 内边距 16–24px（小卡片 12px，用 size 档），卡片间距 16px，圆角跟组件主题，不逐张改
+- 整卡可点时只放一个主链接（标题），用伪元素扩大点击区；卡内其他按钮层级在它之上，不嵌套交互元素；焦点环完整包住卡片
+- 网格用 repeat(auto-fill, minmax(280px, 1fr))，同行等高（卡片 height: 100%），窄屏单列
+- 图片加载失败显示占位色块和图标；加载中用与卡片同形的骨架（Ant Design Vue 的 a-card loading；其余用 el-skeleton / n-skeleton 照卡片结构摆）
 
 ## 提示词
 
-把{模板市场}做成卡片网格：repeat(auto-fill, minmax(260px, 1fr))，间距 16px；每张卡 1px 浅边框、圆角 12px、内边距 16px，封面 16:9，标题 16px/600 最多两行，描述 14px 次要色最多两行，底部元信息（作者、使用次数）对齐到底；整卡可点（标题链接用伪元素覆盖整卡），悬停加轻阴影，焦点环包住整卡；图片失败显示占位色块；首次加载用同形骨架；窄屏单列。
+把{模板市场}做成卡片网格：用项目组件库自带的卡片（Element Plus el-card shadow="never"，封面放默认插槽顶部并用 body-style 清零内边距；Naive UI n-card cover 插槽 + footer 插槽；Ant Design Vue a-card cover 插槽 + a-card-meta + actions 插槽），不手写 div 卡片。网格 repeat(auto-fill, minmax(280px, 1fr))，间距 16px，同行等高；每张卡 1px 浅边框、内边距 16px，封面 16:9，标题 16px/600 最多两行，描述 14px 次要色最多两行，底部元信息（作者、使用次数）对齐到底；整卡可点（标题链接用伪元素覆盖整卡），悬停开 hoverable 或 shadow="hover"，焦点环包住整卡；图片失败显示占位色块；首次加载用同形骨架（a-card loading / el-skeleton / n-skeleton）；窄屏单列。
 
 ## 示例
 
