@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // 全局搜索：⌘K / Ctrl+K 或 / 打开；跨领域、跨板块搜索，方向键选择，回车打开详情
 import { computed, nextTick, ref, watch } from 'vue';
-import { domainOf, domains, entries, matches, sectionOf } from '../kb';
+import { domainOf, domains, entries, headOf, matches, sectionOf } from '../kb';
 import { openDetail, state } from '../state';
 import AppIcon from './AppIcon.vue';
 
@@ -11,7 +11,8 @@ const q = ref('');
 const active = ref(0);
 const results = computed(() => {
   const s = q.value.trim();
-  const list = entries.filter((e) => matches(e, s));
+  // 只有示例、文字都跟主条目走的案例不单独列，免得一次命中出现好几行一样的
+  const list = entries.filter((e) => matches(e, s) && !(e.of && e.look === headOf(e).look));
   // 当前领域排前面，再按名称命中优先
   return list.sort(
     (a, b) =>
@@ -121,7 +122,7 @@ window.addEventListener('keydown', (ev) => {
         >
           <span class="tile"><AppIcon :name="sectionOf(e).icon ?? 'box'" :size="15" /></span>
           <span class="t"
-            ><b>{{ e.zh }}</b
+            ><b>{{ e.of ? `${headOf(e).zh} · ${e.tab ?? e.zh}` : e.zh }}</b
             ><small>{{ e.look }}</small></span
           >
           <span class="where"

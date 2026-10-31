@@ -1,13 +1,13 @@
 <script setup lang="ts">
 // 板块头：图标、名称、介绍、统计，以及本板块内的筛选框和分类
 import { computed } from 'vue';
-import { domainOf, entries } from '../kb';
+import { domainOf, listed } from '../kb';
 import { state } from '../state';
 import AppIcon from './AppIcon.vue';
 
 const domain = computed(() => domainOf(state.domain));
 const section = computed(() => domain.value.sections.find((s) => s.key === state.section)!);
-const inSec = computed(() => entries.filter((e) => e.domain === state.domain && e.sec === state.section));
+const inSec = computed(() => listed.filter((e) => e.domain === state.domain && e.sec === state.section));
 const cats = computed(() => {
   const m = new Map<string, number>();
   for (const e of inSec.value) m.set(e.cat, (m.get(e.cat) ?? 0) + 1);

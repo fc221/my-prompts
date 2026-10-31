@@ -3,15 +3,14 @@
 // 每个领域是一个可折叠分组，默认展开当前领域；collapsible 只给桌面常驻侧栏用。
 // 收起后每个领域只留一个图标，悬停或点击在右侧弹出它的板块（浮层放在顶层，不被侧栏裁切）；领域再多也只占一列图标
 import { computed, onMounted, onUnmounted, reactive, ref, useId, watch } from 'vue';
-import { domains, entries } from '../kb';
+import { domains, listed } from '../kb';
 import { go, originOf, setTheme, state } from '../state';
 import AppIcon from './AppIcon.vue';
 
 const props = defineProps<{ collapsible?: boolean }>();
 const mini = computed(() => !!props.collapsible && state.collapsed);
 const uid = useId(); // 常驻侧栏和手机抽屉各一份，分组 id 不能重复
-const countOf = (dom: string, sec?: string) =>
-  entries.filter((e) => e.domain === dom && (!sec || e.sec === sec)).length;
+const countOf = (dom: string, sec?: string) => listed.filter((e) => e.domain === dom && (!sec || e.sec === sec)).length;
 const open = reactive(new Set([state.domain]));
 watch(
   () => state.domain,

@@ -51,6 +51,12 @@ export interface Entry {
   en?: string;
   /** 别名：别处常见的叫法，空格分隔，只用于搜索 */
   aka?: string;
+  /** 主条目 id：写了就是那一条的一个案例，列表里不单独出现，没写的文字段落跟主条目走 */
+  of?: string;
+  /** 案例切换按钮上的字，没写用 zh */
+  tab?: string;
+  /** 借用另一条的示例或示意图，写条目 id */
+  preview?: string;
   /** 一句话：是什么 / 长什么样 */
   look: string;
   use?: string;

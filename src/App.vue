@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue';
-import { entries, matches, REPO_URL } from './kb';
+import { listed, matchesAny, REPO_URL } from './kb';
 import type { KbEntry } from './types';
 import { state } from './state';
 import AppIcon from './components/AppIcon.vue';
@@ -14,12 +14,12 @@ import CommandPalette from './components/CommandPalette.vue';
 
 const trayOpen = ref(false);
 const shown = computed(() =>
-  entries.filter(
+  listed.filter(
     (e) =>
       e.domain === state.domain &&
       e.sec === state.section &&
       (state.category === '全部' || e.cat === state.category) &&
-      matches(e, state.filter.trim()),
+      matchesAny(e, state.filter.trim()),
   ),
 );
 // 条目已按分类排好：连续同分类的归一组，「全部」时每组上面写分类名

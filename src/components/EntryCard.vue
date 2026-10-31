@@ -1,42 +1,59 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import type { KbEntry } from '../types';
-import { fullPrompt, sectionOf } from '../kb';
+import { casesOf, fullPrompt, matches, sectionOf } from '../kb';
 import { copy, openDetail, state, togglePick } from '../state';
 import AppIcon from './AppIcon.vue';
+import CaseTabs from './CaseTabs.vue';
 import EntryPreview from './EntryPreview.vue';
 
 const props = defineProps<{ entry: KbEntry }>();
-const picked = computed(() => state.picks.includes(props.entry.id));
+const cases = computed(() => casesOf(props.entry));
+const chosen = ref<string>();
+// 当前案例：决定示例、一句话和复制的提示词；标题始终是主条目
+const cur = computed(() => cases.value.find((x) => x.id === chosen.value) ?? cases.value[0] ?? props.entry);
+// 筛选命中某个案例时直接切过去
+watch(
+  () => state.filter,
+  (q) => {
+    const s = q.trim().toLowerCase();
+    // 先按案例的名称匹配，再按全文匹配；主条目自己命中不算，否则“月份”会先停在主条目上
+    const named = cases.value.find((c) => c.of && [c.zh, c.tab, c.aka].join(' ').toLowerCase().includes(s));
+    chosen.value = s ? (named ?? cases.value.find((c) => c.of && matches(c, s)))?.id : undefined;
+  },
+  { immediate: true }, // 筛选变化时列表会重建卡片，新实例也要切到命中的案例
+);
+const picked = computed(() => state.picks.includes(cur.value.id));
 const color = computed(() => sectionOf(props.entry).color ?? 'var(--accent)');
 </script>
 
 <template>
   <article :id="entry.id" class="card" :style="{ '--sec': color }">
-    <div class="demo" :class="{ text: !entry.demo && !entry.wire }" role="group" :aria-label="`${entry.zh}示例`">
-      <EntryPreview :entry="entry" lazy />
+    <div class="demo" :class="{ text: !cur.demo && !cur.wire }" role="group" :aria-label="`${entry.zh}示例`">
+      <EntryPreview :key="cur.id" :entry="cur" lazy />
     </div>
     <div class="body">
+      <CaseTabs v-if="cases.length" :items="cases" :active="cur.id" @pick="chosen = $event" />
       <div class="head">
         <h2>
-          <button type="button" class="title" @click="openDetail(entry.id)">{{ entry.zh }}</button>
+          <button type="button" class="title" @click="openDetail(cur.id)">{{ entry.zh }}</button>
         </h2>
         <span class="tag">{{ entry.cat }}</span>
       </div>
       <p v-if="entry.en" class="en">{{ entry.en }}</p>
-      <p class="look">{{ entry.look }}</p>
+      <p class="look">{{ cur.look }}</p>
       <div class="actions">
-        <button type="button" class="btn ghost sm more" @click="openDetail(entry.id)">查看详情</button>
+        <button type="button" class="btn ghost sm more" @click="openDetail(cur.id)">查看详情</button>
         <button
           type="button"
           class="btn sm pick"
           :aria-pressed="picked"
-          :data-pick="entry.id"
-          @click="togglePick(entry.id)"
+          :data-pick="cur.id"
+          @click="togglePick(cur.id)"
         >
           <AppIcon :name="picked ? 'check' : 'plus'" :size="16" />{{ picked ? '已加入' : '组合' }}
         </button>
-        <button type="button" class="btn sm primary" data-copy @click="copy(fullPrompt(entry))">
+        <button type="button" class="btn sm primary" data-copy @click="copy(fullPrompt(cur))">
           <AppIcon name="copy" :size="16" />复制提示词
         </button>
       </div>

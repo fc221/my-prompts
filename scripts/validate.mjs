@@ -20,8 +20,8 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
-import { buildDomains, parseDemoHtml } from '../src/adapter/index.ts';
+import { fileURLToPath } from 'node:url';
+import { buildDomains, parseDemoHtml, splitExtras } from '../src/adapter/index.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -47,7 +47,7 @@ for (const f of walk(DOM)) {
     parts = r.split('/'),
     name = parts.at(-1);
   if (name.startsWith('.')) continue;
-  const key = r.replace(/\/_(domain|section|category)\.md$|\.(md|html|wire\.ts)$/, '');
+  const key = r.replace(/\/_(domain|section|category)\.md$|\.md$/, '');
   try {
     if (parts[1] === '_shared') {
       if (!/\.(ts|css)$/.test(name) || parts.length !== 3)
@@ -55,20 +55,25 @@ for (const f of walk(DOM)) {
     } else if (parts.length === 2 && name === '_domain.md') src.domains[key] = readFileSync(f, 'utf8');
     else if (parts.length === 3 && name === '_section.md') src.sections[key] = readFileSync(f, 'utf8');
     else if (parts.length === 4 && name === '_category.md') src.categories[key] = readFileSync(f, 'utf8');
-    else if (parts.length === 4 && /^[^_].*\.md$/.test(name)) src.entries[key] = readFileSync(f, 'utf8');
-    else if (parts.length === 4 && name.endsWith('.html')) {
-      const d = parseDemoHtml(readFileSync(f, 'utf8'), (href) => readFileSync(join(dirname(f), href), 'utf8'));
-      if (d.script && !/^export default /m.test(d.script))
-        errors.push(`domains/${r}：<script type="module"> 里要 export default function demo(root) { … }`);
-      src.demos[key] = { html: d.html, css: d.css, ...(d.script ? { js: d.script } : {}) }; // 校验时 js 存脚本源码
-    } else if (parts.length === 4 && name.endsWith('.wire.ts')) {
-      const m = await import(pathToFileURL(f).href);
-      const extra = Object.keys(m).filter((k) => !['wire', 'wireMobile'].includes(k));
-      if (extra.length) errors.push(`domains/${r}：只导出 wire / wireMobile，多了 ${extra.join('、')}`);
-      src.wires[key] = { wire: m.wire, wireMobile: m.wireMobile };
+    else if (parts.length === 4 && /^[^_].*\.md$/.test(name)) {
+      const text = readFileSync(f, 'utf8');
+      src.entries[key] = text;
+      const { demo, wire } = splitExtras(text);
+      if (demo) {
+        const d = parseDemoHtml(demo, (href) => readFileSync(join(dirname(f), href), 'utf8'));
+        if (d.script && !/^export default /m.test(d.script))
+          errors.push(`domains/${r}：“## 示例”的 <script type="module"> 里要 export default function demo(root) { … }`);
+        src.demos[key] = { html: d.html, css: d.css, ...(d.script ? { js: d.script } : {}) };
+      }
+      if (wire) {
+        const m = await import('data:text/javascript;charset=utf-8,' + encodeURIComponent(wire));
+        const extra = Object.keys(m).filter((k) => !['wire', 'wireMobile'].includes(k));
+        if (extra.length) errors.push(`domains/${r}：“## 示意图”只导出 wire / wireMobile，多了 ${extra.join('、')}`);
+        src.wires[key] = { wire: m.wire, wireMobile: m.wireMobile };
+      }
     } else
       errors.push(
-        `domains/${r}：认不出的文件或放错了层级（条目是 <领域>/<板块>/<分类>/<id>.md，示例 <id>.html，示意图 <id>.wire.ts；见 CONTRIBUTING.md）`,
+        `domains/${r}：认不出的文件或放错了层级（一条一个文件：<领域>/<板块>/<分类>/<id>.md，示例和示意图写在它的“## 示例”“## 示意图”里；见 CONTRIBUTING.md）`,
       );
   } catch (e) {
     errors.push(`domains/${r} 无法读取：${e.message}`);

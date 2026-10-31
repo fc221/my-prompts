@@ -4,9 +4,10 @@
 //   domains/<领域>/_domain.md                    头部 name / icon / order / searchHint；正文“## 说明”“## 通用要求”
 //   domains/<领域>/<板块>/_section.md            头部 name / icon / color / order；正文是板块介绍
 //   domains/<领域>/<板块>/<分类>/_category.md    头部 name / order
-//   domains/<领域>/<板块>/<分类>/<id>.md         条目文字：头部 zh / en / aka（别名，搜索用）/ order；正文按 ## 是什么 / 适合 / 不适合 / 注意 / 要点 / 提示词 分段
-//   domains/<领域>/<板块>/<分类>/<id>.html       实时示例（可选）：<link> 共用样式、<style>、结构、<script type="module">
-//   domains/<领域>/<板块>/<分类>/<id>.wire.ts    布局示意图（可选）：export const wire / wireMobile
+//   domains/<领域>/<板块>/<分类>/<id>.md         一条一个文件：头部 zh / en / aka（别名，搜索用）/ order / of / tab / preview；
+//                                              正文按 ## 是什么 / 适合 / 不适合 / 注意 / 要点 / 提示词 分段；
+//                                              ## 示意图（可选）是 ```js 围栏里的 export const wire / wireMobile；
+//                                              ## 示例（可选）必须是最后一段：<link> 共用样式、<style>、结构、<script type="module">
 //
 // 放进去就会出现在网页上，不用登记；顺序按 order（没写的排在后面，再按名称）。
 import type { Demo, Domain, Entry, Section, Wire } from '../types.ts';
@@ -27,6 +28,23 @@ export function splitFrontmatter(text: string): { meta: Meta; body: string } {
     meta[line.slice(0, i).trim()] = v;
   }
   return { meta, body: text.slice(m[0].length) };
+}
+
+/** 把条目文件拆成文字、示例源码（## 示例 之后的全部内容）和示意图源码（## 示意图 里 ```js 围栏中的代码） */
+export function splitExtras(text: string): { text: string; demo?: string; wire?: string } {
+  const out: { text: string; demo?: string; wire?: string } = { text };
+  const i = text.search(/^## 示例[ \t]*$/m);
+  if (i >= 0) {
+    out.demo = text.slice(text.indexOf('\n', i) + 1).trim();
+    out.text = text.slice(0, i);
+  }
+  const w = out.text.match(/^## 示意图[ \t]*\r?\n([\s\S]*?)(?=^## |(?![\s\S]))/m);
+  if (w) {
+    const code = w[1].match(/```\w*\r?\n([\s\S]*?)\r?\n```/);
+    out.wire = (code ? code[1] : w[1]).trim();
+    out.text = out.text.replace(w[0], '');
+  }
+  return out;
 }
 
 /** 正文按“## 标题”切段；第一个标题之前的文字放在 '' 下 */
@@ -60,16 +78,21 @@ export const ENTRY_SECTIONS: Record<string, 'look' | 'use' | 'avoid' | 'care' | 
   提示词: 'prompt',
 };
 
+const META = ['zh', 'en', 'aka', 'order', 'of', 'tab', 'preview'];
+
 /** 解析一条的 Markdown。提示词里写 {{要点}} 会展开成编号的要点清单（自查清单用它保证清单和提示词一致） */
 export function parseEntry(
   id: string,
   text: string,
   problems: string[] = [],
 ): { entry: Omit<Entry, 'sec' | 'cat'>; order: number } {
-  const { meta, body } = splitFrontmatter(text);
+  const { meta, body } = splitFrontmatter(splitExtras(text).text);
   const entry: Record<string, unknown> = { id, zh: meta.zh ?? '' };
   if (meta.en) entry.en = meta.en;
   if (meta.aka) entry.aka = meta.aka;
+  if (meta.of) entry.of = meta.of;
+  if (meta.tab) entry.tab = meta.tab;
+  if (meta.preview) entry.preview = meta.preview;
   for (const [title, value] of splitSections(body)) {
     const field = ENTRY_SECTIONS[title];
     if (!title) {
@@ -93,8 +116,7 @@ export function parseEntry(
     );
   }
   for (const k of Object.keys(meta))
-    if (!['zh', 'en', 'aka', 'order'].includes(k))
-      problems.push(`${id}：头部不认识的字段 ${k}（可用 zh / en / aka / order）`);
+    if (!META.includes(k)) problems.push(`${id}：头部不认识的字段 ${k}（可用 ${META.join(' / ')}）`);
   return { entry: entry as Omit<Entry, 'sec' | 'cat'>, order: toOrder(meta.order) };
 }
 
@@ -192,6 +214,21 @@ export function buildDomains(src: ContentSource): { domains: Domain[]; problems:
     if (parts.get('通用要求')) domain.tail = parts.get('通用要求');
     return domain;
   });
+  // 案例和借用：写了 of 的条目是主条目的一个案例，没写的文字段落跟主条目走；preview 借另一条的示例或示意图
+  const all = new Map(domains.flatMap((d) => d.entries).map((e) => [e.id, e]));
+  for (const e of all.values()) {
+    if (e.of) {
+      const head = all.get(e.of);
+      if (!head || head.of || head.sec !== e.sec || head.cat !== e.cat)
+        problems.push(`${e.path}.md：of 要写同一分类里的主条目`);
+      else for (const k of ['look', 'use', 'avoid', 'care', 'rules', 'prompt'] as const) e[k] ??= head[k] as never;
+    }
+    if (e.preview) {
+      const p = all.get(e.preview);
+      if (!p?.demo && !p?.wire) problems.push(`${e.path}.md：preview 要写一条带示例或示意图的条目`);
+      else Object.assign(e, { demo: p.demo, wire: p.wire, wireMobile: p.wireMobile });
+    }
+  }
   // 放错层级、缺上级说明文件的内容，网页上不会出现
   for (const k of Object.keys(src.entries))
     if (!src.categories[k.split('/').slice(0, -1).join('/')])

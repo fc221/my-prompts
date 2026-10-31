@@ -1,9 +1,10 @@
 <script setup lang="ts">
 // 详情：右侧抽屉（手机全屏）。预览、是什么 / 适合 / 不适合 / 注意、要点、提示词；底部可切上一条 / 下一条
 import { computed, nextTick, ref, watch } from 'vue';
-import { byId, byZh, domainOf, entries, fullPrompt, REPO_URL, sectionOf } from '../kb';
+import { byId, byZh, casesOf, domainOf, fullPrompt, headOf, listed, REPO_URL, sectionOf } from '../kb';
 import { copy, openDetail, state, togglePick } from '../state';
 import AppIcon from './AppIcon.vue';
+import CaseTabs from './CaseTabs.vue';
 import EntryPreview from './EntryPreview.vue';
 import LayoutViewer from './LayoutViewer.vue';
 
@@ -23,7 +24,13 @@ async function copyPrompt() {
   }, 2500);
 }
 const body = ref<HTMLElement>();
-const e = computed(() => (state.detail ? byId.get(state.detail) : undefined));
+// 主条目自己没有示例时（如整段提示词的预览分几块）落到第一个案例
+const e = computed(() => {
+  const x = state.detail ? byId.get(state.detail) : undefined;
+  return x && !x.demo && !x.wire ? (casesOf(x)[0] ?? x) : x;
+});
+const head = computed(() => (e.value ? headOf(e.value) : undefined));
+const cases = computed(() => (e.value ? casesOf(e.value) : []));
 const sec = computed(() => (e.value ? sectionOf(e.value) : undefined));
 const sourceUrl = computed(() => `${REPO_URL}/blob/main/domains/${e.value?.path}.md`);
 // 问题反馈表单的“出现在哪”按字段 id 预填
@@ -44,7 +51,7 @@ const rows = computed(() =>
     : [],
 );
 const siblings = computed(() =>
-  e.value ? entries.filter((x) => x.domain === e.value!.domain && x.sec === e.value!.sec) : [],
+  e.value ? listed.filter((x) => x.domain === e.value!.domain && x.sec === e.value!.sec) : [],
 );
 // 纯文字的知识条目：要点就在下面，详情里不再画预览（卡片上的预览只是缩略）
 const bare = computed(
@@ -55,7 +62,7 @@ const bare = computed(
     !['prompts', 'checklists'].includes(e.value.sec) &&
     !!e.value.rules?.length,
 );
-const idx = computed(() => siblings.value.findIndex((x) => x.id === e.value?.id));
+const idx = computed(() => siblings.value.findIndex((x) => x.id === head.value?.id));
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 const mark = (s: string) => esc(s).replace(/\{([^}]+)\}/g, '<span class="ph">{$1}</span>');
 // 「名称」正好是某个条目时变成链接（同名优先同板块），走 #id 锚点，浏览器后退回到上一条
@@ -108,14 +115,14 @@ function onBackdrop(ev: MouseEvent) {
     @close="onClose"
     @click="onBackdrop"
   >
-    <div v-if="e && sec" class="in" :style="{ '--sec': sec.color ?? 'var(--accent)' }">
+    <div v-if="e && head && sec" class="in" :style="{ '--sec': sec.color ?? 'var(--accent)' }">
       <header class="dh">
         <span class="tile"><AppIcon :name="sec.icon ?? 'box'" :size="18" /></span>
         <div class="tt">
-          <h2 id="d-title">{{ e.zh }}</h2>
+          <h2 id="d-title">{{ head.zh }}</h2>
           <p>
             <span>{{ sec.name }} · {{ e.cat }}</span
-            ><span v-if="e.en" class="en">{{ e.en }}</span>
+            ><span v-if="head.en" class="en">{{ head.en }}</span>
           </p>
         </div>
         <button type="button" class="icon-btn" aria-label="关闭" @click="dlg?.close()">
@@ -124,6 +131,7 @@ function onBackdrop(ev: MouseEvent) {
       </header>
 
       <div ref="body" class="db">
+        <CaseTabs v-if="cases.length" :items="cases" :active="e.id" big @pick="openDetail" />
         <div v-if="e.wire" class="wire-tools">
           <button type="button" class="btn sm" :aria-pressed="annotate" @click="annotate = !annotate">
             <AppIcon :name="annotate ? 'check' : 'layout'" :size="16" />区域标注
