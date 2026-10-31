@@ -24,11 +24,7 @@ async function copyPrompt() {
   }, 2500);
 }
 const body = ref<HTMLElement>();
-// 主条目自己没有示例时（如整段提示词的预览分几块）落到第一个案例
-const e = computed(() => {
-  const x = state.detail ? byId.get(state.detail) : undefined;
-  return x && !x.demo && !x.wire ? (casesOf(x)[0] ?? x) : x;
-});
+const e = computed(() => (state.detail ? byId.get(state.detail) : undefined));
 const head = computed(() => (e.value ? headOf(e.value) : undefined));
 const cases = computed(() => (e.value ? casesOf(e.value) : []));
 const sec = computed(() => (e.value ? sectionOf(e.value) : undefined));

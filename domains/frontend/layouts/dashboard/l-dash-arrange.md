@@ -3,6 +3,7 @@ zh: 数据看板排法
 en: Dashboard arrangements
 aka: 看板布局 看板怎么排 仪表盘布局 指标卡排法
 order: 5
+tab: 怎么选
 ---
 
 ## 是什么

@@ -229,6 +229,15 @@ export function buildDomains(src: ContentSource): { domains: Domain[]; problems:
       else Object.assign(e, { demo: p.demo, wire: p.wire, wireMobile: p.wireMobile });
     }
   }
+  // 主条目自己没有示例时借第一个案例的，这样它的文字和提示词在卡片和详情里都看得到
+  const kids = new Map<string, Entry[]>();
+  for (const e of all.values()) if (e.of) kids.set(e.of, [...(kids.get(e.of) ?? []), e]);
+  for (const [id, list] of kids) {
+    const head = all.get(id);
+    const first = list.find((c) => c.demo || c.wire);
+    if (head && !head.demo && !head.wire && first)
+      Object.assign(head, { demo: first.demo, wire: first.wire, wireMobile: first.wireMobile });
+  }
   // 放错层级、缺上级说明文件的内容，网页上不会出现
   for (const k of Object.keys(src.entries))
     if (!src.categories[k.split('/').slice(0, -1).join('/')])

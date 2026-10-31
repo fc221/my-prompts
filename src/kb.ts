@@ -60,11 +60,11 @@ export const listed = entries.filter((e) => !e.of);
 const kids = new Map<string, KbEntry[]>();
 for (const e of entries) if (e.of) kids.set(e.of, [...(kids.get(e.of) ?? []), e]);
 export const headOf = (e: KbEntry): KbEntry => (e.of && byId.get(e.of)) || e;
-/** 一条的全部案例：主条目自己有示例时排第一个；没有案例返回空数组 */
+/** 一条的全部案例：主条目永远排第一个（没有示例时已借了第一个案例的）；没有案例返回空数组 */
 export const casesOf = (e: KbEntry): KbEntry[] => {
   const head = headOf(e),
     list = kids.get(head.id) ?? [];
-  return list.length && (head.demo || head.wire) ? [head, ...list] : list;
+  return list.length ? [head, ...list] : list;
 };
 
 /** 按中文名查条目：正文里的「名称」靠它变成链接；同名的几条都留着，调用方先挑同领域、同板块的 */

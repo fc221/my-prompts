@@ -3,6 +3,7 @@ zh: 功能区
 en: Feature sections
 aka: 功能介绍区 卖点排法 能力展示
 order: 35
+tab: 怎么选
 ---
 
 ## 是什么

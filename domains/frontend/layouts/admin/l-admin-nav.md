@@ -3,6 +3,7 @@ zh: 后台导航框架
 en: Admin navigation frame
 aka: 后台框架 导航放哪 侧栏还是顶栏 后台布局
 order: 5
+tab: 怎么选
 ---
 
 ## 是什么
