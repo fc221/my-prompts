@@ -18,16 +18,16 @@ order: 30
 
 ## 要点
 
-- 按钮组同组 2–3 个，多出的收进“更多”；同组同尺寸、同层级，图标要么都有、要么都没有
-- 连体按钮组相邻边框合并，中间按钮去圆角、两端保留 6px；不连体时按钮间距 8px
-- 分段控件：浅灰底槽 2px 内边距，选中段白底 + 轻阴影 + 主文字色，未选段次要文字色
-- 分段控件与同行控件等高（外框 32px，内段 28px），每段左右 12px，文字 2–6 个字
-- 语义是单选组：用原生 radio 或 role="radiogroup"，方向键在段间移动，选中即生效
-- 窄屏放不下时不换行、不压扁文字，改为横向滚动或下拉
+- 用组件库的按钮组和分段控件：Element Plus el-button-group（size、type）和 el-segmented（options、block、size）、Naive UI n-button-group（size、vertical），分段控件用 n-tabs type="segment"（Naive UI 没有单独的分段控件）、Ant Design Vue a-space-compact（block、size）或 a-button-group 和 a-segmented（options、block、size）
+- 按钮组同组 2–3 个，多出的收进“更多”；同组同尺寸、同层级，图标要么都有、要么都没有；相邻边框合并是组件自带的，不连体时按钮间距 8px
+- 分段控件只给 2–5 个互斥选项且选中即切换视图（列表 / 卡片、日 / 周 / 月）；外圆角 7、内圆角 5、槽内边距 2，和同行控件等高（外框 32px），组件默认值不一致时改主题变量
+- 每段 2–6 个字，选中即生效，不配“应用”按钮；需要点“保存”才生效的表单选项改用单选组（el-radio-group type="button"、n-radio-group + n-radio-button、a-radio-group optionType="button"）
+- 值用 v-model 绑定，change 时刷新数据，当前视图写进 URL，见「状态放进 URL」
+- 窄屏放不下时不换行、不压扁文字：先 block 撑满一行，再放不下改下拉选择
 
 ## 提示词
 
-在{报表标题行右侧}放一个分段控件切换“{日 / 周 / 月}”，旁边放按钮组“导出 / 分享 / 更多”。分段控件外框高 32px，浅灰底槽 2px 内边距，选中段白底加轻阴影，未选段次要文字色，每段左右 12px；用原生单选实现，方向键切换、选中即刷新数据，聚焦段显示焦点环；按钮组同尺寸、相邻边框合并；选项超过 5 个改下拉；窄屏横向滚动，不压扁文字。
+在{报表标题行右侧}放一个分段控件切换“{日 / 周 / 月}”，旁边放按钮组“导出 / 分享 / 更多”：用项目组件库自带的组件（Element Plus el-segmented :options + el-button-group；Naive UI n-tabs type="segment" + n-button-group；Ant Design Vue a-segmented :options + a-space-compact），不手写。分段控件和同行控件等高（32px），槽内边距 2、外圆角 7、内圆角 5，选中段白底加轻阴影，未选段次要文字色，每段 2–6 个字，选中即刷新数据并把当前视图写进 URL；按钮组同尺寸、同层级，相邻边框合并，多出的操作收进“更多”；选项超过 5 个改下拉选择；窄屏不换行、不压扁文字，先 block 撑满一行，再放不下改下拉。
 
 ## 示例
 
@@ -35,10 +35,10 @@ order: 30
 <style>
 .w{width:100%;max-width:420px;display:flex;flex-direction:column;gap:8px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.seg{display:inline-flex;gap:2px;padding:2px;border-radius:6px;background:#e3e6eb}
+.seg{display:inline-flex;gap:2px;padding:2px;border-radius:7px;background:#e3e6eb}
 .seg label{position:relative}
 .seg input{position:absolute;opacity:0;pointer-events:none}
-.seg span{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:4px;color:#5b616e;cursor:pointer}
+.seg span{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:5px;color:#5b616e;cursor:pointer}
 .seg input:checked+span{background:#fff;color:#1f2329;box-shadow:0 1px 2px rgba(31,35,41,.16)}
 .seg input:focus-visible+span{outline:2px solid #3b5bdb;outline-offset:1px}
 .grp{display:inline-flex}

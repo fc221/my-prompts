@@ -18,16 +18,17 @@ order: 70
 
 ## 要点
 
-- ⌘K（Mac）/ Ctrl+K（其他系统）打开，再按一次或 Esc 关闭；界面上另有可见入口，并标出快捷键
+- 组件库没有现成的，自己做；外壳可以借组件库的对话框（el-dialog、n-modal、a-modal）管遮罩和焦点，输入框和结果列表自己写
+- ⌘K（Mac）/ Ctrl+K（其他系统）打开，再按一次或 Esc 关闭；界面上另有可见入口并标出快捷键，它不能是任何功能的唯一入口
 - 面板在视口上方约 20% 处水平居中，宽 560–640px；结果最多 8 条后内部滚动
 - 结果按“最近 / 页面 / 命令”分组，命中的字加粗，右侧显示类型或快捷键
-- 焦点留在输入框，上下方向键移动高亮（aria-activedescendant），Enter 执行，关闭后焦点回到原处
+- 焦点一直留在输入框：上下方向键移动高亮，Enter 执行，关闭后焦点回到原处
 - 每天用很多次的入口不加进出动画，直接出现
 - 无结果时写“没有找到”，并给出帮助文档等出路；窄屏改全屏
 
 ## 提示词
 
-给{产品}加「命令面板」：⌘K / Ctrl+K 打开或关闭，顶栏另有带快捷键提示的搜索入口；面板居中在视口上方约 20%，宽 600px，输入框在顶部，结果按“最近 / 页面 / 命令”分组、最多 8 条后内部滚动，命中字加粗，右侧显示快捷键；焦点留在输入框，上下键移动高亮（aria-activedescendant），Enter 执行，Esc 关闭并回到原焦点；不加进出动画；无结果时写“没有找到”并给出帮助入口；窄屏改全屏。
+给{产品}加「命令面板」：组件库没有现成的，自己做，外壳可以用 el-dialog / n-modal / a-modal 管遮罩和焦点。⌘K / Ctrl+K 打开或关闭，顶栏另有带快捷键提示的搜索入口；面板居中在视口上方约 20%，宽 600px，输入框在顶部，结果按“最近 / 页面 / 命令”分组、最多 8 条后内部滚动，命中字加粗，右侧显示类型或快捷键；焦点留在输入框，上下键移动高亮，Enter 执行，Esc 关闭并回到原焦点；不加进出动画；无结果时写“没有找到”并给出帮助入口；窄于 640px 改全屏。
 
 ## 示例
 
@@ -71,6 +72,8 @@ export default function demo(root) {
   const m = modal(root, mk, { first: 'input', scrim: true });
   const go = (i) => { const d = hits[i]; if (!d) return; m.close(); out.textContent = '已打开：' + d[0]; };
   const open = () => { inp.value = ''; act = 0; draw(); m.open(root.activeElement || trig); };
+  // 挂载后就是打开的：只亮出面板，不抢焦点；关掉后点入口或按 ⌘K 再开
+  inp.value = '订单'; draw(); mk.setAttribute('data-open', ''); root.querySelector('.app').inert = true;
   trig.addEventListener('click', open);
   root.addEventListener('keydown', (e) => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); mk.hasAttribute('data-open') ? m.close() : open(); } });
   inp.addEventListener('input', () => { act = 0; draw(); });

@@ -19,21 +19,19 @@ tab: 侧栏
 
 ## 要点
 
-- 展开宽 220–240px，收起 64px 只留 20px 图标；收起状态要记住，收起后每项有同名 Tooltip 和 aria-label
-- 有分组时，收起后每组只留一个图标，悬停或点击在旁边弹出这一组的子菜单，做法见「图标窄栏导航」
-- 菜单项高 36–40px，组名 12px 次要文字，组与组之间留 24px 空白，不用分割线
-- 当前项用强调浅底 + 强调色文字，并加 aria-current="page"；只有图标时还要有形状标识，不只靠颜色
-- 二级菜单最多两层，展开状态用 aria-expanded，当前页所在的组默认展开
-- 菜单区单独滚动，账号区或收起按钮固定在底部
-- 多个工作区时顶部放切换器，切换后强调色跟着工作区的颜色变
-- 菜单项多时顶部加搜索：边输边过滤并高亮命中的字，清空后恢复原顺序和展开状态
-- 常用项可以拖到分隔线上方置顶；同一时间只展开一组，展开的子项左侧有一条细引导线，子项依次进场
-- 状态点可以缓慢呼吸，角标数字换值时上下滚动；进过该页后角标消失
-- 窄于 1024px 收进从左侧滑出的抽屉，由顶栏左侧的菜单按钮打开
+- 用组件库的竖向菜单：Element Plus el-menu（router、default-active、default-openeds、unique-opened、collapse）+ el-sub-menu / el-menu-item / el-menu-item-group、Naive UI n-menu（options、value、default-expanded-keys、accordion、collapsed、collapsed-width）、Ant Design Vue a-menu mode="inline"（items、selectedKeys、openKeys、inlineCollapsed）放在 a-layout-sider（collapsible、collapsed、collapsedWidth、width、breakpoint）里
+- 菜单数据从路由表的 meta（title、icon、hidden）生成，不手写第二份；当前项跟路由走：Element Plus 开 router 或把 default-active 绑到 route.path，Naive UI 的 value、Ant Design Vue 的 selectedKeys 绑路由名，刷新后仍高亮
+- 展开宽 220–240px，收起 56–64px 只留图标（collapse / collapsed / inlineCollapsed），收起状态写进本地存储；收起后每组只留一个图标、悬停弹出子菜单是组件自带的，见「图标窄栏导航」
+- 分组用组件的分组项（el-menu-item-group、{ type: 'group' }、type: 'group'），组名 12px 次要文字，组与组之间留 24px，不用分割线
+- 二级菜单最多两层，当前页所在的组默认展开（default-openeds / default-expanded-keys / openKeys）；同时只展开一组用 unique-opened / accordion，Ant Design Vue 自己维护 openKeys 只留一个
+- 菜单项高 36–40px，当前项用强调浅底 + 强调色文字，改组件的主题变量，不在每个菜单项上写样式；只有图标时还要有形状标识，不只靠颜色
+- 菜单区单独滚动，账号区和收起按钮固定在底部；n-layout-sider 的 show-trigger、a-layout-sider 的 trigger 自带收起按钮，Element Plus 自己放一个
+- 菜单超过约 20 项时顶部加搜索：边输边过滤并高亮命中的字，清空后恢复原顺序和展开状态
+- 窄于 1024px 收进从左侧滑出的抽屉（el-drawer direction="ltr"、n-drawer placement="left"、a-drawer placement="left"；Ant Design Vue 也可以用 a-layout-sider 的 breakpoint="lg" collapsedWidth="0"），由顶栏左侧的菜单按钮打开
 
 ## 提示词
 
-给{产品}后台做「侧栏导航」：固定在左侧，展开 232px、可收起到 64px（记住状态，收起后只留图标：单项有同名 Tooltip 和 aria-label，每个分组收成一个图标，悬停或点击在右侧弹出该组子菜单）；菜单按{业务分组}分组，组名 12px 次要文字，组间留 24px；菜单项高 40px，当前项强调浅底 + 强调色文字并加 aria-current="page"；二级菜单用 aria-expanded，当前页所在组默认展开，同时只展开一组；菜单超过约 20 项时顶部加搜索，边输边过滤并高亮命中，清空后恢复原样；菜单区独立滚动，底部固定账号区；窄于 1024px 收进左侧抽屉，由顶栏菜单按钮打开，Esc 或点遮罩关闭。
+给{产品}后台做「侧栏导航」：用项目组件库自带的竖向菜单（Element Plus el-menu router :default-active="route.path" :collapse + el-sub-menu / el-menu-item；Naive UI n-menu :options :value :collapsed accordion；Ant Design Vue a-layout-sider collapsible + a-menu mode="inline" :items :selectedKeys :openKeys），不手写菜单。菜单数据从路由表的 meta 生成，当前项跟路由走、刷新后仍高亮；展开 232px、可收起到 64px 只留图标，收起状态记进本地存储，收起后的分组悬停弹出子菜单用组件自带的；按{业务分组}分组，组名 12px 次要文字，组间留 24px；菜单项高 40px，当前项强调浅底 + 强调色文字；二级菜单最多两层，当前页所在组默认展开，同时只展开一组；菜单超过约 20 项时顶部加搜索；菜单区独立滚动，底部固定账号区和收起按钮；窄于 1024px 收进左侧抽屉（el-drawer direction="ltr" / n-drawer placement="left" / a-drawer placement="left"），由顶栏菜单按钮打开。
 
 ## 示例
 

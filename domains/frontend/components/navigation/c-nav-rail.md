@@ -22,17 +22,17 @@ order: 15
 
 ## 要点
 
-- 宽 56–64px，图标 20px，点击区 40–44px；当前项（或当前页所在的组）用实心强调底 + 白色图标
-- 单个入口：悬停或键盘聚焦时在旁边显示名称提示，每项有 aria-label
-- 分组：鼠标移入组图标打开子菜单（组名在上、子项带名称、当前项高亮），移出图标和子菜单约 200ms 后关，指针从图标移到子菜单的途中不关；悬停刚打开时紧接着的那次点击不把它关掉；点击可开关，点外面关闭
-- 键盘：组图标是带 aria-expanded 的按钮，Enter、空格或朝子菜单方向的方向键打开并把焦点放进第一项（当前项优先），↑↓ 移动，Esc 或反方向键关闭并回到组图标
-- 子菜单浮在内容上方，放在顶层（popover 或挂到 body）不被侧栏的 overflow 裁切，靠近屏幕底部时向上对齐；减少动态效果时只淡入
+- 在组件库菜单的收起态基础上做：Element Plus el-menu collapse（子菜单悬停弹出）、Naive UI n-menu collapsed（collapsed-width、collapsed-icon-size）、Ant Design Vue a-menu mode="inline" inlineCollapsed（放在 a-layout-sider collapsedWidth 里）；分组收成一个图标、悬停弹出该组子菜单是它们自带的，不重写
+- 宽 56–64px，图标 20px；当前项（或当前页所在的组）用实心强调底 + 白色图标，由路由驱动（default-active / value / selectedKeys）
+- 单个入口悬停或聚焦时在旁边显示名称；收起后组件给的提示和每项的无障碍名称核对一遍，缺的用 Tooltip 补
+- 子菜单移出后延迟约 200ms 再关（Element Plus hide-timeout、Ant Design Vue subMenuCloseDelay、Naive UI 在 dropdown-props 里设 duration），指针从图标移到子菜单的途中不关；点击可开关，点外面关闭
+- 子菜单浮层挂到顶层（Element Plus 一级 el-sub-menu 的 teleported 默认开），不被侧栏的 overflow 裁切，别为了样式改回内嵌；减少动态效果时只淡入
 - 编辑器、属性面板类工具可以把窄栏放在右侧，子菜单朝左弹出；同一产品只用一侧
-- 和展开的「侧栏导航」互相切换时宽度一次到位，见「侧栏导航」
+- 和展开的「侧栏导航」互相切换时宽度一次到位，收起状态记住，见「侧栏导航」
 
 ## 提示词
 
-给{产品}做「图标窄栏导航」：左侧固定 64px，图标 20px、点击区 44px，当前项（或当前页所在的组）实心强调底 + 白色图标，并在当前页加 aria-current="page"；单个入口悬停或聚焦时在右侧显示名称提示，每项有 aria-label；{分组，如 内容、用户、系统} 每组只留一个图标，鼠标移入在右侧弹出该组子菜单（组名在上，子项带名称，当前项高亮），移出约 200ms 后关闭，悬停刚打开后的那次点击不关闭，点击可开关，点外面关闭；组图标是带 aria-expanded 的按钮，Enter、空格或 → 打开并聚焦第一项（当前项优先），↑↓ 移动，Esc 或 ← 关闭并回到组图标；子菜单放在顶层不被裁切，靠近屏幕底部时向上对齐；减少动态效果时只淡入。
+给{产品}做「图标窄栏导航」：在项目组件库菜单的收起态上做（Element Plus el-menu collapse；Naive UI n-menu collapsed :collapsed-width="64" :collapsed-icon-size="20"；Ant Design Vue a-layout-sider :collapsedWidth="64" 里放 a-menu mode="inline" inlineCollapsed），不手写菜单。左侧固定 64px，图标 20px，当前项（或当前页所在的组）实心强调底 + 白色图标，当前项由路由驱动（default-active / value / selectedKeys）；{分组，如 内容、用户、系统} 每组只留一个图标，悬停在右侧弹出该组子菜单（组件自带），移出后延迟约 200ms 再关，点击可开关，点外面关闭；单个入口悬停或聚焦时显示名称提示；子菜单浮层挂到顶层不被侧栏裁切；减少动态效果时只淡入。
 
 ## 示例
 

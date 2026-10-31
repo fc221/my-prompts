@@ -18,16 +18,17 @@ order: 60
 
 ## 要点
 
-- 触发器是文字按钮或图标按钮（没有输入框边框），带 aria-haspopup="menu" 和 aria-expanded
-- 菜单宽 160–240px，项高 32–36px，最多 7–9 项，用分割线分组；快捷键右对齐，禁用项说明原因
-- 危险操作放最后、与其他项隔开，可用危险色文字
-- 打开后焦点进入第一项，上下方向键移动，Enter 执行，Esc 关闭并回到触发器，点外部关闭
-- 从触发器一侧淡入并从 0.96 放大，160ms；靠近视口边缘自动翻转方向
-- 对照下拉选择：选择器选完的值留在框里随表单提交；菜单选完立刻执行或跳转
+- 用组件库的下拉菜单：Element Plus el-dropdown（trigger、placement、hide-on-click、split-button）+ el-dropdown-item（command、divided、disabled）、Naive UI n-dropdown（options、trigger、placement、on-select）、Ant Design Vue a-dropdown（trigger、placement）+ 插槽里的 a-menu / a-menu-item / a-menu-divider
+- 触发方式定成点击：三家默认都是悬停（el-dropdown trigger="click"、n-dropdown trigger="click"、a-dropdown :trigger="['click']"），表格行和卡片角落的“更多”悬停会误触
+- 触发器是文字按钮或图标按钮，没有输入框边框；选完立刻执行，触发器文字不变——这是它和「下拉选择」的区别，两者不要做成一个样子
+- 最多 7–9 项，用分割线分组（divided、{ type: 'divider' }、a-menu-divider）；禁用项保留并写原因，不直接藏掉
+- 删除这类危险项放最后、单独一组，文字用中性色；点了进「确认对话框（危险操作）」，确认按钮才用危险色；Ant Design Vue 的 a-menu-item danger 菜单里不开
+- 执行集中在一个事件里按 key 分发：Element Plus 的 command 事件配每项的 command、Naive UI 的 on-select、Ant Design Vue 在 a-menu 的 click 里读 key，不在每一项上单独绑点击
+- 位置翻转、键盘移动、Esc 关闭和焦点回到触发器组件已处理，不重写
 
 ## 提示词
 
-在{表格行 / 卡片右上角}加「下拉菜单」收纳次要操作：触发器是“更多”文字或图标按钮（无输入框边框，aria-haspopup="menu"、aria-expanded）；菜单宽 160–240px，项高 32px，最多 7–9 项并用分割线分组，危险项放最后用危险色；打开后焦点进入第一项，上下键移动、Enter 执行、Esc 关闭并回到触发器，点外部关闭；从触发器一侧淡入缩放 160ms，靠近边缘自动翻转；外观必须和下拉选择（选值、留在框里）区分开。
+在{表格行 / 卡片右上角}加「下拉菜单」收纳次要操作：用项目组件库自带的下拉菜单（Element Plus el-dropdown trigger="click" + el-dropdown-item command；Naive UI n-dropdown trigger="click" :options @select；Ant Design Vue a-dropdown :trigger="['click']" + a-menu），不手写。触发器是“更多”文字按钮或图标按钮，点击打开，不用悬停；菜单项 {列出操作}，最多 7–9 项并用分割线分组，禁用项保留并写原因；“删除”放最后单独一组，用中性色文字，点击后弹确认对话框，确认按钮才用危险色；选中后立即执行并关闭，触发器文字不变；所有项的执行集中在 command / on-select / click 事件里按 key 分发；外观要和「下拉选择」区分开。
 
 ## 示例
 
@@ -44,12 +45,11 @@ select{height:32px;min-width:110px;padding:0 8px;border:1px solid #e3e6eb;border
 .menu button:hover,.menu button:focus-visible{background:#f0f2f5;outline:none}
 kbd{font:12px system-ui;color:#5b616e}
 [role=separator]{height:1px;margin:4px 0;background:#e3e6eb}
-.menu .dg{color:#d92d20}
 .rw{display:flex;justify-content:space-between;align-items:center;height:34px;padding:0 12px;background:#fff;border:1px solid #e3e6eb;border-radius:8px;font-size:13px}
 .out{text-align:center}
 </style>
 
-<div class="s"><div class="box"><div class="tb"><label class="fl">状态<select><option>全部</option><option>待发货</option><option>已完成</option></select></label><div class="anc"><button class="b t more" aria-haspopup="menu" aria-expanded="false" aria-controls="mn">更多操作 <span aria-hidden="true">▾</span></button><div class="menu pop-in" id="mn" role="menu" aria-label="更多操作" hidden><button role="menuitem" tabindex="-1">导出 Excel<kbd>⌘E</kbd></button><button role="menuitem" tabindex="-1">打印</button><div role="separator"></div><button role="menuitem" tabindex="-1" class="dg">清空回收站</button></div></div></div><div class="rw"><span>#2041 林知科技</span><span class="muted">待发货</span></div><div class="rw"><span>#2042 周记餐饮</span><span class="muted">已完成</span></div><p class="muted out" role="status">左边是下拉选择（选一个值），右边是下拉菜单（执行命令）</p></div></div>
+<div class="s"><div class="box"><div class="tb"><label class="fl">状态<select><option>全部</option><option>待发货</option><option>已完成</option></select></label><div class="anc"><button class="b t more" aria-haspopup="menu" aria-expanded="true" aria-controls="mn">更多操作 <span aria-hidden="true">▾</span></button><div class="menu pop-in" id="mn" role="menu" aria-label="更多操作"><button role="menuitem" tabindex="-1">导出 Excel<kbd>⌘E</kbd></button><button role="menuitem" tabindex="-1">打印</button><div role="separator"></div><button role="menuitem" tabindex="-1">清空回收站</button></div></div></div><div class="rw"><span>#2041 林知科技</span><span class="muted">待发货</span></div><div class="rw"><span>#2042 周记餐饮</span><span class="muted">已完成</span></div><p class="muted out" role="status">左边是下拉选择（选一个值），右边是下拉菜单（执行命令）</p></div></div>
 
 <script type="module">
 import { pop } from '../../_shared/components-overlay.ts';

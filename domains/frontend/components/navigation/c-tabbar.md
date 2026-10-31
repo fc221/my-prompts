@@ -19,16 +19,17 @@ order: 80
 
 ## 要点
 
+- 在组件库标签页或横向菜单的基础上做：按板块切换页面内容时把标签页放到底部（Element Plus el-tabs tab-position="bottom" stretch、Naive UI n-tabs placement="bottom" justify-content="space-evenly"、Ant Design Vue a-tabs tabPosition="bottom" centered），按路由跳转时用横向菜单（el-menu mode="horizontal" router、n-menu mode="horizontal"、a-menu mode="horizontal"）；三家都没有现成的底部标签栏，图标在上、文字在下和等分宽度靠样式覆盖
 - 高 48–56px，另加 env(safe-area-inset-bottom) 底部安全区
-- 3–5 项等分宽度，每项 22–24px 图标 + 10–12px 文字，图文都要有
-- 当前项强调色 + 实心图标，其余次要文字色 + 线框图标，加 aria-current，不只靠颜色区分
-- 角标超过 99 显示“99+”，只提示有新内容时用 8px 小圆点
-- 切换时保留每个板块的滚动位置和状态；再次点当前项回到顶部
+- 3–5 项等分宽度，每项 24px 图标 + 12px 文字，图文都要有
+- 当前项强调色 + 实心图标，其余次要文字色 + 线框图标，不只靠颜色区分
+- 角标用组件库的徽标（el-badge value max is-dot、n-badge value max dot、a-badge count overflowCount dot），超过 99 显示“99+”，只提示有新内容时用小圆点
+- 切换时保留每个板块的滚动位置和状态（Naive UI 面板设 display-directive="show"，Ant Design Vue 不开 destroyInactiveTabPane，路由方案用 keep-alive）；再次点当前项回到顶部
 - 进入二级页面后隐藏，返回一级页面再出现；软键盘弹出时不跟着顶起
 
 ## 提示词
 
-给{H5 / App 式页面}做「底部标签栏」：{3–5} 个一级入口等分宽度，高 56px 并加 env(safe-area-inset-bottom)；每项 24px 图标 + 11px 文字，当前项强调色 + 实心图标（其余线框图标）并加 aria-current；消息角标超过 99 显示 99+，只提示新内容用 8px 小圆点；切换时保留各页滚动位置，再点当前项回到顶部；进入二级页面时隐藏；软键盘弹出时不顶起；桌面宽度改为侧栏或顶栏。
+给{H5 / App 式页面}做「底部标签栏」：在项目组件库的标签页或横向菜单上做（切换页面内容：Element Plus el-tabs tab-position="bottom" stretch / Naive UI n-tabs placement="bottom" justify-content="space-evenly" / Ant Design Vue a-tabs tabPosition="bottom" centered；按路由跳转：el-menu / n-menu / a-menu mode="horizontal"），切换和当前项用组件的，外观靠样式覆盖。{3–5} 个一级入口等分宽度，高 56px 并加 env(safe-area-inset-bottom)；每项 24px 图标 + 12px 文字，当前项强调色 + 实心图标（其余线框图标）；消息角标用组件库的徽标（el-badge / n-badge / a-badge），超过 99 显示 99+，只提示新内容用小圆点；切换时保留各板块的滚动位置和状态，再点当前项回到顶部；进入二级页面时隐藏；软键盘弹出时不顶起；桌面宽度改为侧栏或顶栏。
 
 ## 示例
 

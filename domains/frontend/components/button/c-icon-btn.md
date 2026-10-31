@@ -18,16 +18,17 @@ order: 20
 
 ## 要点
 
-- 正方形，边长等于控件高度（32px，紧凑 28px，触屏 44px），图标 16–20px 居中
-- 必须有 aria-label，并配同名提示：悬停约 500ms 或键盘聚焦时出现，Esc 可关闭
-- 工具栏里默认无边框、次要文字色，悬停出现浅灰底；放在有边框的容器里不再给按钮加边框
-- 切换类（加粗、收藏、置顶）用 aria-pressed 表示状态，按下时主色图标 + 浅主色底
-- 同一组用同一套线性图标、同一线宽，不用 emoji 当图标
-- 危险操作不做成纯图标按钮；视觉尺寸小于 44px 的触屏按钮用伪元素把点击区扩到 44px
+- 用组件库的按钮和提示：Element Plus el-button（icon、circle、text）+ el-tooltip（content、placement、show-after）、Naive UI n-button（quaternary、circle，图标放 #icon 插槽）+ n-tooltip（trigger、placement、delay）、Ant Design Vue a-button（shape="circle"、type="text"，图标放 #icon 插槽）+ a-tooltip（title、placement、mouseEnterDelay）
+- 每个按钮都要有无障碍名称（aria-label）和同名提示；提示延迟约 500ms（show-after 500 / delay 500 / mouseEnterDelay 0.5），键盘聚焦也要出现
+- 尺寸用组件的档位，和同行控件等高；触屏用 large 或把点击区补到 44px，见「触控目标」
+- 工具栏里用无边框的文字型（el-button text / n-button quaternary / a-button type="text"），悬停浅底是组件自带的；放在有边框的容器里不再给按钮加边框
+- 切换类（加粗、收藏、置顶）三家都没有按下态属性：自己加 aria-pressed，按下态换成主色图标 + 浅主色底
+- 同一组用同一套线性图标、同一线宽，用组件库配套的图标包（@element-plus/icons-vue、@vicons、@ant-design/icons-vue），不用 emoji 当图标
+- 危险操作不做成纯图标按钮，改用带文字的按钮；一排超过 5 个时低频的收进“更多”
 
 ## 提示词
 
-给{编辑器工具栏}做一组图标按钮：每个 32×32px（触屏 44×44px），16px 线性图标、次要文字色，默认无边框，悬停浅灰底，聚焦显示 2px 焦点环；每个按钮有 aria-label 和同名提示（悬停 500ms 或键盘聚焦出现，Esc 关闭）；加粗、斜体这类切换按钮用 aria-pressed，按下时主色图标加浅主色底；删除等危险操作改用带文字的按钮；窄屏超过 4 个时其余收进“更多”菜单。
+给{编辑器工具栏}做一组图标按钮：用项目组件库自带的按钮和提示（Element Plus el-button text :icon + el-tooltip :show-after="500"；Naive UI n-button quaternary 带 #icon + n-tooltip :delay="500"；Ant Design Vue a-button type="text" 带 #icon + a-tooltip :mouseEnterDelay="0.5"），不手写。每个按钮有 aria-label 和同名提示，悬停或键盘聚焦时出现；尺寸用组件默认档，触屏点击区补到 44px；用组件库配套的线性图标，同一线宽；加粗、斜体这类切换按钮自己加 aria-pressed，按下时主色图标加浅主色底；删除等危险操作改用带文字的按钮；窄屏超过 4 个时其余收进“更多”菜单。
 
 ## 示例
 

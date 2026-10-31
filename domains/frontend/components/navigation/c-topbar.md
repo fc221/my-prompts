@@ -19,15 +19,16 @@ tab: 顶栏
 
 ## 要点
 
+- 用组件库的布局头和横向菜单：Element Plus el-container + el-header（height）+ el-menu mode="horizontal"（router、default-active、ellipsis）、Naive UI n-layout-header（bordered、position）+ n-menu mode="horizontal"（value、responsive）、Ant Design Vue a-layout-header + a-menu mode="horizontal"（selectedKeys、theme）
 - 高 56px（紧凑型 48px），吸顶，底部 1px 分割线，或滚动后才出现的浅阴影
-- 左：Logo / 产品名 + 最多 5–6 个导航项；右：搜索、通知、账号，图标按钮点击区 36–40px，都有 aria-label 和 Tooltip
-- 当前导航项用 2px 强调色下划线或浅底，并加 aria-current
-- 通知角标超过 99 显示“99+”，0 不显示；只需提示有新内容时用 8px 小圆点
-- 窄屏只留标题、返回或菜单按钮和最多 1–2 个操作，其余收进菜单；顶部加安全区
+- 左：Logo / 产品名 + 最多 5–6 个导航项，当前项由路由驱动；放不下时 Element Plus 的 ellipsis、Naive UI 的 responsive、Ant Design Vue 默认都会把溢出的收成“更多”
+- 右：搜索、通知、账号，用「图标按钮」配组件库的 Tooltip 和无障碍名称；主题、语言、密度这类低频设置收进账号的「下拉菜单」
+- 通知角标用组件库的徽标：Element Plus el-badge（value、max、is-dot、hidden，show-zero 默认开着要关掉）、Naive UI n-badge（value、max、dot）、Ant Design Vue a-badge（count、overflowCount、dot）；超过 99 显示“99+”，0 不显示，只提示有新内容时用小圆点
+- 窄于 768px 只留标题、返回或菜单按钮和最多 1–2 个操作，其余收进菜单；顶部加安全区；手机页的写法见「手机顶栏的八种样式」
 
 ## 提示词
 
-给{产品}做「顶栏」：高 56px、吸顶，底部 1px 分割线；左侧 Logo 与最多 5 个一级导航，当前项 2px 强调色下划线并加 aria-current；右侧依次是全局搜索、通知（未读角标，超过 99 显示 99+，0 不显示）和账号头像菜单，图标按钮点击区 40px、都有 aria-label 和 Tooltip；主题、语言等低频设置收进账号菜单；窄于 768px 时只留标题、菜单或返回按钮和最多 2 个操作，其余收进菜单，并加顶部安全区。
+给{产品}做「顶栏」：用项目组件库自带的布局头和横向菜单（Element Plus el-header + el-menu mode="horizontal" router；Naive UI n-layout-header bordered + n-menu mode="horizontal" responsive；Ant Design Vue a-layout-header + a-menu mode="horizontal"），不手写导航。高 56px、吸顶，底部 1px 分割线；左侧 Logo 与最多 5 个一级导航，当前项由路由驱动；右侧依次是全局搜索、通知和账号头像菜单，图标按钮都有 Tooltip 和无障碍名称；通知角标用组件库的徽标（el-badge :max="99" :show-zero="false" / n-badge :max="99" / a-badge :overflowCount="99"），超过 99 显示 99+，0 不显示；主题、语言等低频设置收进账号的下拉菜单；窄于 768px 时只留标题、菜单或返回按钮和最多 2 个操作，其余收进菜单，并加顶部安全区。
 
 ## 示例
 
