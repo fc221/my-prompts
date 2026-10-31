@@ -2,6 +2,7 @@
 zh: 提升页面层次感
 en: Too plain
 aka: 页面太素
+tab: 层次
 order: 60
 ---
 
@@ -25,3 +26,43 @@ order: 60
 5. 用真实可信的内容替换“标题 1、测试数据”。
 6. 确定一个视觉重心，让最重要的模块面积最大。
 动手前先列出要改的 5–8 处。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/fix.css">
+<style>
+.c{padding:6px;font-size:10px;line-height:14px}
+.t{font-size:11px;line-height:16px}
+.kc{margin-top:6px;padding:6px 8px}
+.kl{font-size:10px;line-height:12px}
+.kn{font-size:11px;line-height:16px}
+.tw{margin-top:6px}
+.tb{width:100%;border-collapse:collapse;font-size:10px;line-height:14px}
+.tb th,.tb td{padding:1px 4px;text-align:left;font-weight:400}
+.tb th:nth-child(2),.tb td:nth-child(2){text-align:right;font-variant-numeric:tabular-nums}
+.bs{display:flex;gap:6px;margin-top:6px}
+.b{padding:0 8px;border-radius:4px;font-size:10px;line-height:18px}
+.dot{display:inline-block;width:6px;height:6px;margin-right:4px;border-radius:50%;background:#1f9d61}
+/* 改前：像线框稿，没有表面层次，所有字一样大一样重，两个按钮一个样，状态没标记，空值空着 */
+.bad{color:#444}
+.bad .kc,.bad .b{border:1px solid #b6bcc6}
+.bad .tb th,.bad .tb td{border:1px solid #b6bcc6}
+.bad .dot,.bad .em{display:none}
+/* 改后：页面底、白卡片、浮层三层表面，字号拉开，强调色只给主按钮，表头有样式，状态小色点，空值写 — */
+.good{background:#f5f6f8}
+.good .t{font-size:13px;line-height:18px;font-weight:600}
+.good .kc{padding:5px 8px;border:1px solid #e3e6eb;border-radius:6px;background:#fff}
+.good .kl{color:#5b616e}
+.good .kn{font-size:16px;line-height:20px;font-weight:600;font-variant-numeric:tabular-nums}
+.good .tw{overflow:hidden;border:1px solid #e3e6eb;border-radius:6px;background:#fff}
+.good .tb th{background:#f8f9fb;color:#5b616e;font-size:9px;line-height:13px}
+.good .tb td{border-top:1px solid #eef0f3}
+.good .em{color:#8a909c}
+.good .pr{background:#3b5bdb;color:#fff;box-shadow:0 1px 2px rgba(31,35,41,.16)}
+.good .b:not(.pr){border:1px solid #c9ced6;background:#fff}
+</style>
+
+<div class="fx">
+  <section class="fx-p"><h4>改前</h4><div class="fx-b"><div class="fx-z c bad"><div class="t">今日营业</div><div class="kc"><div class="kl">营收</div><div class="kn">¥12,480</div></div><div class="tw"><table class="tb"><tr><th>门店</th><th>营收</th><th>状态</th></tr><tr><td>西湖店</td><td>8,120</td><td><i class="dot"></i>正常</td></tr><tr><td>滨江店</td><td>4,360</td><td><span class="em">—</span></td></tr></table></div><div class="bs"><span class="b pr">新建订单</span><span class="b">导出</span></div></div></div></section>
+  <section class="fx-p ok"><h4>改后</h4><div class="fx-b"><div class="fx-z c good"><div class="t">今日营业</div><div class="kc"><div class="kl">营收</div><div class="kn">¥12,480</div></div><div class="tw"><table class="tb"><tr><th>门店</th><th>营收</th><th>状态</th></tr><tr><td>西湖店</td><td>8,120</td><td><i class="dot"></i>正常</td></tr><tr><td>滨江店</td><td>4,360</td><td><span class="em">—</span></td></tr></table></div><div class="bs"><span class="b pr">新建订单</span><span class="b">导出</span></div></div></div></section>
+</div>

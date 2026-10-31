@@ -28,3 +28,24 @@ App 式 H5 和移动端产品的一级导航，入口 3–5 个且使用频率�
 ## 提示词
 
 {产品}移动端用「底部标签栏」：顶部导航栏 48px（标题单行居中）；底部标签栏 56px 加安全区，{标签列表}（3–5 项），图标 24px、文字 11px，当前项图标变实心并用主色；内容区左右 16px，底部留出标签栏高度；切换标签保留各自滚动位置，再点当前标签回顶部；进入二级页隐藏标签栏；平板以上改为左侧图标轨。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '88px 1fr',
+  rows: '13% 1fr',
+  areas: ['rail top', 'rail main'],
+  boxes: {
+    rail: { label: '图标轨', dark: true },
+    top: '顶栏',
+    main: { inner: { cols: '12% 1fr 12%', rows: '1fr', areas: ['. c .'], boxes: { c: '内容（限宽居中）' } } },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: '11% 1fr 14%',
+  areas: ['top', 'main', 'tab'],
+  boxes: { top: { label: '标题', kind: 'mtop', text: '首页' }, main: '内容', tab: { label: '底部标签栏', acc: true } },
+};
+```

@@ -41,3 +41,35 @@ order: 60
 4. {敏感操作列表，如 退款、改价、导出会员}写审计日志：操作人、调用方、动作、资源、结果、IP、变化字段的改前改后值；审计表只允许追加。
 5. 访问日志保留至少 180 天，审计日志保留 {审计保留期}。
 最后说明改了哪些文件，并演示：用一个 request id 查到从网关到下游的完整调用；做一次退款后能查到对应的审计记录；在日志里全文搜索不到令牌。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: '访问日志 · 每次调用一行', text: `
+"ts": "2026-10-28T10:15:02Z",
+"request_id": "req_7Fk2a9",
+"app_id": "app_1024",
+"key_prefix": "sk_live_8f3a",
+"method": "PATCH",
+"route": "/orders/:id",
+"status": 200,
+"duration_ms": 86
+` },
+    { t: '审计日志 · 只追加', text: `
+"actor": "u_208",
+"app_id": "app_1024",
+"action": "refund.create",
+"resource": "order/ord_8F3k2",
+"result": "success",
+"ip": "203.0.113.7",
+"changes": {
+  "refundAmount": [0, 12800] }
+` },
+  ]), { title: '调用日志与审计 · 令牌、密码不记录' });
+}
+</script>

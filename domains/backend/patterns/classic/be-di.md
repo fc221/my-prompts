@@ -40,3 +40,29 @@ order: 40
 4. 只给外部系统和有多个实现的依赖定义接口，内部 service 直接注入具体类；多实现按配置项在组装处选择。
 5. 构造参数超过 6 个或出现循环依赖时，先停下来给出拆分建议。
 最后列出改动文件，并补一条用固定时间验证{时间相关规则，如 30 分钟未支付自动取消}的测试。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, stack, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    stack([
+      { t: '组装处', items: ['src/bootstrap/'], note: '只在这里组装，按 sms.provider 选实现', acc: true },
+      { t: '依赖', items: ['OrderRepository', 'Clock', 'IdGenerator', 'aliyun_sms'] },
+      { t: '业务类', items: ['OrderService(repo, clock)'], note: '构造器注入，依赖字段只读' },
+    ], { arrow: '从外面传进来' }),
+    tree(`
+src/
+* bootstrap/        唯一组装处
+  order/
+    order_service   无容器 API
+  infra/sms/
+    aliyun_sms
+    tencent_sms     按配置二选一
+`),
+  ], { title: '依赖注入 · 组装只在一处' });
+}
+</script>

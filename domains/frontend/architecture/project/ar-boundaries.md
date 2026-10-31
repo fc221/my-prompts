@@ -42,3 +42,31 @@ order: 20
 5. 把以上写成 lint 或依赖检查规则并加进 CI；已有违规先记为基线，只拦新增。
 然后按影响从小到大修复现有违规，每修完一类跑一次类型检查和测试。
 完成后汇报：规则配置文件、修掉的违规数量和剩余基线、改了哪些文件；故意写一个跨领域的深路径引用，确认 CI 会失败。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    stack([
+      { t: '页面', items: ['app', 'pages'] },
+      { t: '领域', items: ['features/<领域>'], note: '领域之间不互相引用', acc: true },
+      { t: '状态和请求', items: ['stores', 'api'], note: 'api 不读 store' },
+      { t: '基础层', items: ['components/ui', 'lib', 'config'] },
+    ], { arrow: '只引用比自己低的层' }),
+    tree(`
+features/
+  order/
+*   index.ts        唯一公共出口
+    components/     外部深路径引用报错
+    api.ts
+  member/           只从 '@/features/order' 引
+api/types.ts        两个领域共用的类型
+lib/                与业务无关的下沉到这里
+`),
+  ], { title: '依赖单向往下 · CI 里用 lint 拦截' });
+}
+</script>

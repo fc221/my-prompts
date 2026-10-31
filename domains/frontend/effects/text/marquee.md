@@ -19,3 +19,19 @@ order: 130
 ## 提示词
 
 把{支持对接的平台或合作伙伴名称}做成「无限滚动横带」：内容复制一份首尾相接，匀速向左循环，30–40 秒一轮，两端用渐变遮罩淡出；鼠标悬停或键盘聚焦时暂停；复制出来的那份对读屏隐藏；图片横带可以上下两排反向滚动，两排速度相差 1.5–2 倍；减少动态效果时改为静态换行排列。
+
+## 示例
+
+<style>
+:host{display:grid;align-items:center;height:100%;background:#fff}
+.m{display:flex;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent);mask-image:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent)}
+.row{display:flex;gap:40px;padding-right:40px;flex:none;animation:mq 18s linear infinite}
+.m:hover .row{animation-play-state:paused}
+span{font:600 18px system-ui;color:#3f4147;white-space:nowrap}
+@keyframes mq{to{transform:translateX(-100%)}
+}
+@media (prefers-reduced-motion:reduce){.row{animation:none}
+}
+</style>
+
+<div data-clip class="m"><div class="row"><span>NORTHWIND</span><span>Acme</span><span>星河</span><span>Lumen</span><span>南风</span><span>Orbit</span></div><div class="row" aria-hidden="true"><span>NORTHWIND</span><span>Acme</span><span>星河</span><span>Lumen</span><span>南风</span><span>Orbit</span></div></div>

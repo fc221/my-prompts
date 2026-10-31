@@ -38,3 +38,18 @@ order: 10
 3. 返回字段由序列化层用白名单决定，敏感字段在这里脱敏。
 4. Model 里不出现请求、会话和状态码。
 行为保持不变：每移动一段逻辑，先写一条测试锁住原来的结果。最后列出改了哪些文件、移动了哪些逻辑，以及怎么确认接口返回和原来一致。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: 'Controller', items: ['TicketsController#transfer'], note: '解析请求 → 调一个方法 → 映射响应' },
+    { t: 'Model', items: ['Ticket', 'canTransfer()'], note: '字段、关联、校验和只涉及本表的规则', acc: true },
+    { t: 'View', items: ['TicketSerializer'], note: '白名单返回字段，手机号在这里脱敏' },
+  ], { arrow: 'Controller 调 Model，View 只读 Model' }), { title: 'MVC · 一次转派工单请求' });
+}
+</script>

@@ -39,3 +39,21 @@ order: 10
 3. 按表迁移，每次只迁一类：可派生的改成计算；服务端数据交给请求缓存层；需要分享和刷新保留的筛选、页码、标签页移到 URL；只在一处使用的全局字段下放回组件。
 4. 每迁完一类，核对刷新、前进后退、切换页面再回来、多个组件同时显示同一数据这几种情况，表现与原来一致。
 5. 汇报删掉的 store 字段和同步代码、新增或改动的文件、还没决定去向的状态。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '① 服务端数据', items: ['订单列表、详情', '→ 服务端状态缓存'] },
+    { t: '② URL 状态', items: ['status、page、q', '→ 查询参数'] },
+    { t: '③ 表单状态', items: ['正在填的报销单', '→ 表单库'] },
+    { t: '④ 客户端全局', items: ['当前用户、主题、侧栏', '→ 全局 store'] },
+    { t: '⑤ 组件局部', items: ['下拉是否展开', '→ 最近公共父组件'] },
+    { t: '派生值', items: ['订单总价、是否全选', '直接算，不单独存'], dash: true },
+  ], { cols: 3, note: '按 ① 到 ⑤ 依次问，第一个符合的就是归属' }), { title: '状态分类与归属' });
+}
+</script>

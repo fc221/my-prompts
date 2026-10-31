@@ -1,6 +1,7 @@
 ---
 zh: 404 与空状态页
 en: Not found & empty states
+preview: c-empty
 order: 130
 ---
 

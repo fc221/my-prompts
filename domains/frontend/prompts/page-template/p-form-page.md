@@ -1,6 +1,7 @@
 ---
 zh: 新建 / 编辑表单页
 en: Form page
+preview: l-admin-anchor-form
 order: 30
 ---
 

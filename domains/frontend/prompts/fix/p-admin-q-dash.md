@@ -2,20 +2,14 @@
 zh: 可下钻的分析看板
 en: Dashboard that answers questions
 aka: 能回答问题的看板 下钻看板 经营分析 结论先行 数据口径 可下钻
-order: 40
+tab: 看板
+order: 184
+of: p-fix-admin-query
 ---
 
 ## 是什么
 
 看板不是图表展览，而是一条追问路径：顶部一句话给结论，中间回答“掉在哪、卡在哪一步”，再往下是具体的单子和下一步动作。点一根柱子，结论、指标、漏斗、明细都换成这一块；继续往下拆时，面包屑随时能退回。示例的数字都由最细一层汇总，可以一路拆到“小程序 › 杭州 › 咖啡豆”。
-
-## 适合
-
-经营分析、增长复盘、运营日报这类要解释“为什么变了、接下来谁做什么”的看板，数据能按渠道、地区、品类这样的维度逐层拆开。
-
-## 不适合
-
-实时监控看状态用「全幅画布」；后台首页要一屏概览和入口时用「后台首页概览」；只有三五个固定指标、没有维度可拆时，一排「统计指标卡」就够。
 
 ## 注意
 
@@ -38,17 +32,233 @@ order: 40
 - 柱子是按钮，方向键切换，Enter 选中；范围变化用 role="status" 播报；减少动态效果时柱高和条宽直接变
 - 手机上单列：结论 → 指标 2×2 → 柱子 → 漏斗 → 明细改卡片列表，“下一步”吸底
 
-## 提示词
+## 示例
 
-把{经营看板}改成「可下钻的分析看板」，它要回答的核心问题是{如 本周成交额为什么变了}。指标：{成交额、订单数、支付转化、客单价}，对比{上周同期}；下钻顺序：{渠道 → 城市 → 品类}；漏斗：{访问 → 加购 → 下单 → 支付}；明细：{未支付订单}。
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.d{display:flex;flex-direction:column;gap:6px;height:100%;padding:8px 10px;background:#f4f5f7;color:#1f2329;font:12px/16px system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}
+.top{flex:none;display:flex;align-items:center;gap:8px;min-height:18px;font-size:11px;color:#5b616e}
+.cr{flex:1;min-width:0;display:flex;align-items:center;gap:2px;margin:0;padding:0;list-style:none;white-space:nowrap}
+.cr li{display:flex;align-items:center;gap:2px}
+.cr li+li::before{content:"›";color:#8a909c}
+.cr button{height:18px;padding:0 3px;border:0;border-radius:4px;background:none;color:#3b5bdb;font-size:11px;cursor:pointer}
+.cr button:hover{background:#e6ebff}
+.cr [aria-current]{padding:0 3px;color:#1f2329;font-weight:600}
+.rg{display:none;white-space:nowrap}
+.ts{white-space:nowrap}
+.ans{flex:none;margin:0;font-size:12.5px;line-height:17px;font-weight:600}
+.kw{flex:none;position:relative}
+.kp{display:flex;justify-content:space-between;gap:6px;padding:2px 6px;background:#fff;border:1px solid #e6e8ec;border-radius:6px}
+.kc{min-width:0;display:flex;align-items:center;gap:3px}
+.kc:nth-child(even){display:none}
+.kl{display:flex;align-items:center;gap:1px;height:16px;font-size:10px;color:#5b616e;white-space:nowrap}
+.ib{display:grid;place-items:center;width:14px;height:14px;padding:0;border:0;border-radius:50%;background:none;color:#8a909c;cursor:pointer}
+.ib:hover,.ib[aria-expanded=true]{color:#3b5bdb}
+.kv{display:flex;align-items:baseline;gap:3px;white-space:nowrap}
+.kv b{font-size:12px;line-height:16px}
+.up,.dn,.fl0{font-style:normal;font-size:10px;line-height:14px}
+.up{color:#12805c}
+.dn{color:#d92d20}
+.fl0{color:#5b616e}
+.def{position:absolute;z-index:3;left:0;right:0;top:calc(100% + 4px);padding:6px 8px;background:#fff;border:1px solid #d5d9e0;border-radius:6px;box-shadow:0 6px 16px rgba(31,35,41,.14);font-size:11px;line-height:15px}
+.def p{margin:0}
+.def p+p{margin-top:2px}
+.def b{display:inline-block;width:3.2em;color:#5b616e;font-weight:500}
+.mid{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:6px}
+.pn{min-width:0;min-height:0;display:flex;flex-direction:column;gap:2px;padding:4px 6px;background:#fff;border:1px solid #e6e8ec;border-radius:6px}
+.ph{flex:none;display:flex;align-items:center;justify-content:space-between;gap:4px;min-height:16px}
+.ph h3{margin:0;font-size:11px;line-height:16px;font-weight:600;white-space:nowrap}
+.ph small{font-size:10.5px;color:#5b616e;white-space:nowrap}
+.dr{height:16px;padding:0 4px;border:0;border-radius:4px;background:#edf1ff;color:#3b5bdb;font-size:10.5px;line-height:16px;white-space:nowrap;cursor:pointer}
+.dr:hover{background:#dfe6ff}
+.bars{flex:1;min-height:0;display:flex;gap:2px}
+.b{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;padding:0;border:0;border-radius:4px;background:none;cursor:pointer}
+.b:hover{background:#f5f6f8}
+.b[aria-pressed=true]{background:#edf1ff}
+.tr{position:relative;flex:1;align-self:stretch;min-height:12px}
+.tr i{position:absolute;bottom:0;left:50%;width:58%;max-width:34px;transform:translateX(-50%);border-radius:3px 3px 0 0}
+.fg{background:#a9b8f0;transition:height .22s,background-color .16s}
+.gh{border:1px dashed #8a909c;border-bottom:0;transition:height .22s}
+.bars.has .fg{background:#d5d9e0}
+.bars .b[aria-pressed=true] .fg{background:#3b5bdb}
+.nm{font-size:10.5px;line-height:13px;white-space:nowrap}
+.bars.new .fg{animation:rise .24s ease-out}
+@keyframes rise{from{height:0}
+}
+.fn{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-around}
+.fr{display:grid;grid-template-columns:auto minmax(0,1fr) 32px;align-items:center;gap:4px;font-size:10px;line-height:13px}
+.tk{position:relative;height:9px;background:#f0f1f4;border-radius:2px}
+.bf{position:absolute;inset:0 auto 0 0;background:#a9b8f0;border-radius:2px;transition:width .22s}
+.pv{position:absolute;top:-1px;bottom:-1px;width:1.5px;margin-left:-1px;background:#5b616e;transition:left .22s}
+.fv{text-align:right;white-space:nowrap}
+.fd{display:none}
+.fr.bad .bf{background:#d92d20}
+.fr.bad .fv,.fr.bad>span:first-child{color:#d92d20;font-weight:600}
+.tb,.nx,.leg{display:none}
+.sc{flex:1;min-height:0;overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:11px;line-height:15px}
+th{position:sticky;top:0;background:#fff;color:#5b616e;font-weight:400;text-align:left}
+th,td{padding:2px 6px 2px 0;white-space:nowrap}
+tbody tr+tr td{border-top:1px solid #f0f1f4}
+.n{text-align:right}
+th:last-child,td:last-child{padding-right:0}
+.hot{color:#d92d20}
+.nx{flex:none;align-items:center;gap:8px;padding:4px 8px;background:#fff;border:1px solid #e6e8ec;border-radius:6px}
+.nx p{flex:1;min-width:0;margin:0;font-size:12px;line-height:16px}
+.nx b{margin-right:6px}
+.nx .btn{height:26px;padding:0 10px;font-size:12px}
+@container (min-width:600px){.d{gap:8px;padding:10px 12px}
+.top{font-size:12px}
+.cr button{font-size:12px}
+.rg{display:inline}
+.ans{font-size:15px;line-height:20px}
+.kp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:6px 0}
+.kc,.kc:nth-child(even){display:block;padding:0 12px}
+.kc+.kc{border-left:1px solid #eceef1}
+.kl{font-size:12px;height:16px;gap:2px}
+.kv b{font-size:18px;line-height:24px}
+.kv{gap:6px}
+.up,.dn,.fl0{font-size:12px}
+.def{font-size:12px;line-height:17px;padding:8px 12px}
+.mid{grid-template-columns:minmax(0,1fr) minmax(0,.95fr) minmax(0,1.3fr);gap:8px}
+.pn{padding:6px 8px;gap:4px}
+.ph h3{font-size:12px}
+.nm,.fr{font-size:11px}
+.b{padding-top:2px}
+.tb{display:flex}
+.nx{display:flex}
+.leg{display:inline}
+.fr{grid-template-columns:auto minmax(0,1fr) 34px 46px}
+.fd{display:block;text-align:right;white-space:nowrap}
+.tr i{max-width:30px}
+}
+@container (max-width:310px){.ib{display:none}
+}
+@media (prefers-reduced-motion:reduce){.fg,.gh,.bf,.pv{transition:none}
+.bars.new .fg{animation:none}
+}
+</style>
 
-从上到下：
-1. 顶栏：面包屑写下钻路径（每级可点），右侧写统计周期、“对比上周”和“更新于 MM-DD HH:mm”。
-2. 结论：一句话，由当前范围的数据算出，写总量或差额、较上期变化、贡献最大的一块及占跌幅的比例、恶化最多的漏斗步骤；范围一变就重算。
-3. 指标：每个数带涨跌（箭头 + 颜色，比率差值写“点”）；旁边 ⓘ 就地展开三行口径：算什么、不算什么、统计范围，Esc 或点外面关闭。
-4. 三块并排，标题写成问题：“掉在哪个{维度}？”：每个子项一根柱子，虚框是上期，顶上写涨跌；“卡在哪一步？”：漏斗每步写转化率和变化，竖线标上期位置，恶化最多的一步标红；“是哪些单子？”：当前范围的明细表，写总数。
-5. 底部“下一步”：一句建议 + “导出明细”（只导当前范围）+ “转给 {负责人}”（带上当前范围）；没有异常时写“基本正常”，只留导出。
+<div class="d"><div class="top"><ol class="cr" aria-label="下钻路径"></ol><span class="rg">10-24 ~ 10-30 · 对比上周</span><span class="ts">更新于 10-31 09:20</span></div><p class="ans"></p><div class="kw"><div class="kp"></div><div class="def" id="def" hidden></div></div><div class="mid"><section class="pn"><div class="ph"><h3 class="q"></h3><small class="leg">虚框是上周</small><button type="button" class="dr" hidden></button></div><div class="bars" role="group"></div></section><section class="pn"><div class="ph"><h3>卡在哪一步？</h3><small class="leg">竖线是上周</small></div><div class="fn"></div></section><section class="pn tb"><div class="ph"><h3>是哪些单子？</h3><small class="cn"></small></div><div class="sc" tabindex="0" role="region" aria-label="未支付订单明细"><table><thead><tr><th>订单</th><th>在哪</th><th class="n">金额</th><th>原因</th></tr></thead><tbody></tbody></table></div></section></div><div class="nx"><p><b>下一步</b><span class="nt"></span></p><button type="button" class="btn ex">导出明细</button><button type="button" class="btn pri to"></button></div><p class="sr" role="status"></p></div>
 
-交互：点柱子只换范围，柱子原地高亮、其余变灰，结论、指标、漏斗、明细同一帧切换，再点取消；选中后出现“按{下一维度}拆 ›”，点了才下钻；Esc 先取消选中，再退回上一层，并把焦点还给原来那根柱子；路径写进 URL，切范围时旧请求作废。柱子是按钮，方向键切换，范围变化用 role="status" 播报。手机上单列，明细改卡片，“下一步”吸底。
+<script type="module">
+export default function demo(root) {
+  const CH = { mp: '小程序', tg: '团购', web: '官网', store: '门店' }, CT = { hz: '杭州', sh: '上海', nj: '南京', sz: '苏州' }, KD = { bean: '咖啡豆', gear: '器具', gift: '礼盒' };
+  const DIM = [['渠道', CH], ['城市', CT], ['品类', KD]];
+  const W = { mp: 1.3, tg: 1, web: .6, store: .8, hz: 1.3, sh: 1.2, nj: .8, sz: .7, bean: 1.2, gear: .7, gift: .5 }, PRICE = { bean: 168, gear: 268, gift: 218 };
+  // 最细一格（渠道 × 城市 × 品类）是底数，上面每一层都由它汇总，下钻到哪一层数字都对得上
+  const L = [];
+  for (const c in CH) for (const t in CT) for (const k in KD) {
+    const n = L.length, j = 1 + ((n * 37) % 11 - 5) / 400, v0 = 1000 * W[c] * W[t] * W[k], price = PRICE[k];
+    const a0 = v0 * .55, o0 = a0 * .72, p0 = o0 * .86;
+    const hurt = c === 'mp' ? (t === 'hz' ? (k === 'bean' ? .58 : .7) : t === 'sh' ? .95 : 1) : 1;
+    const v = v0 * { mp: 1, tg: .992, web: 1.006, store: .985 }[c], a = v * .55 * j, o = a * .72, p = o * .86 * hurt * (2 - j);
+    L.push({ k: [c, t, k], v, a, o, p, r: p * price, v0, a0, o0, p0, r0: p0 * price });
+  }
+  const sum = (sc) => { const s = { v: 0, a: 0, o: 0, p: 0, r: 0, v0: 0, a0: 0, o0: 0, p0: 0, r0: 0 }; for (const l of L) if (sc.every((x, i) => l.k[i] === x)) for (const f in s) s[f] += l[f]; return s; };
+  const STEP = [['访问', 'v'], ['加购', 'a'], ['下单', 'o'], ['支付', 'p']];
+  const rates = (s) => STEP.slice(1).map(([n, f], i) => { const g = STEP[i][1], now = s[f] / s[g] * 100, was = s[f + '0'] / s[g + '0'] * 100; return { n, now, was, d: now - was }; });
+  const worst = (s) => rates(s).reduce((a, b) => (b.d < a.d ? b : a));
+  const nameOf = (sc) => (sc.length ? DIM[sc.length - 1][1][sc.at(-1)] : '全部渠道');
+  const kids = (sc) => (sc.length < 3 ? Object.keys(DIM[sc.length][1]).map((k) => [...sc, k]) : []);
+  const money = (n) => (n >= 1e4 ? `¥${(n / 1e4).toFixed(1)} 万` : `¥${Math.round(n).toLocaleString('en-US')}`);
+  const int = (n) => Math.round(n).toLocaleString('en-US');
+  const pct = (a, b) => (a / b - 1) * 100;
+  const tag = (d, u, dp = 1) => (+Math.abs(d).toFixed(dp) === 0 ? '<em class="fl0">持平</em>' : `<em class="${d < 0 ? 'dn' : 'up'}">${d < 0 ? '▼' : '▲'}${Math.abs(d).toFixed(dp)}${u}</em>`);
 
-每一层的数由同一份底数汇总，子项之和等于父项。口径或负责人不确定的地方列出来问我。
+  const KPI = [
+    { t: '成交额', v: (s) => money(s.r), d: (s) => tag(pct(s.r, s.r0), '%'), yes: '已支付订单的实付金额，含运费', no: '退款、测试单、员工内购', at: '10-24 至 10-30，按支付时间，北京时间' },
+    { t: '订单数', v: (s) => int(s.p), d: (s) => tag(pct(s.p, s.p0), '%'), yes: '支付成功的订单，一单多件记 1 单', no: '拆单后的子单、测试单', at: '10-24 至 10-30，按支付时间，北京时间' },
+    { t: '支付转化', v: (s) => (s.p / s.o * 100).toFixed(1) + '%', d: (s) => tag((s.p / s.o - s.p0 / s.o0) * 100, ' 点'), yes: '支付成功数 ÷ 下单数', no: '同一购物车重复下单只记一次', at: '10-24 至 10-30 下单，24 小时内付款' },
+    { t: '客单价', v: (s) => '¥' + int(s.r / s.p), d: (s) => tag(pct(s.r / s.p, s.r0 / s.p0), '%'), yes: '成交额 ÷ 订单数', no: '退款不扣回，按发生当周算', at: '10-24 至 10-30，按支付时间，北京时间' },
+  ];
+  const WHO = { 加购: ['陈序', '商品页和价格'], 下单: ['陈序', '下单页和库存'], 支付: ['周岚', '收银台和优惠券'] };
+  const INFO = '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M8 7.4v3.4M8 5.2v.1"/></svg>';
+  const $ = (q) => root.querySelector(q);
+  const cr = $('.cr'), ans = $('.ans'), kp = $('.kp'), def = $('#def'), q = $('.q'), bars = $('.bars'), dr = $('.dr'), fn = $('.fn'), cn = $('.cn'), tbody = $('tbody'), nt = $('.nt'), ex = $('.ex'), to = $('.to'), st = $('.sr');
+  let path = [], sel = null, touched = false;
+  const scope = () => (sel ? [...path, sel] : path);
+
+  kp.innerHTML = KPI.map((m, i) => `<div class="kc"><div class="kl">${m.t}<button type="button" class="ib" data-i="${i}" aria-label="${m.t}的口径" aria-expanded="false" aria-controls="def">${INFO}</button></div><div class="kv"><b></b><span></span></div></div>`).join('');
+  fn.innerHTML = STEP.map(([n]) => `<div class="fr"><span>${n}</span><span class="tk"><i class="bf"></i><i class="pv"></i></span><span class="fv"></span><span class="fd"></span></div>`).join('');
+  const kcs = [...kp.children], frs = [...fn.children], ibs = [...kp.querySelectorAll('.ib')];
+
+  const verdict = (sc, s, w) => {
+    const d = s.r - s.r0, tail = w.d < -1 ? `；${w.n}从 ${w.was.toFixed(0)}% 掉到 ${w.now.toFixed(0)}%` : '，各步转化基本稳定';
+    if (!sc.length) {
+      const c = kids([]).map((k) => { const x = sum(k); return { k, d: x.r - x.r0 }; }).sort((a, b) => a.d - b.d)[0];
+      return `本周成交额 ${money(s.r)}，比上周${d < 0 ? '少' : '多'} ${Math.abs(pct(s.r, s.r0)).toFixed(1)}%，主要掉在${nameOf(c.k)}，占跌幅 ${Math.round(c.d / d * 100)}%。`;
+    }
+    const up = sum(sc.slice(0, -1)), pd = up.r - up.r0, share = d < 0 && pd < 0 ? Math.round(d / pd * 100) : 0;
+    return `${nameOf(sc)}${d < 0 ? '少了' : '多了'} ${money(Math.abs(d))}${share > 0 && share <= 100 ? `，占${sc.length > 1 ? nameOf(sc.slice(0, -1)) : ''}跌幅 ${share}%` : ''}${tail}。`;
+  };
+  const nextStep = (sc, s, w) => {
+    if (!sc.length) return ['跌幅集中在一块，先点开它看原因；要汇报可以先导出明细。', ''];
+    if (w.d >= -1 && s.r >= s.r0 * .97) return ['这一块基本正常，不用动，回上一层看别的。', ''];
+    if (sc[0] === 'mp' && sc[1] === 'hz') return ['10-27 收银台发版后开始掉，未支付多是券叠加失败，转给周岚回滚或修复。', '周岚'];
+    const [who, where] = WHO[w.n];
+    return [`把${nameOf(sc)}的${w.n}转给${who}，先查${where}。`, who];
+  };
+  const rows = (sc) => L.filter((l) => sc.every((x, i) => l.k[i] === x)).flatMap((l, n) => [0, 1, 2].map((i) => {
+    const hot = l.k[0] === 'mp' && l.k[1] === 'hz' && i < 2, names = [CH[l.k[0]], CT[l.k[1]], KD[l.k[2]]];
+    return { no: 'D' + (20417 + n * 7 + i * 3), at: names.slice(Math.min(sc.length, 2)).slice(0, 2).join(' · '), amt: Math.round(PRICE[l.k[2]] * (1 + i * .35)), why: hot ? '券叠加失败' : i === 1 ? '用户取消' : '超时未付', hot };
+  })).sort((a, b) => b.hot - a.hot || b.amt - a.amt).slice(0, 6);
+
+  const drawBars = (fresh) => {
+    const list = kids(path).map((k) => ({ k, s: sum(k) })), max = Math.max(...list.map((x) => Math.max(x.s.r, x.s.r0)));
+    bars.setAttribute('aria-label', `各${DIM[path.length][0]}成交额，较上周`);
+    bars.innerHTML = list.map(({ k, s }) => { const d = pct(s.r, s.r0); return `<button type="button" class="b" data-k="${k.at(-1)}" aria-pressed="false" aria-label="${nameOf(k)}，成交额 ${money(s.r)}，较上周${d < 0 ? '下降' : '上升'} ${Math.abs(d).toFixed(1)}%">${tag(d, '%', 0)}<span class="tr"><i class="gh" style="height:${s.r0 / max * 100}%"></i><i class="fg" style="height:${s.r / max * 100}%"></i></span><span class="nm">${nameOf(k)}</span></button>`; }).join('');
+    bars.classList.toggle('new', !!fresh);
+  };
+  const draw = () => {
+    const sc = scope(), s = sum(sc), w = worst(s);
+    cr.innerHTML = [[], ...sc.map((_, i) => sc.slice(0, i + 1))].map((p, i, all) => (i === all.length - 1 ? `<li><span aria-current="page">${nameOf(p)}</span></li>` : `<li><button type="button" data-n="${i}">${nameOf(p)}</button></li>`)).join('');
+    ans.textContent = verdict(sc, s, w);
+    KPI.forEach((m, i) => { kcs[i].querySelector('b').textContent = m.v(s); kcs[i].querySelector('.kv span').innerHTML = m.d(s); });
+    q.textContent = `掉在哪个${DIM[path.length][0]}？`;
+    bars.classList.toggle('has', !!sel);
+    bars.querySelectorAll('.b').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.k === sel)));
+    dr.hidden = !sel || path.length >= 2;
+    if (!dr.hidden) { dr.textContent = `按${DIM[path.length + 1][0]}拆 ›`; dr.setAttribute('aria-label', `把${nameOf(sc)}按${DIM[path.length + 1][0]}拆开`); }
+    const r = rates(s);
+    STEP.forEach(([, f], i) => {
+      const x = frs[i], bad = i > 0 && r[i - 1].n === w.n && w.d < -1;
+      x.querySelector('.bf').style.width = s[f] / s.v * 100 + '%';
+      x.querySelector('.pv').style.left = s[f + '0'] / s.v0 * 100 + '%';
+      x.querySelector('.fv').textContent = i ? r[i - 1].now.toFixed(0) + '%' : money(s.v).replace('¥', '');
+      x.querySelector('.fd').innerHTML = i ? tag(r[i - 1].d, ' 点') : tag(pct(s.v, s.v0), '%');
+      x.classList.toggle('bad', bad);
+    });
+    cn.textContent = `未支付 ${int(s.o - s.p)} 笔`;
+    tbody.innerHTML = rows(sc).map((x) => `<tr><td>${x.no}</td><td>${x.at}</td><td class="n">¥${x.amt}</td><td${x.hot ? ' class="hot"' : ''}>${x.why}</td></tr>`).join('');
+    const [text, who] = nextStep(sc, s, w);
+    nt.textContent = text; to.hidden = !who; to.textContent = `转给 ${who}`; to.disabled = false; ex.textContent = '导出明细';
+  };
+  const go = (p, s, fresh) => { touched = true; const drill = fresh || p.length !== path.length; path = p; sel = s; if (drill) drawBars(true); draw(); st.textContent = `当前范围：${['全部渠道', ...scope().map((_, i) => nameOf(scope().slice(0, i + 1)))].join(' 下的 ')}`; };
+  const closeDef = () => { def.hidden = true; ibs.forEach((b) => b.setAttribute('aria-expanded', 'false')); };
+
+  bars.addEventListener('click', (e) => { const b = e.target.closest('.b'); if (!b) return; go(path, b.dataset.k === sel ? null : b.dataset.k); bars.querySelector(`[data-k="${b.dataset.k}"]`).focus(); });
+  bars.addEventListener('keydown', (e) => {
+    const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (!d) return; e.preventDefault();
+    const list = [...bars.children], i = list.indexOf(e.target.closest('.b')); list[(i + d + list.length) % list.length].focus();
+  });
+  dr.addEventListener('click', () => { go([...path, sel], null, true); bars.querySelector('.b').focus(); });
+  cr.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; go(scope().slice(0, +b.dataset.n), null, true); bars.querySelector('.b').focus(); });
+  kp.addEventListener('click', (e) => {
+    const b = e.target.closest('.ib'); if (!b) return; const open = b.getAttribute('aria-expanded') === 'true'; closeDef(); if (open) return;
+    const m = KPI[+b.dataset.i]; b.setAttribute('aria-expanded', 'true'); def.hidden = false;
+    def.innerHTML = `<p><b>算</b>${m.yes}</p><p><b>不算</b>${m.no}</p><p><b>范围</b>${m.at}</p>`;
+  });
+  root.addEventListener('click', (e) => { if (!e.target.closest('.kw')) closeDef(); });
+  root.querySelector('.d').addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (!def.hidden) { const b = kp.querySelector('[aria-expanded=true]'); closeDef(); b.focus(); } else if (sel) { const k = sel; go(path, null); bars.querySelector(`[data-k="${k}"]`).focus(); } else if (path.length) { const up = path.at(-1); go(path.slice(0, -1), up, true); bars.querySelector('[aria-pressed=true]').focus(); }
+  });
+  ex.addEventListener('click', () => { ex.textContent = '已加入导出'; st.textContent = `${nameOf(scope())}的未支付订单明细已加入导出`; });
+  to.addEventListener('click', () => { to.textContent = '已转交'; to.disabled = true; st.textContent = `已把${nameOf(scope())}转给负责人，对方打开就是当前这一块`; });
+
+  drawBars(); draw();
+  // 打开后先演示一次：选中跌得最多的那根
+  setTimeout(() => { if (root.host.isConnected && !touched) { go([], 'mp'); touched = false; } }, 420);
+}
+</script>

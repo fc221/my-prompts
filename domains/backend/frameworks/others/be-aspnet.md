@@ -41,3 +41,28 @@ ASP.NET Core（以 .NET 10 LTS 为准，和 .NET 8 不同的地方在要点里�
 新建时：在 Features/ 下建 {模块} 文件夹，写请求和响应类型、服务、端点或控制器、DbContext 映射和迁移，用 WebApplicationFactory 写覆盖 201、400、404 的接口测试。
 检查时：先找生命周期错配、.Result 或 .Wait()、手动 new HttpClient、每个端点各自 try-catch、启动时自动迁移；逐条列出文件和改法，会改变响应的先问我。
 最后列出改动的文件和验证命令（dotnet build、dotnet test）。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+  Program.cs                    注册服务、中间件顺序、映射端点
+* Features/
+  * Orders/                     按功能分文件夹
+      OrderEndpoints.cs         MapGroup + TypedResults
+      OrderService.cs           AddScoped 注册
+      CreateOrderRequest.cs
+      OrderResponse.cs
+  Data/
+    AppDbContext.cs             Scoped，不注入单例
+    Migrations/                 dotnet ef migrations add
+  appsettings.json              默认值
+  appsettings.Development.json  环境覆盖
+  tests/Mall.Api.Tests/         WebApplicationFactory
+`), { title: 'ASP.NET Core · Program.cs 加功能文件夹' });
+}
+</script>

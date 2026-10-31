@@ -39,3 +39,17 @@ order: 30
 2. 按规则改：配置集中加载成类型化对象并在启动时校验，缺失即失败；密钥移入密钥管理服务，仓库只留 .env.example；CI 加密钥扫描；应用账号和迁移账号分开；密钥支持新旧版本并存；敏感字段用 AES-256-GCM 信封加密加盲索引；日志和错误信息里的密钥打码。
 3. 已泄露的密钥列出清单并给出轮换步骤，只删文件不算处理完。
 4. 汇报：配置项清单、改动文件、需要人工轮换的密钥、验证方式（缺配置时启动失败、密钥扫描通过）。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '代码默认值', note: '只放安全默认值' }, { t: '环境配置', note: '按环境分文件', via: '覆盖' }, { t: '环境变量', note: 'DB_HOST', via: '覆盖' }, { t: '密钥管理', note: 'KMS、Vault', acc: true, via: '覆盖' }],
+    [{ t: '类型化配置对象', note: '启动时一次加载', acc: true }, { t: '启动校验', note: '缺项或开发默认值就退出' }, { t: '业务代码', note: '只读这个对象' }],
+  ]), { title: '配置与密钥 · 优先级从左到右递增' });
+}
+</script>

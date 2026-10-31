@@ -38,3 +38,17 @@ order: 20
 2. 按规则改：保证单实例执行（CronJob Forbid、集群调度器或分布式锁，锁过期大于最长执行时间）；显式使用 Asia/Shanghai；以业务日期为键记录进度，已完成跳过、可断点续跑；每批 500–1000 条按主键游标推进，大任务拆分后投递到任务队列；写运行记录，失败和漏跑都告警；写明补跑策略；提供按业务日期手动重跑的入口。
 3. 验证：两个实例同时启动时{任务名}只执行一次；中途杀掉进程后重跑，结果正确且不重复。
 4. 汇报：任务清单改前改后对比、改动文件、验证结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '4 个实例触发', note: '每天 02:00' }, { t: '抢分布式锁', note: '只有 1 个拿到', acc: true }, { t: '查完成记录', note: '已完成就跳过' }, { t: '分批处理', note: '每批 500 条' }],
+    [{ t: '记断点', note: '中断后从这里续跑' }, { t: '写运行记录', note: '条数、状态、耗时' }, { t: '该跑没跑', note: '30 分钟无成功就告警', bad: true, via: '监控' }],
+  ]), { title: '每日对账 settle:2026-10-28 · 按 Asia/Shanghai 调度' });
+}
+</script>

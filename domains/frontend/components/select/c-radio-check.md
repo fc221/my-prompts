@@ -28,3 +28,27 @@ order: 30
 ## 提示词
 
 在{新建 API Key 表单}里放两组选项：“所属环境”单选（生产 / 测试 / 开发）横排在标签下方，选项间距 24px，不预选；“权限范围”复选（读取 / 写入 / 删除）前面带“全选”三态复选框；选项多或每项带说明时改竖排、间距 8px；控件 16px、与文字间距 8px，整行可点、行高 32px（触屏 44px）；用 fieldset 和 legend 分组，单选方向键切换；窄屏横排放不下时自动换行。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.w{width:100%;max-width:360px;display:flex;flex-direction:column;gap:16px}
+fieldset{min-width:0;margin:0;padding:0;border:0}
+legend{padding:0;margin-bottom:8px}
+.ch{display:flex;flex-wrap:wrap;gap:0 24px}
+.ch label{display:inline-flex;align-items:center;gap:8px;min-height:32px;cursor:pointer}
+input{width:16px;height:16px;accent-color:#3b5bdb;cursor:pointer}
+.dv{align-self:center;width:1px;height:16px;margin:0 -8px;background:#c9ced6}
+</style>
+
+<div class="s"><div class="w"><fieldset><legend class="lab">所属环境</legend><div class="ch"><label><input type="radio" name="env">生产</label><label><input type="radio" name="env">测试</label><label><input type="radio" name="env">开发</label></div></fieldset><fieldset><legend class="lab">权限范围</legend><div class="ch"><label><input type="checkbox" id="all">全选</label><span class="dv"></span><label><input type="checkbox" class="it" checked>读取</label><label><input type="checkbox" class="it">写入</label><label><input type="checkbox" class="it">删除</label></div></fieldset></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const all = root.querySelector('#all'), its = [...root.querySelectorAll('.it')];
+  const sync = () => { const n = its.filter((i) => i.checked).length; all.checked = n === its.length; all.indeterminate = n > 0 && n < its.length; };
+  all.addEventListener('change', () => { its.forEach((i) => { i.checked = all.checked; }); sync(); });
+  its.forEach((i) => i.addEventListener('change', sync)); sync();
+}
+</script>

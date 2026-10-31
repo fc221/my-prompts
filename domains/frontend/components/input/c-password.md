@@ -28,3 +28,33 @@ order: 50
 ## 提示词
 
 把{注册页的“设置密码”}做成密码框：高 40px（触屏 44px），右侧眼睛按钮离边框 12px，切换明文时 aria-label 在“显示密码 / 隐藏密码”间变化并设 aria-pressed，焦点不跳走；autocomplete="new-password"，关闭拼写检查和自动大写；框下逐条列出规则（至少 8 位、包含字母和数字），满足一条勾一条；检测到大写锁定时提示；允许粘贴；错误时边框变红并用 aria-describedby 关联说明；窄屏撑满。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.w{width:100%;max-width:300px;display:flex;flex-direction:column;gap:8px}
+.b{display:flex;flex-direction:column;gap:4px}
+.pw{position:relative;display:flex}
+.pw .inp{flex:1;padding-right:40px}
+.eye{position:absolute;right:4px;top:4px;display:grid;place-items:center;width:24px;height:24px;padding:0;border:0;border-radius:4px;background:none;color:#5b616e;cursor:pointer}
+.eye:hover{background:#f5f6f8;color:#1f2329}
+.eye[aria-pressed=true]{color:#3b5bdb}
+.rules{display:flex;flex-wrap:wrap;gap:0 16px;margin:0;padding:0;list-style:none;font-size:12px;line-height:20px;color:#5b616e}
+.rules li::before{content:"○";display:inline-block;width:16px}
+.rules .ok{color:#12805c}
+.rules .ok::before{content:"✓"}
+</style>
+
+<div class="s"><div class="w"><label class="lab" for="p">设置密码</label><div class="b"><div class="pw"><input class="inp" id="p" type="password" autocomplete="new-password" spellcheck="false" autocapitalize="off" aria-describedby="pr pc"><button type="button" class="eye" aria-label="显示密码" aria-pressed="false"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z"/><circle cx="8" cy="8" r="2"/></svg></button></div><ul class="rules" id="pr"><li data-r="len">至少 8 位</li><li data-r="mix">包含字母和数字</li></ul><p class="help warn" id="pc" hidden>大写锁定已打开</p></div></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const p = root.querySelector('#p'), eye = root.querySelector('.eye'), caps = root.querySelector('#pc');
+  const test = { len: (v) => v.length >= 8, mix: (v) => /[a-z]/i.test(v) && /\d/.test(v) };
+  p.addEventListener('input', () => root.querySelectorAll('.rules li').forEach((li) => li.classList.toggle('ok', test[li.dataset.r](p.value))));
+  const capsCheck = (e) => { if (e.getModifierState) caps.hidden = !e.getModifierState('CapsLock'); };
+  p.addEventListener('keydown', capsCheck); p.addEventListener('keyup', capsCheck);
+  eye.addEventListener('click', () => { const show = p.type === 'password'; p.type = show ? 'text' : 'password'; eye.setAttribute('aria-pressed', String(show)); eye.setAttribute('aria-label', show ? '隐藏密码' : '显示密码'); });
+}
+</script>

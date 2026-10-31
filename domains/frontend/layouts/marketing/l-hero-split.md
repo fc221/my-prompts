@@ -29,3 +29,39 @@ order: 10
 ## 提示词
 
 {产品}官网首屏用「左文右图」：容器最大宽度 1240px，左侧 6 栏放标题“{价值主张}”（不超过 2 行）、一句副标题和主次两个按钮（“{主行动}”“{次行动}”），右侧 6 栏放真实产品截图（固定 16:10，优先加载）；首屏约 85vh，底部露出下一节；导航与正文左对齐，滚动后吸顶加底色；窄于 768px 改为文字在上、图在下。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 1fr',
+  rows: '13% 1fr 10%',
+  areas: ['nav nav', 'txt img', 'nx nx'],
+  boxes: {
+    nav: {
+      inner: {
+        cols: '18% 1fr 20%',
+        rows: '1fr',
+        areas: ['logo links cta'],
+        boxes: { logo: 'Logo', links: '导航', cta: '按钮' },
+      },
+    },
+    txt: {
+      inner: {
+        cols: '1fr',
+        rows: '1fr 36% 16% 18% 1fr',
+        areas: ['.', 't', 's', 'b', '.'],
+        boxes: { t: { label: '大标题', acc: true }, s: '副标题', b: '主次按钮' },
+      },
+    },
+    img: '产品截图',
+    nx: { label: '下一节露出', kind: 'heading', text: '为什么团队选择 MyPrompts', center: true },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: '12% 22% 10% 11% 1fr',
+  areas: ['nav', 't', 's', 'b', 'img'],
+  boxes: { nav: 'Logo ☰', t: { label: '大标题', acc: true }, s: '副标题', b: '按钮', img: '截图' },
+};
+```

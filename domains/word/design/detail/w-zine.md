@@ -40,3 +40,59 @@ Word 做杂志版面最怕到处拖文本框，一改字就错位。正文用分
 3. 正文第一段首字下沉 3 行；从正文挑一句做引文，18pt，上下各一条 1.5 磅强调色线。
 4. 插一张通栏图片（{图片说明}），前后用连续分节符切回一栏；标题要压在图上时，图片衬于文字下方，标题用白字加淡阴影。
 5. 页面背景用 {背景，如 浅米色 #F7F3EC}，页眉放刊名和期号，页码在外侧；格式全部写进样式，不用空格和回车调位置，非系统字体嵌入文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-sp{display:flex;filter:drop-shadow(0 2px 3px rgba(16,24,40,.12)) drop-shadow(0 12px 16px rgba(16,24,40,.14))}
+.m-pg{position:relative;display:flex;flex-direction:column;width:262px;height:350px;padding:16px 18px 12px;background:radial-gradient(circle at 20% 10%,rgba(255,255,255,.7),transparent 60%),#f7f3ec;color:#1c1917;font-family:"Songti SC","SimSun",serif;overflow:hidden}
+.m-pg.l{box-shadow:inset -10px 0 14px -12px rgba(60,40,20,.35)}
+.m-pg.r{box-shadow:inset 10px 0 14px -12px rgba(60,40,20,.35)}
+.m-desk .m-hd{display:flex;justify-content:space-between;margin:0 0 12px;color:#78716c;font:8px/1 system-ui,"PingFang SC",sans-serif;letter-spacing:.08em}
+.m-desk .m-k{margin:0;color:#c2410c;font:700 8.5px/1 system-ui,"PingFang SC",sans-serif;letter-spacing:.3em}
+.m-desk .m-t{margin:7px 0 0;font:900 25px/1.12 "Songti SC","SimSun",serif;letter-spacing:-.01em}
+.m-desk .m-s{margin:8px 0 0;color:#57534e;font:11px/1.55 "STKaiti","KaiTi",serif}
+.m-desk .m-by{margin:7px 0 10px;padding-bottom:8px;border-bottom:1px solid #d6d3d1;color:#78716c;font:8px/1 system-ui,"PingFang SC",sans-serif;letter-spacing:.06em;display:flex;justify-content:space-between;align-items:center}
+.m-col{column-count:2;column-gap:14px;font-size:8.6px;line-height:1.65;text-align:justify;color:#292524}
+.m-col p{margin:0 0 4px!important;text-indent:2em}
+.m-col p.dc{text-indent:0}
+.m-dc{float:left;margin:2px 4px 0 0;color:#c2410c;font:900 31px/.9 "Songti SC","SimSun",serif}
+.m-q{break-inside:avoid;margin:6px 0 7px!important;padding:5px 0;border-top:1.5px solid #c2410c;border-bottom:1.5px solid #c2410c;font:700 12px/1.4 "Songti SC","SimSun",serif;text-indent:0!important;color:#1c1917}
+.m-ph{position:relative;height:150px;margin:-16px -18px 0;background:radial-gradient(ellipse at 70% 35%,rgba(255,214,150,.75),transparent 45%),linear-gradient(180deg,rgba(20,14,8,.05),rgba(20,14,8,.55)),linear-gradient(100deg,#6b4f3a,#a37b57 40%,#3e2f25)}
+.m-ph::before{content:"";position:absolute;left:16%;right:40%;bottom:24%;height:30%;background:repeating-linear-gradient(90deg,rgba(255,236,200,.55) 0 10px,transparent 10px 13px);filter:blur(.4px)}
+.m-ph b{position:absolute;left:18px;right:18px;bottom:14px;color:#fff;font:900 17px/1.25 "Songti SC","SimSun",serif;text-shadow:0 1px 6px rgba(0,0,0,.55)}
+.m-ph i{position:absolute;left:18px;top:14px;color:rgba(255,255,255,.85);font:700 8px/1 system-ui,"PingFang SC",sans-serif;font-style:normal;letter-spacing:.3em}
+.m-desk .m-cap{margin:5px 0 9px;color:#78716c;font:7.5px/1.4 system-ui,"PingFang SC",sans-serif}
+.m-desk .m-pn{margin:auto 0 0;color:#c2410c;font:700 9px/1 system-ui;display:flex}
+.m-pg.r .m-pn{justify-content:flex-end}
+.m-pill{position:absolute;padding:1px 6px;border-radius:8px;background:rgba(43,87,154,.92);color:#fff;font:8.5px/1.5 system-ui,"PingFang SC",sans-serif;white-space:nowrap}
+.m-pill.b{position:static;letter-spacing:0}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const left = '<div class="m-pg l"><p class="m-hd"><span>门店内刊</span><span>2026 · 10 月号</span></p><p class="m-k">店长说</p>'
+    + '<p class="m-t">把一家社区店，<br>开成街坊的客厅</p>'
+    + '<p class="m-s">开店第三年，陈屿把 60 平方米的便利店，变成了街坊每天都想来坐坐的地方。</p>'
+    + '<p class="m-by"><span>文　沈未　｜　摄影　顾一舟</span><span class="m-pill b">连续分节符 ↓ 两栏</span></p>'
+    + '<div class="m-col"><p class="dc"><span class="m-dc">早</span>上七点，翠苑三区的卷帘门才拉起一半，就有老顾客弯腰钻进来买热豆浆。陈屿说，社区店卖的不只是商品，更是一种“随时有人在”的安心。</p>'
+    + '<p>开业第一年，他发现傍晚放学的孩子最多，就把收银台旁的一角改成写作业的小桌，配了台灯和一壶温水。</p>'
+    + '<p class="m-q">“街坊愿意多待五分钟，比多卖一瓶水更要紧。”</p>'
+    + '</div>'
+    + '<p class="m-pn">24</p><span class="m-pill" style="right:18px;top:44px">一栏</span></div>';
+  const right = '<div class="m-pg r"><div class="m-ph"><i>门店故事</i><b>傍晚五点，<br>小桌旁坐满了写作业的孩子</b></div>'
+    + '<p class="m-cap">图片衬于文字下方，白字加淡阴影；图注 7.5pt 灰色</p>'
+    + '<div class="m-col"><p>第二年，他把快递代收点挪到门口，下雨天给晚归的人留一把伞。</p><p>陈屿给每位常客记了一张小卡片：谁家老人只喝低糖酸奶，谁家孩子对花生过敏。新来的店员上岗前，要先把卡片背熟。</p>'
+    + '<p>今年夏天，门店的复购率做到了 68%，在全区 42 家门店里排第一。</p>'
+    + '<p>问他下一步想做什么，他指了指门口那块空地：“想摆两张长椅，让等公交的人也能歇歇脚。”</p></div>'
+    + '<p class="m-pn">25</p></div>';
+  draw(root, '<div class="m-sp">' + left + right + '</div>', { center: true, min: 0.35 });
+}
+</script>

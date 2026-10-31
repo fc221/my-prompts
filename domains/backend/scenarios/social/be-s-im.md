@@ -41,3 +41,22 @@ order: 70
 4. 群聊消息只存一份，成员只记 read_seq，未读数 = 最新 seq − read_seq；{大群人数阈值}人以上只推新消息提示。
 5. 会话列表按最后一条消息时间倒序。
 最后给出压测和对账方法：{目标在线数}个连接每秒共发 1 万条，测端到端延迟 P99；随机断网重连、重复发送，断言每个客户端收到的消息与消息表一致、无重复、按 seq 有序；每天抽查会话列表的 last_seq 与消息表最大 seq 一致。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['发送方', 'IM 服务', '消息表', '接收方'], [
+    [0, 1, '发送 c81'],
+    [1, 2, '取 seq 落库'],
+    [1, 0, 'ack seq 1042', 'r'],
+    [1, 3, '推送 seq 1042'],
+    [3, 3, '上次 1040，缺 1041'],
+    [3, 1, '拉 after_seq=1040'],
+    [1, 3, '补 1041、1042', 'r'],
+  ]), { title: '会话内 seq 定顺序，跳号就补拉' });
+}
+</script>

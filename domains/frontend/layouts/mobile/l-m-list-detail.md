@@ -28,3 +28,45 @@ order: 30
 ## 提示词
 
 {对象}移动端用「列表 → 详情」：列表页每项双行 68px（标题 + 摘要或价格），左右 16px，下拉刷新、上拉加载带三态；点击进入全屏详情页：顶部大图 → 关键信息 → 详细说明，底部固定操作栏（主按钮 48px，加安全区）；返回列表恢复滚动位置和筛选；从分享链接直接进入详情时显示回首页；平板以上改左右主从分栏。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '6% 1fr 9% 1fr 6%',
+  rows: '1fr',
+  areas: ['. ls ar dt .'],
+  boxes: {
+    ls: {
+      card: true,
+      inner: {
+        cols: '1fr',
+        rows: 'auto auto auto auto auto 1fr',
+        areas: ['t', 'r1', 'r2', 'r3', 'r4', '.'],
+        boxes: {
+          t: { label: '列表页', kind: 'mtop', text: '订单' },
+          r1: '条目',
+          r2: { label: '点击', acc: true },
+          r3: '条目',
+          r4: '条目',
+        },
+      },
+    },
+    ar: '→',
+    dt: {
+      card: true,
+      inner: {
+        cols: '1fr',
+        rows: '13% 30% 1fr 15%',
+        areas: ['t', 'img', 'info', 'bar'],
+        boxes: {
+          t: { label: '‹ 详情', kind: 'mtop', text: '订单详情' },
+          img: '大图',
+          info: { label: '关键信息', acc: true, kind: 'field' },
+          bar: { label: '底部操作栏', kind: 'opbtns' },
+        },
+      },
+    },
+  },
+};
+```

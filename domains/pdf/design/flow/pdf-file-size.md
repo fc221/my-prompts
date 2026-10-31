@@ -41,3 +41,17 @@ order: 60
 4. 打印样式里去掉 filter、backdrop-filter 和带模糊的阴影；数据点多的图表先聚合。
 5. 生成后用 qpdf 做无损整理；会丢标签的有损压缩先问我。
 最后给出改前改后的大小、每项改动各省了多少，以及改了哪些文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '先测量', note: 'pdffonts · pdfimages -list', acc: true }, { t: '字体子集', note: '1 个家族 2 个字重' }, { t: '图片降到 300dpi', note: 'JPEG 80 · 去 EXIF' }, { t: 'logo 只存一份', note: '同一文件地址' }],
+    [{ t: '去掉模糊效果', note: 'filter、模糊阴影' }, { t: 'qpdf 无损整理', note: '重写对象流' }, { t: '记录每份字节数', note: '超阈值告警', acc: true }],
+  ]), { title: '单页单据 ≤ 300KB · 图文报告 ≤ 3MB' });
+}
+</script>

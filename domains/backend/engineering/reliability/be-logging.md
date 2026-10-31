@@ -39,3 +39,25 @@ QPS、耗时分布这类统计数字用指标，看「指标与链路追踪」�
 2. 按规则改：生产环境输出单行 JSON 到 stdout，固定字段 ts、level、service、env、version、trace_id、span_id、msg；入口中间件读取 traceparent 或生成 trace_id 放进上下文，异步任务和消息消费时传递；按级别规则调整；日志框架层统一脱敏；访问日志记路由模板、状态码和耗时。
 3. 验证：发起一次{典型请求，如下单}，贴出它产生的全部日志行，确认 trace_id 一致、没有敏感信息。
 4. 汇报：改动的配置和文件、字段规范、脱敏字段清单、验证用的日志样例。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: 'stdout · 一行 JSON（这里折行显示）', text: `
+"ts": "2026-10-29T02:15:30.123Z",
+"level": "INFO", "service": "order-api",
+"trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+"span_id": "00f067aa0ba902b7",
+"tenant_id": 1024, "user_id": 10086,
+// msg 是固定短句，变量放进字段
+"msg": "订单已创建", "order_no": "SO2026102900017",
+"amount_cent": 12800,
+// 手机号掩码，密码和令牌不进日志
+"phone": "138****5678"
+` }]), { title: '结构化日志 · 下单成功' });
+}
+</script>

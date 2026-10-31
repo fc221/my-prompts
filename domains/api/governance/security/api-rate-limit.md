@@ -43,3 +43,27 @@ order: 30
 5. 所有响应带 RateLimit-Policy 和 RateLimit 头，并加进 Access-Control-Expose-Headers。
 6. 导出类重接口单独限制并发。
 最后说明改了哪些文件，并用脚本连续请求演示：第几次开始返回 429、Retry-After 的值、等待后恢复，以及两个商户的计数互不影响。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+GET /orders?storeId=s_1024
+X-Api-Key: sk_live_…8f3a
+`, `
+429 Too Many Requests
+Retry-After: 42
+RateLimit-Policy: "default";q=600;w=60
+RateLimit: "default";r=0;t=42
+Content-Type: application/problem+json
+
+"status": 429,
+"code": "RATE_LIMITED",
+"detail": "每分钟 600 次已用完，42 秒后恢复"
+`), { title: '限流 · 429 带 RateLimit 和 Retry-After' });
+}
+</script>

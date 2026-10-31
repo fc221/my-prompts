@@ -29,3 +29,24 @@ order: 40
 ## 提示词
 
 把{卡片}做成「3D 翻转卡片」：点击或按 Enter 时绕 Y 轴翻转 180°（perspective 1000px，450ms），正反两面都设 backface-visibility: hidden，背面显示{背面内容}；翻转按钮有 aria-pressed；在网格里时先飞到画面中央放大（300ms）再翻，关闭时翻回再飞回原位，原位留占位；减少动态效果时直接切换正反面。
+
+## 示例
+
+<style>
+.zone{height:100%;display:grid;place-items:center;background:#f4f5f7;perspective:1000px}
+.card{position:relative;width:220px;height:130px;border:0;padding:0;background:none;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,0,0,1);cursor:pointer;font:600 15px system-ui}
+.card[aria-pressed=true]{transform:rotateY(180deg)}
+.f{position:absolute;inset:0;display:grid;place-items:center;border-radius:14px;backface-visibility:hidden}
+.front{background:#fff;color:#18181b;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.back{background:#18181b;color:#fff;transform:rotateY(180deg)}
+@media (prefers-reduced-motion:reduce){.card{transition:none}
+}
+</style>
+
+<div class="zone"><button class="card" aria-pressed="false"><span class="f front">正面 · 点我翻转</span><span class="f back">背面 · 详细信息</span></button></div>
+
+<script type="module">
+export default function demo(root) {
+  const c = root.querySelector('.card'); c.onclick = () => c.setAttribute('aria-pressed', String(c.getAttribute('aria-pressed') !== 'true'));
+}
+</script>

@@ -36,3 +36,155 @@ order: 40
 ## 提示词
 
 把{拖甩关闭、拉面板等手势}的松手动画改成弹簧：拖动时元素一比一跟手；松手时取最后 80ms 的位移算速度，把位置和速度作为弹簧初值，目标是{目标位置}；每帧按“加速度 = −刚度 × 距离 − 阻尼 × 速度”累加，刚度 {刚度，如 180}，阻尼比 {阻尼比，如 0.8}；离目标小于 0.5px 且速度小于 5px/s 时吸到目标值并结束；只动 transform；动画途中再次按下，从当前位置接住；松手速度超过 {关闭速度} 或位移超过{关闭距离}时目标改为关闭位置，否则回到原位；减少动态效果时跳过弹簧直接到位。给出刚度和阻尼两个常量，放在一处方便调。
+
+## 示例
+
+<style>
+.st{height:100%;display:flex;flex-direction:column;gap:6px;padding:9px 12px;background:#f5f6f8;color:#1f2329;font:12px/16px system-ui,"PingFang SC",sans-serif}
+.top{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#5b616e}
+.top .ctl{flex:none;height:28px;padding:0 12px;font-size:12px}
+.main{flex:none;display:flex;flex-direction:column;gap:6px;min-width:0}
+.lane{--c:#8a909c;position:relative;height:40px;border-radius:10px;background:#fff;box-shadow:0 0 0 1px #e3e6eb;touch-action:none;cursor:grab;user-select:none}
+.lane.sp{--c:#3b5bdb}
+.lane span{position:absolute;right:10px;top:12px;color:var(--c);font-weight:600;pointer-events:none}
+.lane.sp span{color:#2f49b8}
+.lane.ez span{color:#5b616e}
+.ball{position:absolute;left:6px;top:6px;width:28px;height:28px;border-radius:50%;background:var(--c);box-shadow:0 2px 5px rgba(15,23,42,.3);transform:translateX(var(--x,0))}
+.mk{position:absolute;top:0;bottom:0;left:calc(20px + var(--m,0px));width:0;border-left:1px dashed #8a909c;opacity:0}
+.st.ran .mk{opacity:1}
+.msg{flex:1;min-height:0;margin:0;color:#454b57}
+.side{display:none}
+.plot{height:92px;border-radius:10px;background:#fff;box-shadow:0 0 0 1px #e3e6eb}
+.plot svg{display:block;width:100%;height:100%}
+.plot line{stroke:#dfe2e8;stroke-width:1;vector-effect:non-scaling-stroke}
+.plot polyline{fill:none;stroke-width:2;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.plot .a{stroke:#8a909c}
+.plot .b{stroke:#3b5bdb}
+.cap{margin:0;color:#5b616e}
+.sl{display:grid;grid-template-columns:30px minmax(0,1fr) 28px;align-items:center;gap:6px;font-variant-numeric:tabular-nums}
+.sl input{width:100%;margin:0;accent-color:#3b5bdb}
+.sl output{text-align:right}
+.tip{margin:0;color:#2f49b8;font-weight:600}
+@container (min-height:260px){
+.st{display:grid;grid-template-columns:minmax(0,1fr) 250px;grid-template-rows:auto auto minmax(0,1fr);column-gap:14px;padding:12px 16px;font-size:13px;line-height:18px}
+.top{grid-column:1}
+.main{grid-column:1;gap:10px}
+.lane{height:56px}
+.lane span{top:19px}
+.ball{left:10px;top:10px;width:36px;height:36px}
+.mk{left:calc(28px + var(--m,0px))}
+.msg{grid-column:1}
+.side{grid-column:2;grid-row:1/4;display:flex;flex-direction:column;gap:6px;min-height:0}
+}
+</style>
+
+<div class="st"><div class="top"><span>拖小球甩出去再松手</span><button type="button" class="ctl go">甩一下</button></div><div class="main"><div class="lane ez" aria-label="固定时长缓动"><i class="mk"></i><div class="ball"></div><span>缓动 300ms</span></div><div class="lane sp" aria-label="弹簧"><i class="mk"></i><div class="ball"></div><span>弹簧</span></div></div><p class="msg" role="status">两个球同时跟手，松手后各走各的</p><div class="side"><div class="plot" aria-hidden="true"><svg viewBox="0 0 200 92" preserveAspectRatio="none"><line x1="0" y1="46" x2="200" y2="46"/><line class="t0" x1="20" y1="0" x2="20" y2="92"/><polyline class="a"/><polyline class="b"/></svg></div><p class="cap">速度曲线：竖线是松手。灰线一步跳开，蓝线连着走</p><label class="sl">刚度<input type="range" class="k" min="60" max="400" step="10" value="180"><output class="kv"></output></label><label class="sl">阻尼<input type="range" class="c" min="6" max="40" step="1" value="22"><output class="cv"></output></label><p class="tip"></p></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const $ = (q) => root.querySelector(q);
+  const st = $('.st'), lanes = [...root.querySelectorAll('.lane')], balls = [...root.querySelectorAll('.ball')], msg = $('.msg');
+  const DUR = 300, SPAN = 1100;
+  const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const room = () => lanes[0].clientWidth - balls[0].offsetWidth - 2 * balls[0].offsetLeft;
+  const put = (i, x) => balls[i].style.setProperty('--x', x + 'px');
+  let k = 180, c = 22, run = 0, drag = null;
+
+  const tune = () => {
+    const z = c / (2 * Math.sqrt(k));
+    $('.kv').textContent = k;
+    $('.cv').textContent = c;
+    $('.tip').textContent = `阻尼比 ${z.toFixed(2)}：${z < 0.55 ? '明显回弹，偏活泼' : z < 0.95 ? '轻微过冲，手感最自然' : '不过冲，慢慢靠拢'}`;
+  };
+
+  const plot = (x0, v0, ptsA, ptsB) => {
+    const top = Math.max(Math.abs(v0), (3 * x0) / (DUR / 1000), 1);
+    const line = (pts) => [[-90, v0], ...pts].map(([t, v]) => `${(20 + (t / SPAN) * 180).toFixed(1)},${(46 - (v / top) * 42).toFixed(1)}`).join(' ');
+    $('.a').setAttribute('points', line(ptsA));
+    $('.b').setAttribute('points', line(ptsB));
+  };
+
+  const release = (x0, v0) => {
+    const id = ++run;
+    st.classList.add('ran');
+    root.querySelectorAll('.mk').forEach((m) => m.style.setProperty('--m', x0 + 'px'));
+    if (still()) {
+      put(0, 0);
+      put(1, 0);
+      msg.textContent = '减少动态效果已开启：松手直接回到原位';
+      return;
+    }
+    const t0 = performance.now(), a = [], b = [];
+    let x = x0, v = v0, last = t0;
+    const tick = (now) => {
+      if (id !== run || !root.host.isConnected) return;
+      const dt = Math.min(now - last, 32) / 1000, t = now - t0, p = Math.min(t / DUR, 1);
+      last = now;
+      for (let i = 0; i < 8; i++) {
+        v += ((-k * x - c * v) * dt) / 8;
+        x += (v * dt) / 8;
+      }
+      put(0, x0 * (1 - p) ** 3);
+      put(1, Math.max(x, -6));
+      a.push([t, (-3 * x0 * (1 - p) ** 2 * 1000) / DUR]);
+      b.push([t, v]);
+      plot(x0, v0, a, b);
+      if (p < 1 || Math.abs(x) > 0.3 || Math.abs(v) > 4) return requestAnimationFrame(tick);
+      put(1, 0);
+    };
+    requestAnimationFrame(tick);
+    const ez = Math.round((3 * x0 * 1000) / DUR), s = Math.round(v0);
+    msg.textContent = `松手速度 ${s} px/s：缓动一下变成 ${-ez} px/s；弹簧接着 ${s} 走`;
+  };
+
+  const flick = () => {
+    const id = ++run, x0 = room() * 0.5, ms = 130, t0 = performance.now();
+    if (still()) return release(x0, 0);
+    const tick = (now) => {
+      if (id !== run || !root.host.isConnected) return;
+      const p = Math.min((now - t0) / ms, 1);
+      put(0, x0 * p);
+      put(1, x0 * p);
+      if (p < 1) return requestAnimationFrame(tick);
+      release(x0, (x0 / ms) * 1000);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  const follow = (e) => {
+    const r = lanes[0].getBoundingClientRect();
+    const x = Math.max(0, Math.min(room(), e.clientX - r.left - balls[0].offsetLeft - balls[0].offsetWidth / 2));
+    const t = e.timeStamp;
+    drag.pts = [...drag.pts.filter((p) => t - p.t < 80), { t, x }];
+    put(0, x);
+    put(1, x);
+  };
+  const speed = (pts) => {
+    const a = pts[0], b = pts[pts.length - 1];
+    return b.t - a.t < 8 ? 0 : ((b.x - a.x) / (b.t - a.t)) * 1000;
+  };
+  lanes.forEach((l) => {
+    l.addEventListener('pointerdown', (e) => {
+      run++;
+      l.setPointerCapture(e.pointerId);
+      drag = { pts: [] };
+      follow(e);
+    });
+    l.addEventListener('pointermove', (e) => { if (drag) follow(e); });
+    const up = () => {
+      if (!drag) return;
+      const pts = drag.pts;
+      drag = null;
+      release(pts[pts.length - 1].x, speed(pts));
+    };
+    l.addEventListener('pointerup', up);
+    l.addEventListener('pointercancel', up);
+  });
+  $('.go').addEventListener('click', flick);
+  $('.k').addEventListener('input', (e) => { k = +e.target.value; tune(); });
+  $('.c').addEventListener('input', (e) => { c = +e.target.value; tune(); });
+  root.querySelectorAll('.sl input').forEach((i) => i.addEventListener('change', flick));
+  tune();
+  setTimeout(() => { if (root.host.isConnected) flick(); }, 200);
+}
+</script>

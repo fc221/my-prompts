@@ -44,3 +44,73 @@ order: 20
 7. 另建“口径”表，每个指标写定义、分子分母、数据来源和负责人。
 8. 横向 A4 一页打印，标题行重复，页眉写统计月。
 交付时用{示例月份}演示一遍，并说明换月份时要做哪些操作。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-w{display:grid;gap:8px;width:632px}
+.m-hd{display:flex;align-items:center;gap:10px;font-size:12px}
+.m-hd b{font-size:14px;color:#101828}
+.m-pick{display:flex;align-items:center;gap:6px;margin-left:auto;padding:2px 8px;border:1px solid #c9ced6;border-radius:4px;background:#fff;font-size:11.5px}
+.m-pick span{color:#5d6675}
+.m-pick em{color:#8a94a6;font-size:10px}
+.m-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.m-k{padding:6px 8px 7px;border:1px solid #e1e5ea;border-radius:6px;background:#fff}
+.m-k p{margin:0;color:#5d6675;font-size:11px}
+.m-k b{display:block;color:#101828;font-size:19px;font-weight:700;line-height:1.25;font-variant-numeric:tabular-nums}
+.m-k b small{margin-left:3px;color:#5d6675;font-size:10.5px;font-weight:500}
+.m-k span{display:block;color:#5d6675;font-size:10px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.m-k em{display:block}
+.m-up{color:#067647}
+.m-dn{color:#b42318}
+.m-sp{display:block;width:100%;height:16px}
+</style>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  // 指标、单位、方向、本期、目标、达成率、上期、环比、同比，最后是近 12 个月趋势
+  const rows = [
+    ['销售额', '万元', '越高越好 ▾', '386.4', '400.0', '96.6%', '357.1', '▲ 8.2%', '▲ 12.5%', [300, 312, 335, 318, 342, 350, 361, 344, 352, 349, 357, 386]],
+    ['订单数', '单', '越高越好 ▾', '52,180', '50,000', '104.4%', '49,650', '▲ 5.1%', '▲ 9.8%', [44, 45, 47, 46, 48, 47, 49, 48, 50, 49, 50, 52]],
+    ['客单价', '元', '越高越好 ▾', '74.05', '75.00', '98.7%', '71.92', '▲ 3.0%', '▲ 2.4%', [72, 71, 73, 72, 71, 72, 73, 72, 70, 71, 72, 74]],
+    ['毛利率', '%', '越高越好 ▾', '61.8%', '62.0%', '99.7%', '62.4%', '▼ 0.6pt', '▲ 0.3pt', [61, 61.5, 62, 61.2, 61.8, 62.1, 62.5, 62, 62.3, 62.6, 62.4, 61.8]],
+    ['新增会员', '人', '越高越好 ▾', '3,260', '3,500', '93.1%', '3,410', '▼ 4.4%', '▲ 6.0%', [28, 30, 33, 31, 35, 36, 34, 33, 35, 36, 34, 32]],
+    ['复购率', '%', '越高越好 ▾', '34.5%', '35.0%', '98.6%', '33.1%', '▲ 1.4pt', '▲ 2.2pt', [31, 31.5, 32, 32.4, 32, 32.8, 33, 33.4, 32.9, 33.2, 33.1, 34.5]],
+    ['退货率', '%', '越低越好 ▾', '1.9%', '2.0%', '105.3%', '2.3%', '▼ 0.4pt', '▼ 0.2pt', [2.4, 2.3, 2.5, 2.2, 2.1, 2.3, 2.2, 2.4, 2.1, 2.2, 2.3, 1.9]],
+    ['客诉', '件', '越低越好 ▾', '18', '20', '111.1%', '25', '▼ 28.0%', '▲ 12.5%', [22, 19, 24, 21, 26, 23, 20, 27, 22, 24, 25, 18]],
+  ];
+  const spark = (v) => { // 每行各自缩放，只看走势
+    const lo = Math.min(...v), hi = Math.max(...v), xy = v.map((y, i) => [2 + i * 5.1, 14 - ((y - lo) / (hi - lo || 1)) * 12]);
+    return `<svg class="m-sp" viewBox="0 0 60 16" aria-hidden="true"><polyline points="${xy.map((p) => p.join(',')).join(' ')}" fill="none" stroke="#5b7fb0" stroke-width="1.3" stroke-linejoin="round"/><circle cx="${xy[11][0]}" cy="${xy[11][1]}" r="1.8" fill="#2a78d6"/></svg>`;
+  };
+  const marks = {};
+  rows.forEach((r, i) => {
+    const n = i + 2, lower = r[2].startsWith('越低'), rate = parseFloat(r[5]);
+    marks['F' + n] = rate >= 100 ? 'good' : rate >= 90 ? 'warn' : 'bad';
+    ['H', 'I'].forEach((c, k) => { marks[c + n] = (r[7 + k].startsWith('▲') !== lower) ? 'good' : 'bad'; });
+    if (i === 0 || i === 3 || i === 6) marks['A' + n] = 'b';
+  });
+  const table = sheet({
+    head: ['指标', '单位', '方向', '本期', '目标', '达成率', '上期', '环比', '同比', '趋势'],
+    widths: [64, 40, 76, 58, 58, 60, 58, 62, 62, 64],
+    rows: rows.map((r, i) => [...r.slice(0, 9), 'SPK' + i]),
+    fx: ['F8', '=IFERROR(IF([@方向]="越低越好",[@目标]/[@本期],[@本期]/[@目标]),"")'],
+    marks,
+    tabs: ['指标汇总', '数据', '目标', '口径', '参数'],
+    freeze: true,
+  }).replace(/SPK(\d)/g, (_, i) => spark(rows[i][9]));
+  const card = (t, v, u, sub, d, up) => `<div class="m-k"><p>${t}</p><b>${v}<small>${u}</small></b><span>${sub}<em class="${up ? 'm-up' : 'm-dn'}">${d}</em></span></div>`;
+  draw(root, `<div class="m-w">
+    <div class="m-hd"><b>连锁门店经营指标汇总</b><span>数据更新于 10-08</span><p class="m-pick"><span>统计月</span>2026 年 9 月<em>▾</em></p></div>
+    <div class="m-cards">
+      ${card('销售额', '386.4', '万元', '目标 400.0 · 达成 96.6%', '较上月 ▲ 8.2%', true)}
+      ${card('订单数', '52,180', '单', '目标 50,000 · 达成 104.4%', '较上月 ▲ 5.1%', true)}
+      ${card('毛利率', '61.8', '%', '目标 62.0% · 达成 99.7%', '较上月 ▼ 0.6pt', false)}
+      ${card('退货率', '1.9', '%', '目标 ≤ 2.0% · 达成 105.3%', '较上月 ▼ 0.4pt', true)}
+    </div>
+    ${table}
+  </div>`, { title: '指标汇总页 · 越低越好的指标反向算达成、反向着色', min: 0.4 });
+}
+</script>

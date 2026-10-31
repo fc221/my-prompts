@@ -40,3 +40,18 @@ order: 20
 4. 枚举加值时，检查对接文档是否写明客户端要处理未知值。
 5. 在流水线加 OpenAPI 新旧对比，发现不兼容变更时让检查失败，除非提交里显式标记。
 最后输出结论（能否直接发布）、需要通知的调用方和一份变更日志草稿。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '兼容 · 直接发布', items: ['新增 API、响应字段', '新增可选参数，默认不变', '放宽校验', '新增错误码'], acc: true },
+    { t: '不兼容 · 走新版本', items: ['删除或改名字段', '数字 ID 改字符串', '可选变必填、收紧校验', '改默认排序、状态码'] },
+    { t: '看约定', items: ['枚举加值：写明要处理未知值才算兼容', '改名：新旧同返，旧字段归零再删'], dash: true },
+  ], { cols: 3, note: '判断标准：老客户端不改代码，照样能正确工作' }), { title: '向后兼容规则' });
+}
+</script>

@@ -28,3 +28,31 @@ order: 20
 ## 提示词
 
 在{删除 / 停用对象}前加「确认对话框」：宽 400px，role="alertdialog"；标题写成问句“删除N个{对象}？”，正文说明影响范围、数量和能否恢复；按钮“取消”和“删除N个{对象}”，危险按钮用危险色实底放最右，初始焦点在“取消”；Esc 和点遮罩都只取消；执行中按钮显示加载并防重复，失败在框内说明；极高风险操作要求输入“{对象名称}”后才能确认；窄屏仍居中，宽 min(320px, 100% - 48px)，两个按钮并排。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/components-overlay.css">
+<style>
+.pg{display:flex;align-items:center;gap:16px;width:min(320px,100%);padding:14px 16px;background:#fff;border:1px solid #e3e6eb;border-radius:10px}
+.info{flex:1;display:grid}
+.done{flex:1;font-size:13px;color:#12805c}
+.dlg{width:min(400px,100%);padding:20px 22px 16px}
+h3{font-size:16px;margin-bottom:6px}
+#ad{font-size:13px;color:#5b616e}
+.ft{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+</style>
+
+<div class="s"><div class="pg"><div class="info"><b>已选 3 个文件</b><span class="muted">季度报表.xlsx 等</span></div><button class="b open">删除</button><p class="done" hidden>已删除 3 个文件 <button class="b t sm reset">恢复示例</button></p></div><div class="mask" role="alertdialog" aria-modal="true" aria-labelledby="at" aria-describedby="ad"><div class="panel dlg"><h3 id="at">删除 3 个文件？</h3><p id="ad">文件会被永久删除，无法恢复；已分享的链接也会失效。</p><div class="ft"><button class="b" data-close>取消</button><button class="b d go">删除 3 个文件</button></div></div></div></div>
+
+<script type="module">
+import { modal } from '../../_shared/components-overlay.ts';
+
+export default function demo(root) {
+  const pg = root.querySelector('.pg'), open = root.querySelector('.open'), reset = root.querySelector('.reset');
+  const m = modal(root, root.querySelector('.mask'), { first: '[data-close]', scrim: true }); // 初始焦点在“取消”，点遮罩只取消
+  const show = (del) => { pg.querySelector('.info').hidden = del; open.hidden = del; pg.querySelector('.done').hidden = !del; };
+  open.addEventListener('click', () => m.open(open));
+  root.querySelector('.go').addEventListener('click', () => { m.close(); show(true); reset.focus(); });
+  reset.addEventListener('click', () => { show(false); open.focus(); });
+}
+</script>

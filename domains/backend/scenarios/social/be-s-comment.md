@@ -42,3 +42,23 @@ order: 30
 5. 发回复同事务给一级评论 reply_count 加 1；有回复的一级评论删除后保留楼层。
 6. 每用户每分钟最多 10 条，60 秒内相同内容拒绝。
 最后给出压测和对账方法：给一个对象灌 10 万条一级评论和 50 万条回复，测首屏和翻到第 100 页的耗时；每天抽查 reply_count 与实际回复数是否一致，不一致的修正并记录。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+帖子 9001/
+* 一级评论 C1/    root_id = 0 · 回复 128
+    回复 R1       root_id = C1
+    回复 R2       回复 R1 的作者
+    回复 R3       预览只取前 3 条
+    查看全部 128 条   按 root_id 游标分页
+  一级评论 C2/    root_id = 0 · 时间倒序
+  一级评论 C3/    有回复，删除后保留楼层
+`), { title: '两层结构：回复都挂在 root_id 下' });
+}
+</script>

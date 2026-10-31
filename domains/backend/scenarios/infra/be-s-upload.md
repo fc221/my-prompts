@@ -42,3 +42,22 @@ order: 30
 5. complete 确认分片齐全后返回 202，后台任务按序号合并并校验整体哈希，客户端轮询或收通知拿结果；重复调用返回同一个 file_id。
 6. 24 小时未完成的会话中止并清理，存储桶配生命周期规则。
 最后给出压测和对账方法：上传 5 GB 文件中途断网 3 次仍能完成且哈希一致；50 个客户端并发上传测吞吐；每天核对已完成会话数与 file 表新增数一致，存储里没有超过 7 天的未完成上传。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['客户端', '上传服务', '对象存储'], [
+    [0, 1, 'POST /uploads + 哈希'],
+    [1, 2, '创建分片上传'],
+    [1, 0, '已传 1–37 片', 'r'],
+    [0, 2, 'PUT 第 38 片（预签名地址）'],
+    [0, 1, '回报序号 + ETag，补完缺片'],
+    [0, 1, 'complete → 202 合并中'],
+    [1, 2, '后台合并 · 校验整体哈希'],
+  ]), { title: '断点续传 · 异步合并' });
+}
+</script>

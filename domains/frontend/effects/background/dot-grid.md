@@ -19,3 +19,13 @@ order: 50
 ## 提示词
 
 给{区块}加「点阵渐隐背景」：1.5px 的圆点、间距 20px 排成网格，颜色用很浅的中性灰；用径向遮罩让中间清楚、四周淡出；只做背景纹理，不动。
+
+## 示例
+
+<style>
+.stage{position:relative;height:100%;display:grid;place-items:center;background:#fff}
+.stage::before{content:"";position:absolute;inset:0;background-image:radial-gradient(#c9ccd3 1.5px,transparent 1.5px);background-size:20px 20px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 50%,#000 40%,transparent 100%);mask-image:radial-gradient(ellipse 70% 60% at 50% 50%,#000 40%,transparent 100%)}
+p{position:relative;font:600 18px system-ui;color:#18181b;margin:0}
+</style>
+
+<div class="stage"><p>每一笔订单，都清清楚楚</p></div>

@@ -40,3 +40,21 @@ order: 70
 4. 每张证书严格一页，溢出时报错；数据里有字体缺字形的字时报错，并列出对应的名单行号。
 5. 每人一个文件，文件名“编号-姓名.pdf”，批量结束输出一份成功 / 失败清单。
 用两字名、带间隔号的长名字、含生僻字的三条数据测试，说明改了哪些文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, page({
+    land: true,
+    margin: true,
+    pages: [
+      { label: 'A4 横版 297×210mm，严格一页', blocks: ['text:MyPrompts', 'title:会员证书', 'text:兹授予 王雨桐 女士 2026 年度黑金会员资格，特发此证。', 'text:有效期 2026-10-29 至 2027-10-28', 'text:MyPrompts · 二〇二六年十月二十九日', 'sign', 'text:编号 HY-2026-000321', 'qr'] },
+    ],
+    notes: ['姓名最宽 120mm，32pt 逐级缩到 22pt', '落款用中文数字，印章压在日期上', '编号加核验二维码，内容溢出就报错'],
+  }), { center: true, min: 0.3 });
+}
+</script>

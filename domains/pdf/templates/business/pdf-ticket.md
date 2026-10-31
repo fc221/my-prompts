@@ -41,3 +41,25 @@ order: 40
 4. 须知区：入场须知、禁带物品、退改规则、主办方与客服电话，9pt 编号列出。
 5. 一单多张时每张一页，页脚“第 N 张 / 共 M 张”和订单号。
 生成后用手机分别扫屏幕上和打印出来的码，确认都能识别，说明改了哪些文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const ticket = (seat, no, label) => ({
+    foot: '第 {p} 张 / 共 {n} 张 · 订单 DD20261029A17',
+    label,
+    blocks: ['img', 'title:城市爵士音乐节', 'text:2026-11-15 周六 19:30 开演 · 18:30 检票', 'text:海湾体育馆 南门 3 号口 · ' + seat, 'qr', 'text:' + no + ' · 持票人 李*明', 'text:- - - - - - - - 沿虚线撕下 - - - - - - - -', 'h:入场须知', 'p:3'],
+  });
+  draw(root, page({
+    pages: [
+      ticket('A 区 12 排 08 座', 'TK 2026 1115 0001 2345', '上半页票面，下半页须知'),
+      ticket('A 区 12 排 09 座', 'TK 2026 1115 0001 2346', '一张票一页，各有各的码'),
+    ],
+    notes: ['二维码 ≥ 30mm，纯黑白，四周留白', '码里放核验令牌，不放明文', '票号每 4 位一组，可人工输入'],
+  }), { center: true, min: 0.3 });
+}
+</script>

@@ -40,3 +40,21 @@ order: 10
 3. 列出依赖的许可证；用到 iText、PyMuPDF、Ghostscript 这类 AGPL 组件时单独标出，并给出 Apache / MIT / BSD 许可的替代。
 4. 用一份真实样本验证：300 行以上的明细表、生僻字、超长英文单词、几张图片；报告单份耗时、内存峰值、文件大小，以及服务器缺字体、数据为空、单个字段超长时的表现。
 5. 最后给出接入步骤和要改的文件，这一步先不大改现有代码。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '无头浏览器打印', items: ['Puppeteer · Playwright', '要和网页长得一样'] },
+    { t: '分页排版引擎', items: ['WeasyPrint · Paged.js', '页眉随章节、目录页码'] },
+    { t: 'Typst 排版', items: ['单个二进制，编译快', '报告、合同、证书'] },
+    { t: 'LaTeX 排版', items: ['XeLaTeX + ctex', '公式多、已有模板'] },
+    { t: '代码直接绘制', items: ['ReportLab · pdf-lib', '量大、套打、无浏览器'] },
+    { t: '组件式生成', items: ['@react-pdf/renderer', 'React 团队、前端下载'] },
+  ], { cols: 3, note: '先查许可证：iText、PyMuPDF、Ghostscript 是 AGPL' }), { title: '生成方案怎么选' });
+}
+</script>

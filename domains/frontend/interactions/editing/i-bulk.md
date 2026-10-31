@@ -30,3 +30,80 @@ order: 30
 ## 提示词
 
 给{表格}加「批量操作」：每行前加复选框，表头全选框支持未选 / 部分选 / 全选三态，全选时可见行的勾从上到下依次落下（每行间隔 30–40ms、轻微回弹，减少动态效果时同时勾上）；勾选后工具栏原位换成批量栏，显示“已选 N 项”、{批量操作}和“取消选择”；本页全选后提示“选择全部 N 条”；危险操作先写清对象和数量，按钮写“删除 N 条”，初始焦点在取消；执行后显示结果，部分失败逐项说明并保留失败项选中。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/interactions-base.css">
+<style>
+.st{padding:10px 12px}
+.box{display:flex;flex-direction:column;max-width:600px;height:100%;margin:0 auto;background:#fff;border:1px solid #e3e6eb;border-radius:12px;overflow:hidden}
+.bar{flex:none;display:flex;align-items:center;gap:6px;height:40px;padding:0 8px 0 12px;border-bottom:1px solid #e3e6eb;transition:background .16s}
+.bar.on{background:#edf1ff}
+.info{flex:1;min-width:0;overflow:hidden;color:#5b616e;text-overflow:ellipsis;white-space:nowrap}
+.on .info{color:#3b5bdb;font-weight:600}
+.info.ok{color:#12805c}
+.acts,.ask{display:flex;align-items:center;gap:2px;white-space:nowrap}
+.q{margin-right:4px;color:#5b616e;font-size:12px}
+.bar button{height:28px;padding:0 8px;border:0;border-radius:6px;background:none;color:#3b5bdb}
+.bar button:hover{background:rgba(59,91,219,.1)}
+.bar .dz{color:#d92d20}
+.bar .solid{background:#d92d20;color:#fff}
+.bar .solid:hover{background:#b42318}
+.tw{flex:1;min-height:0;overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{height:32px;padding:0 8px;border-bottom:1px solid #e3e6eb;text-align:left;white-space:nowrap}
+th{position:sticky;top:0;z-index:1;background:#fff;color:#5b616e;font-weight:600}
+th:first-child,td:first-child{width:28px;padding:0 0 0 12px}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr:hover td{background:#f5f6f8}
+tr.sel td{background:#f3f6ff}
+tbody tr.sel:hover td{background:#edf1ff}
+input{width:15px;height:15px;margin:0;vertical-align:middle;accent-color:#3b5bdb}
+.tag{display:inline-block;padding:0 6px;border-radius:4px;background:#f5f6f8;color:#5b616e;line-height:20px}
+.tag.ok{background:#e6f4ee;color:#12805c}
+td.none{height:96px;text-align:center;color:#5b616e}
+td.none button{height:28px;margin-left:8px;padding:0 10px;border:1px solid #e3e6eb;border-radius:6px;background:#fff}
+@container (min-width:560px){th,td{height:38px;font-size:13px}
+}
+</style>
+
+<div class="st"><div class="box"><div class="bar"><span class="info" role="status"></span><span class="acts" hidden><button type="button" data-a="ship">标记已发货</button><button type="button" data-a="del" class="dz">删除</button><button type="button" data-a="clear">取消选择</button></span><span class="ask" hidden><span class="q">不可恢复</span><button type="button" data-a="no">取消</button><button type="button" data-a="yes" class="solid"></button></span></div><div class="tw"><table><thead><tr><th><input type="checkbox" class="all" aria-label="全选"></th><th>订单号</th><th>客户</th><th class="num">金额</th><th>状态</th></tr></thead><tbody></tbody></table></div></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const D = [['DD1025018', '林知远', 1280, '待发货'], ['DD1025017', '苏墨', 356.5, '待发货'], ['DD1024093', '陈一鸣', 2990, '已发货'], ['DD1024088', '何小满', 89, '待发货'], ['DD1024071', '周以宁', 15600, '待发货']];
+  const tb = root.querySelector('tbody'), all = root.querySelector('.all'), bar = root.querySelector('.bar'), info = root.querySelector('.info'), acts = root.querySelector('.acts'), ask = root.querySelector('.ask');
+  let rows = [], note = '', noteT = 0;
+  const fmt = (v) => '¥' + v.toLocaleString('zh-CN', { minimumFractionDigits: 2 });
+  const picked = () => rows.filter((r) => r.sel);
+  const sync = () => {
+    const k = picked().length;
+    all.checked = k > 0 && k === rows.length; all.indeterminate = k > 0 && k < rows.length; all.disabled = !rows.length;
+    bar.classList.toggle('on', k > 0); if (!k) ask.hidden = true; acts.hidden = !k || !ask.hidden;
+    info.classList.toggle('ok', !k && !!note); info.textContent = k ? `已选 ${k} 项` : note || `共 ${rows.length} 条订单`;
+    rows.forEach((r) => { r.tr.classList.toggle('sel', r.sel); r.tr.querySelector('input').checked = r.sel; });
+  };
+  const render = () => {
+    tb.replaceChildren(...rows.map((r) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td><input type="checkbox" aria-label="选择 ${r.id}"></td><td>${r.id}</td><td>${r.who}</td><td class="num">${fmt(r.amt)}</td><td><span class="tag${r.st === '已发货' ? ' ok' : ''}">${r.st}</span></td>`;
+      tr.querySelector('input').onchange = (e) => { r.sel = e.target.checked; sync(); };
+      r.tr = tr; return tr;
+    }));
+    if (!rows.length) { const tr = document.createElement('tr'); tr.innerHTML = '<td colspan="5" class="none">示例订单已全部删除<button type="button">恢复示例</button></td>'; tr.querySelector('button').onclick = reset; tb.append(tr); }
+    sync();
+  };
+  const flash = (t) => { note = t; clearTimeout(noteT); noteT = setTimeout(() => { note = ''; if (root.host.isConnected) sync(); }, 2200); };
+  const reset = () => { rows = D.map(([id, who, amt, st]) => ({ id, who, amt, st, sel: false })); render(); };
+  all.onchange = () => { rows.forEach((r) => { r.sel = all.checked; }); sync(); };
+  bar.addEventListener('click', (e) => {
+    const a = e.target.closest('button')?.dataset.a, k = picked().length; if (!a) return;
+    if (a === 'ship') { picked().forEach((r) => { r.st = '已发货'; r.sel = false; }); flash(`已将 ${k} 条标记为已发货`); render(); all.focus(); }
+    if (a === 'clear') { rows.forEach((r) => { r.sel = false; }); sync(); all.focus(); }
+    if (a === 'del') { ask.querySelector('.solid').textContent = `删除 ${k} 条`; ask.hidden = false; sync(); ask.querySelector('[data-a=no]').focus(); }
+    if (a === 'no') { ask.hidden = true; sync(); acts.querySelector('[data-a=del]').focus(); }
+    if (a === 'yes') { rows = rows.filter((r) => !r.sel); ask.hidden = true; flash(`已删除 ${k} 条订单`); render(); (all.disabled ? tb.querySelector('button') : all).focus(); }
+  });
+  reset(); rows[0].sel = rows[3].sel = true; sync();
+}
+</script>

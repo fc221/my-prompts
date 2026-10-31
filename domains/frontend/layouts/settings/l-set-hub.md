@@ -28,3 +28,37 @@ order: 50
 ## 提示词
 
 {后台}的设置首页做成「入口卡片」：顶部页面标题和搜索框（直接搜到设置项并标出所在分类）；下面 {入口数} 张入口卡片每行 4 张、等高，每张有 44px 浅底图标、名称、一句说明和“N 项设置”，整张可点并有悬停和焦点样式；卡片下方放“最近修改的设置”列表；点卡片进入该类设置页，二级页带面包屑，返回时保留滚动位置；手机上改成分组单元格列表，搜索在最上面。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 1fr 1fr 1fr',
+  rows: 'auto auto auto 1fr',
+  areas: ['hd hd sr sr', 'c1 c2 c3 c4', 'c5 c6 c7 c8', 'rc rc rc rc'],
+  boxes: {
+    hd: { label: '页面标题', kind: 'heading', text: '设置' },
+    sr: { label: '搜索设置项', kind: 'search', text: '搜索设置项，例如“发货”' },
+    c1: { label: '入口卡片', kind: 'catcard', acc: true },
+    c2: { label: '入口卡片', kind: 'catcard' },
+    c3: { label: '入口卡片', kind: 'catcard' },
+    c4: { label: '入口卡片', kind: 'catcard' },
+    c5: { label: '入口卡片', kind: 'catcard' },
+    c6: { label: '入口卡片', kind: 'catcard' },
+    c7: { label: '入口卡片', kind: 'catcard' },
+    c8: { label: '入口卡片', kind: 'catcard' },
+    rc: { label: '最近修改的设置', kind: 'setrows' },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto auto auto 1fr',
+  areas: ['nav', 'sr', 'g1', 'g2', '.'],
+  boxes: {
+    nav: { label: '顶栏', kind: 'mtop', text: '设置' },
+    sr: { label: '搜索设置项', kind: 'search', text: '搜索设置项' },
+    g1: { label: '分组单元格', kind: 'cell', acc: true, text: '常用|应用设置|积分与会员|支付与结算' },
+    g2: { label: '分组单元格', kind: 'cell', text: '更多|成员与权限|通知|安全|开放接口' },
+  },
+};
+```

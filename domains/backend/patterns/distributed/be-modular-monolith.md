@@ -39,3 +39,25 @@ order: 10
 3. 不需要同步完成的联动改成事务提交后分发的进程内事件。
 4. 在构建或 CI 里加模块依赖检查，违规时失败。
 每一步单独提交、测试通过、行为不变。先做{优先模块}，做完停下来给我看再继续。最后用文字列出模块依赖关系和检查命令。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+modules/
+  order/            表前缀 order_
+*   api/            服务接口、DTO、事件定义，跨模块只引用这里
+    internal/       模块外不可见
+  inventory/        表前缀 inv_
+    api/
+    internal/
+  membership/       表前缀 mbr_
+app/                启动、组装、路由汇总
+shared/             只放 Money、ID、错误基类
+`), { title: '模块化单体 · 一个部署单元，模块各管各的表' });
+}
+</script>

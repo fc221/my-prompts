@@ -41,3 +41,36 @@ order: 30
 5. 等 networkidle 和 document.fonts.ready 后再输出；复用浏览器实例、每份用完关闭页面，并发上限取 CPU 核数；单份超时 30 秒，超时返回 504 并记录单号。
 6. 边界情况：数据为空输出一页“暂无数据”；明细超过 1000 行测分页和耗时；超长字段不撑破版面。
 最后说明改了哪些文件，以及本地和容器里各出一份样本的命令。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: 'print.css', text: `
+@page {
+  size: A4;
+  margin: 16mm 14mm;
+  @bottom-center {
+    content: "第 " counter(page)
+      " 页 / 共 " counter(pages) " 页";
+  }
+}
+` },
+    { t: 'page.pdf', text: `
+await page.setContent(html,
+  { waitUntil: 'networkidle0' })
+await page.evaluate(
+  () => document.fonts.ready)
+await page.pdf({
+  format: 'A4',
+  printBackground: true,
+  preferCSSPageSize: true,
+})
+` },
+  ]), { title: '无头浏览器打印 · 页脚写在 @page 里' });
+}
+</script>

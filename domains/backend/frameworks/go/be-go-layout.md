@@ -41,3 +41,29 @@ Go 后端服务的目录和包约定：cmd/ 放程序入口，internal/ 下按�
 新建时：建 internal/{模块}/，写 model、store、service、handler 和表格驱动的 service 单测，在 main.go 里接上组装和路由，在 migrations/ 加一对 up / down 文件。
 检查时：先画出现有包之间的依赖关系，标出按层分包、全局变量、init 里建连接、接口定义在实现方这些问题，给出搬迁清单等我确认，再按包分批改，每批跑 go build ./... 和 go test ./...。
 最后说明改了哪些文件，以及本地怎么启动和验证。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+* cmd/              程序入口
+    api/
+      main.go       读配置、组装依赖、启动
+* internal/         按功能分包，不按层
+    order/
+      handler.go
+      service.go    声明自己要的 Store 接口
+      store.go      SQL，返回具体结构体
+      model.go
+    member/
+    platform/       db、log、middleware
+  migrations/       SQL，带 up / down
+  go.mod
+  Makefile          run、test -race、lint
+`), { title: 'Go 服务布局 · cmd 入口，internal 按功能分包' });
+}
+</script>

@@ -28,3 +28,26 @@ order: 70
 ## 提示词
 
 {工具}用「三栏工作台」：顶部工具栏 48px 横跨全宽；左栏 260px 放{目录或图层}，中间主工作区 1fr（至少 480px）放{主内容}，右栏 320px 放选中对象的属性，没选中时显示页面属性；三栏各自滚动，左右栏可收起成 40px 窄条并记住状态；1024–1279px 右栏改为覆盖式面板，窄于 1024px 左栏进抽屉、右栏改底部面板。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '21% 1fr 26%',
+  rows: '12% 1fr',
+  areas: ['bar bar bar', 'left mid right'],
+  boxes: {
+    bar: '工具栏',
+    left: '目录',
+    mid: { label: '主工作区', acc: true, text: '十月经营复盘' },
+    right: '属性面板',
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto 1fr',
+  areas: ['bar', 'mid'],
+  boxes: { bar: '工具栏', mid: { label: '工作区', acc: true, text: '十月经营复盘' } },
+  drawer: { side: 'bottom', size: '46%', box: '属性面板（底部面板）', open: true },
+};
+```

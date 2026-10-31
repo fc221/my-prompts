@@ -28,3 +28,31 @@ order: 20
 ## 提示词
 
 {产品}的{文章页}用「居中单栏阅读」：正文列 680px 居中，正文 17px / 1.75；顶部标题（不超过 2 行）、作者头像 + 姓名 + 日期 + 阅读时长，然后封面图（16:9，可比正文宽到 960px，带说明文字）；小标题到 h3 为止，图片带说明，引用左侧细线；宽屏右侧可加悬浮的本页目录；文末放标签、分享、上一篇 / 下一篇和 3 篇相关文章；手机边距 16px，标题约 24px，封面满宽。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 680px 1fr',
+  rows: 'auto auto 300px auto 1fr',
+  areas: ['. hd .', '. by .', '. cv .', '. bd .', '. . .'],
+  boxes: {
+    hd: { label: '标题', kind: 'heading', text: '十月经营复盘：复购率提升到 42% 的三件事' },
+    by: { label: '作者 · 日期 · 阅读时长', kind: 'byline' },
+    cv: { label: '封面图', kind: 'image' },
+    bd: { label: '正文', kind: 'text', acc: true },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto auto 200px auto 1fr',
+  areas: ['top', 'hd', 'by', 'cv', 'bd', '.'],
+  boxes: {
+    top: { label: '‹ 返回', kind: 'mtop', text: '文章' },
+    hd: { label: '标题', kind: 'heading', text: '十月经营复盘：复购率提升到 42% 的三件事' },
+    by: { label: '作者 · 日期', kind: 'byline' },
+    cv: { label: '封面图', kind: 'image' },
+    bd: { label: '正文', kind: 'text', acc: true },
+  },
+};
+```

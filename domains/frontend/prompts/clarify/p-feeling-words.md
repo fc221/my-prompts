@@ -36,3 +36,28 @@ order: 20
 1. 规格表：背景 / 表面 / 文字 / 强调色的色值和用途，字号阶梯，圆角，间距，阴影，动效时长。
 2. 明确不做的 3 件事。
 3. 按规格修改后的页面。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/fix.css">
+<style>
+.c{padding:6px 8px}
+.say{margin:0;padding:6px 8px;border-radius:8px 8px 8px 2px;background:#eef0f3;font-size:11px;line-height:16px}
+.say b{font-weight:600}
+.q{margin:6px 0 0;color:#5b616e;font-size:10px;line-height:14px}
+/* 左：AI 听到“高级、科技感”后随手堆上去的装饰 */
+.bad{margin-top:6px;padding:5px 8px;border-radius:12px;background:linear-gradient(135deg,#6a5cff,#b14bff);box-shadow:0 0 8px rgba(120,80,255,.6);color:#fff;font-size:10px;line-height:14px}
+.bad b{display:block;font-size:12px}
+/* 右：翻成可执行的规格 */
+.sw{display:flex;gap:4px;margin:0 0 5px}
+.sw i{flex:1;height:12px;border-radius:3px;border:1px solid #e3e6eb}
+.r{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 6px;margin:0;font-size:10px;line-height:14px}
+.r dt{color:#5b616e}
+.r dd{margin:0}
+.no{margin-top:4px;padding-top:4px;border-top:1px solid #e3e6eb;color:#b42318;font-size:10px;line-height:14px}
+</style>
+
+<div class="fx">
+  <section class="fx-p"><h4>只说感觉</h4><div class="fx-b"><div class="fx-z c"><p class="say">数据看板要<b>高级</b>一点、有<b>科技感</b>。</p><div class="bad">今日营收<b>¥1,280,400</b></div><p class="q">AI 只好堆装饰：渐变、发光、大圆角。</p></div></div></section>
+  <section class="fx-p ok"><h4>翻成规格</h4><div class="fx-b"><div class="fx-z c"><div class="sw"><i style="background:#0f1419"></i><i style="background:#1a2029"></i><i style="background:#e6e9ef"></i><i style="background:#2f6bff"></i></div><dl class="r"><dt>强调色</dt><dd>#2F6BFF 占 10%</dd><dt>字号</dt><dd>12/14/20/32</dd><dt>圆角</dt><dd>4px，1px 细线框</dd><dt>区块距</dt><dd>48px</dd><dt>动效</dt><dd>150ms 线性</dd></dl><div class="no">不做：渐变、发光、玻璃</div></div></div></section>
+</div>

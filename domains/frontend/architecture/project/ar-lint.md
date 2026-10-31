@@ -44,3 +44,17 @@ order: 70
 6. 新加的规则先设为 warn 并记基线；能自动修复的先修，剩下的列成清单。
 全量格式化产生的改动单独一次提交，和逻辑改动分开。
 完成后汇报新增或修改的配置文件、基线前后的错误和警告数；验证：提交一个带 console.log 和格式问题的文件，确认钩子会拦截或自动修复。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '保存', note: '.editorconfig，自动格式化' }, { t: 'pre-commit', note: 'lint-staged 只查暂存文件', via: '提交', acc: true }, { t: 'commit-msg', note: 'commitlint：type(scope): 描述' }],
+    [{ t: 'lint', note: '--max-warnings 0' }, { t: 'typecheck', note: 'tsc --noEmit' }, { t: 'test' }, { t: '阻断合并', note: '任一失败', bad: true, via: '失败' }],
+  ]), { title: '本地只查改动，10 秒内 · CI 全量再跑' });
+}
+</script>

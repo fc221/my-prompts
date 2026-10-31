@@ -30,3 +30,108 @@ order: 40
 ## 提示词
 
 给{消息列表}的未读角标加「拉出液桥再断开」：角标是按钮，点按或 Enter 直接标为已读，名称写“{对象}，N 条未读，标为已读”；按住拖动时捕获指针、touch-action: none，用一层 SVG 画液桥：原位一个圆、指针处一个圆（就是角标本身），两侧用二次曲线连成桥，桥颈宽 = 半径 ×（1 − 距离 ÷ 80px），原位的圆同时缩到约 0.4 倍；距离超过约 80px 桥断开、原位的圆收掉，角标只跟手；断开后松手角标原地缩小淡出并标为已读，未断开松手则约 250ms 带轻微过冲弹回原位；拖动超过 4px 后松手不算点击；列表顶部保留“全部已读”；减少动态效果时不拉伸，点按直接执行。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/interactions-base.css">
+<style>
+.st{padding:12px 14px}
+.box{position:relative;z-index:0;display:flex;flex-direction:column;justify-content:center;gap:8px;max-width:400px;height:100%;margin:0 auto}
+.hd{display:flex;align-items:center;gap:6px;height:30px}
+.hd b{flex:1;font-size:14px}
+.list{list-style:none;margin:0;padding:0;background:#fff;border:1px solid #e3e6eb;border-radius:12px}
+.row{display:flex;align-items:center;gap:10px;height:44px;padding:0 12px;border-top:1px solid #eef0f3}
+.list li:first-child .row{border-top:0}
+.av{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--c);color:#fff;font-style:normal;font-size:12px;font-weight:600}
+.tx{flex:1;min-width:0;display:grid}
+.tx b{font-weight:600}
+.row.read .tx b{font-weight:400}
+.tx small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#5b616e;font-size:12px}
+/* 角标就是被拉出去的那个圆：22px，半径 11 */
+.bd{position:relative;z-index:2;flex:none;display:grid;place-items:center;width:22px;height:22px;padding:0;border:0;border-radius:50%;background:#d92d20;color:#fff;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;touch-action:none}
+.bd.gone{visibility:hidden}
+.goo{position:absolute;inset:0;z-index:1;width:100%;height:100%;overflow:visible;pointer-events:none;fill:#d92d20}
+</style>
+
+<div class="st"><div class="box">
+  <div class="hd"><b>消息</b><button type="button" class="ctl all">全部已读</button><button type="button" class="ctl rs">重置</button></div>
+  <ul class="list">
+    <li><div class="row"><i class="av" style="--c:#7a5af8" aria-hidden="true">运</i><span class="tx"><b>运营群</b><small data-clip>活动页明早十点上线</small></span><button type="button" class="bd" data-n="3" aria-label="运营群，3 条未读，标为已读">3</button></div></li>
+    <li><div class="row"><i class="av" style="--c:#0e7090" aria-hidden="true">陈</i><span class="tx"><b>陈立</b><small data-clip>合同已经盖章寄出</small></span><button type="button" class="bd" data-n="1" aria-label="陈立，1 条未读，标为已读">1</button></div></li>
+  </ul>
+  <svg class="goo" aria-hidden="true"><circle r="0"/><path/></svg>
+  <p class="sr" role="status"></p>
+</div></div>
+
+<script type="module">
+const R = 11, BREAK = 80;
+export default function demo(root) {
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const box = root.querySelector('.box'), dot = root.querySelector('.goo circle'), path = root.querySelector('.goo path');
+  const msg = root.querySelector('[role=status]'), badges = [...root.querySelectorAll('.bd')];
+  let cur = null, O = null, broken = false, moved = false, raf = 0, auto = [];
+  // 两个圆加一座桥：桥颈宽 = 半径 ×（1 − 距离 ÷ 断开距离），原位的圆缩到约 0.4 倍
+  const render = (b, dx, dy) => {
+    const d = Math.hypot(dx, dy);
+    b.style.transform = d ? `translate(${dx}px,${dy}px)` : '';
+    if (broken || d < 1) { path.setAttribute('d', ''); dot.setAttribute('r', 0); return; }
+    const k = Math.min(d / BREAK, 1), a = R * (1 - 0.6 * k), neck = Math.max(R * (1 - k), 1);
+    const nx = -dy / d, ny = dx / d, px = O.x + dx, py = O.y + dy, mx = (O.x + px) / 2, my = (O.y + py) / 2;
+    const p = (x, y) => `${x.toFixed(1)} ${y.toFixed(1)}`;
+    path.setAttribute('d', `M${p(O.x + nx * a, O.y + ny * a)} Q${p(mx + nx * neck, my + ny * neck)} ${p(px + nx * R, py + ny * R)} L${p(px - nx * R, py - ny * R)} Q${p(mx - nx * neck, my - ny * neck)} ${p(O.x - nx * a, O.y - ny * a)}Z`);
+    dot.setAttribute('cx', O.x); dot.setAttribute('cy', O.y); dot.setAttribute('r', a);
+  };
+  const origin = (b) => { const r = b.getBoundingClientRect(), q = box.getBoundingClientRect(); return { x: r.left - q.left + R, y: r.top - q.top + R }; };
+  const say = () => { const n = badges.reduce((s, b) => s + (b.closest('.row').classList.contains('read') ? 0 : +b.dataset.n), 0); msg.textContent = n ? `已标为已读，还有 ${n} 条未读` : '全部已读'; };
+  const read = (b, anim) => {
+    b.closest('.row').classList.add('read');
+    const done = () => { b.classList.add('gone'); b.style.transform = ''; };
+    const tr = b.style.transform || 'translate(0px,0px)';
+    if (anim && !still) b.animate([{ opacity: 1, transform: tr }, { opacity: 0, transform: `${tr} scale(0)` }], { duration: 200, easing: 'cubic-bezier(.4,0,1,1)' }).finished.then(done); else done();
+  };
+  // 没拉断就松手：约 250ms 带轻微过冲弹回原位，桥跟着缩回
+  const back = (b, dx, dy) => {
+    const t0 = performance.now(), out = (t) => 1 + 2.2 * (t - 1) ** 3 + 1.2 * (t - 1) ** 2;
+    const step = (now) => { const t = Math.min((now - t0) / 250, 1), s = 1 - out(t); render(b, dx * s, dy * s); if (t < 1) raf = requestAnimationFrame(step); };
+    cancelAnimationFrame(raf); raf = requestAnimationFrame(step);
+  };
+  badges.forEach((b) => {
+    let sx = 0, sy = 0, dx = 0, dy = 0;
+    b.addEventListener('pointerdown', (e) => {
+      if (still || !e.isPrimary) return;
+      stopAuto(); cancelAnimationFrame(raf); render(b, 0, 0);
+      cur = b; O = origin(b); broken = false; moved = false; sx = e.clientX; sy = e.clientY; dx = dy = 0;
+      b.setPointerCapture(e.pointerId);
+    });
+    b.addEventListener('pointermove', (e) => {
+      if (cur !== b) return;
+      dx = e.clientX - sx; dy = e.clientY - sy;
+      if (Math.hypot(dx, dy) > 4) moved = true;
+      if (!broken && Math.hypot(dx, dy) > BREAK) broken = true;
+      render(b, dx, dy);
+    });
+    const end = () => {
+      if (cur !== b) return;
+      cur = null;
+      if (broken) { read(b, true); say(); } else back(b, dx, dy);
+    };
+    b.addEventListener('pointerup', end);
+    b.addEventListener('pointercancel', () => { broken = false; end(); });
+    b.addEventListener('click', () => {
+      if (moved) { moved = false; return; }
+      read(b, true); say();
+      (badges.find((x) => !x.classList.contains('gone') && x !== b) ?? root.querySelector('.rs')).focus();
+    });
+  });
+  root.querySelector('.all').addEventListener('click', () => { stopAuto(); badges.forEach((b) => read(b, true)); say(); });
+  root.querySelector('.rs').addEventListener('click', () => { stopAuto(); badges.forEach((b) => { b.classList.remove('gone'); b.closest('.row').classList.remove('read'); render(b, 0, 0); }); msg.textContent = '已恢复未读'; });
+  // 自动演示一次：把第一个角标拉到快断开的位置，停一下再松手弹回
+  const stopAuto = () => { auto.forEach(clearTimeout); auto = []; cancelAnimationFrame(raf); badges.forEach((x) => (x.style.transform = '')); path.setAttribute('d', ''); dot.setAttribute('r', 0); };
+  if (!still) auto.push(setTimeout(() => {
+    if (!root.host.isConnected) return;
+    const b = badges[0], t0 = performance.now(); O = origin(b); broken = false;
+    const pull = (now) => { const t = Math.min((now - t0) / 500, 1), e = 1 - (1 - t) ** 3; render(b, -48 * e, 22 * e); if (t < 1) raf = requestAnimationFrame(pull); else auto.push(setTimeout(() => back(b, -48, 22), 900)); };
+    raf = requestAnimationFrame(pull);
+  }, 500));
+}
+</script>

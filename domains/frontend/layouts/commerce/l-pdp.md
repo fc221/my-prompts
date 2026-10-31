@@ -28,3 +28,29 @@ order: 10
 ## 提示词
 
 {产品}的商品详情页：宽屏左侧图集（1:1 主图 + 6 张缩略图，可放大预览），右侧购买区吸顶：名称（不超过 2 行）、评分和销量、价格区（现价 30px 等宽数字、原价划线、优惠条件和截止时间）、规格选项按钮（{规格}，无货置灰，选完后价格库存同步）、数量步进器、“加入购物车”和“立即购买”并排、下方写配送时间和退换政策；页面下半部分 Tab：商品详情、规格参数、评价（数量 + 平均分，可按有图 / 好评 / 差评筛选）、售后保障；手机上图集满宽横滑，底部固定栏放收藏、客服、加入购物车、立即购买并加安全区。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 1fr',
+  rows: '440px auto 1fr',
+  areas: ['gl bb', 'tb tb', 'dt dt'],
+  boxes: {
+    gl: { label: '商品图集', kind: 'gallery' },
+    bb: { label: '购买区（价格 · 规格 · 按钮）', kind: 'buybox', acc: true },
+    tb: { label: '详情 Tab', kind: 'tabs', text: '商品详情|规格参数|评价 612|售后保障' },
+    dt: { label: '商品详情', kind: 'image' },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: '300px auto 1fr auto',
+  areas: ['gl', 'bb', '.', 'bar'],
+  boxes: {
+    gl: { label: '图集（横滑）', kind: 'gallery' },
+    bb: { label: '价格 · 名称 · 规格', kind: 'buybox', acc: true },
+    bar: { label: '底部购买栏', kind: 'opbtns' },
+  },
+};
+```

@@ -33,3 +33,182 @@ order: 30
 ## 提示词
 
 把{产品}里会反复开关的{下拉、菜单、抽屉等组件}改成「可打断、轻退场」：开关状态只切 aria-expanded 或 data-open，动画全部用 CSS transition（JS 驱动的用 Web Animations，被打断时从当前进度反向，不从头重播），不用 @keyframes 做开关；打开 220ms，opacity 0→1、translateY(-4px) scale(.97) 回到原样，缓出曲线；关闭 150ms、先慢后快，只退 8–12px 并淡出、加 blur(3px)，不整块飞出屏幕；visibility 打开时立即可见，关闭时延迟到过渡结束再隐藏；连点时以最后一次为准，aria-expanded 立即更新；Esc 关闭并把焦点还给触发按钮；减少动态效果时只保留 150ms 淡入淡出。
+
+## 示例
+
+<style>
+.st{--k:1;--out:cubic-bezier(0,0,.2,1);--in:cubic-bezier(.4,0,1,1);position:relative;height:100%;display:flex;flex-direction:column;gap:8px;padding:10px 14px 12px;background:#f3f4f7;color:#1f2329;font:12px/1.4 system-ui,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid #3b5bdb;outline-offset:2px}
+[hidden]{display:none!important}
+.msg{position:absolute;width:1px;height:1px;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.top{display:flex;align-items:center;gap:8px}
+.seg{display:flex;padding:2px;border-radius:8px;background:#e4e6eb}
+.seg button{height:24px;padding:0 10px;border:0;border-radius:6px;background:none;color:#5b616e;white-space:nowrap}
+.seg [aria-pressed=true]{background:#fff;color:#1f2329;font-weight:600;box-shadow:0 1px 2px rgba(16,24,40,.12)}
+.top .ctl{margin-left:auto;height:28px;padding:0 10px;font-size:12px}
+.pane{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.col{position:relative;min-width:0;min-height:0;display:flex;flex-direction:column;gap:6px;padding:8px 10px;border-radius:12px;background:#fff;box-shadow:0 0 0 1px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.05)}
+.kf,.fly{--c:#e5484d}
+.tr,.lite{--c:#24946a}
+.lb{display:flex;align-items:center;gap:6px;min-width:0;font-weight:600;white-space:nowrap}
+.lb i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--c)}
+.lb code{min-width:0;overflow:hidden;text-overflow:ellipsis;color:#8a909c;font:500 11px ui-monospace,monospace}
+.dd{position:relative;z-index:2}
+.trg{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;height:30px;padding:0 8px 0 10px;border:1px solid #d6dae1;border-radius:8px;background:#fff;font-size:13px;white-space:nowrap}
+.trg:hover{border-color:#b9bfc9}
+.trg span{overflow:hidden;text-overflow:ellipsis}
+.trg svg{flex:none;width:14px;height:14px;fill:none;stroke:#5b616e;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform calc(.2s * var(--k)) var(--out)}
+.trg[aria-expanded=true] svg{transform:rotate(180deg)}
+.menu{position:absolute;left:0;right:0;top:calc(100% + 4px);margin:0;padding:4px;list-style:none;border-radius:10px;background:#fff;box-shadow:0 0 0 1px rgba(15,23,42,.08),0 10px 24px -8px rgba(15,23,42,.32);transform-origin:50% 0;visibility:hidden;opacity:0}
+.menu button{display:flex;align-items:center;justify-content:space-between;width:100%;height:26px;padding:0 8px;border:0;border-radius:6px;background:none;font-size:13px;text-align:left;white-space:nowrap}
+.menu button:hover,.menu button:focus-visible{background:#f2f4f7}
+.menu [aria-current=true]{color:#3b5bdb;font-weight:600}
+.menu [aria-current=true]::after{content:"✓"}
+/* 关键帧：开、关各一段动画，被打断时新动画从自己的第一帧开始 */
+.kf .open .menu{visibility:visible;animation:kin calc(.22s * var(--k)) var(--out) both}
+.kf .shut .menu{visibility:visible;animation:kout calc(.15s * var(--k)) var(--in) both}
+@keyframes kin{from{opacity:0;transform:translateY(-4px) scale(.97)}
+to{opacity:1;transform:none}
+}
+@keyframes kout{from{opacity:1;transform:none}
+to{opacity:0;transform:translateY(-4px) scale(.97)}
+}
+/* 过渡：只切类名，起点永远是当前值；关闭等过渡结束再 visibility:hidden */
+.tr .menu{transform:translateY(-4px) scale(.97);transition:opacity calc(.15s * var(--k)) var(--in),transform calc(.15s * var(--k)) var(--in),visibility 0s calc(.15s * var(--k))}
+.tr .open .menu{visibility:visible;opacity:1;transform:none;transition:opacity calc(.22s * var(--k)) var(--out),transform calc(.22s * var(--k)) var(--out),visibility 0s}
+.plot{position:relative;flex:1;min-height:24px;border-radius:8px;background:#f7f8fa}
+.plot svg{position:absolute;left:6px;top:5px;width:calc(100% - 12px);height:calc(100% - 10px);overflow:visible}
+.plot polyline{fill:none;stroke:var(--c);stroke-width:2;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.plot .base{stroke:#dfe2e8;stroke-width:1;vector-effect:non-scaling-stroke}
+.plot .mk{stroke:#9aa1ad;stroke-width:1;stroke-dasharray:2 2;vector-effect:non-scaling-stroke}
+.cap{margin:0;min-height:30px;color:#5b616e;font-size:11px;line-height:15px}
+.cap b{color:var(--c);font-weight:600}
+.stage{position:relative;flex:1;min-height:40px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;overflow:hidden;border-radius:8px;background:linear-gradient(#f7f8fa,#eff1f5)}
+.toast{display:flex;align-items:center;gap:8px;min-width:0;margin:0 8px;padding:7px 10px;border-radius:10px;background:#1f2329;color:#fff;white-space:nowrap;box-shadow:0 6px 16px -6px rgba(15,23,42,.5);transition:opacity .24s var(--out),transform .24s var(--out),filter .24s var(--out)}
+.toast svg{flex:none;width:16px;height:16px;fill:none;stroke:#6ee7b7;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.toast span{overflow:hidden;text-overflow:ellipsis}
+.fly.gone .toast{transform:translateX(calc(100% + 40px));transition:transform .42s var(--in)}
+.lite.gone .toast{opacity:0;transform:translateY(8px) scale(.98);filter:blur(3px);transition:opacity .15s var(--in),transform .15s var(--in),filter .15s var(--in)}
+.bar{height:6px;border-radius:3px;background:#eef0f4}
+.bar i{display:block;width:var(--w);height:100%;border-radius:3px;background:var(--c)}
+.nt,.nt *{transition:none!important;animation:none!important}
+@container (max-width:310px){.lb code{display:none}
+}
+@container (min-height:260px){.st{gap:10px;padding:14px 18px}
+.msg{position:static;width:auto;height:auto;overflow:visible;clip-path:none;color:#5b616e;font-size:12px;white-space:normal}
+.cap{font-size:12px;line-height:17px}
+.stage::before{content:"";position:absolute;left:12px;right:12px;top:12px;height:40px;background:linear-gradient(#e1e4ea,#e1e4ea) 0 0/55% 9px no-repeat,linear-gradient(#e9ebef,#e9ebef) 0 18px/88% 7px no-repeat,linear-gradient(#e9ebef,#e9ebef) 0 31px/72% 7px no-repeat;border-radius:4px}
+}
+@media (prefers-reduced-motion:reduce){@keyframes kin{from{opacity:0}
+to{opacity:1}
+}
+@keyframes kout{from{opacity:1}
+to{opacity:0}
+}
+.tr .menu,.lite.gone .toast,.fly.gone .toast{transform:none;filter:none}
+.fly.gone .toast{opacity:0;transition:opacity .15s}
+.toast{transition:opacity .15s}
+.trg svg{transition:none}
+}
+</style>
+
+<div class="st"><div class="top"><div class="seg" role="group" aria-label="对比"><button type="button" aria-pressed="true" data-t="0">被打断</button><button type="button" aria-pressed="false" data-t="1">退场</button></div><button type="button" class="ctl go">连点演示</button></div><div class="pane p1"><section class="col kf" aria-label="关键帧写法"><div class="lb"><i></i>关键帧 <code>@keyframes</code></div><div class="dd"><button type="button" class="trg" aria-expanded="false"><span>排序 · <b class="v">最新</b></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><ul class="menu"><li><button type="button" data-v="最新" aria-current="true">最新</button></li><li><button type="button" data-v="最热" aria-current="false">最热</button></li><li><button type="button" data-v="离我近" aria-current="false">离我近</button></li></ul></div><div class="plot" aria-hidden="true"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><line class="base" x1="0" y1="38" x2="100" y2="38"/><line class="mk" x1="0" y1="0" x2="0" y2="40"/><polyline points=""/></svg></div><p class="cap">打开后半路关闭，看面板怎么走</p></section><section class="col tr" aria-label="过渡写法"><div class="lb"><i></i>过渡 <code>transition</code></div><div class="dd"><button type="button" class="trg" aria-expanded="false"><span>排序 · <b class="v">最新</b></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><ul class="menu"><li><button type="button" data-v="最新" aria-current="true">最新</button></li><li><button type="button" data-v="最热" aria-current="false">最热</button></li><li><button type="button" data-v="离我近" aria-current="false">离我近</button></li></ul></div><div class="plot" aria-hidden="true"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><line class="base" x1="0" y1="38" x2="100" y2="38"/><line class="mk" x1="0" y1="0" x2="0" y2="40"/><polyline points=""/></svg></div><p class="cap">打开后半路关闭，看面板怎么走</p></section></div><div class="pane p2" hidden><section class="col fly" aria-label="飞出屏幕"><div class="lb"><i></i>飞出屏幕 <code>420ms</code></div><div class="stage"><div class="toast"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>已保存</span></div></div><div class="bar" aria-hidden="true"><i style="--w:100%"></i></div><p class="cap">退得比进来还慢，视线被拽到屏幕外</p></section><section class="col lite" aria-label="轻退场"><div class="lb"><i></i>轻退场 <code>150ms</code></div><div class="stage"><div class="toast"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>已保存</span></div></div><div class="bar" aria-hidden="true"><i style="--w:36%"></i></div><p class="cap">下沉 8px、淡出、微糊，<b>比入场快</b></p></section></div><p class="msg" role="status"></p></div>
+
+<script type="module">
+export default function demo(root) {
+  const $ = (q, el = root) => el.querySelector(q), st = $('.st'), msg = $('.msg'), go = $('.go');
+  const dds = [...root.querySelectorAll('.dd')], panes = [$('.p1'), $('.p2')], exits = [$('.fly'), $('.lite')];
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  let tab = 0, run = 0;
+  const say = (t) => { msg.textContent = t; };
+  const isKf = (dd) => !!dd.closest('.kf');
+  const set = (dd, on) => {
+    dd.classList.toggle('open', on);
+    if (isKf(dd)) dd.classList.toggle('shut', !on); // 关键帧写法：关的时候换另一段动画
+    $('.trg', dd).setAttribute('aria-expanded', String(on));
+  };
+  dds.forEach((dd) => {
+    const trg = $('.trg', dd), menu = $('.menu', dd), items = [...menu.querySelectorAll('button')];
+    trg.addEventListener('click', () => set(dd, !dd.classList.contains('open')));
+    trg.addEventListener('keydown', (e) => { if (e.key === 'ArrowDown') { e.preventDefault(); set(dd, true); (items.find((b) => b.getAttribute('aria-current') === 'true') || items[0]).focus(); } });
+    menu.addEventListener('keydown', (e) => {
+      const i = items.indexOf(root.activeElement);
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); items[(i + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length].focus(); }
+    });
+    menu.addEventListener('click', (e) => {
+      const b = e.target.closest('button'); if (!b) return;
+      items.forEach((x) => x.setAttribute('aria-current', String(x === b)));
+      $('.v', trg).textContent = b.dataset.v; set(dd, false); trg.focus();
+      say(`已按“${b.dataset.v}”排序`);
+    });
+    menu.addEventListener('animationend', (e) => { if (e.animationName === 'kout') dd.classList.remove('shut'); });
+    dd.addEventListener('keydown', (e) => { if (e.key === 'Escape' && dd.classList.contains('open')) { set(dd, false); trg.focus(); } });
+  });
+  // 把两个面板的 opacity 逐帧记下来画成折线：横轴是时间，纵轴是打开程度
+  const trace = (dur) => {
+    const cols = [...panes[0].querySelectorAll('.col')].map((col) => ({ menu: $('.menu', col), line: $('polyline', col), pts: [] }));
+    const t0 = performance.now();
+    const tick = () => {
+      if (!root.host.isConnected) return;
+      const t = performance.now() - t0;
+      cols.forEach((c) => {
+        c.pts.push([t, +getComputedStyle(c.menu).opacity]);
+        c.line.setAttribute('points', c.pts.map(([x, v]) => `${(x / dur * 100).toFixed(1)},${(38 - v * 34).toFixed(1)}`).join(' '));
+      });
+      if (t < dur) requestAnimationFrame(tick);
+    };
+    tick();
+    return cols;
+  };
+  const reset = () => {
+    st.classList.add('nt');
+    dds.forEach((dd) => { dd.classList.remove('open', 'shut'); $('.trg', dd).setAttribute('aria-expanded', 'false'); });
+    void st.offsetWidth; st.classList.remove('nt');
+  };
+  // 放慢 3 倍：两个下拉同时打开，开到一半时关闭
+  const sim = async () => {
+    const id = ++run, dur = 1300, cut = 210;
+    reset(); st.style.setProperty('--k', '3');
+    root.querySelectorAll('.p1 .cap').forEach((p) => { p.textContent = '放慢 3 倍：打开，开到一半就关'; });
+    root.querySelectorAll('.p1 .mk').forEach((l) => { l.setAttribute('x1', '0'); l.setAttribute('x2', '0'); });
+    say('演示中：两个下拉同时打开，开到一半就关闭');
+    const cols = trace(dur);
+    dds.forEach((dd) => set(dd, true));
+    await wait(cut); if (id !== run) return;
+    const v0 = cols.map((c) => +getComputedStyle(c.menu).opacity);
+    const x = (cut / dur * 100).toFixed(1);
+    root.querySelectorAll('.p1 .mk').forEach((l) => { l.setAttribute('x1', x); l.setAttribute('x2', x); });
+    dds.forEach((dd) => set(dd, false));
+    await wait(160); if (id !== run) return;
+    // 看关闭后的头 160ms 里面板有没有先跳回更高的位置
+    const res = cols.map((c, i) => {
+      const peak = Math.max(...c.pts.filter(([t]) => t > cut).map(([, v]) => v));
+      const p0 = Math.round(v0[i] * 100);
+      return peak > v0[i] + 0.1 ? `开到 ${p0}% 时关闭，<b>先跳回 ${Math.round(peak * 100)}%</b> 再收起` : `开到 ${p0}% 时关闭，<b>从 ${p0}% 原路收回</b>`;
+    });
+    root.querySelectorAll('.p1 .cap').forEach((p, i) => { p.innerHTML = res[i]; });
+    await wait(dur - cut - 100); if (id !== run) return;
+    st.style.setProperty('--k', '1');
+    say(res.map((r, i) => (i ? '过渡：' : '关键帧：') + r.replace(/<\/?b>/g, '')).join('；'));
+  };
+  const exit = async () => {
+    const id = ++run;
+    exits.forEach((c) => c.classList.add('gone'));
+    say('退场：飞出用 420ms 拖到屏幕外，轻退场 150ms 原地淡掉');
+    await wait(1000); if (id !== run) return;
+    exits.forEach((c) => c.classList.remove('gone'));
+  };
+  const show = (t) => {
+    tab = t; run++;
+    root.querySelectorAll('.seg button').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.t === t)));
+    panes.forEach((p, i) => { p.hidden = i !== t; });
+    exits.forEach((c) => c.classList.remove('gone'));
+    reset(); st.style.setProperty('--k', '1');
+    go.textContent = t ? '播放退场' : '连点演示';
+  };
+  root.querySelectorAll('.seg button').forEach((b) => b.addEventListener('click', () => { show(+b.dataset.t); (tab ? exit : sim)(); }));
+  go.addEventListener('click', () => (tab ? exit : sim)());
+  setTimeout(() => { if (root.host.isConnected) sim(); }, 300);
+}
+</script>

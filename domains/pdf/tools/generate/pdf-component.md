@@ -42,3 +42,25 @@ React 项目里的简历、证书、小票、几页的报价单；数据已在�
 5. 文件名按 {文件名规则}（如 报价单-客户名-日期.pdf），响应头带 Content-Disposition 和 UTF-8 编码的文件名。
 6. 边界情况：明细 0 条、200 条、单条备注 500 字、图片加载失败时显示占位。
 最后说明改了哪些文件，以及在 Chrome 和 iOS Safari 各下载一份的检查结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: '@react-pdf/renderer', text: `
+Font.register({ family: 'SourceHanSans', src: '/fonts/SourceHanSansSC-Regular.ttf' })
+// 中文按单字拆开，英文单词保持整体
+Font.registerHyphenationCallback((w) =>
+  /^[A-Za-z0-9]+$/.test(w) ? [w] : Array.from(w))
+<Page size="A4">
+  <Text fixed>报价单 · 杭州西湖店</Text>
+  <View wrap={false}>…一行明细…</View>
+  <Text fixed render={({ pageNumber, totalPages }) =>
+    '第 ' + pageNumber + ' 页 / 共 ' + totalPages + ' 页'} />
+</Page>
+` }]), { title: '组件式生成 · fixed 每页重复' });
+}
+</script>

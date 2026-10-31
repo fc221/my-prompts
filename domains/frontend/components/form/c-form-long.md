@@ -29,3 +29,45 @@ order: 20
 ## 提示词
 
 把{商品发布页}做成复杂长表单：字段按“基本信息 / 价格库存 / 图文详情 / 物流 / 售后”分成 5 张带标题的卡片，卡内单列，卡片间距 24px、内边距 24px；左侧 180px 吸顶锚点目录，滚动时高亮当前组并标出有错误的组；底部 56px 吸底操作栏，内容与表单列左对齐，“发布商品”主按钮在最左，旁边显示“已保存草稿 · 14:32”；提交时滚动并聚焦第一个错误，3 个以上错误时顶部给可点击汇总；自动保存草稿；窄屏目录改为顶部横向标签。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.lf{align-items:stretch;gap:12px;padding:12px}
+.toc{flex:none;width:92px;display:flex;flex-direction:column}
+.toc a{display:flex;align-items:center;justify-content:space-between;height:28px;padding:0 8px;border-left:2px solid #e3e6eb;color:#5b616e;font-size:13px;text-decoration:none;white-space:nowrap}
+.toc a:hover{color:#1f2329}
+.toc a.on{border-color:#3b5bdb;background:#edf1ff;color:#3b5bdb;font-weight:500}
+.dot{width:6px;height:6px;border-radius:50%;background:#d92d20}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;background:#fff;border:1px solid #e3e6eb;border-radius:8px;overflow:hidden}
+.sc{position:relative;flex:1;min-height:0;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:12px;background:#f5f6f8}
+section{display:flex;flex-direction:column;gap:8px;padding:12px;background:#fff;border:1px solid #e3e6eb;border-radius:8px}
+h4{margin:0;font-size:14px;line-height:22px;font-weight:600}
+h4:focus{outline:none}
+.fl{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:8px;font-size:13px}
+.fl span{color:#5b616e}
+.fl .inp{height:28px;padding:0 8px}
+section .help{margin:-4px 0 0 72px}
+.bar{display:flex;align-items:center;gap:8px;height:48px;padding:0 12px;border-top:1px solid #e3e6eb}
+.bar .btn{height:30px;padding:0 12px}
+@container (max-width:440px){.xs{display:none}
+}
+@container (max-width:320px){.toc{display:none}
+}
+</style>
+
+<div class="s lf"><nav class="toc" aria-label="表单分组"><a href="#g1" class="on">基本信息</a><a href="#g2">价格库存<i class="dot" title="有 1 个错误"></i></a><a href="#g3">图文详情</a><a href="#g4">物流</a><a href="#g5">售后</a></nav><div class="main"><div class="sc"><section id="g1"><h4 tabindex="-1">基本信息</h4><label class="fl"><span>商品名称</span><input class="inp" value="轻量羽绒服"></label><label class="fl"><span>类目</span><input class="inp" value="服装 / 外套"></label></section><section id="g2"><h4 tabindex="-1">价格库存</h4><label class="fl"><span>售价</span><input class="inp err" id="price" placeholder="例如 399" aria-invalid="true" aria-describedby="pe"></label><p class="help bad" id="pe">请填写售价</p><label class="fl"><span>库存</span><input class="inp" value="120"></label></section><section id="g3"><h4 tabindex="-1">图文详情</h4><label class="fl"><span>主图</span><input class="inp" value="已上传 3 张"></label></section><section id="g4"><h4 tabindex="-1">物流</h4><label class="fl"><span>运费模板</span><input class="inp" value="全国包邮"></label></section><section id="g5"><h4 tabindex="-1">售后</h4><label class="fl"><span>退货</span><input class="inp" value="7 天无理由"></label></section></div><div class="bar"><button class="btn pri go" type="button">发布商品</button><button class="btn" type="button">存草稿</button><span class="help xs">已保存草稿 · 14:32</span></div></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const sc = root.querySelector('.sc'), links = [...root.querySelectorAll('.toc a')], secs = [...root.querySelectorAll('section')];
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const spy = () => { let k = 0; secs.forEach((s, i) => { if (s.offsetTop - sc.scrollTop <= 24) k = i; }); if (sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 2) k = secs.length - 1; links.forEach((a, i) => a.classList.toggle('on', i === k)); };
+  const jump = (s, el) => { sc.scrollTo({ top: s.offsetTop - 12, behavior: still ? 'auto' : 'smooth' }); (el || s.querySelector('h4')).focus({ preventScroll: true }); };
+  sc.addEventListener('scroll', spy);
+  links.forEach((a, i) => a.addEventListener('click', (e) => { e.preventDefault(); jump(secs[i]); }));
+  root.querySelector('.go').addEventListener('click', () => jump(secs[1], root.querySelector('#price')));
+  root.querySelector('#price').addEventListener('input', (e) => { const ok = !!e.target.value.trim(); e.target.classList.toggle('err', !ok); e.target.setAttribute('aria-invalid', String(!ok)); root.querySelector('#pe').hidden = ok; root.querySelector('.dot').hidden = ok; });
+}
+</script>

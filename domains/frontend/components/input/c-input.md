@@ -29,3 +29,34 @@ order: 10
 ## 提示词
 
 把{创建项目表单的“访问地址”}做成输入框：标签在上方，框内前缀“https://”、后缀“{.com}”，高 32px（触屏 44px、字号 16px），左右内边距 12px；有内容时显示清除按钮（aria-label“清除”，清除后焦点留在框内）；标签行右端显示“已输入 / 上限”，超出变红但不截断；默认、悬停、聚焦、禁用、只读、错误六态齐全，错误文字在框下方并用 aria-describedby 关联；窄屏宽度撑满。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.w{width:100%;max-width:320px;display:flex;flex-direction:column;gap:16px}
+.f{display:flex;flex-direction:column;gap:8px}
+.lr{display:flex;justify-content:space-between;align-items:baseline}
+.cnt{font-variant-numeric:tabular-nums}
+.box{position:relative;display:flex}
+.box .inp{flex:1;padding-right:36px}
+.clr{position:absolute;right:4px;top:4px;display:grid;place-items:center;width:24px;height:24px;padding:0;border:0;border-radius:4px;background:none;color:#8a909c;cursor:pointer}
+.clr:hover{color:#1f2329;background:#f5f6f8}
+.grp{display:flex}
+.grp .inp{flex:1;width:0;border-radius:0}
+.ad{display:inline-flex;align-items:center;padding:0 12px;border:1px solid #c9ced6;background:#f5f6f8;color:#5b616e}
+.ad:first-child{border-right:0;border-radius:6px 0 0 6px}
+.ad:last-child{border-left:0;border-radius:0 6px 6px 0}
+</style>
+
+<div class="s"><div class="w"><div class="f"><div class="lr"><label class="lab" for="n">项目名称</label><span class="help cnt" aria-live="polite"></span></div><div class="box"><input class="inp" id="n" value="官网改版" autocomplete="off"><button class="clr" type="button" aria-label="清除"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button></div></div><div class="f"><label class="lab" for="u">访问地址</label><div class="grp"><span class="ad">https:&#47;&#47;</span><input class="inp" id="u" placeholder="my-site" spellcheck="false" autocapitalize="off"><span class="ad">.com</span></div></div></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const i = root.querySelector('#n'), c = root.querySelector('.cnt'), x = root.querySelector('.clr');
+  const up = () => { const n = [...i.value].length, over = n > 20; c.textContent = over ? `${n} / 20，超出 ${n - 20} 字` : `${n} / 20`; c.classList.toggle('bad', over); i.classList.toggle('err', over); i.setAttribute('aria-invalid', String(over)); x.hidden = !n; };
+  i.addEventListener('input', up);
+  x.addEventListener('click', () => { i.value = ''; up(); i.focus(); });
+  up();
+}
+</script>

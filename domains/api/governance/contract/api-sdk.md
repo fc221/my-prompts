@@ -42,3 +42,18 @@ order: 30
 4. 版本号用 semver 且独立于 API 版本，User-Agent 带 SDK 名和版本。
 5. README 首屏给安装命令和可运行示例；CI 对 mock 服务跑冒烟测试。
 最后说明改了哪些文件，并用 SDK 演示：列出全部{资源名}（自动翻页），以及模拟一次 429 后自动重试成功。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '调用方', items: ['client.orders.list()'], note: '装一个包，写一个循环遍历全部订单' },
+    { t: '手写封装', items: ['认证', '重试', '分页迭代器', 'RateLimitError'], note: '429/502/503/504 最多重试 3 次，POST 自动带 Idempotency-Key', acc: true },
+    { t: 'generated/', items: ['openapi-generator'], note: '契约一变 CI 重新生成并开 PR，勿手改' },
+  ], { arrow: '封装调生成代码' }), { title: 'SDK · 生成代码外包一层薄封装' });
+}
+</script>

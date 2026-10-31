@@ -43,3 +43,22 @@ JWT 发出去就收不回来，过期前一直有效。访问令牌有效期要�
 5. JWT 校验用固定算法白名单，校验 iss、aud、exp、nbf，按 kid 从 JWKS 取公钥。
 6. 401 带 WWW-Authenticate；scope 不足返回 403 并写明缺少的 scope。
 已经发出去的 Key 和令牌要能平滑过渡，先列出迁移步骤给我确认。最后说明改了哪些文件，并写测试覆盖：过期令牌、错误的 aud、alg 为 none、旧刷新令牌被重用、scope 不足。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['第三方应用', 'API', '授权服务'], [
+    [0, 2, '授权请求 · code_challenge（S256）'],
+    [2, 2, '会员登录并同意 orders:read'],
+    [2, 0, '回调登记的 redirect_uri · code', 'r'],
+    [0, 2, 'POST /token · code + code_verifier'],
+    [2, 0, '访问令牌 15 分钟 + 刷新令牌', 'r'],
+    [0, 1, 'Bearer <访问令牌>'],
+    [1, 0, 'scope 不够 → 403', 'r'],
+  ]), { title: 'OAuth 2.0 授权码 + PKCE' });
+}
+</script>

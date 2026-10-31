@@ -40,3 +40,18 @@ order: 50
 3. 在 src/components/ui 下封装项目自己的组件：样式用现有设计令牌，挂在 data-state 和 aria-* 属性上；对外接口与旧组件一致，浮层用库的 Portal。
 4. 逐个替换调用处，删掉旧实现。
 5. 用键盘逐个验证：Tab 进入、方向键移动、Enter 选中、Esc 关闭、关闭后焦点回到触发按钮，读屏能读出当前选项。汇报改动文件和验证结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '业务代码', items: ['门店筛选', '退款对话框'], note: '只引项目组件，看不到库的类型' },
+    { t: '项目组件', items: ['Select', 'Dialog', 'Menu'], note: 'src/components/ui，样式挂 data-state', acc: true },
+    { t: '无头库', items: ['Select.Root', 'Select.Trigger', 'Portal'], note: '键盘、焦点、读屏、aria-*' },
+  ], { arrow: '换库只改中间这层' }), { title: '无头组件 · 行为归库，外观归项目' });
+}
+</script>

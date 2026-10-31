@@ -43,3 +43,70 @@ order: 30
 5. 条件格式：今天加粗边框和浅蓝底；非本月字变浅灰；周末浅灰底；按今天、非本月、周末的顺序并勾“如果为真则停止”。
 6. 取消网格线，7 列等宽，横向 A4 一页打印。
 交付时用 {示例月份，如 2026 年 8 月（要用到第 6 周）} 演示，填 10 笔左右的示例明细，并说明换月份时整张日历怎么跟着变。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-x{width:680px;border:1px solid #c9ced6;border-radius:6px;background:#fff;overflow:hidden;font:12px/1.35 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:#1f2329}
+.m-in{display:grid;gap:8px;padding:10px 14px 12px}
+.m-top{display:flex;align-items:center;gap:8px}
+.m-top>b{margin-right:auto;font-size:15px;color:#101828}
+.m-dd{display:flex;align-items:center;gap:6px;padding:2px 8px;border:1px solid #c9ced6;border-radius:4px;font-size:11.5px}
+.m-dd span{color:#5d6675}
+.m-dd em{color:#8a94a6;font-size:10px}
+.m-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.m-k{padding:6px 12px 7px;border:1px solid #e1e5ea;border-radius:6px;background:#fafbfc}
+.m-k p{margin:0;color:#5d6675;font-size:11px}
+.m-k b{display:block;font-size:20px;font-weight:700;line-height:1.25;font-variant-numeric:tabular-nums}
+.m-k span{color:#5d6675;font-size:10.5px}
+.m-g{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid #dfe3e8;border-left:1px solid #dfe3e8}
+.m-wh{padding:3px 0;border-right:1px solid #dfe3e8;border-bottom:1px solid #dfe3e8;background:#f1f3f5;color:#5d6675;font-size:11px;font-weight:650;text-align:center}
+.m-d{position:relative;display:grid;grid-template-rows:auto auto auto 1fr;height:52px;padding:3px 6px 4px;border-right:1px solid #dfe3e8;border-bottom:1px solid #dfe3e8;font-variant-numeric:tabular-nums}
+.m-d b{font-size:12px;font-weight:650;line-height:1.2}
+.m-d span{font-size:10.5px;line-height:1.3;text-align:right;white-space:nowrap}
+.m-d .m-i{color:#067647}
+.m-d .m-e{color:#b42318}
+.m-d i{align-self:end;justify-self:start;width:var(--w);height:4px;border-radius:2px;background:#f3a8a1}
+.m-we{background:#f6f7f9}
+.m-out b{color:#b7bec9;font-weight:500}
+.m-today{outline:2px solid #2a78d6;outline-offset:-2px;background:#eef4fc}
+.m-today b::after{content:"今天";margin-left:4px;padding:0 4px;border-radius:3px;background:#2a78d6;color:#fff;font-size:9.5px;font-weight:600}
+.m-sel{outline:2px solid #1d8348;outline-offset:-2px}
+</style>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  // 2026 年 10 月，截至 10-29；1 号是周四，第一格是 9 月 28 日（周一）
+  const exp = [86.5, 1280, 642, 358, 120, 45.8, 210, 63, 98.4, 3500, 156, 72.6, 39, 188, 260, 54, 412, 96, 33.5, 128, 66, 845, 58, 236, 312, 48, 75, 102, 64];
+  const inc = { 10: 18500, 15: 2400, 22: 356.2 };
+  const money = (v) => v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const max = Math.max(...exp), totalE = exp.reduce((a, b) => a + b, 0), totalI = Object.values(inc).reduce((a, b) => a + b, 0);
+  const start = new Date(2026, 8, 28), today = 29;
+  const cells = Array.from({ length: 42 }, (_, k) => {
+    const d = new Date(start); d.setDate(start.getDate() + k);
+    const day = d.getDate(), inMonth = d.getMonth() === 9, we = k % 7 > 4;
+    const cls = ['m-d', we && 'm-we', !inMonth && 'm-out', inMonth && day === today && 'm-today', k === 0 && 'm-sel'].filter(Boolean).join(' ');
+    let body = '';
+    if (inMonth && day <= today) {
+      const e = exp[day - 1];
+      body = `<span class="m-i">${inc[day] ? '+' + money(inc[day]) : ''}</span><span class="m-e">−${money(e)}</span><i style="--w:${Math.max(4, (e / max) * 100).toFixed(1)}%"></i>`;
+    }
+    return `<div class="${cls}"><b>${day}</b>${body}</div>`;
+  }).join('');
+  draw(root, `<div class="m-x">
+    <div class="xfx"><b>B6</b><i>fx</i><span>=DATE(年,月,1)-WEEKDAY(DATE(年,月,1),2)+1</span></div>
+    <div class="m-in">
+      <div class="m-top"><b>2026 年 10 月收支日历</b><p class="m-dd"><span>年份</span>2026<em>▾</em></p><p class="m-dd"><span>月份</span>10<em>▾</em></p></div>
+      <div class="m-kpis">
+        <div class="m-k"><p>本月收入</p><b style="color:#067647">${money(totalI)}</b><span>3 笔入账</span></div>
+        <div class="m-k"><p>本月支出</p><b style="color:#b42318">${money(totalE)}</b><span>日均 ${money(totalE / today)}</span></div>
+        <div class="m-k"><p>本月结余</p><b>${money(totalI - totalE)}</b><span>结余率 ${(((totalI - totalE) / totalI) * 100).toFixed(1)}%</span></div>
+      </div>
+      <div class="m-g">${['一', '二', '三', '四', '五', '六', '日'].map((w) => `<div class="m-wh">${w}</div>`).join('')}${cells}</div>
+    </div>
+    <div class="xt"><span class="on">日历看板</span><span>明细</span><span>类别</span></div>
+  </div>`, { title: '收支日历看板 · 第一格 = 1 号所在那周的周一', min: 0.35 });
+}
+</script>

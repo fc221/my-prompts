@@ -28,3 +28,51 @@ order: 70
 ## 提示词
 
 在{角色权限配置页}用穿梭框分配权限：左“可选权限”、右“已分配”，每侧宽 240px、最高 320px 内滚动，标题显示数量，顶部有搜索框和三态全选；中间“移到右侧”“移到左侧”两个 32px 图标按钮，没有勾选时禁用并有 aria-label；双击单项直接移动；移动后保留搜索词和滚动位置；列表项整行可点、空格勾选；容器窄于 560px 时改为“可搜索复选列表 + 已选标签”。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.tf{display:flex;align-items:center;gap:8px;width:100%;max-width:460px}
+.pn{flex:1;min-width:0;background:#fff;border:1px solid #e3e6eb;border-radius:8px;overflow:hidden}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:4px;height:32px;padding:0 8px 0 10px;border-bottom:1px solid #e3e6eb;font-weight:500;white-space:nowrap}
+.n{font-size:12px;font-weight:400;color:#5b616e;font-variant-numeric:tabular-nums}
+ul{list-style:none;margin:0;padding:4px;height:108px;overflow:auto}
+label{display:flex;align-items:center;gap:8px;min-width:0;cursor:pointer}
+li label{height:26px;padding:0 6px;border-radius:4px;white-space:nowrap;user-select:none}
+li label:hover{background:#f5f6f8}
+input{flex:none;width:16px;height:16px;accent-color:#3b5bdb}
+.emp{padding:6px;font-size:12px;color:#5b616e}
+.mv{display:flex;flex-direction:column;gap:8px}
+.ib{width:32px;padding:0;font-size:18px}
+@container (max-width:290px){.tf{gap:6px}
+.ib{width:28px}
+.ph{gap:6px;padding:0 6px 0 8px}
+}
+.ib:disabled{color:#c9ced6;border-color:#e3e6eb;background:#fff;cursor:not-allowed}
+</style>
+
+<div class="s"><div class="tf"><div class="pn"><div class="ph"><label><input type="checkbox" class="all" data-s="L">可选权限</label><span class="n" data-s="L"></span></div><ul data-s="L"></ul></div><div class="mv"><button type="button" class="btn ib" data-to="R" aria-label="移到右侧">›</button><button type="button" class="btn ib" data-to="L" aria-label="移到左侧">‹</button></div><div class="pn"><div class="ph"><label><input type="checkbox" class="all" data-s="R">已分配</label><span class="n" data-s="R"></span></div><ul data-s="R"></ul></div></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const S = { L: ['查看订单', '导出报表', '管理成员', '修改价格', '退款审批'], R: ['查看商品', '编辑商品'] }, sel = { L: new Set(), R: new Set() };
+  const draw = () => {
+    for (const s of ['L', 'R']) {
+      root.querySelector(`ul[data-s="${s}"]`).innerHTML = S[s].map((x) => `<li><label><input type="checkbox" value="${x}" ${sel[s].has(x) ? 'checked' : ''}>${x}</label></li>`).join('') || '<li class="emp">暂无</li>';
+      const all = root.querySelector(`.all[data-s="${s}"]`); all.checked = S[s].length > 0 && sel[s].size === S[s].length; all.indeterminate = sel[s].size > 0 && !all.checked; all.disabled = !S[s].length;
+      root.querySelector(`.n[data-s="${s}"]`).textContent = sel[s].size ? `${sel[s].size} / ${S[s].length}` : S[s].length;
+    }
+    root.querySelector('[data-to="R"]').disabled = !sel.L.size; root.querySelector('[data-to="L"]').disabled = !sel.R.size;
+  };
+  const move = (from, items) => { const to = from === 'L' ? 'R' : 'L'; S[from] = S[from].filter((x) => !items.includes(x)); S[to].push(...items); items.forEach((x) => sel[from].delete(x)); draw(); };
+  root.querySelectorAll('ul').forEach((ul) => {
+    const s = ul.dataset.s;
+    ul.addEventListener('change', (e) => { const v = e.target.value; e.target.checked ? sel[s].add(v) : sel[s].delete(v); draw(); });
+    ul.addEventListener('dblclick', (e) => { const i = e.target.closest('label')?.querySelector('input'); if (i) move(s, [i.value]); });
+  });
+  root.querySelectorAll('.all').forEach((a) => a.addEventListener('change', () => { const s = a.dataset.s; sel[s] = new Set(a.checked ? S[s] : []); draw(); }));
+  root.querySelectorAll('[data-to]').forEach((b) => b.addEventListener('click', () => { const from = b.dataset.to === 'R' ? 'L' : 'R'; move(from, [...sel[from]]); }));
+  draw();
+}
+</script>

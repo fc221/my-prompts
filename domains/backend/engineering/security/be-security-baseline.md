@@ -39,3 +39,19 @@ order: 40
 2. 按规则改：SQL 全部参数化，排序字段白名单映射；入参绑定专门的 DTO；用户 URL 请求加协议限制、解析后拦截内网地址、关闭自动重定向、设超时和大小上限；关闭不安全的反序列化和 XML 外部实体；命令用参数数组；文件路径服务端生成并校验目录；加请求体和分页上限；CI 加依赖漏洞扫描。
 3. 每类问题至少一个回归测试，如带单引号的搜索词、指向 127.0.0.1 的回调地址、包含 ../ 的文件名。
 4. 汇报：按类别列出发现的问题、位置、修复方式和测试，以及暂不修复的项和原因。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '拼 SQL', items: ['参数化或 ORM 绑定', 'sort=created_at 走白名单映射'] },
+    { t: '拼命令行', items: ['参数数组，不经过 shell', '用户输入只当单个参数'] },
+    { t: '拼文件路径', items: ['路径由服务端生成', '规范化后校验仍在目标目录内'] },
+    { t: '拼 URL（SSRF）', items: ['只允许 http、https', '解析后拒绝内网和保留地址'] },
+  ], { cols: 2, note: '看到用户输入进入这四种拼接，就按框里的规则处理' }), { title: '安全底线 · 问题多出在拼接' });
+}
+</script>

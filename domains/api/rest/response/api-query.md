@@ -43,3 +43,33 @@ order: 30
 6. 每个可过滤、可排序字段确认有索引，没有的列出来并说明要不要加。
 7. 测试：组合过滤、多字段排序、非法字段、传入无权访问的过滤值（如别的门店 ID）。
 最后列出改动文件和前端需要跟着改的参数名。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+GET /orders
+  ?status=paid,shipped
+  &storeId=s_1024
+  &createdAtFrom=2026-10-01T00:00:00+08:00
+  &q=ord_8F3
+  &sort=-createdAt,id
+  &fields=id,status,totalAmount
+  &expand=store
+`, `
+200 OK
+
+"items": [
+  { "id": "ord_8F3k2", "status": "paid",
+    "totalAmount": 12990,
+    "store": { "id": "s_1024",
+               "name": "滨江路店" } }
+],
+"nextCursor": "eyJjIjoi…"
+`), { title: '过滤 · 排序 · 字段选择 · 展开' });
+}
+</script>

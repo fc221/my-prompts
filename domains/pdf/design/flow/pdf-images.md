@@ -40,3 +40,17 @@ PDF 里的照片、截图、图表和 logo 用什么格式、多大分辨率放�
 4. 生成前等所有图片解码完成，去掉懒加载。
 5. 每张信息图补上说明结论的替代文字，装饰图替代文字留空。
 最后列出每张图改前改后的格式、像素和体积变化，以及改了哪些文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '纸上宽 80mm', note: '按放置尺寸算' }, { t: '需要 945 px', note: '80 ÷ 25.4 × 300', via: '300dpi', acc: true }, { t: '原图先缩小', note: '4000 px → 约 945 px' }],
+    [{ t: '图表转 SVG', note: '关掉入场动画' }, { t: '照片转 JPEG', note: '质量 80–85 · 去 EXIF' }, { t: '等 decode()', note: '去掉懒加载' }, { t: '生成 PDF', acc: true }],
+  ]), { title: '打印 300dpi · 屏幕 150dpi' });
+}
+</script>

@@ -45,3 +45,29 @@ Angular 项目的约定，以 Angular 22 为准，v20 起的项目都适用：�
 7. 变更检测用 OnPush；版本支持且第三方库兼容时，再切换到 zoneless。
 每步单独提交，跑 ng build 和 ng test；文件命名沿用现有风格。
 完成后汇报改了哪些文件、每类迁移的数量、还没迁的部分和原因。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+  main.ts               bootstrapApplication
+  styles.css            全局令牌 CSS 变量
+  app/
+*   app.config.ts       provideRouter、provideHttpClient
+*   app.routes.ts       功能路由 loadChildren 懒加载
+    core/               请求客户端、拦截器、全局状态服务
+    shared/ui/          基础组件
+*   orders/             按领域分，不再分类型目录
+      orders.routes.ts  单个页面 loadComponent
+      order-list.ts     独立组件，OnPush
+      order-list.html   @if、@for 写 track
+      order-list.css    样式默认封装
+    members/
+`), { title: 'Angular 22 · 独立组件 + signals' });
+}
+</script>

@@ -41,3 +41,42 @@ Excel 的日期就是数字（1 天 = 1），相减就是天数；再配合 EDAT
 4. 汇总表按 {汇总维度，如 客户} × 账龄段 用 SUMIFS 汇总金额，加合计和占比。
 5. 超过 {预警天数} 天的行用条件格式标红。
 交付时说明哪些格子要每月手动更新（截止日期、节假日表），哪些是公式，并用 4 行示例验证每个账龄段。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-tag{margin:0 0 5px!important;font-size:11.5px;font-weight:650;color:#5d6675;white-space:nowrap}
+.m-fit .dg-col:first-child{flex:none}
+</style>
+
+<div class="dg m-fit"></div>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const tag = (t) => '<p class="m-tag">' + t + '</p>';
+  draw(root, [
+    tag('应收台账 · 截止日期 参数!B1 = 2026-10-31') + sheet({
+      head: ['客户', '开票日期', '金额', '天数', '账龄'],
+      widths: [64, 80, 76, 40, 70],
+      rows: [
+        ['青禾餐饮', '2026-10-12', '18,600.00', '19', '30 天内'],
+        ['麦田烘焙', '2026-09-08', '9,240.00', '53', '31–60 天'],
+        ['山岚酒店', '2026-08-20', '26,500.00', '72', '61–90 天'],
+        ['北岸超市', '2026-06-30', '4,380.00', '123', '90 天以上'],
+      ],
+      fx: ['E4', '=LOOKUP(D4,档位表[下限],档位表[账龄段])'],
+      marks: { E4: 'warn', E5: 'bad', D5: 'bad' },
+      tabs: ['应收台账', '档位表', '参数'],
+      freeze: true,
+    }),
+    tag('档位表') + sheet({
+      head: ['下限', '账龄段'],
+      widths: [44, 70],
+      rows: [['0', '30 天内'], ['31', '31–60 天'], ['61', '61–90 天'], ['91', '90 天以上']],
+      marks: { A4: 'good', B4: 'good' },
+    }),
+  ], { title: '账龄 · 天数 =参数!$B$1-B2，按下限从小到大的档位表取账龄段', min: 0.45 });
+}
+</script>

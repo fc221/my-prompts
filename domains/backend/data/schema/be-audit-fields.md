@@ -39,3 +39,24 @@ order: 50
 2. 按规则改：公共列通过迁移补齐，由框架统一填充；需要追溯的表改为 deleted_at 加 deleted_by 软删除，ORM 全局过滤已删除数据；唯一索引按数据库改造（PostgreSQL 部分唯一索引，MySQL 加 delete_token）；{关键操作，如报销金额修改和审批}写入只追加的审计表，含操作人、前后值和 trace_id。
 3. 补测试：删除后列表查不到；同一手机号删除后能重新注册；恢复后可见；审计表记下了前后值。
 4. 汇报：改了哪些表和文件、迁移路径、仍保留物理删除的地方及原因、验证结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: '会员表的公共列和唯一约束', text: `
+-- 公共列由框架填充，系统任务写 0
+created_at, created_by, updated_at, updated_by,
+-- 删除标记：NULL 表示未删除
+deleted_at TIMESTAMPTZ NULL, deleted_by BIGINT,
+-- PostgreSQL：已删除会员的手机号不再占唯一
+CREATE UNIQUE INDEX uk_member_phone ON member
+  (tenant_id, phone) WHERE deleted_at IS NULL;
+-- MySQL 没有部分索引：删除时 delete_token 写该行 id
+UNIQUE (tenant_id, phone, delete_token)
+` }]), { title: '软删除 · 唯一约束避开已删除行' });
+}
+</script>

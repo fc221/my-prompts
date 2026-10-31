@@ -43,3 +43,60 @@ order: 70
 6. 全文控制在一页 A4（约 800 字）；审批表申请理由栏限{字数}字的，再给一个压缩版。
 7. 落款留手写签名位置，日期写{提交日期}，下面列附件清单。
 交付时列出需要附的证明材料，并标出我给的信息里互相矛盾或缺失的地方。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-wrap{display:flex;gap:14px;align-items:flex-start}
+.m-pg{position:relative;flex:none;width:480px;padding:18px 32px 14px 52px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25);color:#111;font:11.5px/1.66 "Songti SC","SimSun",serif}
+.m-pg .m-title{margin:0 0 5px;text-align:center;font:700 16px/1.4 "PingFang SC","STHeiti","SimHei",sans-serif;letter-spacing:.03em}
+.m-pg .m-p{text-indent:2em}
+.m-pg .m-r{text-align:right}
+.m-pg [data-n]{position:relative}
+.m-pg [data-n]::before{content:attr(data-n);position:absolute;left:-36px;top:3px;width:15px;height:15px;border-radius:50%;background:#c2410c;color:#fff;font:600 9px/15px system-ui,sans-serif;text-align:center;text-indent:0}
+.m-sig{font:14px "STKaiti","KaiTi",serif;color:#1d3b8f}
+.m-num{background:#fff4e5;box-shadow:0 0 0 1px #f5c78a inset}
+.m-tb{width:100%;margin-top:6px;border-collapse:collapse;table-layout:fixed;font-size:10.5px;line-height:1.4}
+.m-tb td{height:44px;padding:3px 5px;border:1px solid #333;vertical-align:top}
+.m-tb small{display:block;margin-top:10px;color:#555;font-size:9.5px;text-align:right}
+.m-ann{display:grid;width:150px;padding-top:2px;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-ann p{margin:0;padding:4px 0}
+.m-ann b{display:block;color:#101828;font-size:11.5px}
+.m-ann i{display:inline-block;width:14px;height:14px;margin-right:5px;border-radius:50%;background:#c2410c;color:#fff;font:600 9px/14px system-ui,sans-serif;text-align:center;vertical-align:1px}
+.m-ann span{display:block;padding-left:19px;color:#667085}
+.m-ann .m-k span{padding:0}
+.m-ann .m-k{margin-top:4px;padding:5px 8px;border:1px solid #f5c78a;border-radius:6px;background:#fff8ef}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, `<div class="m-wrap"><div class="m-pg">
+    <p class="m-title" data-n="1">2026–2027 学年国家助学金申请书</p>
+    <p>尊敬的经济管理学院领导、老师：</p>
+    <p class="m-p" data-n="2">我是 2024 级市场营销专业学生周雨桐，学号 2024031127，已通过本年度家庭经济困难认定（困难档）。</p>
+    <p class="m-p" data-n="3">家中四口人，父亲务农并打零工，年收入约 <span class="m-num">3.1 万元</span>，是家里唯一收入，人均月收入约 650 元；母亲去年 3 月因病停工，每年药费约 <span class="m-num">0.9 万元</span>；弟弟读高二，学杂费和住宿每年约 <span class="m-num">0.6 万元</span>。</p>
+    <p class="m-p" data-n="4">上一学年绩点 3.52/4.0，专业排名 18/126，必修课无不及格；在学院资料室勤工助学，每周 8 小时；累计志愿服务 86 小时。</p>
+    <p class="m-p" data-n="5">资助将用于住宿费 1,200 元和教材、生活费。本人承诺以上内容真实，如有不实愿承担相应责任，并接受学校核查。</p>
+    <p class="m-r" data-n="6">申请人：<span class="m-sig">周雨桐</span>　2026 年 10 月 20 日</p>
+    <p data-n="7">附件：1. 家庭经济困难认定表　2. 成绩单（教务处盖章）</p>
+    <div data-n="8"><table class="m-tb"><tr><td>班级评议意见<small>辅导员签字：　　年　月　日</small></td><td>学院意见<small>（盖章）　　年　月　日</small></td><td>学校意见<small>（盖章）　　年　月　日</small></td></tr></table></div>
+  </div><div class="m-ann">
+    <p><b><i>1</i>标题</b><span>写全学年和奖助名称</span></p>
+    <p><b><i>2</i>个人基本情况</b><span>学院专业、学号、认定档次</span></p>
+    <p><b><i>3</i>家庭经济情况</b><span>每人收入、主要支出、人均月收入</span></p>
+    <p><b><i>4</i>在校表现</b><span>绩点排名、勤工助学、志愿时长</span></p>
+    <p><b><i>5</i>用途和承诺</b><span>钱用在哪，内容真实可核查</span></p>
+    <p><b><i>6</i>落款</b><span>手写签名和提交日期</span></p>
+    <p><b><i>7</i>附件</b><span>认定表、成绩单、证书</span></p>
+    <p><b><i>8</i>审批栏</b><span>班级评议 → 学院 → 学校</span></p>
+    <p class="m-k"><span>黄底数字都要有证明材料对得上</span></p>
+  </div></div>`, { center: true, min: 0.35 });
+}
+</script>

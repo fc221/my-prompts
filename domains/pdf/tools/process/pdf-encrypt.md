@@ -41,3 +41,19 @@ PDF 标准加密有两个密码：打开密码（user password），没有它打
 5. 用户上传加密文件来处理的场景：先用 qpdf --is-encrypted 判断，请用户输入密码，连续输错 5 次锁定 10 分钟；不做破解。
 6. 边界情况：文件已经加密时不重复加密并报告；损坏文件拒绝；超过 {大小上限} MB 的改为后台处理。
 最后说明改了哪些文件，并列出在两种常见阅读器里打开的检查结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '打开密码 user', items: ['没有它打不开文件', '每份随机 8 位以上', '真正起保护作用'], acc: true },
+    { t: '权限密码 owner', items: ['管打印、复制、修改', '只是请阅读器配合', 'qpdf 一条命令就能去掉'], dash: true },
+    { t: 'qpdf', items: ['--encrypt 打开 权限 256', '密码走 @参数文件，不进 ps'] },
+    { t: 'pypdf', items: ['algorithm="AES-256"', '不写就是不安全的 RC4'] },
+  ], { cols: 2, note: '只设权限密码 = 谁都能打开 · 密码和文件分渠道发' }), { title: '加密与权限 · AES-256' });
+}
+</script>

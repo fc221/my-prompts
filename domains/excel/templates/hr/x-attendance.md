@@ -40,3 +40,42 @@ order: 10
 3. 加班登记表：日期、工号、开始、结束、时长、类型、是否调休。
 4. 右侧统计：应出勤、实际出勤、事假、病假、年假、旷工、迟到次数、三类加班时长，全部用公式。
 交付时说明哪些格手填、哪些是公式、下个月怎么复用，并用 4 名员工的示例数据演示统计结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.xc.m-off{background:#eef0f3;color:#8a94a6}
+</style>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const days = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+  const people = [
+    ['MD001', '林晓雯', '√ √ √ √ 休 休 √ 事 √ √', ['1', '0', '0', '0', '0', '4.0']],
+    ['MD002', '周启航', '√ 迟 √ √ 休 休 √ √ 病 √', ['0', '1', '0', '1', '0', '6.5']],
+    ['MD003', '韩若楠', '年 年 √ √ 休 休 √ √ √ 事半', ['0.5', '0', '2', '0', '0', '0.0']],
+    ['MD004', '唐一鸣', '√ √ 旷 √ 休 休 √ 迟 √ √', ['0', '0', '0', '2', '1', '3.0']],
+  ];
+  const col = (i) => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[i];
+  const marks = {};
+  const tone = { 事: 'warn', 事半: 'warn', 病: 'warn', 年: 'warn', 迟: 'acc', 旷: 'bad', 休: 'off' };
+  ['G', 'H'].forEach((c) => { marks[c + '1'] = 'off'; marks[c + '2'] = 'off'; });
+  const rows = [['', '星期', '二', '三', '四', '五', '六', '日', '一', '二', '三', '四', '…', '', '', '', '', '', '']];
+  people.forEach(([id, name, marksStr, stats], r) => {
+    const cells = marksStr.split(' ');
+    cells.forEach((v, i) => { if (tone[v]) marks[col(i + 2) + (r + 3)] = tone[v]; });
+    rows.push([id, name, ...cells, '…', ...stats]);
+  });
+  draw(root, sheet({
+    head: ['工号', '姓名', ...days, '', '事假', '病假', '年假', '迟到', '旷工', '加班 h'],
+    widths: [48, 50, ...days.map(() => 28), 20, 36, 36, 36, 36, 36, 44],
+    rows,
+    fx: ['D1', '=IF(C1="","",IF(MONTH(C1+1)=月份,C1+1,""))'],
+    marks,
+    tabs: ['9 月考勤', '加班登记', '打卡明细', '员工表', '参数'],
+    freeze: true,
+  }), { title: '2026年9月考勤表 · 改年月，日期、星期和周末底色自动变', min: 0.45 });
+}
+</script>

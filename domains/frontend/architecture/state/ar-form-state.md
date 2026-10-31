@@ -40,3 +40,17 @@ order: 50
 3. 改目标表单：schema 放在对应领域目录，类型由 schema 推导；toPayload / fromDto 负责和接口数据互转；编辑页数据到达后 reset 一次；提交状态用 isSubmitting；后端返回的字段错误回填到对应字段；隐藏字段不校验、不提交。
 4. 错误显示的样式和时机保持现状，只替换状态管理。
 5. 验证：必填和格式校验、联动字段隐藏后不提交、未改动时 isDirty 为 false、后端字段错误能回填。汇报改动文件，并列出其余表单的迁移顺序。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '查询缓存', note: '报销单详情' }, { t: 'fromDto', note: '数据到达后 reset 一次' }, { t: '表单草稿', note: 'isDirty、errors、touched', acc: true }, { t: 'schema 校验', note: 'Zod，类型 z.infer' }],
+    [{ t: 'toPayload', note: '去空格、金额转单位' }, { t: '提交', note: 'isSubmitting 防重复' }, { t: '422 字段错误', note: 'details 回填到字段', via: '后端拒绝', bad: true }],
+  ]), { title: '表单状态 · 草稿和缓存分开' });
+}
+</script>

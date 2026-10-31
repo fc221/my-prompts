@@ -28,3 +28,36 @@ order: 100
 ## 提示词
 
 {产品}页面结尾加「收尾行动区」：页脚上方一块整宽{品牌色或深色}色块，居中放一句行动号召“{号召语}”、一行补充说明和一个反色主按钮“{主行动}”，可再配一个文字链接；上下内边距 clamp(48px, 8vw, 96px)；文字对比度 ≥ 4.5:1；窄屏按钮通栏，标题不超过 3 行。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr',
+  rows: '1fr 220px 22%',
+  areas: ['prev', 'cta', 'foot'],
+  boxes: {
+    prev: {
+      label: '上一节',
+      inner: {
+        cols: '1fr 1fr 1fr',
+        rows: '1fr',
+        areas: ['a b c'],
+        boxes: { a: '能力卡片', b: '能力卡片', c: '能力卡片' },
+      },
+    },
+    cta: { label: '整宽色块：号召 + 主按钮', acc: true },
+    foot: { label: '页脚', dark: true },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: '1fr auto 22%',
+  areas: ['prev', 'cta', 'foot'],
+  boxes: {
+    prev: { label: '上一节', kind: 'card', text: '能力卡片' },
+    cta: { label: '号召 按钮', acc: true },
+    foot: { label: '页脚', dark: true },
+  },
+};
+```

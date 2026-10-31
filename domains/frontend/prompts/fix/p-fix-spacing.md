@@ -2,6 +2,7 @@
 zh: 整理页面间距
 en: Messy spacing
 aka: 间距乱 看着挤
+tab: 间距
 order: 90
 ---
 
@@ -26,3 +27,29 @@ order: 90
 6. 内容太多时先删减或收进下一层（详情、展开、更多），而不是压缩间距。
 7. 同一行的控件等高、垂直居中。
 改完列出调整了哪些间距。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/fix.css">
+<style>
+.c{padding:8px}
+.h{font-size:12px;line-height:16px;font-weight:600}
+.l{color:#5b616e;font-size:10px;line-height:14px}
+.i{height:20px;border:1px solid #c9ced6;border-radius:4px}
+.b{display:inline-block;padding:2px 10px;border-radius:4px;background:#3b5bdb;color:#fff;font-size:10px;line-height:14px}
+/* 改前：同一种关系用了不同的距离，看不出谁和谁一组 */
+.bad .h{margin-bottom:3px}
+.bad .l{margin-top:7px}
+.bad .i{margin-top:5px}
+.bad .i+.l{margin-top:3px}
+.bad .b{margin-top:5px}
+/* 改后：同组 4、组间 12，标题离内容近 */
+.good .h{margin-bottom:8px}
+.good .l{margin-bottom:4px}
+.good .i{margin-bottom:12px}
+</style>
+
+<div class="fx">
+  <section class="fx-p"><h4>改前</h4><div class="fx-b"><div class="fx-z c bad"><div class="h">收货信息</div><div class="l">收货人</div><div class="i"></div><div class="l">手机号</div><div class="i"></div><div class="b">保存</div></div></div></section>
+  <section class="fx-p ok"><h4>改后</h4><div class="fx-b"><div class="fx-z c good"><div class="h">收货信息</div><div class="l">收货人</div><div class="i"></div><div class="l">手机号</div><div class="i"></div><div class="b">保存</div></div></div></section>
+</div>

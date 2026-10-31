@@ -28,3 +28,43 @@ order: 30
 ## 提示词
 
 {产品}登录页用「左图右表单」：左半屏放{品牌图或产品画面}，叠一句价值主张；右半屏居中放 380px 宽表单：Logo、标题、账号、密码（可显示 / 隐藏）、“忘记密码”、通栏主按钮“登录”、注册入口；左侧图片延迟加载、不阻塞表单；1024px 以下左侧收成顶部 140px 品牌条，手机上隐藏，表单铺满、左右 24px。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '52% 1fr',
+  rows: '1fr',
+  areas: ['art form'],
+  boxes: {
+    art: { label: '品牌图 · 价值主张', dark: true },
+    form: {
+      card: true,
+      inner: {
+        cols: '12% 1fr 12%',
+        rows: '1fr 13% 14% 14% 14% 11% 1fr',
+        areas: ['. . .', '. t .', '. f1 .', '. f2 .', '. btn .', '. alt .', '. . .'],
+        boxes: {
+          t: { label: '标题', text: '欢迎回来' },
+          f1: { label: '账号', kind: 'input' },
+          f2: { label: '密码', kind: 'input' },
+          btn: { label: '登录', acc: true, kind: 'button' },
+          alt: { label: '注册', kind: 'link' },
+        },
+      },
+    },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: '20% 11% 13% 13% 13% 1fr',
+  areas: ['art', 't', 'f1', 'f2', 'btn', '.'],
+  boxes: {
+    art: { label: '品牌条', dark: true },
+    t: { label: '标题', text: '欢迎回来' },
+    f1: { label: '账号', kind: 'input' },
+    f2: { label: '密码', kind: 'input' },
+    btn: { label: '登录', acc: true, kind: 'button' },
+  },
+};
+```

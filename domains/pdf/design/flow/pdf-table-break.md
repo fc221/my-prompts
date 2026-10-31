@@ -40,3 +40,21 @@ order: 20
 4. 合计只出现一次：放在 tbody 最后一行或表格下方，不放 tfoot。
 5. 用 3 行、40 行、800 行三组数据生成，检查每页表头、有没有被切开的行、合计是否只出现一次。
 最后说明改了哪些文件和每组数据的页数。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, page({
+    margin: true,
+    pages: [
+      { head: '门店月度对账单 · 2026 年 9 月', foot: '第 {p} / {n} 页', label: '第 1 页：表头', blocks: ['title:对账明细', 'kv:2', 'table:9'] },
+      { head: '门店月度对账单 · 2026 年 9 月', foot: '第 {p} / {n} 页', label: '第 2 页：表头重复，标“续”', blocks: ['table:6:续', 'total:¥48,260.00', 'sign'] },
+    ],
+    notes: ['thead 每页重复', '单行不被切断', '合计和签章不单独落到下一页'],
+  }), { center: true, min: 0.3 });
+}
+</script>

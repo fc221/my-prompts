@@ -39,3 +39,22 @@ order: 20
 2. 按规则改：能用一条条件更新表达的改成条件更新并检查影响行数；冲突少的加 version 乐观锁，后台任务冲突重试 3 次带退避，用户操作冲突返回 409 和最新数据；冲突多或必须排队的用 SELECT … FOR UPDATE，精确命中索引、按主键顺序加锁，抢占类场景用 SKIP LOCKED；分布式锁用 SET NX PX 加随机值、Lua 校验后释放，并用版本号兜底。
 3. 写并发测试：{并发数}个请求同时修改同一条记录，断言最终数据正确、没有负数、冲突被正确返回。
 4. 汇报：每条更新路径原来的问题和现在的方案、改动文件、测试结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['客服 A', 'ticket 表', '客服 B'], [
+    [0, 1, '读到 version 7'],
+    [2, 1, '读到 version 7'],
+    [0, 1, 'WHERE version = 7'],
+    [1, 0, '1 行，version → 8', 'r'],
+    [2, 1, 'WHERE version = 7'],
+    [1, 2, '0 行：已被改过', 'rx'],
+    [2, 2, '返回 409 和最新数据'],
+  ]), { title: '乐观锁 · 两个客服同时改一张工单' });
+}
+</script>

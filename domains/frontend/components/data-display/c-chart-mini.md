@@ -37,3 +37,105 @@ order: 112
 ## 提示词
 
 给{健康 App 概览页}做一张「小型健康数据图」卡：上排三格、下排两格。① 月度日历：7 列周一开头，圆点按{活动时长}分四档深浅；② 评分环：环心写分数，pathLength="100"；③ 三层同心环表示{三项指标}完成度，旁边写名称，窄时只留首字；④ 分段条：按时长比例，段间 2px，下方写名称，颜色固定对应项目；⑤ 打卡格：按列排、一列一周、五档深浅，共{周数}周。进场：环 850ms 画到目标值，条从左长出，格子按序弹出，单格错开 10–30ms，总时长 1.2 秒内。悬停或点击图形时，共用提示层贴在图形上方显示日期和数值，靠边时收回框内；每张图一个 Tab 位，聚焦后方向键在图内移动、Esc 收起，提示层 role="status"，每张图用 aria-label 写一句摘要；图用 SVG viewBox 缩放，文字不小于 11px；减少动态效果时取消进场。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/interactions-base.css">
+<style>
+.st{background:#eef0f4}
+.dash{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:5px;height:100%;max-width:640px;margin:0 auto;padding:7px 8px}
+.tl{grid-column:span 2;display:grid;grid-template-rows:auto minmax(0,1fr);gap:2px;min-width:0;min-height:0;padding:5px 7px 6px;border:1px solid #e3e6eb;border-radius:10px;background:#fff}
+.tl.w{grid-column:span 3}
+.tl h3{display:flex;align-items:baseline;justify-content:space-between;gap:4px;min-width:0;margin:0;color:#475467;font-size:11px;font-weight:600;line-height:15px;white-space:nowrap}
+.tl h3 b{color:#1f2329;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.ch{position:relative;min-width:0;min-height:0;border-radius:6px}
+.ch svg{position:absolute;inset:0;display:block;width:100%;height:100%;overflow:visible}
+.r{display:flex;gap:6px;min-width:0;min-height:0}
+.r .ch{flex:1}
+.lg{flex:none;display:flex;flex-direction:column;justify-content:center;gap:2px;margin:0;padding:0;list-style:none;color:#475467;font-size:11px;line-height:14px;white-space:nowrap}
+.lg i{display:inline-block;width:7px;height:7px;margin-right:3px;border-radius:2px;background:var(--c);vertical-align:1px}
+.lg .x{display:none}
+.m{cursor:pointer;transform-box:fill-box;transform-origin:center;animation:pop .3s cubic-bezier(.2,.9,.3,1.3) both;animation-delay:calc(var(--i,0)*var(--g,10ms))}
+.m.act{stroke:#1f2329;stroke-width:1.2}
+.l0{fill:#eceef2}.l1{fill:#b8ebd0}.l2{fill:#5fce9a}.l3{fill:#16a36e}.l4{fill:#0b7a50}
+@keyframes pop{from{opacity:0;transform:scale(.3)}
+}
+.tk{fill:none;stroke:#eceef2}
+.arc{fill:none;stroke:var(--c);stroke-linecap:round;stroke-dasharray:var(--v) 100;transform:rotate(-90deg);transform-origin:32px 32px;animation:arc .85s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0)*80ms);cursor:pointer}
+.arc.act{filter:brightness(.82)}
+@keyframes arc{from{stroke-dasharray:0 100}
+}
+.num{fill:#1f2329;font-size:19px;font-weight:700;text-anchor:middle;dominant-baseline:central;font-variant-numeric:tabular-nums}
+.bars{display:flex;flex-direction:column;justify-content:center;gap:5px;height:100%}
+.sg{display:flex;gap:2px;height:13px}
+.sg i{flex:var(--v);min-width:0;background:var(--c);transform-origin:0 50%;cursor:pointer;animation:gw .55s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i)*90ms)}
+.sg i:first-child{border-radius:4px 0 0 4px}
+.sg i:last-child{border-radius:0 4px 4px 0}
+.sg i.act{box-shadow:0 0 0 1.5px #1f2329}
+@keyframes gw{from{opacity:0;transform:scaleX(0)}
+}
+.lg.h{flex-direction:row;justify-content:space-between;gap:4px}
+.tip{position:absolute;left:0;top:0;z-index:5;padding:2px 7px;border-radius:6px;background:#1f2329;color:#fff;font-size:11.5px;line-height:18px;white-space:nowrap;pointer-events:none;font-variant-numeric:tabular-nums}
+@container (min-width:560px){.dash{gap:7px;padding:9px 12px}
+.tl{padding:7px 10px 8px;gap:4px}
+.tl h3{font-size:12px;line-height:17px}
+.tl h3 b{font-size:13px}
+.lg{gap:4px;font-size:12px;line-height:16px}
+.lg .x{display:inline}
+.sg{height:18px}
+.bars{gap:9px}
+}
+@media (prefers-reduced-motion:reduce){.m,.arc,.sg i{animation:none}
+}
+</style>
+
+<div class="st"><div class="dash"><section class="tl"><h3>活跃<b class="days"></b></h3><div class="ch c1" tabindex="0" role="group" data-y="7"></div></section><section class="tl"><h3>昨晚睡眠</h3><div class="ch c2" tabindex="0" role="group" aria-label="昨晚睡眠评分 84 分，时长 7 小时 12 分"></div></section><section class="tl"><h3>今日营养</h3><div class="r"><div class="ch c3" tabindex="0" role="group"></div><ul class="lg ln"></ul></div></section><section class="tl w"><h3>本周运动<b>5 小时 40 分</b></h3><div class="ch c4" tabindex="0" role="group"></div></section><section class="tl w"><h3>喝水打卡<b>近 16 周</b></h3><div class="ch c5" tabindex="0" role="group" data-x="7"></div></section></div><div class="tip" role="status" hidden></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const st = root.querySelector('.st'), dash = root.querySelector('.dash'), tip = root.querySelector('.tip'), $ = (s) => root.querySelector(s);
+  const NUT = [['碳水', 182, 250, '#f59f00'], ['蛋白质', 62, 80, '#3b5bdb'], ['脂肪', 41, 60, '#d6336c']], SPORT = [['跑步', 150, '#16a36e'], ['力量', 100, '#3b5bdb'], ['骑行', 90, '#f59f00']];
+  const MIN = [32, 0, 45, 61, 0, 28, 74, 0, 35, 40, 66, 0, 0, 52, 30, 18, 0, 85, 47, 0, 33, 62, 58, 0, 25, 41, 0, 70, 36, 0, 54];
+  const lv = (m) => (m ? (m < 30 ? 1 : m < 60 ? 2 : 3) : 0);
+  // 日历：10 月 1 日是周四，周一开头空 3 格
+  $('.c1').innerHTML = `<svg viewBox="0 0 98 70" aria-hidden="true">${MIN.map((m, i) => { const k = i + 3; return `<circle class="m l${lv(m)}" style="--i:${i}" cx="${(k % 7) * 14 + 7}" cy="${Math.floor(k / 7) * 14 + 7}" r="5.6" data-t="10 月 ${i + 1} 日 · ${m ? `活动 ${m} 分钟` : '没有活动'}"/>`; }).join('')}</svg>`;
+  $('.days').textContent = MIN.filter(Boolean).length + ' 天';
+  $('.c1').setAttribute('aria-label', `十月日历，活跃 ${MIN.filter(Boolean).length} 天，方向键查看每天的活动时长`);
+  $('.c2').innerHTML = '<svg viewBox="0 0 64 64" aria-hidden="true"><circle class="tk" cx="32" cy="32" r="26" stroke-width="7" data-t="睡眠 84 分 · 7 小时 12 分"/><circle class="arc" style="--c:#7a5af8;--v:84" pathLength="100" cx="32" cy="32" r="26" stroke-width="7" data-t="睡眠 84 分 · 7 小时 12 分"/><text class="num" x="32" y="32">84</text></svg>';
+  $('.c3').innerHTML = `<svg viewBox="0 0 64 64" aria-hidden="true">${NUT.map(([n, v, g, c], i) => { const r = 28 - i * 8, t = `${n} ${v} / ${g} 克`; return `<circle class="tk" cx="32" cy="32" r="${r}" stroke-width="6" data-t="${t}"/><circle class="arc" style="--c:${c};--v:${Math.round(v / g * 100)};--i:${i}" pathLength="100" cx="32" cy="32" r="${r}" stroke-width="6" data-t="${t}"/>`; }).join('')}</svg>`;
+  $('.c3').setAttribute('aria-label', '今日营养：' + NUT.map(([n, v, g]) => `${n} ${v} / ${g} 克`).join('，'));
+  $('.ln').innerHTML = NUT.map(([n, , , c]) => `<li style="--c:${c}"><i></i>${n[0]}<span class="x">${n.slice(1)}</span></li>`).join('');
+  const total = SPORT.reduce((a, s) => a + s[1], 0);
+  $('.c4').innerHTML = `<div class="bars"><div class="sg">${SPORT.map(([n, m, c], i) => `<i style="--v:${m};--c:${c};--i:${i}" data-t="${n} ${m} 分钟 · ${Math.round(m / total * 100)}%"></i>`).join('')}</div><ul class="lg h">${SPORT.map(([n, m, c]) => `<li style="--c:${c}"><i></i>${n}</li>`).join('')}</ul></div>`;
+  $('.c4').setAttribute('aria-label', '本周运动：' + SPORT.map(([n, m]) => `${n} ${m} 分钟`).join('，'));
+  // 打卡格：今天周六，按列排，最后一列少周日一格
+  let s = 7, cells = '';
+  for (let i = 0; i < 111; i++) {
+    s = (s * 31 + 17) % 97; const cups = i % 7 === 3 && s < 30 ? 0 : 2 + s % 7, day = new Date(2026, 9, 31 - (110 - i));
+    cells += `<rect class="m l${cups ? (cups < 4 ? 1 : cups < 6 ? 2 : cups < 8 ? 3 : 4) : 0}" style="--i:${Math.floor(i / 7)};--g:32ms" x="${Math.floor(i / 7) * 10 + 1}" y="${i % 7 * 10 + 1}" width="8" height="8" rx="2" data-t="${day.getMonth() + 1} 月 ${day.getDate()} 日 · ${cups} 杯"/>`;
+  }
+  $('.c5').innerHTML = `<svg viewBox="0 0 160 70" aria-hidden="true">${cells}</svg>`;
+  $('.c5').setAttribute('aria-label', '近 16 周喝水打卡格，方向键查看每天的杯数');
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  let cur = null, auto = true;
+  const show = (m) => {
+    if (cur === m) return; cur?.classList.remove('act'); cur = m; m.classList.add('act'); tip.hidden = false; tip.textContent = m.dataset.t;
+    const r = m.getBoundingClientRect(), b = st.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight, y = r.top - b.top - h - 4;
+    tip.style.transform = `translate(${clamp(r.left - b.left + r.width / 2 - w / 2, 3, b.width - w - 3)}px,${y < 3 ? r.bottom - b.top + 4 : y}px)`;
+  };
+  const hide = () => { cur?.classList.remove('act'); cur = null; tip.hidden = true; };
+  const hover = (e) => { auto = false; const m = e.target.closest?.('[data-t]:not(.tk)') ?? e.target.closest?.('.tk'); if (m) show(m.classList.contains('tk') ? m.nextElementSibling : m); else if (e.pointerType === 'mouse' && !dash.contains(root.activeElement)) hide(); };
+  dash.addEventListener('pointermove', hover); dash.addEventListener('pointerdown', hover);
+  dash.addEventListener('pointerleave', () => { if (!dash.contains(root.activeElement)) hide(); });
+  // 每张图只占一个 Tab 位，图内用方向键走
+  root.querySelectorAll('.ch').forEach((ch) => {
+    const ms = [...ch.querySelectorAll('[data-t]:not(.tk)')], X = +ch.dataset.x || 1, Y = +ch.dataset.y || 1; let i = ms.length - 1;
+    ch.addEventListener('focus', () => { auto = false; show(ms[i]); }); ch.addEventListener('blur', hide);
+    ch.addEventListener('keydown', (e) => {
+      const d = { ArrowLeft: -X, ArrowRight: X, ArrowUp: -Y, ArrowDown: Y }[e.key];
+      if (e.key === 'Escape') return hide(); if (!d) return; e.preventDefault(); i = clamp(i + d, 0, ms.length - 1); show(ms[i]);
+    });
+  });
+  setTimeout(() => { if (auto && root.host.isConnected) show(root.querySelectorAll('.c5 rect')[79]); }, 1000);
+}
+</script>

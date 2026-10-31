@@ -28,3 +28,38 @@ order: 30
 ## 提示词
 
 {产品}{页面}用「主区 + 侧栏」：主区 1fr 放{图表和列表}，跟随页面滚动；右侧 320px 窄栏放{提醒内容}，position: sticky，top 为顶栏高度加 16px，超出视口时窄栏内部滚动；每类提醒最多 6 条加“全部”；点提醒在主区定位对应对象；窄于 1024px 窄栏移到主区上方变成一行摘要条。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 30%',
+  rows: '24% 1fr 1fr',
+  areas: ['k side', 'ch side', 'tb side'],
+  boxes: {
+    k: { inner: { cols: '1fr 1fr 1fr', rows: '1fr', areas: ['a b c'], boxes: { a: '指标', b: '指标', c: '指标' } } },
+    ch: { label: '图表', acc: true },
+    tb: { label: '列表', acc: true },
+    side: {
+      label: '吸顶窄栏',
+      inner: {
+        cols: '1fr',
+        rows: 'auto 1fr',
+        areas: ['n', 't'],
+        boxes: { n: { label: '公告', kind: 'notice' }, t: { label: '待处理', kind: 'list' } },
+      },
+    },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto 13% 1fr 1fr',
+  areas: ['top', 'sum', 'ch', 'tb'],
+  boxes: {
+    top: { label: '顶栏 ☰', text: '经营概览' },
+    sum: { label: '提醒摘要', kind: 'notice' },
+    ch: { label: '图表', acc: true },
+    tb: { label: '列表', acc: true },
+  },
+};
+```

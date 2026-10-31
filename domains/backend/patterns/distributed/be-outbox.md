@@ -41,3 +41,17 @@ order: 60
 4. 已发送记录保留{保留天数}天后分批清理。
 5. 加未发送条数和最老等待时间两个监控指标。
 补测试：业务事务回滚时 outbox 没有记录；投递中途失败后重试，消息不丢。最后列出改动文件，并写明下游需要按 event_id 幂等。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '支付成功', note: '更新订单状态' }, { t: '同一个事务', note: '改订单 + 插 outbox 记录', acc: true }, { t: '提交', note: 'sent_at 为空' }],
+    [{ t: 'outbox_relay', note: '每 1–2 秒，SKIP LOCKED' }, { t: '发到 MQ', note: 'aggregate_id 分区' }, { t: '写 sent_at', note: '之前宕机会再发' }, { t: '下游按 eventId 幂等', note: '会收到重复消息', acc: true }],
+  ]), { title: '发件箱 · 改库和登记消息在同一个事务' });
+}
+</script>

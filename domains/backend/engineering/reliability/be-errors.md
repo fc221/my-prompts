@@ -39,3 +39,17 @@ order: 10
 2. 按规则改：区分业务异常（带错误码、不告警）和系统异常（保留 cause、记 ERROR）；错误码统一为 领域_原因 的大写字符串（已有体系则沿用），集中登记并附说明和 HTTP 状态码；只在全局异常处理里转换成「错误响应格式」规定的结构并带 trace_id；中间层包装时保留原因。
 3. 补测试：每个新错误码至少一个用例；未知异常返回 500 且响应里没有内部信息。
 4. 汇报：问题清单、新的错误码表、改动文件、测试结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '库存不足', note: '抛业务异常，带错误码' }, { t: '统一出口', note: '记 INFO，不告警', acc: true }, { t: '409', note: '用户看得懂的提示' }],
+    [{ t: '数据库超时', note: '包装时带上 cause', bad: true }, { t: '统一出口', note: '记 ERROR 带堆栈', acc: true }, { t: '500', note: '通用提示 + trace_id', bad: true }],
+  ], { lanes: ['业务异常', '系统异常'] }), { title: '错误处理 · 错误码如 ORDER_STOCK_INSUFFICIENT' });
+}
+</script>

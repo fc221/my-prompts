@@ -41,3 +41,29 @@ order: 20
 4. {编号列} 重复时高亮。
 5. 同时加一列“提醒”，用公式算出 逾期 / 临近 / 正常，方便筛选和统计。
 交付时列出每条规则的应用范围、公式和颜色含义，并用 4–5 行示例数据演示每种颜色。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const row = (r, m) => Object.fromEntries(['A', 'B', 'C', 'D', 'E', 'F'].map((c) => [c + r, m]));
+  draw(root, sheet({
+    head: ['单号', '客户', '金额', '到期日', '状态', '剩余天数'],
+    widths: [74, 76, 118, 74, 58, 62],
+    rows: [
+      ['YS-0931', '青禾餐饮', '▮70 18,600.00', '2026-10-20', '未收款', '-9'],
+      ['YS-0935', '麦田烘焙', '▮35 9,240.00', '2026-11-03', '部分收款', '5'],
+      ['YS-0940', '山岚酒店', '▮100 26,500.00', '2026-11-28', '未收款', '30'],
+      ['YS-0942', '北岸超市', '▮17 4,380.00', '2026-10-25', '已收款', ''],
+      ['YS-0947', '云栖茶舍', '▮48 12,800.00', '2026-12-15', '未收款', '47'],
+    ],
+    fx: ['F2', '=IF(E2="已收款","",D2-TODAY())'],
+    marks: Object.assign(row(2, 'bad'), row(3, 'warn'), { E5: 'good' }),
+    tabs: ['应收台账', '客户表'],
+    freeze: true,
+  }), { title: '红：=AND($D2<TODAY(),$E2<>"已收款") 整行 · 黄：7 天内到期 · 绿：已收款', min: 0.45 });
+}
+</script>

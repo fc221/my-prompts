@@ -41,3 +41,27 @@ order: 20
 4. 下拉的序列来源引用溢出区域，新增门店后自动出现。
 5. 用户版本是 {Excel 版本}：低于 Excel 2021 时改用透视表或辅助列 + INDEX/MATCH 的写法。
 交付时标出每个溢出公式所在的单元格和它的溢出范围，说明需要的版本。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, sheet({
+    head: ['订单号', '门店', '状态', '金额', '', '门店', '销售额'],
+    widths: [70, 56, 58, 70, 18, 56, 78],
+    rows: [
+      ['DD260301', '西湖店', '已签收', '1,280.00', '', '滨江店', '3,450.00'],
+      ['DD260302', '滨江店', '待发货', '2,160.00', '', '湖滨店', '960.00'],
+      ['DD260303', '湖滨店', '已签收', '960.00', '', '西湖店', '2,020.00'],
+      ['DD260304', '滨江店', '已签收', '1,290.00', '', '', ''],
+      ['DD260305', '西湖店', '待发货', '740.00', '', '', ''],
+    ],
+    fx: ['F2', '=SORT(UNIQUE(订单[门店]))'],
+    marks: { F2: 'acc', F3: 'acc', F4: 'acc', G2: 'acc', G3: 'acc', G4: 'acc' },
+    freeze: true,
+  }), { title: '动态数组 · F2 一个公式溢出整列，G2 =SUMIFS(订单[金额],订单[门店],F2#)', min: 0.45 });
+}
+</script>

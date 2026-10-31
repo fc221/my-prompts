@@ -41,3 +41,17 @@ order: 60
 5. 输出：原文件不动，结果放到 {输出目录}，文件名加 -ocr 后缀；全文文本按页分隔并带页码。
 6. 结束时输出汇总：文件数、页数、跳过的页、复核清单、总耗时。
 最后说明脚本用法和需要的系统依赖（附 Dockerfile 片段），并抽一份结果用 pdftotext 展示前 200 字。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '扫描件', note: '每页只是一张图' }, { t: '预处理', note: '纠偏、转正、去噪' }, { t: 'Tesseract', note: 'chi_sim+eng', acc: true }, { t: '双层 PDF', note: '图片 + 隐形文字层', acc: true }],
+    [{ t: '抽页统计字数', note: 'pdftotext' }, { t: '明显偏少', note: '低于 200dpi、倾斜、反光', bad: true }, { t: '人工复核', note: '原扫描件一起归档' }],
+  ]), { title: 'ocrmypdf --mode skip · 已有文字层的页跳过' });
+}
+</script>

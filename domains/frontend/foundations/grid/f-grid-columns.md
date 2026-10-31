@@ -28,3 +28,16 @@ order: 10
 ## 提示词
 
 用 12 列网格重排{页面}：grid-template-columns: repeat(12, minmax(0, 1fr))，列间距 ≥ 1024px 时 24px、以下 16px；{主模块}跨 8 列、{次要模块}跨 4 列，下方 3 个模块各跨 4 列；所有区块边缘对齐列线；卡片墙用 auto-fill + minmax(280px, 1fr)；768–1023px 改为 6 列、主模块占满一行，小于 768px 单列；子项加 min-width: 0，防止被宽内容撑开。
+
+## 示例
+
+<style>
+.s{height:100%;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:12px 16px;background:#fff;font:12px/1.2 system-ui,"PingFang SC",sans-serif;color:#5b616e}
+.g{position:relative;flex:1;max-height:140px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:1fr;gap:8px}
+.cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px}
+.cols i{background:#fdecea}
+.b{position:relative;display:grid;place-items:center;border-radius:6px;background:rgba(59,91,219,.12);box-shadow:inset 0 0 0 1px #8ea2f2;color:#2f49b0;font-weight:600}
+p{margin:0;text-align:center}
+</style>
+
+<div class="s"><div class="g"><div class="cols"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="b" style="grid-column:span 8">8</div><div class="b" style="grid-column:span 4">4</div><div class="b" style="grid-column:span 4">4</div><div class="b" style="grid-column:span 4">4</div><div class="b" style="grid-column:span 4">4</div><div class="b" style="grid-column:span 6">6</div><div class="b" style="grid-column:span 6">6</div></div><p>12 列 · 列间距 24（窄屏 16）· 区块边缘都落在列线上</p></div>

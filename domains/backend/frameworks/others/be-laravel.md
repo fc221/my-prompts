@@ -41,3 +41,29 @@ env() 只在 config/ 下的配置文件里调用，业务代码一律用 config(
 新建时：用 make:model -mfc、make:request、make:resource 生成骨架，补上 Action 或 Service、路由和 Policy，写覆盖 201、422、404、403 的 Feature 测试。
 检查时：先找业务代码里的 env()、控制器里的校验和查询、直接返回 Model、没有预加载的列表、改过的已执行迁移；逐条列出文件和改法，会改变响应格式的先问我。
 最后列出改动的文件和验证命令（php artisan test 等）。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+  app/
+    Http/
+      Controllers/Api/
+        OrderController.php    保持薄
+      Requests/
+        StoreOrderRequest.php  rules()、authorize()
+      Resources/
+        OrderResource.php      不直接返回 Model
+    Models/
+      Order.php                可批量赋值字段、casts()
+  * Actions/
+      CreateOrder.php          业务放这里
+* bootstrap/app.php            中间件和异常都在这配
+  routes/api.php               默认 /api 前缀
+`), { title: 'Laravel · 薄控制器，业务进 Action' });
+}
+</script>

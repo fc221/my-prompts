@@ -41,3 +41,22 @@ order: 10
 4. 多页时页眉重复编号和商户名，汇总和签章只在最后一页，页脚“第 X 页 / 共 Y 页”。
 5. 标题和正文都不出现“发票”字样，不放任何仿税务的章和二维码。
 用 3 行和 60 行明细各生成一份样张，说明改了哪些文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const head = 'SJ-20261029-000123 · 星河咖啡南山店';
+  const foot = '本凭证不作为报销凭证 · 第 {p} / {n} 页';
+  draw(root, page({
+    pages: [
+      { head, foot, label: '第 1 页：抬头、双方、明细', blocks: ['title:收款收据', 'kv:3', 'h:付款方 / 收款方', 'kv:4', 'table:7'] },
+      { head, foot, label: '末页：汇总、支付信息、签章', blocks: ['table:2:续', 'total:¥ 1,280.00', 'text:人民币壹仟贰佰捌拾元整', 'h:支付信息', 'kv:3', 'h:备注', 'p:2', 'sign'] },
+    ],
+    notes: ['标题不写“发票”，不印税务二维码', '金额两位小数、千分位、右对齐', '汇总和签章只在最后一页'],
+  }), { center: true, min: 0.3 });
+}
+</script>

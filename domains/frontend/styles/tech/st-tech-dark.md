@@ -30,3 +30,31 @@ order: 10
 ## 提示词
 
 把{产品}官网做成科技深色风：底 #0b0d12、表面 #12151c、1px 线 #232834，正文 #e6e8ee、次要 #9aa3b2；只用一个强调色 {品牌色}，面积 ≤ 5%，浅色按钮配深字；无衬线标题 600，等宽字体只用于代码与读数；圆角 ≤ 6px，不发光、不用蓝紫渐变；首屏左侧价值主张 + 主次按钮，右侧可复制的代码块；动效只有代码逐行出现一次；窄屏代码块移到标题下方并可横向滚动；减少动态效果时直接显示。
+
+## 示例
+
+<style>
+:host{container-type:size}
+.s{height:100%;display:flex;flex-direction:column;padding:10px 20px 14px;background:#0b0d12;color:#e6e8ee;font:13px/1.5 system-ui,"PingFang SC",sans-serif}
+nav{display:flex;align-items:center;gap:16px;font-size:12px;color:#9aa3b2}
+nav b{margin-right:auto;color:#e6e8ee}
+nav em{font-style:normal;color:#3fb6ff}
+.h{flex:1;min-height:0;display:flex;align-items:center;gap:16px}
+.tx{flex:1;min-width:0}
+h1{margin:0;font-size:clamp(20px,11cqh,38px);line-height:1.2;font-weight:600}
+p{margin:6px 0 12px;color:#9aa3b2;font-size:12px}
+.bt{display:flex;gap:8px}
+.bt a{height:30px;padding:0 12px;display:inline-flex;align-items:center;border-radius:6px;border:1px solid #2f3542;font-size:12px;white-space:nowrap}
+.bt .p{background:#3fb6ff;border-color:#3fb6ff;color:#0b0d12;font-weight:600}
+pre{flex:1;min-width:0;max-width:300px;margin:0;padding:12px;border:1px solid #232834;border-radius:6px;background:#12151c;font:12px/1.8 ui-monospace,Menlo,monospace;color:#c9d1dc;white-space:pre;overflow:hidden}
+pre i{font-style:normal;color:#3fb6ff}
+pre u{text-decoration:none;color:#5fd4a0}
+pre s{text-decoration:none;color:#9aa3b2}
+@container (max-width:440px){.bt a:not(.p){display:none}
+}
+</style>
+
+<div class="s"><nav><b>◆ MyPrompts</b><span>文档</span><span>定价</span><em>控制台</em></nav><div class="h"><div class="tx"><h1>提交代码，<br>42 秒上线</h1><p>28 个边缘节点，自动回滚</p><div class="bt"><a class="p">免费部署</a><a>查看文档</a></div></div><pre><i>$</i> fluxa up --prod
+<u>✓</u> 构建完成   8.2s
+<u>✓</u> 发布到 28 个节点
+<s>→ fluxa.app/v42</s></pre></div></div>

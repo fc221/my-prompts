@@ -29,3 +29,40 @@ order: 10
 ## 提示词
 
 {产品}设置页：左侧分类导航 220px 吸顶（{分类}），右侧每组一张卡片，卡片顶部写组标题和一句说明，下面放字段（宽屏两列、窄屏一列）；开关类设置做成列表行，标签和说明在左、开关在右，改动即时生效并显示“已保存”；需要统一确认的组在底部放保存按钮；删除、转移等放在最底部“危险操作”区并二次确认；窄屏分类改为顶部可横滑标签，卡片字段改单列。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '23% 1fr',
+  rows: '1fr',
+  areas: ['nav main'],
+  boxes: {
+    nav: '设置分类',
+    main: {
+      inner: {
+        cols: '1fr',
+        rows: 'auto auto auto 1fr',
+        areas: ['f1', 'f2', 'dz', '.'],
+        boxes: {
+          f1: { label: '分组卡片（标题 + 说明 + 字段）', kind: 'form', acc: true, text: '工作区信息' },
+          f2: { label: '分组卡片（开关行）', kind: 'switches', acc: true, text: '通知' },
+          dz: '危险操作',
+        },
+      },
+    },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto auto auto auto 1fr',
+  areas: ['nav', 'tabs', 'f1', 'f2', 'dz', '.'],
+  boxes: {
+    nav: { label: '‹ 返回', kind: 'mtop', text: '设置' },
+    tabs: { label: '设置分类横滑', kind: 'tabs' },
+    f1: { label: '分组卡片', kind: 'form', acc: true, text: '工作区信息' },
+    f2: { label: '分组卡片（开关行）', kind: 'switches', acc: true, text: '通知' },
+    dz: '危险操作',
+  },
+};
+```

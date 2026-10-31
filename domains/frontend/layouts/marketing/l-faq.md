@@ -28,3 +28,37 @@ order: 90
 ## 提示词
 
 {产品}常见问题区：左侧 1/3 放区块标题和“联系{支持渠道}”入口，右侧 2/3 放 {问题数} 个可展开问答（{问题列表}）；每项整行可点，右侧 ＋ / － 图标，按钮带 aria-expanded；展开用高度过渡，收起的内容不可聚焦；默认只展开第一项；窄屏改单列，联系入口放在列表下方。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '32% 1fr',
+  rows: '1fr auto auto auto auto auto auto auto 1fr',
+  areas: ['. .', 'h q1', 'ct q2', '. a2', '. q3', '. q4', '. q5', '. q6', '. .'],
+  boxes: {
+    h: { label: '区块标题', text: '常见问题' },
+    ct: { label: '联系入口', text: '联系客服' },
+    q1: '问题 ＋',
+    q2: { label: '问题 －', acc: true },
+    a2: { label: '展开的回答', kind: 'answer' },
+    q3: '问题 ＋',
+    q4: '问题 ＋',
+    q5: '问题 ＋',
+    q6: '问题 ＋',
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto auto auto auto auto 1fr',
+  areas: ['h', 'q1', 'q2', 'a2', 'q3', 'ct', '.'],
+  boxes: {
+    h: { label: '标题', text: '常见问题' },
+    q1: '问题 ＋',
+    q2: { label: '问题 －', acc: true },
+    a2: { label: '回答', kind: 'answer' },
+    q3: '问题 ＋',
+    ct: { label: '联系', text: '联系客服' },
+  },
+};
+```

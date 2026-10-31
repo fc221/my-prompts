@@ -41,3 +41,29 @@ Django 6（以 6.1 为准，还停在 5.2 LTS 的项目同样适用）项目的�
 新建时：startapp 后写 models、serializers、services、views、urls、admin，生成并检查迁移，在 tests/ 里用 APIClient 覆盖创建成功、校验失败和无权限三种情况。
 检查时：先找视图里堆业务逻辑、列表接口的 N+1、密钥写死在 settings 里、生产开着 DEBUG 这几类；逐条列出文件和改法，涉及迁移和响应格式变化的先问我。
 最后列出改动的文件和验证命令（python manage.py test 或 pytest，以及 check --deploy）。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+  manage.py
+  config/            配置包
+    settings/        base.py、dev.py、prod.py、test.py
+    urls.py
+* orders/            业务 app，按业务能力划分
+    models.py
+    serializers.py   DRF 入参校验
+    views.py         只鉴权、校验、调 services
+  * services.py      写操作，transaction.atomic
+    admin.py
+    urls.py
+    migrations/      makemigrations 生成
+    tests/
+  members/           同样结构的业务 app
+`), { title: 'Django · 配置包加业务 app' });
+}
+</script>

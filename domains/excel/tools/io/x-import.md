@@ -44,3 +44,32 @@ order: 10
 7. 限制：只收 .xlsx，不超过 {大小上限} MB、{行数上限} 行，超过的转成后台任务。
 8. 测试覆盖：缺列、类型错、日期为序列数、文件内重复、库里已存在、全部正确。
 完成后说明改了哪些文件、怎么手动验证。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-fit{width:max-content}
+</style>
+
+<script type="module">
+import { draw, flow, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const steps = flow([{ t: '上传 .xlsx', note: '≤ 10 MB · ≤ 5 万行' }, { t: '按表头找列', note: '去空格 · 别名映射' }, { t: '逐格校验', note: '收集全部错误', acc: true }, { t: '有错：回错误报告', note: '原表 + 错误说明列', bad: true }, { t: '全对：事务写入', note: '记批次号' }]);
+  const report = sheet({
+    head: ['门店编码', '会员姓名', '手机号', '开卡日期', '储值金额', '错误说明'],
+    widths: [66, 62, 96, 82, 70, 176],
+    rows: [
+      ['MD012', '林小禾', '13812345678', '2026-09-03', '500.00', ''],
+      ['MD012', '周一航', '1381234567', '2026-09-03', '300.00', '手机号应为 11 位'],
+      ['MD019', '陈可', '13900001111', '2026/9/31', '200.00', '门店编码不存在；开卡日期无效'],
+      ['MD012', '许诺', '13812345678', '2026-09-05', '1,000.00', '手机号与第 2 行重复'],
+      ['MD015', '高原', '13755556666', '2026-09-06', '-50.00', '储值金额须大于 0'],
+    ],
+    marks: { C3: 'bad', A4: 'bad', D4: 'bad', C5: 'warn', E6: 'bad', F3: 'b', F4: 'b', F5: 'b', F6: 'b' },
+    tabs: ['会员导入', '填写说明', '门店编码'],
+    freeze: true,
+  });
+  draw(root, steps + '<div style="height:10px"></div><div class="m-fit">' + report + '</div>', { title: '导入校验 · 共 5 行：通过 1 行，失败 4 行', min: 0.45 });
+}
+</script>

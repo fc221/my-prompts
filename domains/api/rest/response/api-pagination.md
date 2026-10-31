@@ -42,3 +42,24 @@ offset 越往后越慢（OFFSET 100000 要先扫过前面所有行），翻页�
 5. 空列表返回 200 和空数组。
 6. 测试：第一页、最后一页、翻页期间插入新数据时不重复不遗漏、非法游标。
 最后列出改动文件和前端需要配合改的地方。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+GET /orders?limit=20&cursor=eyJjIjoiMjAyNi0xMC0yOFQxMDoxNVoiLCJpZCI6Im9yZF84RjMifQ
+Authorization: Bearer <token>
+`, `
+200 OK
+Content-Type: application/json
+
+"items": [ … 20 条 … ],
+"nextCursor": "eyJjIjoiMjAyNi0xMC0yN1Qw…",
+"hasMore": true
+`), { title: '游标分页' });
+}
+</script>

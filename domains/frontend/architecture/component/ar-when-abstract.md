@@ -41,3 +41,17 @@ AI 最常见的问题是不知道已有现成组件，于是又造一个：写�
 4. 改动的页面在改前改后截图对比，外观和交互不变。
 5. 在项目给 AI 的规则文件里加上：新增界面前先搜索现有组件并列出候选；同一结构出现第 3 次再抽。
 汇报合并了几组、删掉了多少重复代码、哪些组保持分开及原因。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '写新界面' }, { t: '先搜现有组件', note: '能用就用，差点加 variant' }, { t: '第 2 次出现', note: '先复制，两处注释互指', via: '没有' }],
+    [{ t: '第 3 次出现' }, { t: '会因同一原因改？', note: '否：保持分开' }, { t: '抽成组件', note: '替换全部，删旧副本', via: '是', acc: true }],
+  ]), { title: '什么时候抽组件' });
+}
+</script>

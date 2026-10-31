@@ -42,3 +42,50 @@ order: 20
 5. 条件格式标出连续上班超过上限、晚班后接早班。
 6. 调班记录表：日期、原班人、原班次、替班人、新班次、原因、批准人。
 交付时说明哪些格手填、哪些是公式，并用示例数据故意放一处连续上班和一处晚接早，展示提醒效果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.xc.m-off{background:#eef0f3;color:#8a94a6}
+.xc.m-e{background:#fff4d6;color:#7a4b00}
+.xc.m-mi{background:#e0ecfb;color:#16407a}
+.xc.m-n{background:#34507f;color:#fff}
+</style>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const people = [
+    ['林晓雯', '休 早 早 早 早 中 早 休'],
+    ['周启航', '晚 早 中 中 休 晚 晚 休'],
+    ['韩若楠', '中 中 中 中 中 中 中 中'],
+    ['唐一鸣', '早 晚 休 早 早 早 休 早'],
+    ['苏沐阳', '早 休 晚 晚 休 早 早 早'],
+  ];
+  const col = (i) => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[i];
+  const tone = { 早: 'e', 中: 'mi', 晚: 'n', 休: 'off' };
+  const marks = { B1: 'off', H1: 'off', I1: 'off', B2: 'off', H2: 'off', I2: 'off' };
+  const rows = [['星期', '日', '一', '二', '三', '四', '五', '六', '日', '', '', '', '', '']];
+  const early = Array(8).fill(0);
+  people.forEach(([name, s], r) => {
+    const cells = s.split(' ');
+    const n = (k) => String(cells.filter((c) => c === k).length);
+    cells.forEach((v, i) => { marks[col(i + 1) + (r + 3)] = tone[v]; if (v === '早') early[i]++; });
+    rows.push([name, ...cells, n('早'), n('中'), n('晚'), n('休'), String((8 - +n('休')) * 8)]);
+  });
+  Object.assign(marks, { C4: 'bad', H5: 'bad', I5: 'bad' });
+  const foot = ['早班人数', ...early.map(String), '', '', '', '', ''];
+  early.forEach((v, i) => { if (v < 2) marks[col(i + 1) + (rows.length + 2)] = 'bad'; });
+  draw(root, sheet({
+    head: ['姓名', '1', '2', '3', '4', '5', '6', '7', '8', '早', '中', '晚', '休', '工时'],
+    widths: [58, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 40],
+    rows,
+    foot,
+    fx: ['H5', '条件格式：=AND(H$1<>"",COUNTIF(B5:H5,"休")+COUNTIF(B5:H5,"假")=0)'],
+    marks,
+    tabs: ['11 月排班', '调班记录', '员工表', '参数'],
+    freeze: true,
+  }), { title: '11 月排班表 · 前 8 天，红框：连续 7 天无休、晚班接早班、早班不足 2 人', min: 0.45 });
+}
+</script>

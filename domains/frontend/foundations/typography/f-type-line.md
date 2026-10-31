@@ -28,3 +28,20 @@ order: 20
 ## 提示词
 
 调整{页面}的正文排版：正文 {正文字号}、行高 1.7，段落间距 1em；正文容器 max-width 40em（约 35–45 个汉字），宽屏时对齐到内容列，不铺满；标题行高 1.2 并用 text-wrap: balance，正文用 pretty 避免末行只剩一两个字；长英文和链接允许断行；手机左右留 16px、正文不小于 15px；文字放大到 200% 时不裁切、不出现横向滚动。
+
+## 示例
+
+<style>
+.s{height:100%;display:grid;grid-template-columns:repeat(2,minmax(0,17em));justify-content:center;align-content:center;align-items:start;gap:24px;padding:16px 20px;background:#fff;color:#1f2329;font:13px system-ui,"PingFang SC",sans-serif}
+.c{display:grid;gap:8px}
+h4{margin:0;font-size:12px;font-weight:600}
+.x{color:#d92d20}
+.o{color:#12805c}
+p{margin:0}
+.a{line-height:1.3;letter-spacing:-.02em}
+.b{line-height:1.75}
+@container (max-width:300px){.s{gap:16px;padding:12px;font-size:12px}
+}
+</style>
+
+<div class="s"><div class="c"><h4 class="x">✗ 行高 1.3，读串行</h4><p class="a">正文的行高决定阅读的呼吸感。行距太紧，视线换行时容易跳错行；行距合适，段落看起来松而不散，读起来也更轻松。</p></div><div class="c"><h4 class="o">✓ 行高 1.75，松而不散</h4><p class="b">正文的行高决定阅读的呼吸感。行距太紧，视线换行时容易跳错行；行距合适，段落看起来松而不散，读起来也更轻松。</p></div></div>

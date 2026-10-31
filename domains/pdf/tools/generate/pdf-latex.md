@@ -41,3 +41,31 @@ order: 70
 5. 给出 Dockerfile：TeX Live 精简安装加用到的宏包、中文字体，构建时先编译一份样本生成字体缓存。
 6. 边界情况：题目里有公式、有 & 和 % 这类字符、有超宽表格和图片时都要能出稿。
 最后说明脚本用法、镜像大小和单份平均耗时。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: 'main.tex 导言区', text: String.raw`
+\documentclass[fontset=none]{ctexart}
+\setCJKmainfont{Source Han Serif SC}
+\setCJKsansfont{Source Han Sans SC}
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+\cfoot{第 \thepage{} 页 共 \pageref{LastPage} 页}
+` },
+    { t: '编译', text: String.raw`
+latexmk -xelatex -no-shell-escape \
+  -interaction=nonstopmode \
+  -halt-on-error main.tex
+# texmf.cnf：只读写当前目录
+openin_any = p
+openout_any = p
+` },
+  ]), { title: 'XeLaTeX + ctex' });
+}
+</script>

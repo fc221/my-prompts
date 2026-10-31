@@ -40,3 +40,21 @@ order: 30
 4. 同步改前端请求层：401 刷新令牌后重放一次，409 / 412 提示刷新，429 / 503 按 Retry-After 重试。
 5. 每个状态码至少一条集成测试。
 最后列出改动文件，以及对现有调用方有破坏的变更。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '2xx 成功', items: ['200 查询、更新', '201 创建 + Location', '202 受理 → /jobs/:id', '204 无内容'], acc: true },
+    { t: '400 / 422', items: ['400 解析不了、类型不对', '422 违反业务规则'] },
+    { t: '401 / 403 / 404', items: ['401 刷新令牌后重放一次', '403 无权限，不重试', '404 不存在或不该暴露'] },
+    { t: '409 / 412 / 428', items: ['409 和当前状态冲突', '412 ETag 已变', '428 缺 If-Match'] },
+    { t: '429 / 503', items: ['带 Retry-After', '按秒数重试'] },
+    { t: '5xx', items: ['500 通用提示 + traceId', '502 / 504 上游出错、超时'] },
+  ], { cols: 3, note: '客户端改了请求能成功就是 4xx，不能就是 5xx' }), { title: '状态码怎么选' });
+}
+</script>

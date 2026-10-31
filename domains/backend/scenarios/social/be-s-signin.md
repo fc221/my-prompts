@@ -42,3 +42,22 @@ App 每日签到领积分、会员打卡、学习打卡、门店员工打卡的�
 5. 补签每月最多{补签次数}次，补后重算连续天数。
 6. 签到同时落库，Redis 丢失可按表重建。
 最后给出压测和对账方法：同一用户并发签到 100 次只发一次奖励；构造跨月、跨年、补签和 UTC 与北京时间跨日的用例；每天比对位图 BITCOUNT 合计与数据库签到记录数。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: 'sign:7321:202610 · 1 号在最高位', text: `
+# 1 号 → 29 号：1111 0111 1111 1111 1111 1111 0111 1
+SETBIT sign:7321:202610 28 1
+# 返回 0：今天首签，发积分；返回 1：已签过
+BITCOUNT sign:7321:202610
+# 27：本月累计 27 天
+BITFIELD sign:7321:202610 GET u29 0
+# 从最低位数连续的 1：连续 4 天
+` }]), { title: '签到位图 · 一个月 4 字节' });
+}
+</script>

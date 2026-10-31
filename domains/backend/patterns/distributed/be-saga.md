@@ -41,3 +41,22 @@ order: 50
 4. 参与方接口用 saga_id + 步骤名做幂等键，能处理空补偿和重复调用。
 5. 每步设超时；补偿重试{重试次数}次仍失败，状态转为“需人工”并告警。
 补测试：让每一步分别失败，验证最终数据都回到一致状态。最后用文字给出状态流转和改动文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['下单编排器', '库存', '支付', '订单'], [
+    [0, 1, '1 锁定库存 reserve'],
+    [1, 0, '已锁定 15 分钟', 'r'],
+    [0, 2, '2 扣款 charge'],
+    [2, 0, '余额不足', 'rx'],
+    [0, 0, '失败 → 按倒序补偿'],
+    [0, 1, '补偿：释放库存 cancel'],
+    [0, 3, '订单标记“已取消”'],
+  ]), { title: '编排式 Saga · 第 2 步失败时' });
+}
+</script>

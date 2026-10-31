@@ -28,3 +28,39 @@ order: 60
 ## 提示词
 
 {产品}的{高级设置}做成「可搜索的设置列表」：顶部搜索框（匹配名称、说明和参数名，边输入边过滤并高亮命中文字）和“全部 / 只看已修改”切换；左侧 220px 设置分组树，点击滚到对应分组、滚动时同步高亮；右侧逐条列出设置项：“分组 › 名称”、一句说明、右侧控件，改动即时保存；改过默认值的项左侧加主色竖线并显示“已修改 · 恢复默认”；需要重启生效的项写明；手机上去掉分组树，控件放到说明下方。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '22% 1fr',
+  rows: 'auto 1fr',
+  areas: ['tree top', 'tree list'],
+  boxes: {
+    tree: { label: '设置分组树', kind: 'toc' },
+    top: {
+      inner: {
+        cols: '1fr 200px',
+        rows: '1fr',
+        areas: ['s g'],
+        boxes: {
+          s: { label: '搜索', kind: 'search', text: '搜索设置项、说明或参数名' },
+          g: { label: '只看已修改', kind: 'segment' },
+        },
+      },
+    },
+    list: { label: '设置项（改过的有标记）', kind: 'setrows', acc: true },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto auto 1fr',
+  areas: ['nav', 's', 'g', 'list'],
+  boxes: {
+    nav: { label: '‹ 返回', kind: 'mtop', text: '高级设置' },
+    s: { label: '搜索', kind: 'search', text: '搜索设置项' },
+    g: { label: '只看已修改', kind: 'segment' },
+    list: { label: '设置项', kind: 'setrows', acc: true },
+  },
+};
+```

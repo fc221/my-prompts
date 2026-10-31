@@ -42,3 +42,35 @@ order: 50
 5. 前端按 results 逐行提示，部分失败时保留失败行，改完可以只重试这些行。
 6. 测试：全部成功、部分失败、超过上限、重复提交、混入越权条目。
 最后列出改动文件，并说明单批上限的取值理由。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+POST /tickets/batch-close
+Idempotency-Key: 5c0e8a41-…
+
+"items": [
+  { "id": "tk_101" },
+  { "id": "tk_102" },
+  { "id": "tk_207" }
+]
+`, `
+200 OK
+
+"results": [
+  { "index": 0, "status": 200,
+    "id": "tk_101" },
+  { "index": 1, "status": 200, … },
+  { "index": 2, "status": 403,
+    "error": { "code": "FORBIDDEN",
+      "message": "不是本门店的工单" } }
+],
+"succeeded": 2, "failed": 1
+`), { title: '逐条批量 · 每条结果单独返回' });
+}
+</script>

@@ -42,3 +42,20 @@ order: 40
 6. 模板里有用户内容时限制资源加载：WeasyPrint 用自定义 url_fetcher 只放行 data: 和模板目录，Paged.js 拦截外部请求。
 7. 用 200 页的样本测耗时和内存，超过 60 秒就按章节分段排版再用 qpdf 合并，并说明分段后页码和目录怎么保持连续。
 最后列出改了哪些文件，以及所选引擎不支持的 CSS 特性和你用的替代写法。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, page({
+    pages: [
+      { label: '封面：@page :first 不要页眉页脚', blocks: ['gap', 'gap', 'gap', 'title:门店运营手册', 'text:2026 版 · 华东区', 'gap', 'img'] },
+      { head: '门店运营手册', foot: '第 2 页，共 86 页', label: '目录：target-counter 填页码', blocks: ['h:目录', 'toc:6'] },
+      { head: '门店运营手册 · 第 3 章 收银与对账', foot: '第 17 页，共 86 页', label: '正文：string-set 把章名带进页眉', blocks: ['title:第 3 章 收银与对账', 'p:4', 'table:4', 'p:3'] },
+    ],
+  }), { center: true, min: 0.3 });
+}
+</script>

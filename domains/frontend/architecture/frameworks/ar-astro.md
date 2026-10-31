@@ -43,3 +43,28 @@ order: 80
 5. 需要按请求渲染的页面单独关闭预渲染，其余保持静态。
 6. 提供 dev、build、preview、check 命令。
 完成后汇报改了哪些文件、改前改后每个页面的 JS 体积；验证：astro check 通过，构建产物里纯内容页面不带多余脚本，故意删掉一篇内容的 title 时构建报错。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+* pages/                  文件路由，.astro、.md、.mdx
+    index.astro
+*   blog/[...slug].astro  getStaticPaths 从集合生成
+  layouts/                BaseLayout.astro：head、SEO
+  components/             交互组件才加 client:*
+* content.config.ts       defineCollection、glob()、zod
+* content/blog/           Markdown / MDX 正文
+  assets/                 要优化的图片
+  actions/index.ts        defineAction 处理表单
+  styles/
+public/                   favicon、robots.txt 原样输出
+astro.config.mjs
+`), { title: 'Astro 6 内容站 · 默认零 JS' });
+}
+</script>

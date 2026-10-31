@@ -41,3 +41,29 @@ Rust Axum（以 0.8 为准）服务的约定：main.rs 只负责启动，lib.rs 
 新建时：建 src/{模块}/，写 model、repo、service、handlers 和路由，在 app() 里 nest 进来，加一条 sqlx 迁移，写覆盖 201、404、422 的 oneshot 接口测试。
 检查时：先找 0.7 的冒号路径写法、handler 里的 unwrap、async 里的阻塞调用、跨 .await 持有的同步锁、包在 Arc 和 Mutex 里的连接池；逐条列出文件和改法，会改变响应的先问我。
 最后列出改动的文件和验证命令（cargo clippy、cargo test）。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+  main.rs          配置、tracing、连接池，serve
+* lib.rs           app(state) 返回 Router
+  state.rs         AppState，derive(Clone)
+  error.rs         AppError 实现 IntoResponse
+  config.rs
+* orders/
+    mod.rs         routes()，nest 到 /orders
+    handlers.rs    State、Path、Json 提取
+    service.rs     不依赖 axum 类型
+    repo.rs        sqlx query! 编译期检查
+    model.rs
+migrations/        sqlx migrate add
+tests/             调 app(state) 加 oneshot
+`), { title: 'Axum · main 只启动，lib 构建 Router' });
+}
+</script>

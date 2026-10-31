@@ -39,3 +39,20 @@ order: 20
 2. 按规则改：权限点按 资源:操作 命名并集中定义；每个路由声明所需权限点，默认拒绝；数据范围条件由仓储层统一追加；按 ID 访问时带归属条件，查不到返回 404、无权操作返回 403；{条件规则，如报销金额超过 5000 元需财务总监审批}集中写在策略类；角色变更时失效权限缓存；权限变更和高危操作写审计记录。
 3. 补测试：每个接口覆盖有权限、无权限、跨部门、跨租户四类用例。
 4. 汇报：路由权限清单、发现的越权点、改动文件、测试结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['客服', '工单服务', '数据库'], [
+    [0, 1, '改派工单 8812'],
+    [1, 1, '有 ticket:assign 权限点'],
+    [1, 2, 'WHERE 带归属'],
+    [2, 1, '0 行：别部门的单', 'r'],
+    [1, 0, '统一返回 404', 'rx'],
+  ]), { title: '权限模型 · 查询带上 tenant_id 和可见部门' });
+}
+</script>

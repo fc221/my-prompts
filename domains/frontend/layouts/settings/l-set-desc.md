@@ -28,3 +28,34 @@ order: 20
 ## 提示词
 
 {产品}的{设置页}用「左说明右卡片」：内容区限宽 960px 居中，按{分组}从上到下排；每组左侧约 1/3 写组标题（16px 中粗）和一句说明（写清改了会怎样），右侧约 2/3 是一张卡片放字段，卡片底部放这一组的保存按钮；组间距 32–40px；最底部单独一组“危险操作”，浅红底卡片 + 描边按钮并二次确认；窄屏组标题和说明移到卡片上方、字段改一列。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 300px 640px 1fr',
+  rows: 'auto auto auto auto 1fr',
+  areas: ['. hd hd .', '. t1 f1 .', '. t2 f2 .', '. t3 dz .', '. . . .'],
+  boxes: {
+    hd: { label: '页面标题', kind: 'heading', text: '工作区设置' },
+    t1: { label: '组标题 + 说明', kind: 'secdesc', text: '工作区信息' },
+    f1: { label: '字段（卡片）', kind: 'form', acc: true, text: '工作区信息' },
+    t2: { label: '组标题 + 说明', kind: 'secdesc', text: '通知' },
+    f2: { label: '开关行（卡片）', kind: 'switches', acc: true, text: '通知' },
+    t3: { label: '组标题 + 说明', kind: 'secdesc', text: '危险操作' },
+    dz: '危险操作',
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto auto auto auto 1fr',
+  areas: ['nav', 't1', 'f1', 't2', 'f2', '.'],
+  boxes: {
+    nav: { label: '‹ 返回', kind: 'mtop', text: '工作区设置' },
+    t1: { label: '组标题 + 说明', kind: 'secdesc', text: '工作区信息' },
+    f1: { label: '字段（卡片）', kind: 'form', acc: true, text: '工作区信息' },
+    t2: { label: '组标题 + 说明', kind: 'secdesc', text: '通知' },
+    f2: { label: '开关行（卡片）', kind: 'switches', acc: true, text: '通知' },
+  },
+};
+```

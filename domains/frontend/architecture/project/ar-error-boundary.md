@@ -42,3 +42,22 @@ order: 50
 4. 构建时上传 source map 到监控平台，部署产物里删掉 .map 文件。
 5. 同一会话同一错误只报一次，性能数据按 10% 采样，已知无害错误加入忽略列表；chunk 加载失败单独处理为提示刷新。
 完成后汇报改了哪些文件；验证：在开发环境故意让一个区块组件抛错，确认只有该块显示错误、导航可用；触发一次未处理的 Promise 拒绝，在监控平台看到能还原到源码行的堆栈。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, rings, stack } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    rings([{ t: '根边界', note: '整页兜底：刷新、回首页' }, { t: '路由边界', note: '保住导航' }, { t: '区块边界', note: '图表坏了只这块重试' }], '事件和异步错误靠 window 监听兜底'),
+    stack([
+      { t: '捕获', items: ['error', 'unhandledrejection'], note: '捕获阶段才收得到资源加载失败' },
+      { t: '整理', items: ['release', '路由', '20 条面包屑'], note: '过滤手机号、token', acc: true },
+      { t: '上报', note: '同一错误每会话只报一次' },
+      { t: '还原', items: ['source map'], note: '构建时上传，部署目录删掉 .map' },
+    ]),
+  ], { title: '错误边界三层 · 上报能还原到源码行' });
+}
+</script>

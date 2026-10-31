@@ -2,6 +2,7 @@
 zh: 数据看板首页
 en: Dashboard home
 aka: Dashboard首页
+preview: l-dash-overview
 order: 50
 ---
 

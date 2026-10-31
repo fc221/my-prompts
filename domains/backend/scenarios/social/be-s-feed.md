@@ -41,3 +41,18 @@ order: 20
 4. 分页用发布时间戳加帖子 ID 的游标。
 5. 删帖、拉黑、可见范围在展示填充时过滤；作者自己的新帖立即可见。
 最后给出压测和对账方法：模拟 1 个 500 万粉丝的账号和 1000 个普通作者同时发帖，测首页 P99 和扩散耗时；随机抽 100 个用户，用拉模式重算前 50 条与收件箱结果比对，差异记录原因。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '发帖' }, { t: '逐个粉丝 ZADD', note: '大号要写 500 万次', bad: true }, { t: '读收件箱', note: '一次 ZREVRANGE' }],
+    [{ t: '发帖', note: '只写自己的列表' }, { t: '读时拉关注', note: '关注 2000 人就慢', bad: true }, { t: '归并取前 20' }],
+    [{ t: '粉丝 < 1 万', note: '推给 7 天活跃粉丝' }, { t: '大号', note: '不推，读时拉' }, { t: '收件箱 + 大号归并', note: '游标分页', acc: true }],
+  ], { lanes: ['推模式', '拉模式', '混合'] }), { title: '按粉丝数选推或拉' });
+}
+</script>

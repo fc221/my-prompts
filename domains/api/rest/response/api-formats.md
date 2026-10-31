@@ -43,3 +43,32 @@ JavaScript 的 Number 只能精确表示 2^53（约 9007 万亿）以内的整�
 6. 入参格式不对返回 400，错误里写期望格式。
 7. 测试：19 位 ID 往返不变，0.1 加 0.2 这类金额计算准确，+08:00 和 Z 两种写法解析到同一时刻。
 最后列出改动文件，以及对前端和对接方有影响的字段清单。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: '容易出错', text: `
+"id": 1849203385720193024,
+// 前端读成 …193000，查到别的记录
+"amount": 129.9,
+// 浮点相加，对账差一分
+"createdAt": "2026-03-08 14:30:00"
+// 不带时区，海外门店差 8 小时
+` },
+    { t: '统一格式', text: `
+"id": "1849203385720193024",
+"amount": 12990,
+"currency": "CNY",
+"createdAt": "2026-03-08T06:30:00Z",
+"bizDate": "2026-03-08",
+"timeZone": "Asia/Shanghai",
+"rateBp": 125
+` },
+  ]), { title: '时间带时区 · 金额用分 · ID 用字符串' });
+}
+</script>

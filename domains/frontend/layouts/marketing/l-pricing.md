@@ -28,3 +28,26 @@ order: 70
 ## 提示词
 
 {产品}价格区：顶部居中月付 / 年付切换（标明年付优惠）；下面 {套餐数} 张等宽套餐卡，内含档名、适合人群、价格（等宽数字，写全单位和周期）、主按钮和包含内容；推荐档“{推荐档}”用加粗描边和角标突出；卡片下方放按功能分组的完整对比表，宽屏表头吸顶在导航下方；窄屏卡片单列（推荐档在前），对比表放进限高约 70vh 的滚动框，表头吸在框顶、首列固定（吸顶和横向滚动不能同时挂在页面上）。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 1fr 1fr',
+  rows: 'auto auto 1fr',
+  areas: ['. tg .', 'p1 p2 p3', 'cmp cmp cmp'],
+  boxes: {
+    tg: { label: '月付 / 年付', center: true },
+    p1: '基础版',
+    p2: { label: '推荐档', acc: true },
+    p3: '企业版',
+    cmp: '功能对比表',
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto auto auto 1fr',
+  areas: ['tg', 'p2', 'p1', 'p3', '.'],
+  boxes: { tg: '月 / 年', p2: { label: '推荐档', acc: true }, p1: '其他档', p3: '其他档' },
+};
+```

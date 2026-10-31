@@ -40,3 +40,21 @@ store 不是全局变量收纳箱。每加一个字段先过一遍「状态分�
 3. 按规则修改：Pinia 改为 setup 写法，组件解构用 storeToRefs；Zustand 调用处改为 selector，多字段用 useShallow；组件里直接给 store 字段赋值的改为调用 action。
 4. 持久化只保留偏好和草稿并加版本号；令牌如果存在 localStorage，单独列出，交给我决定。
 5. 跑类型检查和现有测试，手动走一遍主要流程；汇报删掉的字段、改动的文件和验证方式。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: 'useCartStore', items: ['items、count', 'addItem(sku)'], acc: true },
+    { t: 'useUiStore', items: ['theme、sidebar', '持久化带 version'] },
+    { t: 'useAuthStore', items: ['user 摘要、status', '令牌不持久化'] },
+    { t: '订单列表', items: ['→ 服务端状态缓存'], dash: true },
+    { t: '筛选、页码', items: ['→ URL'], dash: true },
+    { t: '正在填的表单', items: ['→ 表单库'], dash: true },
+  ], { cols: 3, note: '组件用 selector 取最小数据，修改只走 action' }), { title: '全局状态库 · 按领域拆，虚线不放进来' });
+}
+</script>

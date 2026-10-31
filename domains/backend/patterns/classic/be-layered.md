@@ -39,3 +39,31 @@ order: 20
 4. 依赖只能 controller → service → repository；发现 service 之间循环调用，就抽出共用部分并说明怎么抽的。
 5. 只有一种实现的地方直接用具体类，不加接口。
 完成后用文字列出这个模块的调用关系，列出新增和修改的文件，给出每个用例对应的测试名称和运行命令。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, stack, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    stack([
+      { t: '接口层', items: ['order_controller'], note: '路由、参数校验、鉴权、错误映射' },
+      { t: '业务层', items: ['order_service', 'createOrder()'], note: '业务校验，一个用例一个事务', acc: true },
+      { t: '数据访问层', items: ['order_repository'], note: '只做读写，不放业务判断' },
+    ], { arrow: '依赖只能向下' }),
+    tree(`
+src/
+* order/
+    order_controller
+    order_service
+    order_repository
+    dto/
+  inventory/
+  member/
+  common/           错误类型、分页、工具
+`),
+  ], { title: '三层架构 · 先按模块再按层' });
+}
+</script>

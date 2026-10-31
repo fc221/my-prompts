@@ -28,3 +28,49 @@ order: 60
 ## 提示词
 
 把{收货地址的“所在地区”}做成级联选择：触发器高 32px、宽 320px，选中后显示“省 / 市 / 区”完整路径；面板三列，每列宽 140px、最高 260px 内滚动，有下级的项带 ›，当前路径浅主色底，只能选末级；顶部可跨级搜索并高亮匹配字；方向键上下移动、右键进入下级、左键返回上级、Enter 选中、Esc 关闭并还焦点；手机上改为底部面板逐级推进，顶部显示已选路径。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.w{width:100%;max-width:420px;display:flex;flex-direction:column;gap:6px}
+.trg{position:relative;display:flex;align-items:center;height:32px;padding:0 32px 0 12px;border:1px solid #3b5bdb;border-radius:6px;background:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trg::after{content:"";position:absolute;right:15px;top:14px;width:6px;height:6px;border:solid #5b616e;border-width:0 1.5px 1.5px 0;transform:rotate(225deg)}
+.ph{color:#8a909c}
+.cols{display:flex;padding:4px 0;background:#fff;border:1px solid #e3e6eb;border-radius:8px;box-shadow:0 6px 16px rgba(31,35,41,.1)}
+.cols ul{flex:1;min-width:0;height:112px;margin:0;padding:0 4px;list-style:none;overflow:auto}
+.cols ul+ul{border-left:1px solid #e3e6eb}
+.cols button{display:flex;align-items:center;justify-content:space-between;width:100%;height:28px;padding:0 8px;border:0;border-radius:4px;background:none;text-align:left;white-space:nowrap;cursor:pointer}
+.cols button:hover{background:#f5f6f8}
+.cols button:focus-visible{outline-offset:-2px}
+.cols .on{background:#edf1ff;color:#3b5bdb}
+.cols .sub::after{content:"›";margin-left:4px;color:#8a909c}
+.cols .on.sub::after{color:#3b5bdb}
+</style>
+
+<div class="s"><div class="w"><div class="trg" id="cv" aria-live="polite"></div><div class="cols"><ul aria-label="省份"></ul><ul aria-label="城市"></ul><ul aria-label="区县"></ul></div></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const D = { 浙江: { 杭州: ['西湖区', '滨江区', '余杭区', '拱墅区'], 宁波: ['海曙区', '鄞州区'], 温州: ['鹿城区', '瓯海区'] }, 江苏: { 南京: ['玄武区', '鼓楼区'], 苏州: ['姑苏区', '吴中区'] }, 广东: { 广州: ['天河区', '越秀区'], 深圳: ['南山区', '福田区'] }, 四川: { 成都: ['武侯区', '锦江区'] } };
+  let p = '浙江', c = '杭州', d = '西湖区';
+  const cols = root.querySelector('.cols'), [u1, u2, u3] = cols.querySelectorAll('ul'), cv = root.querySelector('#cv');
+  const li = (arr, cur, sub, lv) => arr.map((x) => `<li><button type="button" data-l="${lv}" class="${x === cur ? 'on' : ''}${sub ? ' sub' : ''}">${x}</button></li>`).join('');
+  const draw = () => {
+    u1.innerHTML = li(Object.keys(D), p, 1, 1); u2.innerHTML = p ? li(Object.keys(D[p]), c, 1, 2) : ''; u3.innerHTML = c ? li(D[p][c], d, 0, 3) : '';
+    cv.innerHTML = d ? `${p} / ${c} / ${d}` : '<span class="ph">请选择省 / 市 / 区</span>';
+  };
+  cols.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return; const v = b.textContent, l = +b.dataset.l;
+    if (l === 1) { p = v; c = ''; d = ''; } else if (l === 2) { c = v; d = ''; } else d = v;
+    draw(); const nx = l < 3 ? cols.querySelector(`[data-l="${l + 1}"]`) : cols.querySelector('[data-l="3"].on'); if (nx) nx.focus({ preventScroll: true });
+  });
+  cols.addEventListener('keydown', (e) => {
+    const b = e.target.closest('button'); if (!b) return; const l = +b.dataset.l, all = [...cols.querySelectorAll(`[data-l="${l}"]`)], k = all.indexOf(b);
+    const go = (el) => { if (el) { e.preventDefault(); el.focus(); } };
+    if (e.key === 'ArrowDown') go(all[k + 1]); else if (e.key === 'ArrowUp') go(all[k - 1]);
+    else if (e.key === 'ArrowRight' && l < 3) { e.preventDefault(); b.click(); } else if (e.key === 'ArrowLeft' && l > 1) go(cols.querySelector(`[data-l="${l - 1}"].on`));
+  });
+  draw();
+}
+</script>

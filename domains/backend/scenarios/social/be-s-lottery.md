@@ -41,3 +41,17 @@ order: 60
 4. 抽奖记录 request_id 唯一，异步落库；发奖用 record_id 做幂等键，失败重试后转人工。
 5. 大奖按时段分配库存，每人每日中奖设上限。
 最后给出压测和对账方法：对抽取函数模拟 100 万次，各奖项命中率与配置偏差在 0.5% 以内；1000 并发抽到奖品耗尽，断言发放数不超过总量；活动结束核对 已发放 + 剩余 = 总量，次数扣减与抽奖记录数一致。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '抽奖请求', note: '校验资格 · request_id' }, { t: '安全随机数', note: '[0, 10000) 按权重区间' }, { t: 'Lua 原子扣减', note: '次数 + 总库存 + 当日库存', acc: true }, { t: '写记录 · 发奖', note: 'record_id 做幂等键' }],
+    [{ t: '奖品已发完', note: '改为兜底奖', bad: true, via: '库存 < 0' }, { t: '加回库存', note: '不超发' }, { t: '活动后对账', note: '已发 + 剩余 = 总量' }],
+  ]), { title: '概率归概率，库存归库存' });
+}
+</script>

@@ -42,3 +42,19 @@ order: 10
 5. 现状：有没有老项目要迁移，框架和版本是什么。
 然后按条件判断：内容站优先 Astro；要收录又重交互选 Next.js 或 Nuxt；后台和工具选 Vite 单页应用；团队熟练的框架优先，硬条件命中两条以上才换栈；只有静态托管时排除依赖 SSR 的方案。
 输出一页决策记录：推荐组合（框架、元框架、构建工具、请求和状态库、样式方案）、命中的条件、放弃的方案和原因、主要风险、重新评估的触发条件。只写和本项目相关的判断，不写通用的框架优缺点对比。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '内容为主，要收录', items: ['官网、文档、博客', '→ Astro'] },
+    { t: '要收录又重交互', items: ['电商、社区、预约', '→ Next.js / Nuxt'], acc: true },
+    { t: '登录后的后台', items: ['工具、看板', '→ Vite + React / Vue'] },
+    { t: '微信生态为主', items: ['原生、uni-app、Taro', '→ 小程序与跨端'] },
+  ], { cols: 2, note: '团队熟练度权重最高，硬条件命中两条以上才换栈' }), { title: '先定形态，再看团队' });
+}
+</script>

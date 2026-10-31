@@ -2,7 +2,7 @@
 zh: 长页面的七种定位方式
 en: Staying oriented on long pages
 aka: 长页面怎么不迷路 长页面导航 页面定位 回到顶部 返回顶部 页内导航 锚点 长页选型
-order: 70
+order: 20
 ---
 
 ## 是什么
@@ -38,3 +38,590 @@ order: 70
 {产品}的{页面}太长，大约{屏数}屏，内容是{内容类型}，用户来这里主要是{浏览 / 查找 / 走流程}。按用途选定位方式：走流程用步骤条；查找时，章节清楚用锚点目录，内容按状态分用状态筛选，知道关键词用搜索，内容可以按需看用折叠面板；浏览时用阅读进度加回到顶部。最多组合两种，告诉我选了哪些和理由，再实现。
 
 做完要回答三个问题。我在哪：当前章节或步骤有高亮，滚动时同步更新，刷新后保持位置。还能去哪：目录、步骤或筛选一直看得到，吸顶元素不遮挡跳转后的标题。怎么回来：从详情返回时恢复原滚动位置，地址里带锚点或筛选条件，可以分享。键盘能走完全部入口，跳转后焦点移到目标标题，减少动态效果时直接跳到位。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/pick.css">
+<style>
+  .x {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  @container (min-height: 260px) {
+    .x {
+      zoom: 1.5;
+    }
+  }
+  :where(.x) button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+  .x :focus-visible {
+    outline: 2px solid #3b5bdb;
+    outline-offset: -2px;
+  }
+  .x-box {
+    position: relative;
+    overflow: hidden;
+    height: 112px;
+    border: 1px solid #e1e4ea;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .x-scroll {
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .x-feed div {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 48px 5px 10px;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .x-feed span:last-child,
+  .x-note {
+    color: #5b616e;
+    font-size: 11px;
+  }
+  .x-top {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #3b5bdb;
+    color: #fff;
+    font-size: 15px;
+    box-shadow: 0 3px 10px rgb(59 91 219 / 40%);
+    transition:
+      opacity 0.18s,
+      transform 0.18s;
+  }
+  .x-top.off {
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+  }
+  .x-chips {
+    display: flex;
+    gap: 4px;
+    padding: 6px 8px 4px;
+  }
+  .x-chips button {
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 11px;
+    background: #eef0f4;
+    color: #4a505b;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .x-chips [aria-pressed='true'] {
+    background: #3b5bdb;
+    color: #fff;
+  }
+  .x-tasks {
+    height: 78px;
+    overflow-y: auto;
+    padding: 0 10px;
+  }
+  .x-tasks div {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .x-tag {
+    color: #a15c00;
+    font-size: 11px;
+  }
+  .x-tag.ok {
+    color: #1d6b32;
+  }
+  .x-toc {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
+  }
+  .x-toc nav {
+    padding: 6px 4px;
+    border-right: 1px solid #eef0f3;
+  }
+  .x-toc nav button {
+    display: block;
+    width: 100%;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #5b616e;
+    text-align: left;
+  }
+  .x-toc nav [aria-current='true'] {
+    background: #eef1fd;
+    color: #2b45b0;
+    font-weight: 600;
+  }
+  .x-sec {
+    padding: 6px 10px 10px;
+  }
+  .x-sec h5 {
+    margin: 0 0 2px;
+    font-size: 12px;
+  }
+  .x-sec p {
+    margin: 0;
+    color: #4a505b;
+  }
+  .x-steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 12px 0 6px;
+    padding: 0;
+    list-style: none;
+  }
+  .x-steps li {
+    position: relative;
+    text-align: center;
+  }
+  .x-steps li:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 50%;
+    width: 100%;
+    height: 2px;
+    background: #e1e4ea;
+  }
+  .x-steps li.done:not(:first-child)::before,
+  .x-steps li.cur:not(:first-child)::before {
+    background: #3b5bdb;
+  }
+  .x-steps button {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    width: 100%;
+    color: #5b616e;
+    font-size: 11px;
+    line-height: 16px;
+  }
+  .x-steps b {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 2px;
+    border: 2px solid #e1e4ea;
+    border-radius: 50%;
+    background: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 18px;
+  }
+  .x-steps .done b {
+    border-color: #3b5bdb;
+    background: #3b5bdb;
+    color: #fff;
+  }
+  .x-steps .cur b {
+    border-color: #3b5bdb;
+    color: #2b45b0;
+  }
+  .x-steps .cur button {
+    color: #1f2329;
+    font-weight: 600;
+  }
+  .x-steps button:disabled {
+    cursor: default;
+  }
+  .x-foot {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+  .x .x-btn {
+    height: 26px;
+    padding: 0 12px;
+    border: 1px solid #cdd2da;
+    border-radius: 6px;
+    background: #fff;
+  }
+  .x .x-btn.go {
+    border-color: #3b5bdb;
+    background: #3b5bdb;
+    color: #fff;
+  }
+  .x .x-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  .x details {
+    border-bottom: 1px solid #eef0f3;
+  }
+  .x summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 28px;
+    padding: 0 10px;
+    list-style: none;
+    cursor: pointer;
+  }
+  .x summary::-webkit-details-marker {
+    display: none;
+  }
+  .x summary::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid #5b616e;
+    border-bottom: 1.5px solid #5b616e;
+    transform: rotate(45deg);
+    transition: transform 0.16s;
+  }
+  .x details[open] summary {
+    font-weight: 600;
+  }
+  .x details[open] summary::after {
+    transform: rotate(-135deg);
+  }
+  .x details p {
+    margin: 0;
+    padding: 0 10px 6px;
+    color: #4a505b;
+    line-height: 17px;
+  }
+  .x-in {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 10px;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .x-in svg {
+    flex: none;
+    width: 13px;
+    height: 13px;
+    color: #5b616e;
+  }
+  .x-in input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+  }
+  .x-in:focus-within {
+    box-shadow: inset 0 -2px #3b5bdb;
+  }
+  .x-hits {
+    height: 80px;
+    overflow-y: auto;
+    padding: 2px 4px;
+  }
+  .x-hits button {
+    display: block;
+    width: 100%;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-align: left;
+  }
+  .x-hits button:hover {
+    background: #f1f3f7;
+  }
+  .x-hits p {
+    margin: 0 6px 2px;
+    color: #4a505b;
+    font-size: 11px;
+    line-height: 16px;
+  }
+  .x mark {
+    border-radius: 2px;
+    background: #ffe58f;
+    color: inherit;
+  }
+  .x-bar {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #3b5bdb;
+    transform: scaleX(var(--p, 0));
+    transform-origin: left;
+  }
+  .x-article {
+    padding: 8px 10px 10px;
+  }
+  .x-article h5 {
+    margin: 0 0 2px;
+    font-size: 13px;
+  }
+  .x-article p {
+    margin: 0 0 6px;
+    color: #4a505b;
+  }
+  .x-pct {
+    position: absolute;
+    right: 8px;
+    bottom: 6px;
+    padding: 0 6px;
+    border-radius: 9px;
+    background: rgb(31 35 41 / 78%);
+    color: #fff;
+    font-size: 11px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .x-top,
+    .x summary::after {
+      transition: none;
+    }
+  }
+</style>
+
+<script type="module">
+import { pick } from '../../_shared/pick.ts';
+
+const behavior = () => (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+// 示例在详情尺寸里被 zoom 放大，换算一下再滚；用 scrollBy 只动这个小窗，外层页面不跟着滚
+const jump = (box, to) => {
+  const r = box.getBoundingClientRect();
+  box.scrollBy({ top: (to.getBoundingClientRect().top - r.top) / (r.height / box.clientHeight), behavior: behavior() });
+};
+
+const NEWS = ['门店周报', '新品试吃', '仓库盘点', '培训通知', '值班安排', '客户回访', '活动复盘', '年会筹备', '设备保养', '招聘进度', '预算调整', '季度总结'];
+
+function backTop(el) {
+  const box = el.querySelector('.x-scroll');
+  const btn = el.querySelector('.x-top');
+  const sync = () => {
+    const off = box.scrollTop < 40;
+    btn.classList.toggle('off', off);
+    btn.tabIndex = off ? -1 : 0;
+  };
+  box.addEventListener('scroll', sync);
+  btn.addEventListener('click', () => {
+    box.focus();
+    box.scrollTo({ top: 0, behavior: behavior() });
+  });
+  box.scrollTop = 145;
+  sync();
+}
+
+const TASKS = [
+  ['核对发票', 0],
+  ['回复供应商', 1],
+  ['更新价目表', 0],
+  ['安排巡店', 1],
+  ['提交预算', 1],
+  ['整理合同', 0],
+  ['确认排班', 1],
+];
+
+function status(el) {
+  const chips = [...el.querySelectorAll('.x-chips button')];
+  const list = el.querySelector('.x-tasks');
+  const show = (f) => {
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.f === f)));
+    list.innerHTML = TASKS.filter(([, d]) => f === 'a' || String(d) === f)
+      .map(([t, d]) => `<div><span>${t}</span><span class="x-tag ${d ? 'ok' : ''}">${d ? '已完成' : '待处理'}</span></div>`)
+      .join('');
+  };
+  chips.forEach((c) => c.addEventListener('click', () => show(c.dataset.f)));
+  show('0');
+}
+
+function toc(el) {
+  const box = el.querySelector('.x-scroll');
+  const secs = [...box.querySelectorAll('.x-sec')];
+  const links = [...el.querySelectorAll('nav button')];
+  const mark = (i) => links.forEach((l, k) => l.setAttribute('aria-current', String(k === i)));
+  let lock = 0;
+  links.forEach((l, i) =>
+    l.addEventListener('click', () => {
+      lock = performance.now() + 500;
+      mark(i);
+      jump(box, secs[i]);
+    }),
+  );
+  box.addEventListener('scroll', () => {
+    if (performance.now() < lock) return;
+    const top = box.getBoundingClientRect().top;
+    let cur = 0;
+    secs.forEach((s, i) => {
+      if (s.getBoundingClientRect().top - top < 12) cur = i;
+    });
+    mark(cur);
+  });
+  mark(0);
+}
+
+const STEPS = ['填资料', '传证件', '等审核', '开通'];
+
+function steps(el) {
+  const items = [...el.querySelectorAll('.x-steps li')];
+  const prev = el.querySelector('[data-p]');
+  const next = el.querySelector('[data-n]');
+  const live = el.querySelector('.x-note');
+  let i = 1;
+  const render = () => {
+    items.forEach((li, k) => {
+      li.className = k < i ? 'done' : k === i ? 'cur' : '';
+      const b = li.querySelector('button');
+      b.disabled = k >= i;
+      if (k === i) b.setAttribute('aria-current', 'step');
+      else b.removeAttribute('aria-current');
+      b.querySelector('b').textContent = k < i ? '✓' : k + 1;
+    });
+    prev.disabled = i === 0;
+    next.disabled = i === STEPS.length - 1;
+    live.textContent = `第 ${i + 1} 步，共 ${STEPS.length} 步`;
+  };
+  items.forEach((li, k) =>
+    li.querySelector('button').addEventListener('click', () => {
+      i = k;
+      render();
+    }),
+  );
+  prev.addEventListener('click', () => (i--, render()));
+  next.addEventListener('click', () => (i++, render()));
+  render();
+}
+
+const FAQ = [
+  ['怎么申请发票', '订单详情里点“开发票”，电子票两小时内发到邮箱。'],
+  ['发票抬头填错了', '未寄出前可以改，已开出的要先红冲。'],
+  ['多久能退款', '原路退回，1 到 3 个工作日到账。'],
+  ['能改收货地址吗', '发货前可以改，发货后要联系快递。'],
+  ['怎么注销账号', '在账号设置底部，注销后 15 天内可恢复。'],
+];
+
+function search(el) {
+  const input = el.querySelector('input');
+  const hits = el.querySelector('.x-hits');
+  const count = el.querySelector('.x-note');
+  const render = () => {
+    const q = input.value.trim();
+    const rows = FAQ.filter(([t, a]) => (t + a).includes(q));
+    count.textContent = `${rows.length} / ${FAQ.length}`;
+    hits.innerHTML = rows.length
+      ? rows
+          .map(([t], i) => {
+            const text = q ? t.split(q).join(`<mark>${q}</mark>`) : t;
+            return `<button type="button" data-i="${i}" aria-expanded="false">${text}</button>`;
+          })
+          .join('')
+      : '<p>没找到，试试“退款”</p>';
+    hits.dataset.rows = rows.map((r) => r[1]).join('|');
+  };
+  hits.addEventListener('click', (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    hits.querySelector('p')?.remove();
+    hits.querySelectorAll('button').forEach((x) => x.setAttribute('aria-expanded', 'false'));
+    b.setAttribute('aria-expanded', 'true');
+    b.insertAdjacentHTML('afterend', `<p>${hits.dataset.rows.split('|')[b.dataset.i]}</p>`);
+  });
+  input.addEventListener('input', render);
+  render();
+}
+
+function progress(el) {
+  const box = el.querySelector('.x-scroll');
+  const bar = el.querySelector('.x-bar');
+  const pct = el.querySelector('.x-pct');
+  const sync = () => {
+    const p = box.scrollTop / (box.scrollHeight - box.clientHeight) || 0;
+    bar.style.setProperty('--p', p);
+    pct.textContent = `${Math.round(p * 100)}%`;
+  };
+  box.addEventListener('scroll', sync);
+  box.scrollTop = (box.scrollHeight - box.clientHeight) * 0.38;
+  sync();
+}
+
+const ICON =
+  '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3.5 3.5"/></svg>';
+
+export default function demo(root) {
+  pick(
+    root,
+    [
+      {
+        name: '回到顶部',
+        fit: '滚得很深，想一下回到开头',
+        html: `<div class="x"><div class="x-box"><div class="x-scroll x-feed" tabindex="0" role="region" aria-label="动态列表">${NEWS.map(
+          (t, i) => `<div><span>${t}</span><span>${i + 1} 小时前</span></div>`,
+        ).join('')}</div><button type="button" class="x-top" aria-label="回到顶部">↑</button></div></div>`,
+        init: backTop,
+      },
+      {
+        name: '状态筛选',
+        fit: '同一批内容，只想看某种状态',
+        html: `<div class="x"><div class="x-box"><div class="x-chips" role="group" aria-label="按状态筛选">
+          <button type="button" data-f="a">全部 7</button><button type="button" data-f="0">待处理 3</button><button type="button" data-f="1">已完成 4</button>
+          </div><div class="x-tasks" tabindex="0" role="region" aria-label="任务列表"></div></div></div>`,
+        init: status,
+      },
+      {
+        name: '锚点目录',
+        fit: '章节清楚，要随时跳到某一节',
+        html: `<div class="x"><div class="x-box x-toc"><nav aria-label="本页目录"><button type="button">入职</button><button type="button">假期</button><button type="button">报销</button><button type="button">离职</button></nav>
+          <div class="x-scroll" tabindex="0" role="region" aria-label="员工手册">
+            <section class="x-sec"><h5>入职</h5><p>第一天带好证件原件，上午九点到前台报到，领工牌和电脑。</p></section>
+            <section class="x-sec"><h5>假期</h5><p>年假按司龄计算，满一年 5 天，提前三天在系统里申请。</p></section>
+            <section class="x-sec"><h5>报销</h5><p>发票抬头写公司全称，每月 25 日前提交，次月发放。</p></section>
+            <section class="x-sec" style="min-height:96px"><h5>离职</h5><p>提前三十天告知，交接完成后办理手续。</p></section>
+          </div></div></div>`,
+        init: toc,
+      },
+      {
+        name: '步骤条',
+        fit: '有先后的流程，要看到走到第几步',
+        html: `<div class="x"><div class="x-box" style="padding:0 8px"><ol class="x-steps">${STEPS.map((s) => `<li><button type="button"><b></b>${s}</button></li>`).join('')}</ol>
+          <div class="x-foot"><button type="button" class="x-btn" data-p>上一步</button><button type="button" class="x-btn go" data-n>下一步</button></div></div>
+          <span class="x-note" role="status" style="position:absolute;top:0;opacity:0"></span></div>`,
+        init: steps,
+      },
+      {
+        name: '折叠面板',
+        fit: '内容不用全看，按需展开',
+        html: `<div class="x"><div class="x-box" data-clip>
+          <details name="x-acc" open><summary>配送范围</summary><p>全国可配送，偏远地区加收运费。</p></details>
+          <details name="x-acc"><summary>售后政策</summary><p>七天无理由退货，质量问题包运费。</p></details>
+          <details name="x-acc"><summary>保养方法</summary><p>避免暴晒，用软布擦拭。</p></details></div></div>`,
+      },
+      {
+        name: '搜索',
+        fit: '目的明确，知道要找哪个词',
+        html: `<div class="x"><div class="x-box"><div class="x-in">${ICON}<input aria-label="搜索帮助内容" value="发票" placeholder="搜索帮助内容"><span class="x-note" role="status"></span></div><div class="x-hits"></div></div></div>`,
+        init: search,
+      },
+      {
+        name: '阅读进度',
+        fit: '长文一路读下去，想知道还剩多少',
+        html: `<div class="x"><div class="x-box"><i class="x-bar"></i><div class="x-scroll x-article" tabindex="0" role="region" aria-label="文章">
+          <h5>一杯手冲的十分钟</h5>
+          <p>水烧开后放一分钟，温度落到九十度上下，豆子闻起来最香。先用少量热水闷蒸三十秒，让粉层鼓起来。</p>
+          <p>接着从中心绕圈注水，水流细一点，别冲到滤纸边上。一杯的总水量大约是粉重的十五倍。</p>
+          <p>第二段注水后等液面落下，再补最后一段。整个过程控制在两分半到三分钟。</p>
+          <p>冲好后别急着喝，稍微晾一下，酸甜会更清楚。换一支豆子，再把比例调一调。</p>
+          <p>记下每次的粉量、水温和时间，下次就知道该往哪边改。</p>
+          </div><span class="x-pct" aria-hidden="true"></span></div></div>`,
+        init: progress,
+      },
+    ],
+    '定位方式',
+  );
+}
+</script>

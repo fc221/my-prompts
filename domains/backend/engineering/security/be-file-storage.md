@@ -39,3 +39,22 @@ order: 50
 2. 按规则改：存储桶改私有；建或补齐文件元数据表；对象键由服务端生成；改为预签名直传加上传确认（pending 到 active）；扩展名白名单加魔数校验和大小上限；图片重新编码并去掉 EXIF；下载前校验业务权限，签发 5–10 分钟的签名 URL 并强制附件下载；pending 超过 24 小时的由定时任务清理。
 3. 补测试：改了扩展名的伪造文件被拒绝；无权限用户拿不到下载地址；签名过期后无法访问。
 4. 汇报：改动文件、存量文件的迁移和处理方式、测试结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['客户端', '服务端', '对象存储'], [
+    [0, 1, '申请上传发票 PDF'],
+    [1, 1, '校验权限，生成对象键'],
+    [1, 0, '预签名 URL，15 分钟', 'r'],
+    [0, 2, '直传，限 10MB'],
+    [0, 1, '上传完成'],
+    [1, 2, '确认存在、大小一致'],
+    [1, 1, 'status：pending → active'],
+  ]), { title: '预签名直传 · t1024/expense/2026/10/01JBK7Q9ZQ3V.pdf' });
+}
+</script>

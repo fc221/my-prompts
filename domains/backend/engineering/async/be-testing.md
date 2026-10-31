@@ -39,3 +39,19 @@ order: 30
 2. 按规则改：业务规则补单元测试，不连外部依赖；仓储和接口的集成测试改用 Testcontainers 起同版本数据库，数据互相独立；CI 从空库跑迁移；第三方用桩服务模拟成功、超时、5xx；时间和 ID 注入固定值；用工厂生成测试数据。
 3. CI 分阶段：单元测试每次提交跑，集成测试每个合并请求跑，端到端测试在预发布环境跑。
 4. 汇报：分层统计改前改后对比、新增和改造的测试、本地运行命令、CI 耗时。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '单元', items: ['大量', '毫秒级'], note: '领域规则和分支，不连库和网络，1 分钟内跑完', acc: true },
+    { t: '集成', items: ['适量', 'Testcontainers', 'WireMock'], note: '同版本 MySQL、Redis，从空库跑迁移', acc: true },
+    { t: '契约', items: ['Pact', '提供方 CI 验证'] },
+    { t: '端到端', items: ['少量', '下单到支付成功'], note: '预发布环境跑，不挡每次提交' },
+  ], { arrow: '越往下越少、越慢' }), { title: '后端测试分层' });
+}
+</script>

@@ -41,3 +41,27 @@ order: 20
 新建时：在 src/modules/ 下建 {模块} 目录，写 schema、repo、service、routes，在 buildApp 里注册，补上覆盖 201、400、404 的接口测试。
 检查时：先确认构建应用和监听端口是否分开、有没有统一的错误处理、入参是否都经过 schema；还停在 Express 4 的，列出升级到 5 要改的路由和中间件。逐条列出位置和改法，会改变对外响应的先问我。
 最后列出改动的文件和验证命令。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+* app.ts                 buildApp()，只注册不监听
+  server.ts              listen，处理 SIGTERM
+  config.ts              启动时校验环境变量
+* modules/               按功能分模块
+    orders/
+      orders.routes.ts
+      orders.schema.ts   zod 或 JSON Schema
+      orders.service.ts  工厂函数接收 repo、logger
+      orders.repo.ts
+      orders.test.ts     inject() 或 supertest
+  lib/                   数据库、日志
+`), { title: 'Express / Fastify · 构建和监听分开' });
+}
+</script>

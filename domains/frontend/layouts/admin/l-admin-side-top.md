@@ -30,3 +30,34 @@ order: 10
 ## 提示词
 
 把{后台}做成「侧栏 + 顶栏」框架：左侧固定侧栏 232px（可收起到 64px：单项菜单只留图标并有 Tooltip，分组收成一个图标、悬停或点击在右侧弹出该组子菜单；收起展开时布局宽度一次到位，侧栏面板和内容区用 transform 做约 240ms 过渡，不要逐帧过渡 width），分组菜单，当前项用浅色底 + 主色文字；顶栏 56px 放全局搜索、通知和账号菜单；内容区独立滚动、左右内边距 24px（手机 16px）；窄于 1024px 时侧栏收进左侧抽屉（约 256px 宽的浮动卡片、带遮罩），顶栏左边放 ☰ 打开它。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '22% 1fr',
+  rows: '14% 1fr',
+  areas: ['side top', 'side main'],
+  boxes: {
+    side: { label: '侧栏导航', dark: true },
+    top: '顶栏',
+    main: {
+      label: '内容区',
+      acc: true,
+      inner: {
+        cols: '1fr 1fr 1fr',
+        rows: '24% 1fr',
+        areas: ['k1 k2 k3', 'tb tb tb'],
+        boxes: { k1: '指标', k2: '指标', k3: '指标', tb: { label: '表格', acc: true } },
+      },
+    },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto 1fr',
+  areas: ['top', 'main'],
+  boxes: { top: '顶栏 ☰', main: { label: '内容', acc: true } },
+  drawer: { size: '70%', box: { label: '侧栏（左侧抽屉）', dark: true, kind: 'nav' } },
+};
+```

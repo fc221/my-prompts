@@ -43,3 +43,22 @@ order: 10
 5. 建连用一次性短期票据，握手校验 Origin，订阅时校验频道权限。
 6. 发版前给所有连接发 1012；多实例之间用 {消息总线} 分发。
 最后说明改了哪些文件，并演示：断网 20 秒后恢复，期间产生的 {业务事件，如新订单} 能补齐且不重复。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['客户端', '服务端'], [
+    [0, 1, 'ping（每 25 秒）'],
+    [1, 0, 'pong', 'r'],
+    [0, 0, '60 秒无消息 → 断开'],
+    [0, 0, '退避加抖动，最长 30 秒'],
+    [0, 1, '重连 · subscribe 带 seq: 128'],
+    [1, 0, '补发 seq 129 之后的消息', 'r'],
+    [1, 0, '超出缓冲 → resync 拉全量', 'r'],
+  ]), { title: 'WebSocket 心跳 · 重连 · 按 seq 补发' });
+}
+</script>

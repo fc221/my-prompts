@@ -39,3 +39,17 @@ order: 30
 2. 按先加后删拆成两次发布：第一次加新列（可空）、代码双写新旧列、分批回填（每批约 1000 行、可重复执行），核对一致后读切到新列；第二次删除旧列的读写代码和旧列本身。
 3. 每个迁移会话先设锁超时（lock_timeout / lock_wait_timeout）；PostgreSQL 建索引用 CONCURRENTLY 并放进不带事务的迁移；MySQL 一个文件一条 DDL，大表用在线变更工具。
 4. 汇报：每次发布包含的迁移文件和代码改动、回填脚本、每步回滚办法、核对 SQL（新旧列不一致的行数为 0）以及 CI 从空库重放的结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '加新列', note: '允许 NULL' }, { t: '双写', note: '新旧列都写' }, { t: '回填', note: '每批 1000 行' }, { t: '切读', note: '核对后读新列', acc: true }],
+    [{ t: '确认旧列', note: '没有任何读写' }, { t: '删旧列', note: '连同相关代码', acc: true }, { t: '新列加 NOT NULL', note: '回填完成之后' }],
+  ], { lanes: ['发布 1', '发布 2'] }), { title: '先加后删 · 新旧两版代码同时在跑' });
+}
+</script>

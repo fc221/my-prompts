@@ -37,3 +37,32 @@ order: 10
 5. 加护栏：加上会报错的检查（令牌以外的色值和间距、绕开项目组件直接写原生控件），并在项目根目录写一份简短的 DESIGN.md：令牌、组件清单（名字、用途、路径）、每类页面用哪套布局。
 
 全程沿用现有技术栈和数据接口，页面行为保持原样；每一步单独提交；要超出当前这一步的范围才能改好时，先停下说明。每步结尾写三行：做完了什么、实际截图验证了什么、需要我决定什么。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/fix.css">
+<style>
+.c{display:flex;flex-direction:column;gap:6px;padding:8px}
+.n{color:#5b616e;font-size:10px;line-height:14px}
+.pg{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:6px 8px;border:1px solid #e3e6eb;border-radius:6px}
+.pg b{display:block;font-size:11px;line-height:14px;font-weight:600}
+.pg i{display:block;width:48px;height:4px;margin-top:4px;border-radius:2px;background:#e3e6eb}
+.bt{flex:none;padding:0 8px;border-radius:4px;background:#3b5bdb;color:#fff;font-size:10px;line-height:18px}
+/* 翻新前：三个页面各写各的颜色、字号、间距、圆角，同一种按钮有三版 */
+.bad .p1 b{font-size:12px;color:#111}
+.bad .p1 .bt{border-radius:2px;background:#2f6fed}
+.bad .p2{padding:10px 8px 6px;border-color:#d5d9e0;border-radius:12px;background:#f8f9fb}
+.bad .p2 b{font-size:10px;font-weight:500;color:#444}
+.bad .p2 i{width:60px;background:#d5d9e0}
+.bad .p2 .bt{border-radius:9px;background:#2f9e62;font-size:9px;line-height:16px}
+.bad .p3{padding:4px 8px;border-color:#c9ced6;border-radius:0}
+.bad .p3 b{font-size:12px;font-weight:700;color:#000}
+.bad .p3 i{width:36px;margin-top:2px}
+.bad .p3 .bt{padding:0 9px;border:1px solid #7c3aed;border-radius:0;background:#fff;color:#7c3aed;line-height:20px}
+/* 翻新后：同一套令牌，同一个按钮组件，三页一个样 */
+</style>
+
+<div class="fx">
+  <section class="fx-p"><h4>翻新前</h4><div class="fx-b"><div class="fx-z c bad"><div class="n">颜色 23 种 · 按钮 3 版</div><div class="pg p1"><div><b>门店列表</b><i></i></div><span class="bt">新建</span></div><div class="pg p2"><div><b>新建门店</b><i></i></div><span class="bt">保存</span></div><div class="pg p3"><div><b>门店详情</b><i></i></div><span class="bt">编辑</span></div></div></div></section>
+  <section class="fx-p ok"><h4>翻新后</h4><div class="fx-b"><div class="fx-z c"><div class="n">颜色 6 种 · 按钮 1 版</div><div class="pg"><div><b>门店列表</b><i></i></div><span class="bt">新建</span></div><div class="pg"><div><b>新建门店</b><i></i></div><span class="bt">保存</span></div><div class="pg"><div><b>门店详情</b><i></i></div><span class="bt">编辑</span></div></div></div></section>
+</div>

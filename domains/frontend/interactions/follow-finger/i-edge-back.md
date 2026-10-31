@@ -33,3 +33,154 @@ order: 10
 ## 提示词
 
 给{产品}的{详情页}做「从屏幕边拖回上一页」：只在左边缘 20px 内按下、横向位移超过 10px 且大于纵向 1.5 倍时接管，其余交给页面滚动；拖动中进度 p = 横移 ÷ 屏宽，当前页跟手右移并在左侧投影，上一页从 −25% 同步移入、遮罩从 0.2 淡到 0，全程不加过渡；松手时向右速度大于 0.4px/ms 直接返回，向左回拉速度大于 0.4px/ms 留下，否则看是否过半；收尾从当前进度继续，按剩余距离 120–300ms 缓出；完成后只后退一次，焦点回到打开它的那一项，取消则恢复原页面状态；左上角保留“‹ 返回”按钮；运行环境已有系统侧滑返回时不再自己实现；减少动态效果时去掉错位，收尾直接到位。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/app-control-base.css">
+<style>
+.st{display:flex;justify-content:center;gap:14px;padding:10px 12px 0;background:linear-gradient(155deg,#eef1f6,#dce2eb)}
+.dev{position:relative;flex:none;width:188px;height:calc(100% + 30px);padding:5px 5px 0;border-radius:30px 30px 0 0;background:#15171c;box-shadow:0 20px 40px -18px rgba(15,23,42,.55)}
+.scr{position:relative;height:100%;overflow:hidden;border-radius:25px 25px 0 0;background:#f2f3f6}
+.sbar{position:absolute;left:0;right:0;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;height:24px;padding:0 16px 0 18px;font-size:10px;font-weight:600;pointer-events:none}
+.sbar::after{content:"";position:absolute;left:50%;top:6px;width:44px;height:13px;margin-left:-22px;border-radius:7px;background:#15171c}
+.bat{width:18px;height:9px;padding:1px;border:1.3px solid currentColor;border-radius:3px}
+.bat::before{content:"";display:block;width:65%;height:100%;border-radius:1px;background:currentColor}
+.pg{position:absolute;inset:0;padding:24px 0 30px;overflow:hidden auto;background:#f2f3f6;scrollbar-width:none;will-change:transform}
+.nav{display:flex;align-items:center;height:34px;padding:0 12px}
+.nav h3{margin:0;font-size:16px}
+.list{display:grid;gap:5px;margin:0 8px;padding:0;list-style:none}
+.row{display:grid;grid-template-columns:28px minmax(0,1fr);align-items:center;column-gap:8px;width:100%;padding:5px 8px;border:0;border-radius:12px;background:#fff;text-align:left}
+.row i,.hero{background:var(--g)}
+.row i{width:28px;height:28px;border-radius:8px}
+.row b,.row small{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.row b{font-size:12px}
+.row small{color:#6b7280;font-size:10.5px}
+.row.flash{animation:fl 1.4s ease-out}
+@keyframes fl{from{background:#dfe7ff}
+}
+.dim{position:absolute;inset:0;background:#0b0d12;opacity:0;pointer-events:none}
+.top{background:#fff;box-shadow:-12px 0 24px -8px rgba(15,23,42,.35);touch-action:pan-y}
+.top .nav{gap:2px;padding:0 8px 0 4px}
+.top .nav h3{min-width:0;overflow:hidden;font-size:13px;white-space:nowrap;text-overflow:ellipsis}
+.back{flex:none;display:inline-flex;align-items:center;height:28px;padding:0 6px 0 2px;border:0;border-radius:8px;background:none;color:#2f5bd8;font-size:13px}
+.back svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.hero{height:62px;margin:2px 10px 0;border-radius:14px}
+.dt{padding:8px 12px 0}
+.dt h3{margin:0;font-size:15px}
+.dt p{margin:2px 0 0;color:#6b7280;font-size:11px}
+.tags{display:flex;gap:4px;margin-top:6px}
+.tags span{padding:0 7px;border-radius:999px;background:#f1f3f7;color:#475467;font-size:10.5px;line-height:18px}
+.edge{position:absolute;left:0;top:30%;z-index:3;display:none;width:3px;height:40%;border-radius:0 3px 3px 0;background:rgba(47,91,216,.4);pointer-events:none}
+.side{display:flex;flex:0 1 220px;flex-direction:column;gap:8px;min-width:0;padding:4px 0 12px}
+.side .ctl{order:-1;align-self:flex-start;height:28px;padding:0 10px;font-size:12px}
+.u{display:none;font-size:11px;font-weight:400}
+.cap{display:none;margin:0;color:#5b616e;font-size:12px}
+.ro{display:grid;grid-template-columns:auto minmax(0,1fr);gap:1px 8px;align-items:baseline;margin:0;color:#5b616e;font-size:11px}
+.ro b{color:#15171c;font:600 13px/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+.vd{align-self:flex-start;margin:0;padding:0 8px;border-radius:999px;background:#e9ecf1;color:#475467;font-size:11px;line-height:20px;white-space:nowrap}
+.vd.go{background:#dcfae6;color:#067647}
+.msg{margin:0;color:#344054;font-size:11.5px;line-height:1.5}
+@container (max-width:310px){.st{gap:10px;padding:10px 10px 0}
+.dev{width:170px}
+.msg{font-size:11px}
+}
+@container (min-width:560px){.st{gap:32px}
+.dev{width:236px}
+.cap,.edge{display:block}
+.u{display:inline}
+.side .ctl{order:0}
+.hero{height:96px}
+.ro b{font-size:15px}
+.msg{font-size:12.5px}
+}
+</style>
+
+<div class="st"><div class="dev"><div class="scr"><div class="sbar" aria-hidden="true"><span>10:08</span><span class="bat"></span></div><section class="pg under" aria-label="收藏"><div class="nav"><h3>收藏</h3></div><ul class="list"></ul></section><i class="dim"></i><section class="pg top" aria-labelledby="eb-t"><i class="edge" aria-hidden="true"></i><div class="nav"><button type="button" class="back" aria-label="返回收藏"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3.5 5.5 9l5.5 5.5"/></svg>收藏</button></div><div class="hero"></div><div class="dt"><h3 id="eb-t"></h3><p></p><div class="tags"><span>营业中</span><span>可预约</span></div></div></section></div></div><div class="side"><p class="cap">从屏幕左边缘 20px 内按下往右拖</p><p class="ro"><span>进度</span><b class="vp">0%</b><span>速度</span><b><span class="vv">0.00</span><small class="u"> px/ms</small></b></p><p class="vd">松手会：留下</p><p class="msg" role="status"></p><button type="button" class="ctl rp">重播</button></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const scr = root.querySelector('.scr'), top = root.querySelector('.top'), under = root.querySelector('.under'), dim = root.querySelector('.dim'), list = root.querySelector('.list');
+  const vp = root.querySelector('.vp'), vv = root.querySelector('.vv'), vd = root.querySelector('.vd'), msg = root.querySelector('.msg');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SHOPS = [['城南旧书店', '二手书 · 1.2 km', 'linear-gradient(135deg,#c2410c,#fdba74)'], ['拐角咖啡', '手冲 · 600 m', 'linear-gradient(135deg,#78350f,#d6a37a)'], ['青石面馆', '老字号 · 900 m', 'linear-gradient(135deg,#0f766e,#99f6e4)'], ['河畔花市', '周末开 · 2.1 km', 'linear-gradient(135deg,#be185d,#fbcfe8)']];
+  list.innerHTML = SHOPS.map(([n, m, g], i) => `<li><button type="button" class="row" data-i="${i}" style="--g:${g}"><i></i><span><b>${n}</b><small>${m}</small></span></button></li>`).join('');
+  const rows = [...list.querySelectorAll('.row')];
+  let p = 0, open = false, from = 0, drag = null, anim = 0, tm = [];
+  const W = () => scr.clientWidth;
+  const paint = (q) => {
+    p = q; const w = W();
+    top.style.transform = `translateX(${q * w}px)`;
+    under.style.transform = still ? '' : `translateX(${-0.25 * w * (1 - q)}px)`; // 上一页从 -25% 移到 0
+    dim.style.opacity = String(0.2 * (1 - q));
+  };
+  const goes = (q, v) => (v > 0.4 ? true : v < -0.4 ? false : q > 0.5);
+  const show = (q, v) => { vp.textContent = Math.round(q * 100) + '%'; vv.textContent = v.toFixed(2); const g = goes(q, v); vd.textContent = '松手会：' + (g ? '返回' : '留下'); vd.classList.toggle('go', g); };
+  const run = (to, done) => { // 从当前进度接着走，时长按剩余距离
+    const id = ++anim, a = p, ms = still ? 0 : 120 + 180 * Math.abs(to - a), t0 = performance.now();
+    const f = (t) => {
+      if (id !== anim || !root.host.isConnected) return;
+      const k = ms ? Math.min(1, (t - t0) / ms) : 1; paint(a + (to - a) * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(f); else done?.();
+    };
+    requestAnimationFrame(f);
+  };
+  const inside = () => root.activeElement && scr.contains(root.activeElement);
+  const finish = (text) => { // 只在收尾走完后“后退”一次
+    const had = inside(); open = false; top.hidden = true; under.inert = false;
+    rows[from].classList.remove('flash'); void rows[from].offsetWidth; rows[from].classList.add('flash');
+    if (had) rows[from].focus();
+    msg.textContent = text + '，已返回「收藏」';
+  };
+  const openShop = (i, instant) => {
+    const had = inside(); from = i; const [n, m, g] = SHOPS[i];
+    top.querySelector('h3').textContent = n; top.querySelector('.dt p').textContent = m + ' · 步行可达'; top.querySelector('.hero').style.setProperty('--g', g);
+    open = true; top.hidden = false; under.inert = true; anim++; drag = null;
+    if (instant) paint(0); else { paint(1); run(0); }
+    if (had) top.querySelector('.back').focus();
+  };
+  const vel = (s) => { const a = s[0], b = s[s.length - 1]; return b[0] - a[0] > 0 && performance.now() - b[0] < 80 ? (b[1] - a[1]) / (b[0] - a[0]) : 0; };
+  top.addEventListener('pointerdown', (e) => {
+    const x = e.clientX - scr.getBoundingClientRect().left;
+    if (!open || e.button > 0 || x - p * W() > 20) return; // 只在页面左边缘 20px 内接管
+    anim++; // 收尾动画途中也能接住
+    drag = { x0: e.clientX, y0: e.clientY, p0: p, on: false, id: e.pointerId, s: [[e.timeStamp, e.clientX]] };
+  });
+  top.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+    if (!drag.on) {
+      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+      if (dx < 0 || Math.abs(dx) < Math.abs(dy) * 1.5) { drag = null; return; } // 交还给页面滚动
+      drag.on = true; try { top.setPointerCapture(drag.id); } catch {}
+    }
+    drag.s.push([e.timeStamp, e.clientX]); while (drag.s.length > 2 && e.timeStamp - drag.s[0][0] > 80) drag.s.shift();
+    const q = Math.max(0, Math.min(1, drag.p0 + dx / W())); paint(q); show(q, vel(drag.s));
+  });
+  const up = () => {
+    if (!drag) return;
+    const g = drag; drag = null; if (!g.on) return;
+    const v = vel(g.s), back = goes(p, v), n = Math.round(p * 100); show(p, v);
+    if (back) run(1, () => finish(v > 0.4 ? `向右甩得快，只拉到 ${n}% 也返回了` : `拖过一半（${n}%）`));
+    else { run(0); msg.textContent = v < -0.4 ? `往回拉了，留在「${SHOPS[from][0]}」` : `只拉到 ${n}%、速度不够，留在「${SHOPS[from][0]}」`; }
+  };
+  top.addEventListener('pointerup', up); top.addEventListener('pointercancel', up);
+  top.querySelector('.back').addEventListener('click', () => { if (open) { show(p, 0); run(1, () => finish('点了返回按钮')); } });
+  list.addEventListener('click', (e) => { const r = e.target.closest('.row'); if (r && !open) { openShop(+r.dataset.i); msg.textContent = `已打开「${SHOPS[+r.dataset.i][0]}」`; } });
+  // 自动演示：先慢慢拖到 30% 松手（弹回留下），再快速一甩（不到一半也返回）
+  const play = () => {
+    tm.forEach(clearTimeout); tm = []; openShop(0, true); show(0, 0); msg.textContent = '';
+    const fire = (type, x) => { const r = scr.getBoundingClientRect(); top.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerId: 9, button: 0, clientX: r.left + x, clientY: r.top + 110 })); };
+    const swipe = (to, steps, gap, hold, t0) => {
+      tm.push(setTimeout(() => { if (root.host.isConnected) fire('pointerdown', 6); }, t0));
+      for (let k = 1; k <= steps; k++) tm.push(setTimeout(() => { if (root.host.isConnected) fire('pointermove', 6 + (to() - 6) * k / steps); }, t0 + k * gap));
+      tm.push(setTimeout(() => { if (root.host.isConnected) fire('pointerup', to()); }, t0 + steps * gap + hold));
+      return t0 + steps * gap + hold;
+    };
+    const t1 = swipe(() => W() * 0.3, 16, 36, 200, 300);
+    swipe(() => W() * 0.24, 4, 16, 8, t1 + 480);
+  };
+  root.querySelector('.rp').addEventListener('click', play);
+  openShop(0, true);
+  tm.push(setTimeout(() => { if (root.host.isConnected) play(); }, 100));
+}
+</script>

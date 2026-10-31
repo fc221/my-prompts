@@ -41,3 +41,29 @@ TypeScript 团队做中大型 API，需要清楚的模块边界和依赖注入�
 新建时：用 nest g resource 生成骨架，再按约定补齐 DTO 校验、Service 业务、实体和迁移，在 AppModule 里 imports 新模块，写 Service 单测和覆盖 201、400、404 的 e2e 测试。
 检查时：先画出模块依赖关系，标出循环依赖、跨模块直接用别人的 Repository、DTO 没有校验、直接读 process.env、Controller 里 try-catch 的位置；逐条给出改法，会改变对外响应的先问我。
 最后列出改动的文件和验证命令。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+  main.ts                  全局 ValidationPipe 和过滤器
+  app.module.ts            只 imports 各业务模块
+* orders/                  一个业务一个 Module
+*   orders.module.ts       providers 声明，exports 暴露 Service
+    orders.controller.ts   构造函数注入 Service
+    orders.service.ts      @Injectable()
+    dto/
+      create-order.dto.ts  class-validator 装饰器
+      update-order.dto.ts  PartialType 生成
+    entities/              order.entity.ts
+    orders.service.spec.ts
+  common/                  过滤器、拦截器、守卫
+test/                      e2e
+`), { title: 'NestJS · 一个业务一个 Module' });
+}
+</script>

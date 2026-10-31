@@ -28,3 +28,31 @@ order: 60
 ## 提示词
 
 {产品}价值区用「三列卡片」：区块标题“{区块标题}”加一句说明，下面三张等宽卡片（间距 24px，内边距 28px，高度对齐），分别讲{三个能力}，每张标题写结果、正文给具体数字或做法，可配小截图；不用彩色圆底图标；只有可点击的卡片才有悬停效果；窄屏改为单列。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 1fr 1fr',
+  rows: '1fr auto auto 8px 400px 1fr',
+  areas: ['. . .', '. h .', '. s .', '. . .', 'c1 c2 c3', '. . .'],
+  boxes: {
+    h: { label: '区块标题', center: true },
+    s: { label: '一句说明', center: true },
+    c1: { label: '能力卡片', acc: true },
+    c2: { label: '能力卡片', acc: true },
+    c3: { label: '能力卡片', acc: true },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: '13% 1fr 1fr 1fr',
+  areas: ['h', 'c1', 'c2', 'c3'],
+  boxes: {
+    h: '区块标题',
+    c1: { label: '能力卡片', acc: true },
+    c2: { label: '能力卡片', acc: true },
+    c3: { label: '能力卡片', acc: true },
+  },
+};
+```

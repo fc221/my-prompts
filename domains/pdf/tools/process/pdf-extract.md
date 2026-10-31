@@ -41,3 +41,17 @@ order: 50
 6. 边界情况：加密文件跳过并记录；qpdf --check 失败的先用 qpdf 重写，再失败就记录；单文件超过 {页数上限} 页或处理超过 {超时秒数} 秒就中止该文件。
 7. 结束时输出汇总：文件数、页数、需要 OCR 的页、待复核的表、失败清单。
 最后说明脚本用法，并用一份跨页表格的样本对比提取结果和原文。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '电子 PDF', note: '流水、对账单、发票' }, { t: '查文字层', note: '每页 ≥ 20 个字符' }, { t: '按坐标拼回', note: '词、坐标和表格', acc: true }, { t: 'JSON / CSV', note: '带页码和坐标框' }],
+    [{ t: '不到 20 个字符', note: '或满是 (cid:123)', bad: true }, { t: '当扫描件处理', note: '先 OCR 再提取', via: '转去' }],
+  ]), { title: 'pdfplumber 按坐标拼回 · 隐藏文字要滤掉' });
+}
+</script>

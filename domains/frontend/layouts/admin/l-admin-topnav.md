@@ -30,3 +30,32 @@ order: 20
 ## 提示词
 
 把{产品}做成「顶栏导航」框架：顶栏 56px 吸顶，左侧 Logo，中间一级导航（{导航项}，不超过 7 个，当前项用下划线 + 主色文字），右侧搜索、通知和账号菜单；顶栏内容与正文共用最大宽度 1280px 和 24px 左右内边距，Logo 与页面标题左对齐；二级页面用页内 Tabs；首屏是大图时顶栏透明、当前项用半透明白色圆角底，滚动约 64px 后变成实色底加分割线；窄于 1024px 时一级导航收进左侧抽屉（顶栏左侧 ☰ 打开，后面加遮罩），点遮罩、Esc 或选中后关闭。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr',
+  rows: '14% 11% 1fr',
+  areas: ['top', 'tabs', 'main'],
+  boxes: {
+    top: {
+      inner: {
+        cols: '18% 1fr 18%',
+        rows: '1fr',
+        areas: ['logo nav acct'],
+        boxes: { logo: 'Logo', nav: '一级导航', acct: '账号' },
+      },
+    },
+    tabs: '页内 Tabs',
+    main: { label: '内容区（整宽）', acc: true },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto 1fr',
+  areas: ['top', 'main'],
+  boxes: { top: '顶栏 ☰', main: { label: '内容', acc: true } },
+  drawer: { size: '70%', box: { label: '一级导航（左侧抽屉）', kind: 'nav' } },
+};
+```

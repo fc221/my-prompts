@@ -31,3 +31,30 @@ order: 50
 5. 铺开：照样板实现其余页面，复用同一批组件和令牌，不另做第二套按钮、弹窗；窄屏重新安排层级，不把桌面版整体缩小。
 
 只在答案会改变页面安排时才问我（例如“以浏览为主还是以编辑为主”），其余直接给默认值，写进【假设】。每步结尾写三行：这一步做完了什么；哪些还只是文字方案、没有实现；需要我决定的事。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/fix.css">
+<style>
+.c{padding:6px 8px}
+/* 左：三页一口气画完，各长各样 */
+.pg{display:flex;align-items:center;justify-content:space-between;gap:4px;height:24px;padding:0 6px;border:1px solid #e3e6eb;border-radius:4px;font-size:9.5px;line-height:13px;color:#5b616e}
+.pg+.pg{margin-top:4px}
+.b{padding:0 6px;color:#fff;font-size:9px;line-height:14px;white-space:nowrap}
+.b1{background:#3b5bdb;border-radius:2px}
+.b2{background:#1f9d61;border-radius:7px}
+.b3{background:#8b5cf6;border-radius:4px;padding:0 10px}
+.q{margin:6px 0 0;color:#5b616e;font-size:10px;line-height:14px}
+/* 右：五步，每步先交短结果 */
+.st{margin:0;padding:0;list-style:none;font-size:10px;line-height:14px}
+.st li{display:flex;align-items:center;gap:5px;padding:2px 0}
+.st i{flex:none;width:14px;height:14px;border-radius:50%;background:#3b5bdb;color:#fff;font-style:normal;font-size:9px;line-height:14px;text-align:center}
+.st span{flex:1}
+.st small{color:#5b616e;font-size:9px;line-height:12px;padding:0 4px;border-radius:3px;background:#eef0f3;white-space:nowrap}
+.mo{margin:4px 0 0;padding-top:4px;border-top:1px solid #e3e6eb;color:#1f7a4d;font-size:9.5px;line-height:13px}
+</style>
+
+<div class="fx">
+  <section class="fx-p"><h4>一口气全画</h4><div class="fx-b"><div class="fx-z c"><div class="pg">订单列表 <span class="b b1">新建</span></div><div class="pg">客户详情 <span class="b b2">保存</span></div><div class="pg">设置 <span class="b b3">确定</span></div><p class="q">三页三套按钮和圆角，空、错误状态一个没有。</p></div></div></section>
+  <section class="fx-p ok"><h4>分步先交短结果</h4><div class="fx-b"><div class="fx-z c"><ol class="st"><li><i>1</i><span>全局规则</span><small>文字</small></li><li><i>2</i><span>页面结构</span><small>文字</small></li><li><i>3</i><span>功能状态</span><small>文字</small></li><li><i>4</i><span>首屏样板</span><small>一页</small></li><li><i>5</i><span>铺开其余页面</span><small>复用</small></li></ol><p class="mo">每步停下，你点头再往下</p></div></div></section>
+</div>

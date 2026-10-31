@@ -28,3 +28,36 @@ order: 20
 ## 提示词
 
 {页面}用「顶部分段标签」：导航栏下方 44px 标签栏吸顶，放{分类列表}，文字 15px，当前项加粗并有下划线指示条平移；超出屏宽时横向滚动、当前项自动滚入可见区、右缘渐隐；内容区可左右滑动切换并与标签同步，各标签保留滚动位置；宽屏标签全部露出，内容改为多列网格。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr',
+  rows: '12% 11% 1fr',
+  areas: ['top', 'tabs', 'main'],
+  boxes: {
+    top: '顶栏',
+    tabs: { label: '分类标签（全部露出）', acc: true },
+    main: {
+      inner: {
+        cols: '1fr 1fr 1fr',
+        rows: '1fr 1fr',
+        areas: ['a b c', 'd e f'],
+        boxes: { a: '卡片', b: '卡片', c: '卡片', d: '卡片', e: '卡片', f: '卡片' },
+      },
+    },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: '11% 12% 1fr 11%',
+  areas: ['top', 'seg', 'main', 'tab'],
+  boxes: {
+    top: { label: '标题', kind: 'mtop', text: '消息' },
+    seg: { label: '分类横滑', acc: true },
+    main: '列表',
+    tab: '标签栏',
+  },
+};
+```

@@ -43,3 +43,37 @@ GET、PUT、DELETE 按语义本来就幂等，见「方法与幂等」；接收 
 5. 抢占记录靠唯一约束，业务写入和标记完成放在同一个事务里。
 6. 前端和 SDK 按一次用户操作生成键，重试时沿用。
 最后说明改了哪些文件，并写测试覆盖：同一请求并发发两次只扣一次款、改了金额沿用旧键返回 422、第一次返回 500 后用同一个键重试能成功。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: '第一次提交', text: `
+POST /orders
+Idempotency-Key: 6f1c2b9e-4a7d-…
+
+201 Created
+Location: /orders/ord_8F3k2
+
+"id": "ord_8F3k2",
+"status": "PENDING_PAYMENT"
+` },
+    { t: '超时重试 · 同一个键', text: `
+POST /orders
+Idempotency-Key: 6f1c2b9e-4a7d-…
+
+201 Created
+Idempotent-Replayed: true
+Location: /orders/ord_8F3k2
+
+"id": "ord_8F3k2",
+"status": "PENDING_PAYMENT"
+// 不再建单，原样返回第一次的响应
+` },
+  ]), { title: '幂等键 · 同一个键返回同样的结果' });
+}
+</script>

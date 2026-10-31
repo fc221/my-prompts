@@ -28,3 +28,37 @@ order: 90
 ## 提示词
 
 {产品}{页面}用「KPI 横带 + 图表网格」：顶部 {指标数} 个等宽指标卡（{指标}），高 108px，含名称、主读数（32px，等宽数字）和环比；下方 12 列图表网格，第一行 6 + 6、第二行 8 + 4，同行等高 300px；间距 16px；页头放吸顶的全局时间筛选；点指标卡筛选下方图表；窄屏指标两列、图表单列。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 1fr 1fr 1fr',
+  rows: '22% 1fr 1fr',
+  areas: ['k1 k2 k3 k4', 'c1 c1 c2 c2', 'c3 c3 c3 c4'],
+  boxes: {
+    k1: { label: '指标', acc: true },
+    k2: { label: '指标', acc: true },
+    k3: { label: '指标', acc: true },
+    k4: { label: '指标', acc: true },
+    c1: '趋势图',
+    c2: '分布',
+    c3: '明细表格',
+    c4: { label: '占比图表', text: '客户类型占比' },
+  },
+};
+export const wireMobile = {
+  cols: '1fr 1fr',
+  rows: 'auto 16% 16% 1fr 1fr',
+  areas: ['top top', 'k1 k2', 'k3 k4', 'c1 c1', 'c2 c2'],
+  boxes: {
+    top: { label: '顶栏 ☰', text: '经营概览' },
+    k1: { label: '指标', acc: true },
+    k2: { label: '指标', acc: true },
+    k3: { label: '指标', acc: true },
+    k4: { label: '指标', acc: true },
+    c1: '趋势图',
+    c2: '明细表格',
+  },
+};
+```

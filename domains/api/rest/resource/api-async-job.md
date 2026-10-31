@@ -43,3 +43,37 @@ order: 60
 6. 执行失败按队列的重试策略重试，最终失败写入 error，结构和同步接口一致。
 7. 前端提交后显示进度，轮询 2 秒起步、逐步放大到 15 秒，离开页面停止。
 最后列出改动文件，说明结果文件保留多久、怎么清理。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: '提交', text: `
+POST /order-exports
+Idempotency-Key: 9b1d6c2e-…
+
+202 Accepted
+Location: /jobs/job_7Hq2
+
+"id": "job_7Hq2",
+"status": "queued"
+` },
+    { t: '轮询 GET /jobs/job_7Hq2', text: `
+200 OK
+Retry-After: 2
+
+"status": "running",
+"progress": 35
+
+// 结束后
+"status": "succeeded",
+"result": { "url": "/files/f_91c/content",
+  "expiresAt": "2026-11-05T00:00:00Z" }
+` },
+  ]), { title: '先回 202 和任务地址，再轮询' });
+}
+</script>

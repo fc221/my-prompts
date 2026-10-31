@@ -43,3 +43,30 @@ If-Match 用强比较，W/ 开头的弱 ETag 永远匹配不上，所以写操�
 6. 前端：保存时带上 ETag；收到 412 提示“已被他人修改”，提供“刷新”和“对比后再提交”两种处理，已填的内容保留。
 7. 测试：两个会话先后修改同一条，后一个得到 412；没带 If-Match 得到 428；未修改时 GET 得到 304。
 最后列出改动文件和数据库迁移脚本。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+PATCH /tickets/tk_3021
+If-Match: "v12"
+Content-Type: application/merge-patch+json
+
+"assigneeId": "u_208"
+// 读到的是 v12，同事已保存成 v13
+`, `
+412 Precondition Failed
+ETag: "v13"
+Content-Type: application/problem+json
+
+"code": "PRECONDITION_FAILED",
+"detail": "工单已被他人修改，请刷新后再改",
+"currentEtag": "v13",
+"current": { "id": "tk_3021", … }
+`), { title: 'If-Match 不一致 → 412，不覆盖别人的修改' });
+}
+</script>

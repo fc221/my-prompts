@@ -36,3 +36,31 @@ order: 60
 6. 自查后回报：文字是否都装得下，主视觉有没有挡住主要按钮，手机宽度下是否重新排版而不是整体缩小，把标题换成长一倍的文字会不会破版；分别列出已实现和仍是占位的部分。
 
 不要复制原图的品牌、文案、插画和整页布局。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/fix.css">
+<style>
+.c{padding:6px 8px}
+/* 左：一张说不清哪里好的参考截图 */
+.sh{position:relative;height:82px;padding:7px 8px;border-radius:5px;background:#15181d;overflow:hidden}
+.nv{display:flex;gap:3px}
+.nv i{width:14px;height:3px;border-radius:2px;background:#5b616e}
+.nv i:first-child{width:8px;background:#e6e9ef}
+.tl{margin-top:12px;height:7px;width:62%;border-radius:2px;background:#f4f5f7}
+.tl+.tl{margin-top:4px;width:38%}
+.im{position:absolute;right:8px;bottom:8px;width:44%;height:34px;border-radius:3px;background:#c9a27a}
+.cta{position:absolute;left:8px;bottom:10px;width:26px;height:8px;border-radius:2px;background:#e4572e}
+.q{margin:6px 0 0;color:#5b616e;font-size:10px;line-height:14px}
+/* 右：先拆成三张清单 */
+.l{margin:0;font-size:9.5px;line-height:13px}
+.l dt{margin-top:3px;color:#1f7a4d;font-weight:600}
+.l dt:first-child{margin-top:0}
+.l dd{margin:0}
+.ex{margin:4px 0 0;padding-top:3px;border-top:1px solid #e3e6eb;color:#8a909c;font-size:9.5px;line-height:13px}
+</style>
+
+<div class="fx">
+  <section class="fx-p"><h4>参考截图</h4><div class="fx-b"><div class="fx-z c"><div class="sh"><div class="nv"><i></i><i></i><i></i><i></i></div><div class="tl"></div><div class="tl"></div><div class="cta"></div><div class="im"></div></div><p class="q">喜欢这种感觉，但说不清是版式、配色还是图的功劳。</p></div></div></section>
+  <section class="fx-p ok"><h4>拆成三张清单</h4><div class="fx-b"><div class="fx-z c"><dl class="l"><dt>可借鉴</dt><dd>深底大留白、一个强调色、图占右下 44%</dd><dt>普通组件能做</dt><dd>导航、标题、按钮、分割线</dd><dt>要单独备素材</dt><dd>主视觉 4:3 一张、插画透明底</dd></dl><p class="ex">排除：设备样机、斜视角、布光</p></div></div></section>
+</div>

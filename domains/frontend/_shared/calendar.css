@@ -1,0 +1,265 @@
+.cal {
+  display: flex;
+  gap: 12px;
+  min-width: 0;
+  --cal-row: 17px;
+}
+.cal-m {
+  flex: 1;
+  min-width: 0;
+}
+.cal-h {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  font-size: 11px;
+}
+.cal-h b {
+  flex: 1;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+.cal-h button,
+.cal-h i {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: #5b616e;
+  cursor: pointer;
+}
+.cal-h button:hover {
+  background: #f0f2f5;
+  color: #1f2329;
+}
+.cal-g {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  font-size: 11px;
+  text-align: center;
+}
+.cal-g > b {
+  font-weight: 400;
+  line-height: 15px;
+  color: #5b616e;
+}
+.cal-g button {
+  display: grid;
+  place-items: center;
+  height: var(--cal-row);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.cal-g span {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(100%, calc(var(--cal-row) + 2px));
+  height: 100%;
+  border-radius: 4px;
+}
+.cal-g button:hover span {
+  background: #eef0f3;
+}
+.cal-g .in {
+  background: #e4e9ff;
+}
+.cal-g .a {
+  background: linear-gradient(90deg, transparent 50%, #e4e9ff 50%);
+}
+.cal-g .b {
+  background: linear-gradient(90deg, #e4e9ff 50%, transparent 50%);
+}
+.cal-g .a.b {
+  background: none;
+}
+.cal-g .a span,
+.cal-g .b span {
+  background: #3b5bdb;
+  color: #fff;
+}
+.cal-g .now span::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  width: 3px;
+  height: 3px;
+  margin-left: -1.5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.cal-g button[aria-disabled='true'] {
+  color: #b6bcc6;
+  cursor: not-allowed;
+}
+.cal-g button[aria-disabled='true'] span {
+  background: none;
+}
+.cal-g button:focus-visible {
+  outline: 2px solid #3b5bdb;
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+/* 范围选择：框、快捷选项、日历和底栏 */
+.rp {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  max-width: 640px;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #e3e6eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(31, 35, 41, 0.08);
+  font-size: 12px;
+  line-height: 18px;
+}
+.rf {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 8px 0 2px;
+  border: 1px solid #c9ced6;
+  border-radius: 6px;
+  color: #5b616e;
+}
+.rf:focus-within {
+  border-color: #3b5bdb;
+}
+.rf button {
+  flex: 1;
+  min-width: 0;
+  height: 22px;
+  padding: 0 6px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: #1f2329;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  cursor: pointer;
+}
+.rf button.ph {
+  color: #6b7280;
+}
+.rf button[aria-current='true'] {
+  border-bottom-color: #3b5bdb;
+}
+.rb {
+  display: flex;
+  gap: 8px;
+  min-height: 0;
+}
+.pre {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 62px;
+}
+.pre button {
+  height: 22px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  font-size: 12px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.pre button:hover {
+  background: #f5f6f8;
+}
+.pre [aria-pressed='true'] {
+  background: #edf1ff;
+  color: #3b5bdb;
+  font-weight: 600;
+}
+.rb .cal {
+  flex: 1;
+}
+.rft {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid #e3e6eb;
+}
+.rft span {
+  flex: 1;
+  min-width: 0;
+  color: #5b616e;
+}
+.rft button {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid #c9ced6;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+.rft .ok {
+  border-color: #3b5bdb;
+  background: #3b5bdb;
+  color: #fff;
+}
+@container (max-width: 320px) {
+  .cal-h [data-go='-12'],
+  .cal-h [data-go='12'] {
+    display: none;
+  }
+}
+@container (min-width: 560px) {
+  .cal {
+    gap: 20px;
+    --cal-row: 24px;
+  }
+  .cal-h {
+    height: 24px;
+    font-size: 13px;
+  }
+  .cal-h button,
+  .cal-h i {
+    width: 20px;
+    height: 20px;
+  }
+  .cal-g {
+    font-size: 12px;
+  }
+  .cal-g > b {
+    line-height: 20px;
+  }
+  .rp {
+    gap: 8px;
+    padding: 10px;
+  }
+  .rf {
+    height: 32px;
+  }
+  .pre {
+    width: 78px;
+  }
+  .pre button {
+    height: 28px;
+  }
+  .rft {
+    display: flex;
+  }
+}

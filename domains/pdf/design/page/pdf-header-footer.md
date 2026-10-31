@@ -39,3 +39,22 @@ order: 30
 3. 封面（如有）不显示页眉页码；打印方式 {单面 / 双面}，双面时页码放外侧。
 4. 上下边距留够页眉页脚的高度，正文不被盖住。
 最后说明用的是哪种机制、改了哪些文件，并截图第 1 页、中间页和最后一页核对页码。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const head = 'HT-2026-0158 · 年度保洁服务合同';
+  const foot = '2026-10-29 14:35 · 第 {p} 页 / 共 {n} 页';
+  draw(root, page({
+    pages: [
+      { label: '封面：@page :first 不显示', blocks: ['gap', 'gap', 'gap', 'gap', 'title:年度保洁服务合同', 'text:合同编号 HT-2026-0158'] },
+      { head, foot, label: '第 2 页', blocks: ['h:第一条 服务内容与标准', 'p:6', 'h:第二条 服务期限', 'p:4', 'h:第三条 费用与支付', 'p:6', 'p:5'] },
+      { head, foot, label: '第 3 页：页码随页变化', blocks: ['h:第七条 违约责任', 'p:5', 'h:第八条 变更与解除', 'p:6', 'text:（以下无正文）'] },
+    ],
+  }), { title: '@page 边距区 · counter(page) / counter(pages)', center: true, min: 0.3 });
+}
+</script>
