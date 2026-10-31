@@ -18,16 +18,16 @@ order: 100
 
 ## 要点
 
-- 放在相关内容正上方，宽度同所在区域；单行高 40–48px，内边距 10–12px 16px
-- 四种语气：信息、成功、警告、错误；浅色底 + 同色描边 + 语义图标 + 正文色文字，不只靠颜色
-- 一句话说清状态，最多带一个操作（“立即续费”“查看详情”）
-- 可关闭的关闭后记住，不反复出现；错误汇总在问题解决前不可关闭
-- 出现时把下方内容推下去，而不是浮在内容上；关闭时高度平滑收起
-- 错误类用 role="alert"，其余用 role="status"
+- 用组件库的横幅：Element Plus el-alert（title、description、type、show-icon、closable、close-text、@close），Naive UI n-alert（title、type、show-icon、closable、bordered、@close，正文放默认插槽），Ant Design Vue a-alert（message、description、type、show-icon、closable、banner、action 插槽、@close）；颜色、图标、关闭按钮、收起动画、读屏角色由组件负责
+- 放在相关内容正上方，宽度同所在区域；作为普通块级元素把下方内容推下去，不用 position 浮在内容上；Ant Design Vue 的 banner 模式去圆角和边框，只给页面最顶上的通栏
+- 四种语气用 type：信息、成功、警告、错误（Element Plus 和 Ant Design Vue 是 info / success / warning / error，Naive UI 还有 default）；图标要显式开，Element Plus 和 Ant Design Vue 的 show-icon 默认关，Naive UI 默认开；不只靠颜色区分
+- 一句话说清状态，最多带一个操作（“立即续费”“查看详情”）：Ant Design Vue 放 action 插槽，Element Plus 和 Naive UI 写在 title / 默认插槽里的链接
+- 可不可关闭要显式写：Element Plus closable 默认开，Naive UI 和 Ant Design Vue 默认关；关闭后在 @close 里记住（本地存储或用户设置），不反复出现；错误汇总在问题解决前 closable=false
+- 横幅跟着状态走：状态消失时用 v-if 撤掉，不要每次打开页面都无差别弹同一条
 
 ## 提示词
 
-在{页面或区块}顶部加「页内横幅提示」说明{持续状态}：宽同所在区域，单行高 40–48px，浅色底 + 同色描边 + 语义图标 + 正文色文字，分信息、成功、警告、错误四种；一句话说状态，最多一个操作链接；可关闭的关闭后记住不再出现，关闭时高度平滑收起；出现时把下方内容推下去而不是盖住；错误用 role="alert"，其他用 role="status"；窄屏文字换行、关闭按钮保持在右侧。
+在{页面或区块}顶部加「页内横幅提示」说明{持续状态}：用项目组件库自带的横幅（Element Plus el-alert show-icon；Naive UI n-alert；Ant Design Vue a-alert show-icon），不手写提示条。作为块级元素放在相关内容正上方，宽同所在区域，把下方内容推下去而不是盖住；语气用 type {info / success / warning / error}，图标显式打开；一句话说状态，最多一个操作“{立即续费}”（Ant Design Vue 放 action 插槽，另两家写在标题里的链接）；{可关闭时}显式写 closable，@close 里记住不再出现；错误汇总 closable=false，问题解决后随状态用 v-if 撤掉；不要每次打开页面都无差别弹同一条；窄屏文字换行、关闭按钮保持在右侧。
 
 ## 示例
 
@@ -36,10 +36,10 @@ order: 100
 .area{width:100%;max-width:520px;display:grid}
 .w{display:grid;grid-template-rows:1fr;transition:grid-template-rows .24s cubic-bezier(.2,0,0,1),opacity .16s}
 .w.gone{grid-template-rows:0fr;opacity:0}
-.al{min-height:0;overflow:hidden;display:flex;align-items:center;gap:10px;padding:0 6px 0 12px;margin-bottom:8px;border:1px solid;border-radius:8px;font-size:13px;transition:margin .24s}
+.al{min-height:0;overflow:hidden;display:flex;align-items:center;gap:8px;padding:0 8px 0 12px;margin-bottom:8px;border:1px solid;border-radius:8px;font-size:13px;transition:margin .24s}
 .w.gone .al{margin-bottom:0;border-width:0}
 .al svg{flex:none}
-.al p{flex:1;padding:9px 0}
+.al p{flex:1;padding:8px 0}
 .info{background:#edf1ff;border-color:#d3dcfb}
 .info svg{color:#3b5bdb}
 .warn{background:#fff6e8;border-color:#f5d9ad}
@@ -57,6 +57,7 @@ order: 100
 
 <script type="module">
 export default function demo(root) {
+  // 三条横幅挂载时就常驻显示；关掉的记住不再出现，错误汇总没有关闭按钮
   const reset = root.querySelector('.reset');
   root.querySelectorAll('.al .x').forEach((x) => x.addEventListener('click', () => { x.closest('.w').classList.add('gone'); x.closest('.al').inert = true; reset.hidden = false; reset.focus(); }));
   reset.addEventListener('click', () => { root.querySelectorAll('.w').forEach((w) => { w.classList.remove('gone'); w.firstChild.inert = false; }); reset.hidden = true; });
