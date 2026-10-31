@@ -22,16 +22,16 @@ order: 25
 
 ## 要点
 
-- 高 32px，左右 12px，全圆角，标签间 8px；未选是白底描边，选中是强调浅底 + 强调色文字 + 14px 对勾
-- 对勾宽度从 0 过渡到 14px（约 160ms），标签跟着变宽，相邻标签顺势让位；减少动态效果时直接切换
-- 多选时每个标签是 button + aria-pressed；只能选一个时改成 radiogroup（role="radio" + aria-checked，方向键切换）
+- 组件库没有现成的筛选标签，在可选标签的基础上做：Element Plus el-check-tag（v-model:checked、type、disabled、@change），Naive UI n-tag checkable（checked、disabled、@update:checked），Ant Design Vue a-checkable-tag（v-model:checked、@change）；填色的选中态、圆角和尺寸用组件默认
+- 三家的可选标签都是 span / div，没有 role 和 aria-pressed，要自己补：多选时加 role="button" + aria-pressed；只能选一个时改用单选按钮组（el-radio-group + el-radio-button / n-radio-group + n-radio-button / a-radio-group + a-radio-button），方向键切换是现成的
+- 选中态除了填色再放一个 14px 对勾图标（写在标签内容里），满足“不只靠颜色”；对勾出现时的宽度过渡是可选项，不进默认要求
 - 点一下立即生效，没有“确定”；同组多选按“或”合并；结果数量就地更新，用 role="status" 播报“共 N 条”
-- 有选中项时末尾出现“清除”文字按钮；桌面放不下就换行，手机单行横向滚动，两端渐隐提示还有更多
+- 有选中项时末尾出现“清除”文字按钮；相邻标签间距 8px；桌面放不下就换行，手机单行横向滚动，两端渐隐提示还有更多
 - 选中条件写进地址栏，刷新和分享后保留，见「筛选联动与 URL 同步」
 
 ## 提示词
 
-给{订单列表}上方加「快捷筛选标签」：{条件，如 待付款、待发货、已完成、退款中} 每个一枚，高 32px、左右 12px、全圆角、间距 8px；可多选，每个标签是 button 并用 aria-pressed，同组多选按“或”合并；未选白底描边，选中强调浅底 + 强调色文字，左侧对勾宽度从 0 过渡到 14px（约 160ms），相邻标签顺势让位，减少动态效果时直接切换；点一下立即筛选，不要确定按钮，列表上方“共 N 条”同步更新并用 role="status" 播报；有选中项时末尾出现“清除”文字按钮；桌面放不下换行，手机单行横向滚动并在两端渐隐；选中条件写进 URL，刷新后保留。
+给{订单列表}上方加「快捷筛选标签」：在项目组件库的可选标签上做（Element Plus el-check-tag；Naive UI n-tag checkable；Ant Design Vue a-checkable-tag），不手写标签样式。{条件，如 待付款、待发货、已完成、退款中} 每个一枚，间距 8px；可多选，每个标签补 role="button" 和 aria-pressed，同组多选按“或”合并（只能选一个时改用 el-radio-button / n-radio-button / a-radio-button）；选中态用组件的填色，再在标签里加 14px 对勾图标；点一下立即筛选，不要确定按钮，列表上方“共 N 条”同步更新并用 role="status" 播报；有选中项时末尾出现“清除”文字按钮；桌面放不下换行，手机单行横向滚动并在两端渐隐；选中条件写进 URL，刷新后保留。
 
 ## 示例
 

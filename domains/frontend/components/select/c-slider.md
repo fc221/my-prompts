@@ -19,21 +19,17 @@ order: 50
 
 ## 要点
 
-- 轨道高 4px，已选段主色；圆钮 16px（触屏点击区 44px），聚焦和拖动时加 4px 浅主色光晕
-- 当前值带单位显示在旁边或圆钮上方；需要精确时旁边配数字输入并双向同步
-- 优先用原生 input type="range"；自绘时 role="slider" + aria-valuenow / min / max / valuetext
-- 键盘：方向键一步，PageUp / PageDown 十步，Home / End 到两端
-- 范围滑块两个圆钮不能交叉，并保留最小间距；刻度只标关键值
-- 手机上的双端范围滑块：两个圆钮各 44px 热区，拖动时圆钮上方浮出当前值，两钮靠近时后拖的在上层；价格区间这类大跨度的值用对数刻度
-- 拖动中实时预览，松手后才提交请求
-- 已选段、圆钮和数值读同一个值，在同一帧里更新，三者都不单独加过渡，拖得再快也不会错位
-- 数值显示在圆钮上方的气泡里时，换数用上下滚动（同「数字滚动计数」），气泡宽度按最长的值固定
-- 可选：快速拖动时圆钮沿拖动方向轻微拉长（不超过 1.15 倍），停下立即恢复
-- 自绘滑块可选两处手感：拖过两端时轨道像橡皮筋一样带阻力多拉出一点（位移约为超出量的 0.35 倍，最多 12px），松手弹回；有刻度的滑块松手后带一点惯性、略微冲过再吸附到最近的刻度
+- 用组件库的滑块：Element Plus el-slider（min、max、step、range、show-input、show-stops、marks、format-tooltip、range-start-label / range-end-label），Naive UI n-slider（min、max、step、range、marks、format-tooltip、tooltip、show-tooltip），Ant Design Vue a-slider（min、max、step、range、marks、dots、tipFormatter、tooltipOpen）；轨道、圆钮尺寸、键盘（方向键、PageUp / PageDown、Home / End）和 aria-valuenow 由组件负责
+- 当前值带单位：用 format-tooltip / format-tooltip / tipFormatter 写“¥200”，默认只显示数字；需要精确时旁边配数字输入并双向同步（Element Plus 单值可直接开 show-input，范围滑块三家都要自己配两个数字输入）
+- 拖动中实时预览，松手后才提交请求：Element Plus 用 input 事件预览、change 提交；Naive UI 用 on-update:value 预览、on-dragend 提交；Ant Design Vue 用 change 预览、afterChange 提交
+- 范围滑块两个圆钮不能交叉是组件自带的；最小间距（“至少相隔 ¥100”）三家都没有，在更新回调里夹住
+- 刻度只标关键值（marks）；要吸附到刻度用 Element Plus step="mark"、Naive UI step="mark"、Ant Design Vue dots
+- 焦点样式检查一遍：圆钮聚焦要有 2px 实线环，组件默认只有光晕时用 :focus-visible 补 outline
+- 价格区间这类大跨度的值用对数刻度，在 formatter 里换算；拉长、回弹这类手感只在自绘滑块里做，可选，不进默认要求
 
 ## 提示词
 
-在{商品筛选区}加价格区间滑块：轨道 4px，已选段主色，两个 16px 圆钮（触屏点击区 44px），两钮不能交叉、至少相隔 ¥100；上方显示“¥200 – ¥1,500”，旁边两个数字输入与滑块双向同步；方向键一步、PageUp / PageDown 十步、Home / End 到端点，每个圆钮有 aria-valuetext“最低价 200 元”；已选段、圆钮和数值在同一帧更新，不加过渡；拖动时实时预览结果数量，松手才刷新列表；聚焦有光晕；窄屏滑块撑满。
+在{商品筛选区}加价格区间滑块：用项目组件库自带的滑块（Element Plus el-slider range；Naive UI n-slider range；Ant Design Vue a-slider range），不手写轨道和圆钮。范围 {0} 至 {5000}，step {50}；两钮不能交叉，至少相隔 ¥100，在更新回调里夹住；气泡用 format-tooltip / tipFormatter 显示“¥200”；上方显示“¥200 至 ¥1,500”，旁边两个数字输入与滑块双向同步；拖动时实时预览结果数量（input / on-update:value / change），松手才刷新列表（change / on-dragend / afterChange）；每个圆钮有读屏名称“最低价 / 最高价”（Element Plus range-start-label / range-end-label，另两家没有对应属性，渲染后给圆钮补 aria-label）；圆钮聚焦有 2px 实线环；窄屏滑块撑满。
 
 ## 示例
 

@@ -19,16 +19,17 @@ tab: 搜索框
 
 ## 要点
 
-- 用 type="search" + enterkeyhint="search"；左侧 16px 放大镜离边框 12px，文字左内边距 36px
-- 输入防抖 250–300ms 再请求；搜索中在框内右侧显示 16px 转圈，旧结果保留不清空
-- 有内容时显示清除按钮，Esc 也能清除；清除后焦点留在框内
-- 区分“没有数据”和“没有符合条件的结果”，后者显示当前关键词和“清除搜索”
+- 用组件库的输入框加放大镜：Element Plus el-input clearable prefix-icon="Search"，Naive UI n-input clearable round（prefix 插槽放图标，loading 显示转圈），Ant Design Vue a-input-search allowClear（loading、enterButton 可选，@search 在回车和点按钮时触发）；高度、内边距、图标位置用组件默认
+- 防抖组件没有：input 事件上自己做 300ms 再请求；搜索中显示转圈并保留旧结果（Naive UI 和 Ant Design Vue 用 loading，Element Plus 在 suffix 插槽放加载图标）
+- 清除按钮要显式打开（clearable / allowClear），清除后焦点留在框内；Esc 清空组件没有，自己监听 keydown
+- 占位文字写明范围（“搜索姓名或部门”“过滤本页文件”），同一页有两个搜索时尤其要写
+- 区分“没有数据”和“没有符合条件的结果”，后者显示当前关键词和“清除搜索”，见「空状态」
 - 结果数量用 role="status" 播报，不抢焦点；匹配字可以浅色底高亮
-- 宽 240–320px（顶栏全局搜索可到 400px），窄屏撑满或收成图标按钮点开展开；长页面下滚时也可以收成放大镜按钮，点一下在原位展开并聚焦，框里有内容时保持展开
+- 宽 240–320px（顶栏全局搜索可到 400px），窄屏撑满或收成图标按钮点开展开，框里有内容时保持展开
 
 ## 提示词
 
-在{成员列表上方}放一个搜索框：type="search"，宽 280px（窄屏撑满），高 32px，左侧 16px 放大镜，占位“搜索姓名或部门”；输入后防抖 300ms 过滤，等待时框内右侧显示转圈并保留旧结果，匹配字浅色高亮；有内容时显示清除按钮，Esc 也能清除；没有结果时显示“没有找到“{关键词}”相关成员”和“清除搜索”；结果数量用 role="status" 播报；搜索框有 aria-label。
+在{成员列表上方}放一个搜索框：用项目组件库自带的输入框（Element Plus el-input clearable prefix-icon="Search"；Naive UI n-input clearable，prefix 插槽放放大镜；Ant Design Vue a-input-search allowClear），不手写。宽 280px（窄屏撑满），占位“搜索姓名或部门”；输入后防抖 300ms 过滤，等待时显示转圈（loading 或 suffix 插槽）并保留旧结果，匹配字浅色高亮；有内容时显示清除按钮，Esc 也能清空，清除后焦点留在框内；没有结果时显示“没有找到“{关键词}”相关成员”和“清除搜索”；结果数量用 role="status" 播报；搜索框加 aria-label。
 
 ## 示例
 

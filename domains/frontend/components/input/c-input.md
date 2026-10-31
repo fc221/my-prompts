@@ -18,17 +18,18 @@ order: 10
 
 ## 要点
 
-- 高 32px（紧凑 28px、宽松 40px、触屏 44px），左右内边距 12px；字号同正文，触屏 16px 防止页面缩放
-- 标签常驻在上方，距输入框 8px；帮助文字在下方 4px、12px 次要色；placeholder 只写示例，不代替标签
-- 前后缀（¥、https://、.com、单位）放在框内或贴边的灰底附加块里，离边框 12px，不随输入滚走
-- 有内容时显示清除按钮，离右边框 8px，aria-label“清除”，清除后焦点留在输入框
-- 有长度上限时在标签行右端或框下右侧显示“12 / 40”，超出变危险色并提示，不截断已输入内容
-- 状态：默认、悬停（边框加深）、聚焦（主色边框 + 浅色光晕）、禁用、只读、错误（危险色边框 + 下方错误文字）
-- 宽度按内容取档：特短 80–120px、短 160–200px、中 260–360px、长 480–560px 或撑满；窄屏一律撑满
+- 用组件库的输入框：Element Plus el-input（clearable、maxlength + show-word-limit、prefix / suffix / prepend / append 插槽、size），Naive UI n-input（clearable、maxlength + show-count、prefix / suffix 插槽，贴边附加块用 n-input-group + n-input-group-label，status），Ant Design Vue a-input（allowClear、maxlength + showCount、prefix / suffix / addonBefore / addonAfter、status）；高度、内边距、聚焦样式用组件默认
+- 标签常驻上方，用表单的属性而不是自己排：Element Plus el-form label-position="top"，Naive UI n-form label-placement="top"（默认就是），Ant Design Vue a-form layout="vertical"；帮助文字和错误文字走表单项，不另写一行
+- placeholder 只写示例（“如 https://example.com”），不代替标签
+- 前后缀分两种：单位、货币符号放框内（prefix / suffix）；https://、.com 这类固定片段放贴边附加块（prepend / append、n-input-group-label、addonBefore / addonAfter）
+- 清除按钮要显式打开（clearable / allowClear），三家默认都关着；清除后焦点留在框内，组件已处理
+- 字数：设了 maxlength 组件会直接截断，再加 show-word-limit / show-count / showCount 显示“12 / 40”；要“超出标红但不截断”就不设 maxlength，自己算字数并在校验里报错，两种选一种
+- 默认、悬停、聚焦、禁用、只读由组件负责；错误态配表单校验（el-form-item 的 error，n-form-item 的 validation-status + feedback，a-form-item 的 validateStatus + help），不要只改边框颜色
+- 宽度按内容取档：特短 80–120px、短 160–200px、中 260–360px、长 480–560px 或撑满；窄屏一律撑满；触屏字号 16px，组件默认 14 要覆盖
 
 ## 提示词
 
-把{创建项目表单的“访问地址”}做成输入框：标签在上方，框内前缀“https://”、后缀“{.com}”，高 32px（触屏 44px、字号 16px），左右内边距 12px；有内容时显示清除按钮（aria-label“清除”，清除后焦点留在框内）；标签行右端显示“已输入 / 上限”，超出变红但不截断；默认、悬停、聚焦、禁用、只读、错误六态齐全，错误文字在框下方并用 aria-describedby 关联；窄屏宽度撑满。
+把{创建项目表单的“访问地址”}做成输入框：用项目组件库自带的输入框（Element Plus el-input clearable；Naive UI n-input clearable；Ant Design Vue a-input allowClear），不手写。标签在上方（label-position="top" / label-placement="top" / layout="vertical"）；前缀“https://”、后缀“{.com}”放贴边附加块（prepend / append、n-input-group-label、addonBefore / addonAfter）；placeholder 只写示例；字数上限 {40}：{用 maxlength + show-word-limit / show-count / showCount 直接截断 / 不设 maxlength，超出标红并在校验里报错}；错误文字走表单项的校验提示，不只改边框颜色；宽度取{中档 260–360px}，窄屏撑满，触屏字号 16px。
 
 ## 示例
 

@@ -25,21 +25,22 @@ order: 30
 
 ## 要点
 
-- 单选：六到十五个互斥选项时用，外观同输入框，选完收起，值留在框里
-- 多选：要同时选几个时用，面板不随点选收起，已选项写回框内，框高固定一行，放不下时收成“+N”；细节见「多选与标签输入」
-- 分组选择：选项多且能归类时用，组名吸顶，用户先找组再找项
-- 级联：选项有上下级时用（省市、类目），左列选完右列才出现，框内显示完整路径；细节见「级联选择」
-- 拆分按钮：有一个最常用动作、其余偶尔才用时用，主体直接执行默认动作，右侧箭头展开其他，两块各自有焦点和名称
-- 大菜单：顶部入口多时用，一次铺开几列真实链接；细节见「多列下拉导航」
-- 日期：选日子时用，面板能切月，框里也能直接输入；细节见「日期与时间选择」
-- 选型判断：选项极少就平铺或用开关；选项很多就加搜索并分组；用户熟悉的内容（生日、手机号、邮编）让他直接输入
+- 单选：六到十五个互斥选项时用；Element Plus el-select、Naive UI n-select、Ant Design Vue a-select，选完收起，值留在框里；细节见「下拉选择」
+- 多选：要同时选几个时用；el-select multiple、n-select multiple、a-select mode="multiple"，框固定一行，放不下收成“+N”（collapse-tags / max-tag-count="responsive" / maxTagCount）；细节见「多选与标签输入」
+- 分组选择：选项多且能归类时用；el-option-group、n-select 的 options 里放 type: 'group' 的项、a-select-opt-group，组名吸顶是组件自带的
+- 级联：选项有上下级时用（省市、类目）；el-cascader、n-cascader、a-cascader，框内显示完整路径；细节见「级联选择」
+- 拆分按钮：有一个最常用动作、其余偶尔才用时用；Element Plus el-dropdown split-button，Ant Design Vue a-dropdown-button；Naive UI 没有现成的，用 n-button-group 拼一个 n-button 和一个套了 n-dropdown 的图标按钮
+- 大菜单：顶部入口多时用；三家都没有现成的，一次铺开几列真实链接自己做，细节见「多列下拉导航」
+- 日期：选日子时用；el-date-picker、n-date-picker、a-date-picker，面板能切月，框里也能直接输入；细节见「日期与时间选择」
+- 执行动作的下拉菜单：el-dropdown、n-dropdown、a-dropdown，三家默认悬停触发，动作菜单改成 trigger="click"；不要拿选择器做动作菜单，见「下拉菜单」
+- 选型判断：选项极少就平铺或用开关；选项很多就加搜索（filterable / filterable / showSearch）并分组；用户熟悉的内容（生日、手机号、邮编）让他直接输入
 - 跟 AI 说清楚四件事：选值还是执行动作、有多少选项、单选还是多选、选项之间有没有层级
 
 ## 提示词
 
-我要在{产品}的{位置}放一个下拉控件，用途是{选一个值随表单提交 / 选了就执行动作 / 跳转到别的页面}，选项有{选项清单或数量}。先判断类别：选了就执行动作，用下拉菜单，有一个最常用动作时做成拆分按钮；跳转且入口多，用大菜单；其余都是下拉选择。再判断形态：选项不超过 5 个改成平铺，不做下拉；要选多个用多选；有上下级用级联；选的是日期用日期面板；能归类用分组；超过 15 个顶部加搜索；用户熟悉的内容改成直接输入。告诉我选了哪一种和理由，然后只实现这一种。
+我要在{产品}的{位置}放一个下拉控件，用途是{选一个值随表单提交 / 选了就执行动作 / 跳转到别的页面}，选项有{选项清单或数量}。先判断类别：选了就执行动作，用下拉菜单（el-dropdown / n-dropdown / a-dropdown，trigger="click"），有一个最常用动作时做成拆分按钮（el-dropdown split-button / n-button-group 拼 / a-dropdown-button）；跳转且入口多，用大菜单（组件库没有，自己做）；其余都是下拉选择（el-select / n-select / a-select）。再判断形态：选项不超过 5 个改成平铺，不做下拉；要选多个用多选（multiple / multiple / mode="multiple"）；有上下级用级联（el-cascader / n-cascader / a-cascader）；选的是日期用日期选择器（el-date-picker / n-date-picker / a-date-picker）；能归类用分组（el-option-group / type: 'group' / a-select-opt-group）；超过 15 个打开搜索（filterable / filterable / showSearch）；用户熟悉的内容改成直接输入。告诉我选了哪一种和理由，然后只用项目组件库实现这一种，不手写下拉面板。
 
-外观要说明类别：选择器和输入框同高同边框，值留在框里；菜单触发器是按钮样式，文字不随选择改变。键盘：下方向键打开并进入第一项，上下键移动，Enter 选中，Esc 关闭并把焦点还给触发器，点外面关闭。选择器用 listbox / option，菜单用 menu / menuitem。面板宽度不小于触发器，靠近视口底部时向上翻。
+外观要说明类别：选择器和输入框同高同边框，值留在框里；菜单触发器是按钮样式，文字不随选择改变。键盘、ARIA、面板宽度和向上翻转由组件负责，不要自己重写。
 
 ## 示例
 

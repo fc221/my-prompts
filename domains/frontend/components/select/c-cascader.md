@@ -18,16 +18,17 @@ order: 60
 
 ## 要点
 
-- 触发器外观同选择器，选中后显示完整路径，过长时省略并在悬停显示全文
-- 面板每列宽 120–160px、最高 260px 内滚动；有下级的项右侧带 ›，当前路径上的项浅主色底
-- 默认只能选末级；允许选任意级时每项前给单选圈
-- 支持跨级搜索：输入“西湖”直接列出“浙江 / 杭州 / 西湖区”，匹配字高亮
-- 键盘：上下移动，右键进入下级，左键回上级，Enter 选中，Esc 关闭
-- 窄屏改为底部面板，逐级推进，顶部显示已选路径
+- 用组件库的级联选择：Element Plus el-cascader（options、props="{ checkStrictly, emitPath, lazy, lazyLoad }"、filterable、show-all-levels、separator、clearable），Naive UI n-cascader（options、check-strategy、show-path、filterable、separator、remote + on-load、clearable），Ant Design Vue a-cascader（options、changeOnSelect、showSearch、displayRender、loadData、allowClear）；面板列宽、高度、键盘和定位用组件默认
+- 默认只能选末级；允许选任意级：Element Plus props.checkStrictly，Naive UI check-strategy="all"（只选末级写 "child"），Ant Design Vue changeOnSelect
+- 选中后框里显示完整路径“浙江 / 杭州 / 西湖区”（show-all-levels / show-path 默认开，Ant Design Vue 用 displayRender 定格式），过长省略并在悬停显示全文
+- 跨级搜索要显式打开（filterable / filterable / showSearch）：输入“西湖”直接列出“浙江 / 杭州 / 西湖区”，匹配字高亮；Ant Design Vue 的 showSearch 和 loadData 不能同时用
+- 绑定值和后端对齐：Element Plus 和 Ant Design Vue 默认给整条路径数组，Naive UI 给末级值；只要末级编码时 Element Plus 设 props.emitPath=false，Ant Design Vue 取数组最后一项
+- 数据量大时按需加载（lazy + lazyLoad / remote + on-load / loadData），每级只取下一级
+- 窄屏改为底部面板逐级推进，顶部显示已选路径：Element Plus 有独立的 el-cascader-panel 可以放进「底部面板」；另两家没有独立面板，要么直接用弹出面板，要么自己做
 
 ## 提示词
 
-把{收货地址的“所在地区”}做成级联选择：触发器高 32px、宽 320px，选中后显示“省 / 市 / 区”完整路径；面板三列，每列宽 140px、最高 260px 内滚动，有下级的项带 ›，当前路径浅主色底，只能选末级；顶部可跨级搜索并高亮匹配字；方向键上下移动、右键进入下级、左键返回上级、Enter 选中、Esc 关闭并还焦点；手机上改为底部面板逐级推进，顶部显示已选路径。
+把{收货地址的“所在地区”}做成级联选择：用项目组件库自带的级联选择（Element Plus el-cascader filterable clearable；Naive UI n-cascader filterable clearable check-strategy="child"；Ant Design Vue a-cascader showSearch allowClear），不手写多列面板。只能选末级；选中后框里显示“省 / 市 / 区”完整路径，过长省略、悬停看全文；顶部可跨级搜索并高亮匹配字；绑定值{整条路径数组 / 只要区县编码（Element Plus props.emitPath=false）}；省市区数据{一次加载 / 按需加载下一级}；手机上改为底部面板逐级推进，顶部显示已选路径（Element Plus 用 el-cascader-panel 放进底部面板，另两家没有独立面板时直接用弹出面板）。
 
 ## 示例
 

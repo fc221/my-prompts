@@ -19,18 +19,17 @@ order: 40
 
 ## 要点
 
-- 尺寸 36×20px（触屏 44×24px），圆钮 16px，开为主色、关为深灰（与底色对比 ≥ 3:1），底色切换 160ms，圆钮滑动约 220ms
-- 用 button role="switch" + aria-checked，或原生复选框加 role="switch"；空格和 Enter 切换
+- 用组件库的开关：Element Plus el-switch（loading、before-change、active-text / inactive-text、inline-prompt、active-value / inactive-value、size），Naive UI n-switch（loading、checked-value / unchecked-value、rubber-band、size、checked / unchecked 插槽），Ant Design Vue a-switch（loading、checkedChildren / unCheckedChildren、checkedValue / unCheckedValue、size）；尺寸、颜色、滑动动画、role="switch" 和 aria-checked 由组件负责
 - 设置列表里做成一行：标签和说明在左、开关在右，行高一致，行间用分割线
-- 切换即保存：请求中在开关旁显示 16px 转圈；失败回滚并就地写原因；成功不弹提示，状态本身就是反馈
-- 标签写被控制的东西（“邮件通知”），不在开关旁写“开 / 关”代替标签
-- 按下时圆钮朝要去的方向拉长到约 1.3 倍（transform: scaleX，变换原点在圆钮靠出发一侧），松手后边滑边缩回原宽，宽度 1 → 1.3 → 1 共约 220ms，像有弹性
-- 可选：一组联动的开关（如“全部通知”控制下面几项）切换时，下面受影响的开关依次轻推 2px 再回位，提示它们跟着变了
-- 禁用时说明原因（“需要管理员开通”）；减少动态效果时去掉滑动和拉长
+- 切换即保存：请求中开 loading；失败回滚并就地写原因；成功不弹提示，状态本身就是反馈。Element Plus 用 before-change 返回 Promise，失败就不切换；另两家在更新回调里先改值、开 loading，失败再改回来
+- 标签写被控制的东西（“邮件通知”），用表单项的 label 或列表行的标题；active-text、checkedChildren 这类只写“开 / 关”之类的状态词，不拿它代替标签
+- 绑定值不是布尔时用 active-value / checked-value / checkedValue 对上后端的 1 / 0 或 "on" / "off"
+- 禁用时说明原因（“需要管理员开通”），写在说明文字里
+- 按下时拉长、联动开关的轻推是可选项，不进默认要求：Naive UI 的 rubber-band 默认开着，不要就关掉；另两家没有
 
 ## 提示词
 
-把{通知设置页}的各项做成开关列表：每行左侧是标签和一行说明，右侧 36×20px 开关（触屏 44×24px），行高 56px，行间分割线；开关用 role="switch" 和 aria-checked，空格切换；按下时圆钮朝要去的方向拉长到约 1.3 倍，松手后边滑边缩回（约 220ms）；切换即保存，请求中旁边显示小转圈，失败自动回滚并在该行写明原因；无权限的项禁用并说明原因；减少动态效果时去掉滑动和拉长；窄屏说明文字换行，开关保持在右侧垂直居中。
+把{通知设置页}的各项做成开关列表：用项目组件库自带的开关（Element Plus el-switch；Naive UI n-switch；Ant Design Vue a-switch），不手写胶囊和圆钮。每行左侧是标签和一行说明，右侧开关，行间分割线；切换即保存，请求中开 loading，失败自动回滚并在该行写明原因，成功不弹提示（Element Plus 用 before-change 返回 Promise）；无权限的项禁用并在说明里写原因；绑定值对上后端的 {true / false 或 1 / 0}；拉长、回弹等动效{要 / 不要}，默认不要（Naive UI 关掉 rubber-band）；窄屏说明文字换行，开关保持在右侧垂直居中。
 
 ## 示例
 

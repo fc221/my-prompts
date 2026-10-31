@@ -6,7 +6,7 @@ order: 25
 
 ## 是什么
 
-在评论或消息输入框里打 @（或 #），光标处弹出候选；选中的人或文档作为一个整体块插进文字里，一次退格整块删掉，提交时带的是 id。
+在评论或消息输入框里打 @（或 #），光标处弹出候选；选中的人或文档以“@名字 ”写进文字里，提交时换成 id。
 
 ## 适合
 
@@ -22,16 +22,16 @@ order: 25
 
 ## 要点
 
-- 触发：@ 或 # 前面不是英文字母和数字时才弹出（中文紧跟 @ 也能触发，邮箱里的 @ 不触发），后面的字作为关键词实时过滤；输入空格、按 Esc 或光标移走后关闭
-- 定位：用光标所在的文字矩形（Range.getBoundingClientRect）放候选列表，下方放不下翻到上方，左右不出输入框所在区域
-- 候选最多 6 条：头像或图标 + 名称 + 次要信息（部门、所在目录），命中的字高亮；没有匹配时显示“没有找到”并保留已输入的文字
-- 键盘同「搜索联想」：↑↓ 移动（首尾循环），Enter 或 Tab 插入，Esc 关闭；焦点始终在输入框，ARIA 按 combobox 写
-- 插入的块 contenteditable="false"，强调浅底 + 强调色文字，后面自动补一个空格；光标紧挨块后时按一次 Backspace 删除整块
-- 提交时把块转成带类型和 id 的标记（如 <@u_102>、<#d_7>），改名不影响；粘贴只保留纯文本；Enter 换行，⌘/Ctrl + Enter 发送
+- 用组件库的提及输入：Element Plus el-mention（options、prefix、split、filter-option、whole、loading、@search、@select、label 插槽），Naive UI n-mention（options、prefix、separator、filter、loading、render-label、type="textarea" + autosize、@search、@select、empty 插槽），Ant Design Vue a-mentions（options、prefix、split、filterOption、loading、notFoundContent、@search、@select、option 插槽）；候选贴着光标、上下键选择、Enter 插入、输入法组字不触发由组件负责
+- 触发符：prefix 传数组同时支持 @ 和 #（['@', '#']），在 @search 里按 prefix 给两份不同的候选；邮箱里的 @ 不触发，组件按前一个字符判断
+- 组件插进文字的是纯文本“@名字 ”，不是不可编辑的块：在 @select 里记下选中的 option（id、名字、前缀），提交前把文本里的“@名字”按这份记录换成 <@u_102>、<#d_7>，没记录的保持原文；重名在 label 里带部门区分
+- 整块删除只有 Element Plus 有（whole），另两家按字符退格；不要为了整块删除自己写 contenteditable
+- 候选最多 6 条：头像或图标 + 名称 + 次要信息（部门、所在目录），用 label / render-label / option 插槽渲染；没有匹配时显示“没有找到”并保留已输入的文字（Naive UI empty 插槽，Ant Design Vue notFoundContent；Element Plus 没有对应插槽，让下拉收起）
+- 候选从接口取时在 @search 里请求并开 loading；粘贴只保留纯文本；Enter 换行，⌘/Ctrl + Enter 发送
 
 ## 提示词
 
-给{任务评论框}加「@ 提及」：输入 @ 弹出成员候选，输入 # 弹出{文档或话题}，@ 或 # 前面是英文字母或数字时不触发（避开邮箱）；后面的字实时过滤，最多 6 条，显示头像、名称和部门，命中的字高亮，没有匹配显示“没有找到“{关键词}””；候选列表贴着光标出现，下方放不下翻到上方；↑↓ 移动、Enter 或 Tab 插入、Esc 关闭，焦点留在输入框，ARIA 按 combobox 写；输入法组字中不触发、不响应回车；选中后插入不可编辑的提及块（强调浅底），后面补一个空格，光标紧挨块后时一次 Backspace 删掉整块；提交时提及块转成 <@成员 id>，粘贴只保留纯文本；Enter 换行，⌘/Ctrl + Enter 发送。
+给{任务评论框}加「@ 提及与话题」：用项目组件库自带的提及输入（Element Plus el-mention；Naive UI n-mention type="textarea"；Ant Design Vue a-mentions），不手写候选定位和 contenteditable。prefix 同时支持 @（成员）和 #（{文档或话题}），各自一份候选，从接口取时在 @search 里请求并开 loading；候选最多 6 条，显示头像、名称和部门，用 label / render-label / option 插槽渲染，没有匹配显示“没有找到“{关键词}””；在 @select 里记下选中的 id 和名字，提交时把文本里的“@名字”换成 <@成员 id>、“#名字”换成 <#id>；Element Plus 开 whole 让退格整块删除；粘贴只保留纯文本；Enter 换行，⌘/Ctrl + Enter 发送。
 
 ## 示例
 

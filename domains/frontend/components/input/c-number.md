@@ -18,16 +18,17 @@ order: 40
 
 ## 要点
 
-- 用 type="text" + inputmode="decimal"（整数用 numeric），不用 type="number"：滚轮会误改值，格式也不可控
-- 单位写在后缀（元、%、秒、件），离右边框 12px；金额前缀 ¥；数值用等宽数字
-- 设置最小、最大、步长；步进按钮只用于小范围整数，宽 32px，到边界时禁用该方向
-- 允许直接输入，失焦后按精度格式化千分位，聚焦时去掉千分位方便修改
-- 超出范围就地提示“最大 99 件”，不悄悄改成边界值
-- 键盘：上下方向键加减一个步长，Shift+方向键加减 10 倍
+- 用组件库的数字输入：Element Plus el-input-number（min、max、step、precision、controls、controls-position="right"、prefix / suffix 插槽），Naive UI n-input-number（min、max、step、precision、show-button、button-placement="both"、prefix / suffix 插槽），Ant Design Vue a-input-number（min、max、step、precision、controls、prefix、addonAfter）；不用原生 type="number"，也不用普通输入框加正则
+- 单位写在后缀（元、%、秒、件）、金额前缀 ¥，用 suffix / prefix 插槽或 addonAfter，不拼进值里
+- 步进按钮只给小范围整数：Element Plus 默认两侧、controls-position="right" 改右侧上下；Naive UI 默认右侧、button-placement="both" 改两侧；Ant Design Vue 默认右侧上下。不需要时关掉（controls=false / show-button=false）；到边界时按钮禁用、方向键加减一个步长是组件自带的
+- 千分位：Element Plus 和 Ant Design Vue 用 formatter / parser，Naive UI 用 format / parse；聚焦时去掉千分位方便修改
+- 超出范围：设了 min / max，三家都会把值拉回边界，不提示。要“提示不改值”，就不设 min / max，把范围写进表单校验，在框下提示“最大 9999”；两种选一种，别又设 max 又写校验
+- 允许直接输入，precision 定小数位，整数设 precision=0（Element Plus 也可以 step-strictly）；清空后的值先定好（Element Plus value-on-clear，另两家是 null）
+- 宽度按位数取档 120–200px，不撑满
 
 ## 提示词
 
-把{商品编辑页的“库存”和“售价”}做成数字输入：库存是 0–9999 的整数，两侧带“−”“+”步进按钮（各 32px），到边界时禁用对应按钮，上下方向键加减 1、Shift 加减 10；售价前缀“¥”、保留两位小数，失焦后格式化千分位、聚焦时去掉千分位；都用 type="text" 加 inputmode，不用 type="number"；超出范围在框下提示“最大 9999”，不悄悄改值；宽 160–200px，高 32px，触屏 44px。
+把{商品编辑页的“库存”和“售价”}做成数字输入：用项目组件库自带的数字输入（Element Plus el-input-number；Naive UI n-input-number；Ant Design Vue a-input-number），不用原生 type="number"，也不手写正则。库存：0 至 9999 的整数，precision=0，step=1，两侧“−”“+”步进按钮（Element Plus 默认；Naive UI button-placement="both"；Ant Design Vue 用默认的右侧上下），后缀“件”；售价：precision=2，前缀“¥”，千分位用 formatter / parser（Naive UI 是 format / parse），聚焦时去掉；超出范围{用组件 min / max 直接拉回边界 / 不设 min / max，在表单校验里提示“最大 9999”}，两种选一种；宽度按位数取 120–200px。
 
 ## 示例
 

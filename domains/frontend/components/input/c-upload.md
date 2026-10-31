@@ -23,17 +23,17 @@ order: 70
 
 ## 要点
 
-- 上传前写清类型、大小和数量（“PDF、JPG，单个不超过 20 MB，最多 5 个”）
-- 拖拽区 1px 虚线框，高 56–120px；拖入时边框和底色变主色，文案换成“松开即可上传”；整块可点击，内部有可聚焦的文件输入，用 accept 限定类型
-- 每个文件一行：图标或缩略图、文件名（过长中间省略）、大小、进度条与百分比、取消 / 移除
-- 失败的行变危险色并写原因（“超过 20 MB”“网络中断”），可重试的给“重试”；一个失败不清空其他文件
-- 进度按真实字节推进、不倒退；完成后显示成功色和“移除”，图片显示缩略图
-- 还有文件没传完时，提交按钮写明“还有 2 个文件在上传”；文件误投到页面其他位置时阻止浏览器直接打开它
-- 进度条 role="progressbar" 带 aria-valuenow；完成和失败用 role="status" 播报；窄屏拖拽区改成按钮
+- 用组件库的上传：Element Plus el-upload（action 或 http-request、drag、accept、limit + on-exceed、before-upload、v-model:file-list、on-error、tip 插槽、file 插槽），Naive UI n-upload + n-upload-dragger（action 或 custom-request、accept、max、on-before-upload、v-model:file-list、on-error、show-retry-button），Ant Design Vue a-upload / a-upload-dragger（action 或 customRequest、accept、maxCount、beforeUpload、v-model:file-list、showUploadList、itemRender）；拖拽区、文件列表、进度条、取消和移除都是组件自带的
+- 上传前写清类型、大小和数量（“PDF、JPG，单个不超过 20 MB，最多 5 个”）：放在 tip 插槽或拖拽区文案里，并用 accept 限定类型、limit / max / maxCount 限定数量
+- 大小和类型校验在 before-upload / on-before-upload / beforeUpload 里返回 false 并就地说明原因；Ant Design Vue 返回 false 文件仍会留在列表里，不想显示就返回 Upload.LIST_IGNORE
+- 失败的行写原因（“超过 20 MB”“网络中断”）并给“重试”：Naive UI 自带 show-retry-button 和 on-retry；另两家没有，在 file 插槽 / itemRender 里加重试按钮，只重传那一个文件；一个失败不清空其他文件
+- 拖入时的高亮、进度按真实字节推进、完成后的成功态由组件负责；图片要缩略图开列表类型（Element Plus 和 Ant Design Vue list-type="picture"，Naive UI list-type="image"）
+- 还有文件没传完时，提交按钮写明“还有 2 个文件在上传”，看 file-list 里的 status；文件误投到页面其他位置时阻止浏览器直接打开它（window 的 dragover / drop 上 preventDefault）
+- 窄屏拖拽区改成“选择文件”按钮，拖拽只是增强
 
 ## 提示词
 
-给{合同附件}做上传组件：上方说明“支持 PDF、JPG，单个不超过 20 MB，最多 5 个”；拖拽区虚线框高 112px，可点击也可拖入，拖入时变主色并提示“松开即可上传”；下方文件列表每行显示文件名（过长中间省略）、大小、进度条和百分比、取消；失败整行危险色并写原因和“重试”；成功显示对勾和“移除”；一个失败不影响其他文件；没传完时提交按钮写明还剩几个；阻止页面其他位置误投放打开文件；进度条 role="progressbar"，结果用 role="status" 播报；窄屏只保留“选择文件”按钮。
+给{合同附件}做上传：用项目组件库自带的上传组件（Element Plus el-upload drag；Naive UI n-upload + n-upload-dragger；Ant Design Vue a-upload-dragger），不手写拖拽区和文件列表。说明文字“支持 PDF、JPG，单个不超过 20 MB，最多 5 个”放在 tip 插槽或拖拽区里；accept 限定 .pdf,.jpg，数量用 limit / max / maxCount = 5；大小在 before-upload / on-before-upload / beforeUpload 里校验，超出时返回 false 并就地提示（Ant Design Vue 返回 Upload.LIST_IGNORE）；失败整行写原因和“重试”（Naive UI 用自带的重试按钮，另两家在 file 插槽 / itemRender 里加），一个失败不影响其他文件；没传完时提交按钮写明还剩几个；阻止页面其他位置误投放打开文件；窄屏只保留“选择文件”按钮。
 
 ## 示例
 

@@ -18,16 +18,16 @@ order: 50
 
 ## 要点
 
-- 右侧显示 / 隐藏按钮是 button，aria-label 随状态在“显示密码 / 隐藏密码”间切换，并设 aria-pressed
-- 图标 16px 离右边框 12px，文字右内边距 40px；切换后焦点不跳走
-- autocomplete 区分：登录用 current-password，注册和改密用 new-password；关闭拼写检查和自动大写
-- 注册时规则写在框下方（至少 8 位、包含字母和数字），满足一条勾一条，不要等提交后才报错
-- 检测到大写锁定时在框下提示“大写锁定已打开”
-- 强度提示只做辅助，用“弱 / 中 / 强”文字，不只靠颜色
+- 用组件库的密码框：Element Plus el-input type="password" show-password，Naive UI n-input type="password" show-password-on="click"，Ant Design Vue a-input-password（visibilityToggle 默认开）；眼睛按钮、切换后焦点不跳由组件负责
+- autocomplete 要自己传，组件不会猜：登录用 current-password，注册和改密用 new-password（Element Plus 直接写 autocomplete，Naive UI 用 input-props，Ant Design Vue 写在 a-input-password 上透传）；同时关掉拼写检查和自动大写（spellcheck="false"、autocapitalize="off"）
+- 注册时规则写在框下方（至少 8 位、包含字母和数字），满足一条勾一条，边输入边更新；组件库没有现成的，用表单项的说明区自己列，不要等提交后才报错
+- 大写锁定提示组件库没有：监听 keydown 的 getModifierState('CapsLock')，在框下提示“大写锁定已打开”
+- 强度提示只做辅助，用“弱 / 中 / 强”文字，不只靠颜色；组件库没有现成的
+- 错误文字走表单项的校验提示；允许粘贴
 
 ## 提示词
 
-把{注册页的“设置密码”}做成密码框：高 40px（触屏 44px），右侧眼睛按钮离边框 12px，切换明文时 aria-label 在“显示密码 / 隐藏密码”间变化并设 aria-pressed，焦点不跳走；autocomplete="new-password"，关闭拼写检查和自动大写；框下逐条列出规则（至少 8 位、包含字母和数字），满足一条勾一条；检测到大写锁定时提示；允许粘贴；错误时边框变红并用 aria-describedby 关联说明；窄屏撑满。
+把{注册页的“设置密码”}做成密码框：用项目组件库自带的密码框（Element Plus el-input type="password" show-password；Naive UI n-input type="password" show-password-on="click"；Ant Design Vue a-input-password），不手写眼睛按钮。autocomplete="new-password"（登录页改 current-password），关闭拼写检查和自动大写；框下逐条列出规则（至少 8 位、包含字母和数字），满足一条勾一条，边输入边更新；监听 CapsLock 时提示“大写锁定已打开”；允许粘贴；错误文字走表单项的校验提示；窄屏撑满。
 
 ## 示例
 
