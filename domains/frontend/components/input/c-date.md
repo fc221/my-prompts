@@ -20,15 +20,16 @@ order: 60
 
 ## 要点
 
-- 触发框与其他控件同高（32px），右侧日历图标离边框 12px；格式写在占位里（YYYY-MM-DD），允许直接键入
-- 不可选的日期置灰并能看出原因（悬停提示“不能晚于今天”）
-- 面板里今天有标记，选中主色实心；方向键移动、Enter 选中、Esc 关闭并把焦点还给触发框
+- 用组件库自带的日期选择器，不手写日历：Element Plus el-date-picker（type="date"、value-format="YYYY-MM-DD"），Naive UI n-date-picker（type="date"），Ant Design Vue a-date-picker（valueFormat="YYYY-MM-DD"）
+- 占位写格式 YYYY-MM-DD，允许直接键入；绑定值统一用字符串，不把 Date 对象或时间戳直接传给接口
+- 有业务默认值（今天、下一个工作日）就填上，不留空让人翻
+- 不可选的日期用组件的禁用回调（disabled-date / is-date-disabled / disabledDate）置灰，悬停或旁边文字说明原因（“不能晚于今天”）
 - 跨时区业务在旁边写明时区（UTC+8）
-- 触屏优先用原生 date / time 输入，或从底部弹出面板
+- 窄屏优先原生 date 输入或底部面板
 
 ## 提示词
 
-在{表单的开票日期}加日期选择：触发框高 32px、宽 200px，显示“2026-10-25”，右侧日历图标，可直接键入，格式错时在框下提示；点开面板是单个月的日历，今天有标记，选中项主色实心；不可选日期置灰并提示原因；方向键在日历里移动，Esc 关闭并还焦点；窄屏改为底部面板。
+在{表单的开票日期}加日期选择：用项目组件库自带的日期选择器（Element Plus el-date-picker type="date" value-format="YYYY-MM-DD"；Naive UI n-date-picker type="date"；Ant Design Vue a-date-picker valueFormat="YYYY-MM-DD"），不手写日历。占位写 YYYY-MM-DD，允许直接键入，格式错时在框下提示；默认值{今天或业务默认}；不可选日期用组件的禁用回调置灰并说明原因（“不能晚于今天”）；绑定值用 YYYY-MM-DD 字符串；跨时区写明时区；窄屏改原生 date 输入或底部面板。
 
 ## 示例
 

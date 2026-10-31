@@ -23,30 +23,21 @@ order: 100
 
 ## 要点
 
-- 每级缩进 16–24px，行高 32px（紧凑 28px）；展开箭头 16px，叶子节点留出同宽占位保持对齐
-- 三种用法只差节点前面的标记，缩进、展开、键盘和搜索都一样，做成一个控件的三种模式
-- 展示：当前节点浅主色底 + 主色文字，悬停浅灰底
-- 单选：节点前放单选圈，点行选中，输入框里写完整路径“客服中心 / 在线组 / 在线 2 组”；只能选末级时父节点不放单选圈，点它只展开
-- 多选：节点前放复选框，父节点三态（全选打勾、部分选中横杠、未选空框）；点部分选中的父节点变全选，再点清空；父节点后写“已选/总数”，树收起时也看得出选了多少
-- 多选的标签按部门收：全选一个标签，部分选中一个标签加计数“客服中心 19/20”，子项不展开成标签；标签上的 × 移除整个部门，焦点到下一个标签，没有就回到树
-- 输入框固定 32px 一行，放不下时从后往前收进“+N”，悬停或点开看全部
-- 放进下拉面板时最高约 320px，内部滚动
-- 节点很多时顶部提供搜索，命中时展开路径；搜索状态下勾父节点只作用于命中的项
-- 大部分选中时提交“部门 + 排除项”比列出全部子项更短，含义也更准
-- 按需加载子级时箭头位置显示 16px 转圈，失败在该节点下显示“加载失败，重试”；勾选未加载的父节点直接记成整部门
-- 名称过长单行省略并悬停显示全文
-- role="tree" / "treeitem" / "group"，展开节点设 aria-expanded；单选用 aria-selected，多选用 aria-checked，部分选中写 aria-checked="mixed"；漫游焦点，整棵树只占一个 Tab 位
-- 键盘：上下移动，右键展开或进入子级，左键收起或回到父级，Enter 或空格选中，Home / End 到首尾
+- 用组件库的树：展示用 Element Plus el-tree、Naive UI n-tree、Ant Design Vue a-tree；放进下拉选值用 el-tree-select、n-tree-select、a-tree-select
+- 三种用法只差节点前面的标记：展示不加；单选点行选中，输入框写完整路径；多选加复选框（Element Plus show-checkbox，Naive UI checkable，Ant Design Vue treeCheckable）
+- 多选的标签按部门收：Naive UI check-strategy="parent"，Ant Design Vue showCheckedStrategy=SHOW_PARENT；Element Plus 没有现成策略，提交时用 getCheckedNodes 自己按部门收。全选一个标签，部分选中一个标签加计数“客服中心 19/20”，子项不展开成标签
+- 框固定一行，放不下收成 +N：Element Plus collapse-tags，Naive UI max-tag-count="responsive"，Ant Design Vue maxTagCount
+- 节点多时打开 filterable，命中时组件会展开路径；按需加载用 lazy + load、on-load、loadData，勾选未加载的父节点直接记成整部门
+- 提交的值和后端对齐：整部门传部门编号，之后新建的小组自动包含；大部分选中传“部门 + 排除项”；少量选中传小组编号
+- 父节点三态、键盘和读屏由组件负责；只有自己写树时才按 role="tree"、aria-checked="mixed" 做
 
 ## 提示词
 
-把{组织架构}做成树形控件，用法选{展示 / 单选 / 多选}，只保留用到的一种。每级缩进 20px，行高 32px，展开箭头 16px，叶子节点留同宽占位；名称过长省略；节点多时顶部搜索，命中时展开路径；子级按需加载时箭头处显示转圈，失败显示“重试”；用 role="tree" / "treeitem" / "group" 和 aria-expanded，漫游焦点只占一个 Tab 位；方向键上下移动、右键展开或进入子级、左键收起或回父级、Enter 或空格选中、Home / End 到首尾；窄屏收进抽屉。
+把{组织架构}做成树形控件，用法选{展示 / 单选 / 多选}，用项目组件库自带的树，不手写：展示用 Element Plus el-tree / Naive UI n-tree / Ant Design Vue a-tree；选值用 el-tree-select / n-tree-select / a-tree-select。节点多时打开搜索，子级按需加载。
 
-展示：当前节点浅主色底加主色文字，悬停浅灰底。
+单选：点行选中，输入框写完整路径“客服中心 / 在线组 / 在线 2 组”。
 
-单选：节点前放单选圈，点行选中，输入框写完整路径，用 aria-selected 表达选中。
-
-多选：节点前放复选框，父节点三态，点部分选中的父节点变全选，再点清空，行尾写“已选/总数”，用 aria-checked 表达三态；输入框固定 32px 一行，下拉面板最高 320px 内滚动；已选结果按{部门}收成标签：全选一个标签，部分选中写“部门名 19/20”，子项不展开成标签，放不下时从后往前收进“+N”，悬停看全部，标签的 × 移除整个部门；提交时全选传部门编号（之后新建的小组自动包含），大部分选中传“部门 + 排除的小组”，少量选中传小组编号。
+多选：节点前放复选框（show-checkbox / checkable / treeCheckable），已选结果按{部门}收成标签（Naive UI check-strategy="parent"，Ant Design Vue showCheckedStrategy=SHOW_PARENT，Element Plus 提交时用 getCheckedNodes 自己收）：全选一个标签，部分选中写“部门名 19/20”，子项不展开成标签；框固定一行，放不下收成 +N（collapse-tags / max-tag-count="responsive" / maxTagCount）；提交时全选传部门编号（之后新建的小组自动包含），大部分选中传“部门 + 排除的小组”，少量选中传小组编号；勾选未加载的父节点直接记成整部门。
 
 ## 示例
 

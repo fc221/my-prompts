@@ -25,17 +25,17 @@ order: 64
 
 ## 要点
 
-- 两个月连续排列，跨月范围不用来回翻；左月上方是上一年、上一月，右月上方是下一月、下一年
-- 点第一下：开始日写进框里并在日历上实心选中，下划线移到结束日
-- 选结束日时，指针移动就预览区间；点第二下写入，比开始日早时自动交换两端
-- 起止两端主色实心，中间浅主色底，跨月时两个面板里的区间连着
-- 点框里的开始或结束可以单独改那一端
-- 底部写“共 N 天”，“清除”清空两端，“确认”才应用，没确认前不发请求
-- 窄屏改成单月，从底部面板升起
+- 用组件库的范围类型，一个控件管两端：Element Plus el-date-picker type="daterange"，Naive UI n-date-picker type="daterange"，Ant Design Vue a-range-picker；不要拼两个单日期框再自己校验先后
+- 并排两个月是组件自带的，别改成单月翻页；跨年范围才考虑 Element Plus 的 unlink-panels
+- 两端占位“开始日期 / 结束日期”（start-placeholder、end-placeholder 或 placeholder 数组），分隔符用组件默认的，全站一致
+- 选到一半的状态组件已处理：开始日先写进框、焦点移到结束端；范围选完或点确认才查询，不用中途的 change 事件提交
+- 范围上限和不可选日期用禁用回调：Naive UI 的 is-date-disabled 带 phase 和已选值，能按开始日算上限；Element Plus、Ant Design Vue 在 disabled-date 里读已选的开始日
+- 绑定值用两端的 YYYY-MM-DD，提交时按口径写清结束日含不含当天
+- 窄屏改单月或底部面板
 
 ## 提示词
 
-在{订单列表的筛选区}加日期范围选择：用项目组件库自带的范围选择器（Element Plus 的 el-date-picker type="daterange"、Naive UI 的 n-date-picker type="daterange"、Ant Design Vue 的 a-range-picker），不自己拼两个日期框。一个触发框写“开始日期 → 结束日期”，高 32px，点开面板并排两个月，左月上方是上一年、上一月，右月上方是下一月、下一年。点第一下：开始日写进框里并在日历上实心选中，框里的下划线移到结束日；移动指针时预览区间；点第二下写入结束日，比开始日早时自动交换。两端主色实心，中间浅主色底，跨月时区间连着。点框里某一端可以单独改。底部写“共 N 天”，“清除”清空，“确认”才应用。今天有标记，不可选日期置灰并提示原因；方向键在日历里移动，Esc 关闭并还焦点；窄屏改成单月底部面板。
+在{订单列表的筛选区}加日期范围选择：用组件库自带的范围选择器（Element Plus el-date-picker type="daterange" value-format="YYYY-MM-DD"；Naive UI n-date-picker type="daterange"；Ant Design Vue a-range-picker valueFormat="YYYY-MM-DD"），不要拼两个单日期框。保留它默认并排两个月的面板，两端占位“开始日期 / 结束日期”；范围选完或点确认才触发查询，中途不提交；最长 {天数} 天和晚于今天的日期用组件的禁用回调置灰并说明原因；绑定值是两端的 YYYY-MM-DD；提交时写清结束日{含 / 不含}当天；窄屏改单月或底部面板。
 
 ## 示例
 

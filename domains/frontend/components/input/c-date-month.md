@@ -21,13 +21,13 @@ order: 68
 
 ## 要点
 
-- 网格四列，当前月份、季度或年份加粗，选中项主色实心
-- 月份和季度页翻一年，年份页翻十二年
-- 提交的值带上粒度，“2026 Q4”和“2026-10”不能混用同一个字段
+- 用组件库的月份、季度、年份类型：Element Plus type="month" / "quarter" / "year"（范围 monthrange / quarterrange / yearrange），Naive UI 同名的 type，Ant Design Vue picker="month" / "quarter" / "year"
+- 绑定值带粒度：月 YYYY-MM，季度 YYYY-Qn，年 YYYY；同一字段不混用
+- 未来月份、没有数据的账期用禁用回调置灰
 
 ## 提示词
 
-给{账单筛选}加月份选择：触发框写“2026-10”，面板是 3 行 4 列的月份网格，顶部翻年，当前月份加粗，选中项主色实心；需要时切到季度或年份，提交的值带上粒度；方向键在网格里移动，Esc 关闭并还焦点。
+给{账单筛选}加月份选择：用组件库自带的月份类型（Element Plus el-date-picker type="month" value-format="YYYY-MM"；Naive UI n-date-picker type="month"；Ant Design Vue a-date-picker picker="month" valueFormat="YYYY-MM"），需要时切季度或年份类型；绑定值带粒度（YYYY-MM / YYYY-Qn / YYYY），不混用同一字段；未来月份用禁用回调置灰；窄屏改底部面板。
 
 ## 示例
 

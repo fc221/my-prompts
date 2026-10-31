@@ -21,19 +21,17 @@ order: 20
 
 ## 要点
 
-- 已选值显示为标签（高 24px，左右 8px，标签间 4px），每个带 × 按钮，aria-label“移除 {名称}”
-- 可搜索：框里打字即过滤选项，方向键移动、Enter 勾选或取消；没有匹配时给“新建”；不开搜索时框只读，点开从列表里选
-- 折叠：筛选区、表格上方这类不能撑高的地方用折叠。框固定 32px 一行，放不下时从后往前收进“+N”，悬停看全部，点开展开并能逐个移除，“收起”恢复一行
-- 不折叠：表单里要一眼看全已选项时，框随内容长高，标签换行排列
-- Enter 或逗号确认一个值，粘贴多行可一次拆开；输入法组字中的 Enter 只确认候选词，不生成标签
-- 空输入时按 Backspace 先选中最后一个标签，再按一次删除；它收在“+N”里时高亮“+N”并写出标签名
-- 删除时标签缩小淡出（150–180ms），后面的标签平移补位；焦点移到下一个标签的 ×，没有下一个就回输入框；减少动态效果时直接移除
-- 重复值不重复添加；不合法的值（邮箱格式错）标成危险色并说明原因
-- 可设上限（“最多 8 个”），到上限后未选的选项置灰并说明
+- 用组件库选择器的多选模式：Element Plus el-select multiple filterable（新建开 allow-create，上限 multiple-limit），Naive UI n-select multiple filterable（新建开 tag），Ant Design Vue a-select mode="multiple"（新建用 mode="tags"）
+- 折叠：筛选区、表格上方这类不能撑高的地方，Element Plus 开 collapse-tags + collapse-tags-tooltip（max-collapse-tags 定露出几个），Naive UI 用 max-tag-count="responsive"，Ant Design Vue 用 maxTagCount；框固定一行，放不下收成 +N，悬停看全部
+- 不折叠：表单里要一眼看全已选项时不开这些属性，框随内容长高、标签换行
+- 可搜索：打字过滤选项，Enter 勾选或取消，没有匹配时给“新建”
+- 上限：到上限后未选项置灰并说明（multiple-limit，或在选项上设 disabled）
+- 退格先选中最后一个标签、删除后的焦点，组件已处理，不要重写
+- 部门、类目这类有层级的用「树形控件」的多选，选整个部门只占一个标签
 
 ## 提示词
 
-把{文章编辑页的“标签”}做成可搜索的标签选择：已选标签排在框内（高 24px，左右 8px，带 × 删除按钮，aria-label“移除 {标签名}”）；框里打字即过滤下面的选项，方向键移动，Enter 勾选或取消，没有匹配时给“新建”，输入法组字中不添加；空输入时 Backspace 先选中再删除最后一个；删除后焦点移到下一个标签的 ×，没有就回输入框；最多 8 个，到上限时未选的选项置灰并说明。显示方式选{折叠 / 不折叠}：折叠时框固定 32px 一行，放不下时从后往前收进“+N”，悬停看全部，点开展开并能逐个移除，“收起”恢复一行；不折叠时框随内容长高，标签换行排列。窄屏宽度撑满、字号 16px。
+把{文章编辑页的“标签”}做成可搜索的多选：用组件库选择器的多选模式（Element Plus el-select multiple filterable allow-create；Naive UI n-select multiple filterable tag；Ant Design Vue a-select mode="tags"），不手写标签输入框。显示方式选{折叠 / 不折叠}：折叠时用 collapse-tags + collapse-tags-tooltip / max-tag-count="responsive" / maxTagCount，框固定一行，放不下收成 +N，悬停看全部；不折叠时不设这些属性，框随内容长高。打字过滤选项，没有匹配时给“新建”；最多 {8} 个，到上限后未选项置灰并说明；重复值不重复添加。
 
 ## 示例
 
