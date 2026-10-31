@@ -20,7 +20,7 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { buildDomains, parseDemoHtml, splitExtras } from '../src/adapter/index.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
