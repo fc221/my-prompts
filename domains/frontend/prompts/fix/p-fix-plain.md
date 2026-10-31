@@ -1,6 +1,7 @@
 ---
-zh: 页面太素
+zh: 提升页面层次感
 en: Too plain
+aka: 页面太素
 order: 10
 ---
 

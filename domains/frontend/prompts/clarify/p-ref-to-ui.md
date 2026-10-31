@@ -1,6 +1,7 @@
 ---
-zh: 参考图落成页面
+zh: 照参考图做页面
 en: From reference to UI
+aka: 参考图落成页面
 order: 60
 ---
 

@@ -1,6 +1,7 @@
 ---
-zh: 加载时页面跳动
+zh: 修复加载时的页面跳动
 en: Layout shift
+aka: 加载时页面跳动
 order: 120
 ---
 

@@ -2,7 +2,7 @@
 zh: 树形多选
 en: Tree multi-select
 aka: 树选择 部门选择 组织架构多选 可见范围选择
-order: 65
+order: 30
 ---
 
 ## 是什么

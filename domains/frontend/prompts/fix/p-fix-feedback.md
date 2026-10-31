@@ -1,6 +1,7 @@
 ---
-zh: 点了没反应
+zh: 补全操作反馈
 en: Missing feedback
+aka: 点了没反应
 order: 160
 ---
 

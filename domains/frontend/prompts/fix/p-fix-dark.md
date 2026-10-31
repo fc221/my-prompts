@@ -1,6 +1,7 @@
 ---
-zh: 暗色模式难看
+zh: 优化暗色模式
 en: Ugly dark mode
+aka: 暗色模式难看
 order: 110
 ---
 

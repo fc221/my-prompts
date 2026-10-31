@@ -1,6 +1,7 @@
 ---
-zh: 间距乱、看着挤
+zh: 整理页面间距
 en: Messy spacing
+aka: 间距乱 看着挤
 order: 30
 ---
 

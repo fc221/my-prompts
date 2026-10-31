@@ -1,6 +1,7 @@
 ---
-zh: 按钮没对齐
+zh: 修正控件对齐
 en: Misaligned controls
+aka: 按钮没对齐
 order: 40
 ---
 

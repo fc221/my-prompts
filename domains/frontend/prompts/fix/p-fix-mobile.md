@@ -1,6 +1,7 @@
 ---
-zh: 手机上排版乱
+zh: 修复手机端排版
 en: Broken on mobile
+aka: 手机上排版乱
 order: 90
 ---
 

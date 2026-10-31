@@ -1,6 +1,7 @@
 ---
-zh: 没有重点
+zh: 理清页面重点
 en: No focal point
+aka: 没有重点
 order: 140
 ---
 

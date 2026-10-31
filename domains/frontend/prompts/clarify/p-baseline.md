@@ -1,6 +1,7 @@
 ---
-zh: 通用底线
+zh: 前端质量底线
 en: Quality baseline
+aka: 通用底线
 order: 40
 ---
 

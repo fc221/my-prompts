@@ -1,6 +1,7 @@
 ---
-zh: 颜色很 AI 味
+zh: 去掉配色的 AI 味
 en: Generic AI colors
+aka: 颜色很AI味
 order: 20
 ---
 

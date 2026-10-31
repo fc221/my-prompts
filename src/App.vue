@@ -47,7 +47,10 @@ watch(
   () => state.navOpen,
   async (o) => {
     await nextTick();
-    if (o && !navDlg.value?.open) navDlg.value?.showModal();
+    if (o && !navDlg.value?.open) {
+      navDlg.value?.showModal();
+      navDlg.value?.focus(); // showModal 默认聚焦第一个分类，手机上会显示焦点框
+    }
     if (!o && navDlg.value?.open) navDlg.value.close();
   },
 );
@@ -123,6 +126,7 @@ watch(
 
     <dialog
       ref="navDlg"
+      tabindex="-1"
       class="navdrawer"
       aria-label="板块菜单"
       @close="state.navOpen = false"
@@ -288,6 +292,9 @@ watch(
   color: var(--text-primary);
   box-shadow: var(--shadow-3);
 }
+.navdrawer:focus {
+  outline: none;
+} /* 打开时焦点落在面板本身，不落到第一个分类上 */
 .navdrawer::backdrop {
   background: var(--scrim);
 }

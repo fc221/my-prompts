@@ -1,6 +1,7 @@
 ---
-zh: 换语言后排版坏了
+zh: 修复多语言排版
 en: Layout breaks after translation
+aka: 换语言后排版坏了
 order: 200
 ---
 

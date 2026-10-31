@@ -1,6 +1,7 @@
 ---
-zh: 表单太长
+zh: 优化长表单
 en: Form too long
+aka: 表单太长
 order: 50
 ---
 

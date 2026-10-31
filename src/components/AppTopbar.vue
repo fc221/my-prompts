@@ -37,14 +37,14 @@ defineEmits<{ picks: [] }>();
       ><span v-if="state.picks.length" class="badge">{{ state.picks.length }}</span>
     </button>
     <a
-      class="icon-btn gh"
+      class="btn gh"
       :href="REPO_URL"
       target="_blank"
       rel="noopener"
       aria-label="GitHub 仓库（新窗口打开）"
       title="GitHub 仓库"
     >
-      <AppIcon name="github" :size="20" />
+      <AppIcon name="github" :size="16" />
     </a>
   </header>
 </template>
@@ -112,6 +112,10 @@ defineEmits<{ picks: [] }>();
 }
 .picks {
   gap: 6px;
+}
+.gh {
+  width: var(--control-h);
+  padding: 0;
 }
 .badge {
   min-width: 20px;

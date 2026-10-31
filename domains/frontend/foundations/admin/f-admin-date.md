@@ -2,7 +2,7 @@
 zh: 时间范围快捷按钮
 en: Date range presets
 aka: 时间快捷 日期预设 近七天 上期对比 环比
-order: 65
+order: 20
 ---
 
 ## 是什么

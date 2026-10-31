@@ -1,6 +1,7 @@
 ---
-zh: 弹窗像白框盖上来
+zh: 优化弹窗质感
 en: Plain popup
+aka: 弹窗像白框盖上来
 order: 70
 ---
 

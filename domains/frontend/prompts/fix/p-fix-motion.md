@@ -1,6 +1,7 @@
 ---
-zh: 动效生硬廉价
+zh: 优化动效质感
 en: Cheap motion
+aka: 动效生硬廉价
 order: 60
 ---
 

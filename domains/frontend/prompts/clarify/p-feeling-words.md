@@ -1,6 +1,7 @@
 ---
-zh: 感觉词翻译
+zh: 把感觉词翻成设计规格
 en: Translate vibe words
+aka: 感觉词翻译
 order: 20
 ---
 

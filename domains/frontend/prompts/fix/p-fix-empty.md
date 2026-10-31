@@ -1,6 +1,7 @@
 ---
-zh: 空状态一片白
+zh: 补全空状态
 en: Blank empty states
+aka: 空状态一片白
 order: 130
 ---
 
