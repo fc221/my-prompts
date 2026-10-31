@@ -1,6 +1,7 @@
 ---
-zh: Dashboard 首页
+zh: 数据看板首页
 en: Dashboard home
+aka: Dashboard首页
 order: 50
 ---
 

@@ -1,7 +1,7 @@
 ---
-zh: 格式自查
+zh: 检查文档格式
 en: Format self-check before delivery
-aka: 格式检查 排版检查 交付前检查 打印前检查 Word检查清单 孤行控制 字体嵌入 导出PDF检查 统稿
+aka: 格式自查 格式检查 排版检查 交付前检查 打印前检查 Word检查清单 孤行控制 字体嵌入 导出PDF检查 统稿
 order: 30
 ---
 

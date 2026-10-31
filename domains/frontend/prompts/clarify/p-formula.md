@@ -1,6 +1,7 @@
 ---
-zh: 风格 + 布局 + 组件组合公式
+zh: 提示词填空公式
 en: Prompt formula
+aka: 风格+布局+组件组合公式
 order: 30
 ---
 

@@ -1,7 +1,7 @@
 ---
-zh: 后端通用底线
+zh: 后端质量底线
 en: Backend quality baseline
-aka: 后端底线 质量要求 检查清单
+aka: 后端通用底线 后端底线 质量要求 检查清单
 order: 30
 ---
 

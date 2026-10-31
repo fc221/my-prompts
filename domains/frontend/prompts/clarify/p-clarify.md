@@ -1,6 +1,7 @@
 ---
-zh: 大白话 → 结构化需求
+zh: 把大白话整理成需求
 en: Clarify first
+aka: 大白话→结构化需求
 order: 10
 ---
 

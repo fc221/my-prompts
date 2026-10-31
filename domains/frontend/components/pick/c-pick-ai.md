@@ -1,7 +1,7 @@
 ---
-zh: AI 功能放哪：六种形态
+zh: AI 功能的六种产品形态
 en: Six forms for AI features
-aka: AI 形态 AI 入口 AI 助手放哪 AI 选型 Copilot 侧边助手 划词工具条
+aka: AI功能放哪 六种形态 AI 形态 AI 入口 AI 助手放哪 AI 选型 Copilot 侧边助手 划词工具条
 order: 90
 ---
 

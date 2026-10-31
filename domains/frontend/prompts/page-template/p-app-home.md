@@ -1,6 +1,7 @@
 ---
-zh: App 首页（有记忆点）
+zh: App 首页
 en: Memorable app home
+aka: App首页（有记忆点）
 order: 100
 ---
 
