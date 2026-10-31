@@ -2,6 +2,7 @@
 zh: 日历视图
 en: Calendar view
 order: 70
+of: l-task-views
 ---
 
 ## 是什么

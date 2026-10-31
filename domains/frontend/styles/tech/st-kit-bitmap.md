@@ -1,7 +1,7 @@
 ---
 zh: 位图风后台
 en: Bitmap dashboard kit
-aka: 点阵后台 点阵数字 打印机风 dot matrix bitmap dashboard
+aka: 点阵后台 点阵数字 打印机风 dot matrix bitmap dashboard 点阵风
 order: 30
 ---
 

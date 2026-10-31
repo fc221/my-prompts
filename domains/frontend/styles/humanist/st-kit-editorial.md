@@ -3,6 +3,8 @@ zh: 杂志风后台
 en: Editorial dashboard kit
 aka: 杂志后台 报刊后台 经营月刊 月报后台 editorial dashboard
 order: 10
+of: st-editorial
+tab: 后台
 ---
 
 ## 是什么

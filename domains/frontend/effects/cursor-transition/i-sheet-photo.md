@@ -2,6 +2,8 @@
 zh: 大图 + 贴边抽屉
 en: Image with docked drawer
 order: 40
+of: shared-element
+tab: 大图抽屉
 ---
 
 ## 是什么

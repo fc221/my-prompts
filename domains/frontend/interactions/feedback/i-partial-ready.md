@@ -2,6 +2,7 @@
 zh: 先好的先能用
 en: Use results as they land
 order: 90
+tab: 先好先用
 ---
 
 ## 是什么

@@ -3,6 +3,8 @@ zh: 液态玻璃后台
 en: Liquid glass dashboard kit
 aka: 玻璃后台 暖色玻璃 毛玻璃仪表盘 glass dashboard
 order: 50
+of: st-glass
+tab: 后台
 ---
 
 ## 是什么

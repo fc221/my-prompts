@@ -2,6 +2,8 @@
 zh: 框住几张卡一起挪
 en: Box-select and group
 order: 20
+of: i-marquee-select
+tab: 框住一起挪
 ---
 
 ## 是什么

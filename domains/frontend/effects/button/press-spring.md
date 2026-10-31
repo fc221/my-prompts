@@ -3,6 +3,7 @@ zh: 按压回弹
 en: Press spring
 aka: 点击反馈 按下缩放 按钮回弹
 order: 60
+tab: 回弹
 ---
 
 ## 是什么

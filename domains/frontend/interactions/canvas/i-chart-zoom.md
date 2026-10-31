@@ -2,6 +2,8 @@
 zh: 滚轮缩放时间轴
 en: Zoomable time axis
 order: 40
+of: i-canvas-zoom
+tab: 时间轴
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 功能区交替左右
 en: Alternating features
 order: 40
+of: l-features
 ---
 
 ## 是什么

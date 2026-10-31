@@ -2,6 +2,7 @@
 zh: 滚动渐显
 en: Scroll reveal
 order: 20
+tab: 滚动渐显
 ---
 
 ## 是什么

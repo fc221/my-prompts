@@ -2,6 +2,7 @@
 zh: 按住确认
 en: Hold to confirm
 order: 110
+tab: 按住
 ---
 
 ## 是什么

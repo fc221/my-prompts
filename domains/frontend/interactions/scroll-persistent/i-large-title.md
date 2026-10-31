@@ -2,6 +2,7 @@
 zh: 大标题收成导航栏
 en: Collapsing large title
 order: 10
+tab: 大标题
 ---
 
 ## 是什么

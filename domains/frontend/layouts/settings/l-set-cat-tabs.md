@@ -2,6 +2,7 @@
 zh: 分类卡片 + 页内 Tab
 en: Category cards with tabs
 order: 30
+of: l-settings-page
 ---
 
 ## 是什么

@@ -2,6 +2,8 @@
 zh: 合并热区，不留死缝
 en: Merged tap area
 order: 10
+of: f-a11y-target
+tab: 合并热区
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 粗标题 + 满宽图卡流
 en: Bold heading + image feed
 order: 10
+of: l-app-home
 ---
 
 ## 是什么

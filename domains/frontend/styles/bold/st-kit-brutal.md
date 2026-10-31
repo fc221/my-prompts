@@ -3,6 +3,8 @@ zh: 粗野风后台
 en: Brutalist dashboard kit
 aka: 新粗野后台 硬阴影后台 撞色后台 贴纸后台 neo-brutalist dashboard
 order: 40
+of: st-brutalism
+tab: 后台
 ---
 
 ## 是什么

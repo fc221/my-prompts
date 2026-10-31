@@ -2,6 +2,7 @@
 zh: 主区 + 侧栏
 en: Main + sticky aside
 order: 30
+of: l-dash-arrange
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 放大镜透镜
 en: Magnifier lens
 order: 60
+tab: 放大镜
 ---
 
 ## 是什么

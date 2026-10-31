@@ -2,6 +2,7 @@
 zh: 统计面板同步滚动
 en: Synced stats panel
 order: 40
+tab: 统计面板
 ---
 
 ## 是什么

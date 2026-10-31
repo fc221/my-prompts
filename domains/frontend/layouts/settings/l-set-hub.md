@@ -2,6 +2,7 @@
 zh: 设置首页（入口卡片）
 en: Settings hub
 order: 50
+of: l-settings-page
 ---
 
 ## 是什么

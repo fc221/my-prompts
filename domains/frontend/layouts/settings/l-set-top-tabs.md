@@ -2,6 +2,7 @@
 zh: 顶部 Tab 设置页
 en: Tabbed settings page
 order: 40
+of: l-settings-page
 ---
 
 ## 是什么

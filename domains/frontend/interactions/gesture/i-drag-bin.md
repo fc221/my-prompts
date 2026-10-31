@@ -3,6 +3,8 @@ zh: 拖到回收区
 en: Drag to trash zone
 aka: 拖拽删除 拖到垃圾桶 回收站 删除区
 order: 30
+of: i-drag-sort
+tab: 回收区
 ---
 
 ## 是什么

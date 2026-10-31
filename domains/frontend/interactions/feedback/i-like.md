@@ -2,6 +2,8 @@
 zh: 点赞收藏反馈
 en: Like & save feedback
 order: 10
+of: i-optimistic
+tab: 点赞
 ---
 
 ## 是什么

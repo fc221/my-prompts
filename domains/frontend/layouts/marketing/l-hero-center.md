@@ -2,6 +2,7 @@
 zh: 首屏居中大标题
 en: Centered hero
 order: 20
+of: l-hero
 ---
 
 ## 是什么

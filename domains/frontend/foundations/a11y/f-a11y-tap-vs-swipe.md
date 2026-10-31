@@ -2,6 +2,8 @@
 zh: 点击与滑动让位
 en: Tap vs swipe zones
 order: 20
+of: f-a11y-target
+tab: 点击与滑动
 ---
 
 ## 是什么

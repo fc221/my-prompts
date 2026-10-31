@@ -2,6 +2,7 @@
 zh: 会话列表 + 对话
 en: Sessions + chat
 order: 20
+of: l-ai-page
 ---
 
 ## 是什么

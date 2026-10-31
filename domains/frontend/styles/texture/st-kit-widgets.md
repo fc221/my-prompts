@@ -3,6 +3,8 @@ zh: 玻璃小组件组
 en: Glass widget set
 aka: 小组件 桌面组件 天气组件 专注计时 氛围场景 widgets
 order: 70
+of: st-glass
+tab: 小组件
 ---
 
 ## 是什么

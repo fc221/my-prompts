@@ -2,6 +2,8 @@
 zh: 标题逐行浮现
 en: Staggered text reveal
 order: 30
+of: scroll-reveal
+tab: 标题逐行
 ---
 
 ## 是什么

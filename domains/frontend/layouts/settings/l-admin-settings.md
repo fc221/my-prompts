@@ -2,6 +2,7 @@
 zh: 分类导航 + 分组卡片
 en: Settings with category nav
 order: 10
+of: l-settings-page
 ---
 
 ## 是什么

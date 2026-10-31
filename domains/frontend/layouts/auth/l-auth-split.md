@@ -2,6 +2,7 @@
 zh: 左图右表单登录
 en: Split login
 order: 30
+of: l-auth
 ---
 
 ## 是什么

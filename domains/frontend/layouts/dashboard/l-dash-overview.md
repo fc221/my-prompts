@@ -2,6 +2,7 @@
 zh: 后台首页概览
 en: Admin overview
 order: 80
+of: l-dash-arrange
 ---
 
 ## 是什么

@@ -2,6 +2,8 @@
 zh: 只补跑失败的那几项
 en: Retry only failures
 order: 100
+of: i-partial-ready
+tab: 只重试失败
 ---
 
 ## 是什么

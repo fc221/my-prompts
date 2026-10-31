@@ -2,6 +2,8 @@
 zh: 滑到头才执行
 en: Slide to commit
 order: 120
+of: i-hold-confirm
+tab: 滑到头
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 居中卡片登录
 en: Centered card
 order: 10
+of: l-auth
 ---
 
 ## 是什么

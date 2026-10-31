@@ -2,6 +2,7 @@
 zh: 触控目标
 en: Touch targets
 order: 30
+tab: 尺寸
 ---
 
 ## 是什么

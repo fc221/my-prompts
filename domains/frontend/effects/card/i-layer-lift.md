@@ -2,6 +2,8 @@
 zh: 立体分层卡片
 en: Depth layered card
 order: 30
+of: tilt
+tab: 分层
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 左说明右卡片
 en: Described settings sections
 order: 20
+of: l-settings-page
 ---
 
 ## 是什么

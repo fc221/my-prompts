@@ -2,6 +2,7 @@
 zh: 空白处拉框多选
 en: Rubber-band selection
 order: 130
+tab: 拉框
 ---
 
 ## 是什么

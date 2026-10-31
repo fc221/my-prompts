@@ -2,6 +2,7 @@
 zh: 编辑杂志风
 en: Editorial
 order: 10
+tab: 基础
 ---
 
 ## 是什么

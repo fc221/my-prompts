@@ -2,6 +2,7 @@
 zh: 主次布局
 en: Primary + secondary
 order: 10
+of: l-dash-arrange
 ---
 
 ## 是什么

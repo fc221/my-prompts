@@ -2,6 +2,7 @@
 zh: 乐观更新
 en: Optimistic update
 order: 40
+tab: 点下去就变
 ---
 
 ## 是什么

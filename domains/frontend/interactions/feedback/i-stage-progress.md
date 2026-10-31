@@ -2,6 +2,7 @@
 zh: 按实际步骤报进度
 en: Honest stage progress
 order: 70
+tab: 按步骤
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 共享元素过渡
 en: Shared element transition
 order: 30
+tab: 共享元素
 ---
 
 ## 是什么

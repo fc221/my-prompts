@@ -2,6 +2,7 @@
 zh: 侧栏 + 顶栏
 en: Sidebar + top bar
 order: 10
+of: l-admin-nav
 ---
 
 ## 是什么

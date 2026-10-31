@@ -2,6 +2,7 @@
 zh: 三列卡片功能区
 en: Three-column cards
 order: 60
+of: l-features
 ---
 
 ## 是什么

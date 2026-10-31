@@ -2,6 +2,7 @@
 zh: 黑白单主角
 en: Monochrome with one hero
 order: 30
+of: l-app-home
 ---
 
 ## 是什么

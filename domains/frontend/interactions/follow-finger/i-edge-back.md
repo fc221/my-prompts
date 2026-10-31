@@ -2,6 +2,8 @@
 zh: 从屏幕边拖回上一页
 en: Edge swipe back
 order: 10
+of: i-gesture-transition
+tab: 边缘返回
 ---
 
 ## 是什么

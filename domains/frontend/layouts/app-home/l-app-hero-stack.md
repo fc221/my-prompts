@@ -2,6 +2,7 @@
 zh: 满版头图 + 浮起信息卡
 en: Full-bleed header + floating card
 order: 20
+of: l-app-home
 ---
 
 ## 是什么

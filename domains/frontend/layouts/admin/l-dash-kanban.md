@@ -2,6 +2,7 @@
 zh: 看板分列
 en: Kanban columns
 order: 50
+of: l-task-views
 ---
 
 ## 是什么

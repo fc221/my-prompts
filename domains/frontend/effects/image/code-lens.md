@@ -3,6 +3,8 @@ zh: 代码透视镜
 en: Code lens reveal
 aka: X光镜头 线框透视 界面透视 镜头揭示 x-ray
 order: 70
+of: lens
+tab: 代码透视
 ---
 
 ## 是什么

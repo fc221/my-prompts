@@ -2,6 +2,7 @@
 zh: 通栏横带
 en: Full-width bands
 order: 20
+of: l-dash-arrange
 ---
 
 ## 是什么

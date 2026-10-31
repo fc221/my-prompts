@@ -2,6 +2,8 @@
 zh: 指标区收成一行
 en: Collapsing KPI strip
 order: 40
+of: i-large-title
+tab: 指标区
 ---
 
 ## 是什么

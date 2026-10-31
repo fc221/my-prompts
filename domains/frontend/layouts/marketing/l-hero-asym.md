@@ -2,6 +2,7 @@
 zh: 首屏不对称 / 满版图
 en: Asymmetric / full-bleed hero
 order: 30
+of: l-hero
 ---
 
 ## 是什么

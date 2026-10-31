@@ -2,6 +2,7 @@
 zh: 3D 倾斜卡片
 en: 3D tilt card
 order: 10
+tab: 倾斜
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 混合导航
 en: Top + side navigation
 order: 30
+of: l-admin-nav
 ---
 
 ## 是什么

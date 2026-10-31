@@ -2,6 +2,8 @@
 zh: 拖到另一列
 en: Cross-column drag
 order: 20
+of: i-drag-sort
+tab: 跨列
 ---
 
 ## 是什么

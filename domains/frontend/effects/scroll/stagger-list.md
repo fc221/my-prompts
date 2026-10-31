@@ -2,6 +2,8 @@
 zh: 列表依次进入
 en: Staggered list enter
 order: 50
+of: scroll-reveal
+tab: 列表依次
 ---
 
 ## 是什么

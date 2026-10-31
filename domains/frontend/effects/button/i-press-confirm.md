@@ -2,6 +2,8 @@
 zh: 按下态与触感确认
 en: Press acknowledgement
 order: 30
+of: press-spring
+tab: 触感确认
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 围绕指针缩放的画布
 en: Cursor-anchored zoom
 order: 10
+tab: 画布
 ---
 
 ## 是什么

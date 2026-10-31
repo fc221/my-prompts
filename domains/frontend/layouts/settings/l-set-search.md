@@ -2,6 +2,7 @@
 zh: 可搜索的设置列表
 en: Searchable settings list
 order: 60
+of: l-settings-page
 ---
 
 ## 是什么

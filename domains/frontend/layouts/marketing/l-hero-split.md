@@ -2,6 +2,7 @@
 zh: 首屏左文右图
 en: Split hero
 order: 10
+of: l-hero
 ---
 
 ## 是什么

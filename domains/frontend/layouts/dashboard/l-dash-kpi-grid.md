@@ -2,6 +2,7 @@
 zh: KPI 横带 + 图表网格
 en: KPI strip + chart grid
 order: 90
+of: l-dash-arrange
 ---
 
 ## 是什么

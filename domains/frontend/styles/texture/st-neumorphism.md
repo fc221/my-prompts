@@ -2,6 +2,7 @@
 zh: 新拟态（软浮雕）
 en: Neumorphism
 order: 30
+tab: 基础
 ---
 
 ## 是什么

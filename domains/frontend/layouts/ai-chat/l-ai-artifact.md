@@ -2,6 +2,7 @@
 zh: 对话 + 产物分栏
 en: Chat + artifact panel
 order: 30
+of: l-ai-page
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 顶栏导航
 en: Top navigation
 order: 20
+of: l-admin-nav
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 时间轴泳道
 en: Timeline swimlanes
 order: 60
+of: l-task-views
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 功能区 Bento 网格
 en: Bento grid
 order: 50
+of: l-features
 ---
 
 ## 是什么

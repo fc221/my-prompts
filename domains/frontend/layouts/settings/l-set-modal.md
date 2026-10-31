@@ -2,6 +2,7 @@
 zh: 弹窗式偏好设置
 en: Preferences dialog
 order: 70
+of: l-settings-page
 ---
 
 ## 是什么

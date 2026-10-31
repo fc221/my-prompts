@@ -2,6 +2,7 @@
 zh: 拖拽排序
 en: Drag to reorder
 order: 10
+tab: 排序
 ---
 
 ## 是什么

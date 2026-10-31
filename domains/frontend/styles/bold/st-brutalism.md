@@ -2,6 +2,7 @@
 zh: 粗野主义
 en: Neo-brutalism
 order: 10
+tab: 基础
 ---
 
 ## 是什么

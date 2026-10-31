@@ -2,6 +2,7 @@
 zh: 全幅画布
 en: Full canvas + floating panels
 order: 40
+tab: 浮动面板
 ---
 
 ## 是什么

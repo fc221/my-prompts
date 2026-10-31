@@ -2,6 +2,7 @@
 zh: 界面设置抽屉
 en: Appearance settings drawer
 order: 80
+of: l-settings-page
 ---
 
 ## 是什么

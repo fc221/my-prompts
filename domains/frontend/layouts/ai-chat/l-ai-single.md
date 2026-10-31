@@ -2,6 +2,7 @@
 zh: 单栏对话
 en: Single-column chat
 order: 10
+of: l-ai-page
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 海报标题 + 半圆选择盘
 en: Poster heading + arc picker
 order: 50
+of: l-app-home
 ---
 
 ## 是什么

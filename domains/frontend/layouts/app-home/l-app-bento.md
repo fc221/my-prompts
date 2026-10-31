@@ -2,6 +2,7 @@
 zh: 色块打卡墙
 en: Color tile dashboard
 order: 40
+of: l-app-home
 ---
 
 ## 是什么

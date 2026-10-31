@@ -2,6 +2,7 @@
 zh: 换视图不丢勾选
 en: View switch keeps state
 order: 70
+tab: 切视图
 ---
 
 ## 是什么

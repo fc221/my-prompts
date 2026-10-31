@@ -2,6 +2,8 @@
 zh: 会拉伸的选中块
 en: Stretchy indicator
 order: 30
+of: nav-pill
+tab: 拉伸
 ---
 
 ## 是什么

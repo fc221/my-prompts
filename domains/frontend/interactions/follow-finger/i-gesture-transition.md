@@ -2,6 +2,7 @@
 zh: 手指推着页面切换
 en: Scrubbed transition
 order: 40
+tab: 推着切换
 ---
 
 ## 是什么

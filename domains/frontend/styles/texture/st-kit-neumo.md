@@ -3,6 +3,8 @@ zh: 新拟物控制台
 en: Neumorphic console kit
 aka: 软浮雕后台 拟物控制台 硬件面板 旋钮面板 neumorphic console
 order: 60
+of: st-neumorphism
+tab: 控制台
 ---
 
 ## 是什么

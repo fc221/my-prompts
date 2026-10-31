@@ -2,6 +2,7 @@
 zh: 竖卡叠放翻看
 en: Upright card deck
 order: 60
+of: l-app-home
 ---
 
 ## 是什么

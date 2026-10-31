@@ -2,6 +2,7 @@
 zh: 打字机文字
 en: Typewriter text
 order: 10
+tab: 打字机
 ---
 
 ## 是什么

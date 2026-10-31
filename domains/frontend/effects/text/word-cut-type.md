@@ -3,6 +3,8 @@ zh: 打字切词标题
 en: Word swap typing
 aka: 替换打字 标题换词 单词轮换 打字换词
 order: 20
+of: typewriter
+tab: 切词
 ---
 
 ## 是什么

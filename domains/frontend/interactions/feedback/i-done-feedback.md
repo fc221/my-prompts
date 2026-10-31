@@ -2,6 +2,8 @@
 zh: 完成反馈与勾选联动
 en: Completion feedback
 order: 20
+of: i-optimistic
+tab: 勾选联动
 ---
 
 ## 是什么

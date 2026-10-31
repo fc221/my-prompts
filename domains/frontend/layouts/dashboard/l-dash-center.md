@@ -2,6 +2,8 @@
 zh: 中轴布局
 en: Center-axis layout
 order: 45
+of: l-dash-canvas
+tab: 中轴
 ---
 
 ## 是什么

@@ -2,6 +2,7 @@
 zh: 卡片内分栏登录
 en: Split card login
 order: 20
+of: l-auth
 ---
 
 ## 是什么
