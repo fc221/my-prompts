@@ -51,4 +51,8 @@ tsconfig.domains.json      内容里 .ts 的类型检查（示意图结构严格
 
 ## 参与贡献
 
-加条目、分类、板块、领域的写法，示例和提示词的约定，以及提交前的自测命令，见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+加条目、分类、板块、领域的写法，示例和提示词的约定，提交前的自测命令，以及分支和 PR 流程，见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+## 许可
+
+[MIT](LICENSE)
