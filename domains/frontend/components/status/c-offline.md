@@ -18,15 +18,17 @@ order: 80
 
 ## 要点
 
-- 断网时页面顶部常驻提示“网络已断开，修改会暂存在本机，恢复后自动同步”，不自动消失
-- 已加载的内容可以继续看；未提交的输入保存在本地；依赖网络的按钮置灰并说明原因
-- 恢复后提示“已恢复连接，3 处修改已同步”，约 3 秒消失；同步失败逐条说明
-- 请求超过 3 秒提示“网络较慢，正在重试…”，自动重试的间隔逐次加长
-- 监听 online / offline 事件，但以真实请求的结果为准；状态变化用 role="status" 播报
+- 用组件库的警示条、轻提示和通知拼，行为按下面的要求：断网横幅用 Element Plus el-alert type="warning" :closable="false" show-icon、Naive UI n-alert type="warning" :closable="false"、Ant Design Vue a-alert banner type="warning"；恢复提示用 ElMessage / useMessage() / message；同步失败清单用 ElNotification / useNotification() / notification
+- 横幅在页面顶部常驻，写“网络已断开，修改会暂存在本机，恢复后自动同步”，不可关闭、不自动消失，网络恢复才撤掉
+- 已加载的内容照常看；未提交的输入存本地，见「自动保存与保存状态」；依赖网络的按钮 disabled 并用「文字提示」说明原因
+- 恢复后用轻提示“已恢复连接，3 处修改已同步”，约 3 秒消失；注意单位：Ant Design Vue 的 duration 是秒，Element Plus、Naive UI 是毫秒
+- 同步失败不用轻提示，用通知逐条列出并设为不自动关闭（Element Plus duration: 0，Naive UI 不传 duration，Ant Design Vue duration: null），每条带“重试”
+- 请求超过 3 秒出一条可手动关闭、不自动消失的提示“网络较慢，正在重试…”，自动重试间隔逐次加长，成功后把它关掉
+- 监听 online / offline 事件只用来切横幅，以真实请求的结果为准：连着 Wi-Fi 没网也是断网
 
 ## 提示词
 
-给{编辑器 / 表单 / H5 页面}加「离线与弱网」处理：断网时顶部出现常驻提示“网络已断开，修改会暂存在本机，恢复后自动同步”；已加载内容可继续查看，输入暂存本地，依赖网络的按钮置灰并说明原因；恢复后提示“已恢复连接，N 处修改已同步”，3 秒消失，同步失败逐条列出；请求超过 3 秒提示“网络较慢，正在重试…”，自动重试间隔逐次加长；状态变化用 role="status" 播报；不清空页面，不只显示转圈。
+给{编辑器 / 表单 / H5 页面}加离线与弱网处理，用项目组件库的现成件拼，不手写提示条：断网时顶部用警示条（Element Plus el-alert type="warning" :closable="false" show-icon；Naive UI n-alert type="warning" :closable="false"；Ant Design Vue a-alert banner type="warning"）常驻“网络已断开，修改会暂存在本机，恢复后自动同步”，恢复才撤掉；已加载内容可继续查看，输入暂存本地，依赖网络的按钮 disabled 并用文字提示说明原因；恢复后用轻提示（ElMessage / useMessage / message）显示“已恢复连接，N 处修改已同步”，3 秒消失（Ant Design Vue 的 duration 单位是秒）；同步失败用通知（ElNotification / useNotification / notification）逐条列出，不自动关闭，每条带“重试”；请求超过 3 秒出“网络较慢，正在重试…”，可手动关、成功后自动关，自动重试间隔逐次加长；online / offline 事件只切横幅，以真实请求结果为准；不清空页面，不只显示转圈。
 
 ## 示例
 
