@@ -1,4 +1,4 @@
 ---
-name: 怎么选
-order: 100
+name: 选型
+order: 5
 ---

@@ -2120,7 +2120,7 @@ i {
 .inp,
 .inp-s {
   display: block;
-  height: 36px;
+  height: 32px;
   padding: 0 32px 0 12px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
@@ -2192,7 +2192,7 @@ i {
   min-width: 0;
 }
 .k-input {
-  gap: 6px;
+  gap: 8px;
 }
 .k-input label,
 .frow label {
@@ -2233,14 +2233,25 @@ i {
 .k-form:has(.handle) {
   border-radius: 18px 18px 0 0;
   box-shadow: 0 -10px 30px -12px rgba(15, 23, 42, 0.25);
-  padding-top: 10px;
+  padding-top: 12px;
+}
+/* 手机画布：控件 40px、表单项间距 20px */
+@container (max-width: 600px) {
+  .sel,
+  .inp,
+  .inp-s {
+    height: 40px;
+  }
+  .k-form {
+    gap: 20px;
+  }
 }
 .form-t {
   font-size: 16px;
 }
 .frow {
   display: grid;
-  gap: 6px;
+  gap: 8px;
 }
 .frow label i {
   color: var(--dan);

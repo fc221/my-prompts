@@ -3,7 +3,7 @@
 // 只占一行、且全是“条”类区域（顶栏、标签栏、筛选条…）的行改成 auto，按真实高度显示，不按百分比拉伸。
 // 所在行全是 auto 的区域按内容高度画（fit），这样数据里用 auto 行 + 末尾 1fr 就能让内容紧凑排列，不被百分比撑出空白。
 // 单行嵌套里全是条类区域、并且有 Logo / 导航 / 账号 / 筛选项时，画成一整条白色横栏（顶栏、筛选区），导航横排。
-// drawer：盖在页面上的左侧抽屉或底部面板，后面加遮罩；root 时贴到画布边缘（盖住状态栏和边距）。
+// drawer：盖在页面上的左侧抽屉或底部面板，后面加遮罩；root 时贴到画布边缘（盖住状态栏和边距）。底部面板放单个区块时高度贴内容，size 只是上限。
 // annotate：给每个区域画虚线框和名称（主体区域用强调色），标注的字号按缩放比例反向放大，缩略图里也看得清
 import { computed } from 'vue';
 import type { MockKind, Wire, WireBox } from '../types';
@@ -130,7 +130,13 @@ const dr = computed(() => {
           dr.side,
           { bleed: root, nest: dr.b.inner, dark: dr.b.dark, ann: annotate && dr.b.label, acc: dr.b.acc },
         ]"
-        :style="dr.side === 'bottom' ? { height: dr.size } : { width: dr.size, height: dr.height }"
+        :style="
+          dr.side === 'bottom'
+            ? dr.b.inner
+              ? { height: dr.size }
+              : { maxHeight: dr.size }
+            : { width: dr.size, height: dr.height }
+        "
       >
         <WireGrid v-if="dr.b.inner" :w="dr.b.inner" :seed="dr.seed" :annotate="annotate" :dark="dr.b.dark" />
         <MockBlock v-else :kind="dr.kind" :label="dr.b.label" :text="dr.b.text" :dark="dr.b.dark" :seed="dr.seed" />
@@ -275,8 +281,17 @@ const dr = computed(() => {
   padding-right: 4px;
 }
 .drawer.nest > .wg {
-  padding: 12px;
-  gap: 12px;
+  padding: 16px;
+  gap: 16px;
+}
+/* 底部面板放单个区块时高度贴内容：区块默认是尺寸型容器，高度不能由内容撑起，这里改成只按宽度查询 */
+.drawer.bottom:not(.nest) > :deep(.blk) {
+  container-type: inline-size;
+  flex: none;
+}
+/* 底部面板里的表单：把手上下 12px，两侧 16px，底部多留安全区 */
+.drawer.bottom > :deep(.k-form) {
+  padding: 12px 16px 28px;
 }
 .drawer.center.nest > .wg,
 .drawer.right.nest > .wg {

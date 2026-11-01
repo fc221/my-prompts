@@ -48,6 +48,6 @@ export const wireMobile = {
   rows: 'auto 1fr',
   areas: ['bar', 'mid'],
   boxes: { bar: '工具栏', mid: { label: '工作区', acc: true, text: '十月经营复盘' } },
-  drawer: { side: 'bottom', size: '46%', box: '属性面板（底部面板）', open: true },
+  drawer: { side: 'bottom', size: '52%', box: '属性面板（底部面板）', open: true },
 };
 ```
