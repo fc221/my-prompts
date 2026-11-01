@@ -498,6 +498,12 @@ watch(mini, () => {
   pointer-events: none;
   box-shadow: var(--shadow-2);
 }
+@media (pointer: coarse) {
+  .group,
+  .item {
+    height: 44px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .fly:popover-open {
     animation: fade 160ms var(--ease);

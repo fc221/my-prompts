@@ -35,7 +35,7 @@ textarea {
   gap: 6px;
   height: 32px;
   padding: 0 16px;
-  border: 1px solid #c9ced6;
+  border: 1px solid #868c98;
   border-radius: 6px;
   background: #fff;
   cursor: pointer;
@@ -43,7 +43,7 @@ textarea {
 }
 .btn:hover {
   background: #f5f6f8;
-  border-color: #8a909c;
+  border-color: #5b616e;
 }
 .pri {
   background: #3b5bdb;

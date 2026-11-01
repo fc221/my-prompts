@@ -60,4 +60,20 @@ defineEmits<{ pick: [id: string] }>();
   border-color: var(--text-primary);
   color: var(--surface-raised);
 }
+/* 触屏：标签 32 高，上下留 12，热区用伪元素撑到 44 且不和上下行重叠 */
+@media (pointer: coarse) {
+  .cases {
+    gap: 12px 8px;
+  }
+  .cases button {
+    position: relative;
+    height: 32px;
+    padding: 0 12px;
+  }
+  .cases button::before {
+    content: '';
+    position: absolute;
+    inset: -6px 0;
+  }
+}
 </style>

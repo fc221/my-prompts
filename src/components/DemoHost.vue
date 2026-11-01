@@ -8,7 +8,7 @@ const host = ref<HTMLElement>();
 let io: IntersectionObserver | undefined;
 // 示例里的控制按钮（重播、模拟操作、切换状态）统一用 class="ctl"（只认 button，示例里别的元素同名不受影响），外观和知识库的次要按钮一致，不用浏览器默认样式；排在示例自己的样式之前，示例可以覆盖位置
 const CTL =
-  ':where(button).ctl{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 12px;border:1px solid #d0d5dd;border-radius:6px;background:#fff;color:#1f2937;font:500 13px/1 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;cursor:pointer;box-shadow:0 1px 2px rgba(16,24,40,.06);transition:background-color .1s,border-color .1s}:where(button).ctl:hover{background:#f5f6f8;border-color:#c4cad4}:where(button).ctl:active{background:#eceff3}:where(button).ctl:focus-visible{outline:2px solid #2563eb;outline-offset:2px}';
+  ':where(button).ctl{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 12px;border:1px solid #868c98;border-radius:6px;background:#fff;color:#1f2937;font:500 13px/1 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;cursor:pointer;box-shadow:0 1px 2px rgba(16,24,40,.06);transition:background-color .1s,border-color .1s}:where(button).ctl:hover{background:#f5f6f8;border-color:#c4cad4}:where(button).ctl:active{background:#eceff3}:where(button).ctl:focus-visible{outline:2px solid #2563eb;outline-offset:2px}';
 
 function mount() {
   const el = host.value;

@@ -226,6 +226,14 @@ watch(
   min-height: 24px;
   color: inherit;
 }
+@media (pointer: coarse) {
+  .site-foot nav {
+    gap: var(--space-2) var(--space-4);
+  }
+  .site-foot a {
+    min-height: 44px;
+  }
+}
 @media (hover: hover) {
   .site-foot a:hover {
     color: var(--text-primary);

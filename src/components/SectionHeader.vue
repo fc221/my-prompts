@@ -119,8 +119,8 @@ const withDemo = computed(() => inSec.value.filter((e) => e.demo || e.wire).leng
 }
 h1 {
   margin: 0;
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 28px;
+  line-height: 36px;
   letter-spacing: -0.01em;
 }
 .intro {
@@ -144,9 +144,9 @@ h1 {
 }
 .stats dd {
   margin: 0;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 600;
-  line-height: 28px;
+  line-height: 32px;
   font-variant-numeric: tabular-nums;
 }
 .tools {
@@ -241,6 +241,10 @@ h1 {
     height: 40px;
   }
   h1 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+  .stats dd {
     font-size: 20px;
     line-height: 28px;
   }

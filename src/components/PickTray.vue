@@ -192,6 +192,18 @@ li {
   width: 28px;
   height: 28px;
 }
+@media (pointer: coarse) {
+  li + li {
+    margin-top: var(--space-2);
+  }
+  .name {
+    min-height: 44px;
+  }
+  .rm {
+    width: 44px;
+    height: 44px;
+  }
+}
 .foot {
   display: flex;
   align-items: center;

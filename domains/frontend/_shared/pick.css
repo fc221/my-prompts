@@ -14,7 +14,7 @@
   flex: none;
   display: flex;
   gap: 4px;
-  padding: 8px 12px 0;
+  padding: 8px 12px 4px; /* 底部留出焦点环 */
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -39,7 +39,10 @@
   color: #1f2329;
   font-weight: 600;
 }
-.pk-tabs button:focus-visible,
+.pk-tabs button:focus-visible {
+  outline: 2px solid #3b5bdb;
+  outline-offset: 2px;
+}
 .pk-stage:focus-visible {
   outline: 2px solid #3b5bdb;
   outline-offset: -2px;
