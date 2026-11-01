@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   height: 20px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .cal-h b {
   flex: 1;
@@ -29,7 +29,7 @@
   height: 18px;
   padding: 0;
   border: 0;
-  border-radius: 3px;
+  border-radius: 6px;
   background: none;
   color: #5b616e;
   cursor: pointer;
@@ -41,12 +41,12 @@
 .cal-g {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  font-size: 11px;
+  font-size: 12px;
   text-align: center;
 }
 .cal-g > b {
   font-weight: 400;
-  line-height: 15px;
+  line-height: 16px;
   color: #5b616e;
 }
 .cal-g button {
@@ -66,7 +66,7 @@
   place-items: center;
   width: min(100%, calc(var(--cal-row) + 2px));
   height: 100%;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 .cal-g button:hover span {
   background: #eef0f3;
@@ -109,7 +109,7 @@
 .cal-g button:focus-visible {
   outline: 2px solid #3b5bdb;
   outline-offset: -2px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 /* 范围选择：框、快捷选项、日历和底栏 */
 .rp {
@@ -121,10 +121,12 @@
   padding: 8px;
   background: #fff;
   border: 1px solid #e3e6eb;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(31, 35, 41, 0.08);
+  border-radius: 12px;
+  box-shadow:
+    0 1px 2px rgba(31, 35, 41, 0.06),
+    0 4px 12px rgba(31, 35, 41, 0.08);
   font-size: 12px;
-  line-height: 18px;
+  line-height: 20px;
 }
 .rf {
   flex: none;
@@ -143,8 +145,8 @@
 .rf button {
   flex: 1;
   min-width: 0;
-  height: 22px;
-  padding: 0 6px;
+  height: 24px;
+  padding: 0 8px;
   border: 0;
   border-bottom: 2px solid transparent;
   background: none;
@@ -168,14 +170,14 @@
   flex: none;
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
   width: 62px;
 }
 .pre button {
-  height: 22px;
+  height: 24px;
   padding: 0 6px;
   border: 0;
-  border-radius: 4px;
+  border-radius: 6px;
   background: none;
   color: inherit;
   font-size: 12px;
@@ -197,7 +199,7 @@
 .rft {
   display: none;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   padding-top: 8px;
   border-top: 1px solid #e3e6eb;
 }
@@ -207,8 +209,8 @@
   color: #5b616e;
 }
 .rft button {
-  height: 26px;
-  padding: 0 10px;
+  height: 28px;
+  padding: 0 12px;
   border: 1px solid #c9ced6;
   border-radius: 6px;
   background: #fff;
@@ -237,8 +239,8 @@
   }
   .cal-h button,
   .cal-h i {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   }
   .cal-g {
     font-size: 12px;
@@ -248,16 +250,17 @@
   }
   .rp {
     gap: 8px;
-    padding: 10px;
+    padding: 12px;
   }
   .rf {
     height: 32px;
   }
   .pre {
-    width: 78px;
+    width: 80px;
   }
   .pre button {
     height: 28px;
+    padding: 0 8px;
   }
   .rft {
     display: flex;

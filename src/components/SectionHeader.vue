@@ -77,7 +77,7 @@ const withDemo = computed(() => inSec.value.filter((e) => e.demo || e.wire).leng
   gap: var(--space-5);
   padding: var(--space-6);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-card);
   background: var(--surface-raised);
   overflow: hidden;
   isolation: isolate;
@@ -93,7 +93,7 @@ const withDemo = computed(() => inSec.value.filter((e) => e.demo || e.wire).leng
 }
 .deco {
   position: absolute;
-  right: -18px;
+  right: -16px;
   top: -24px;
   color: color-mix(in srgb, var(--sec) 10%, transparent);
   z-index: -1;
@@ -109,7 +109,7 @@ const withDemo = computed(() => inSec.value.filter((e) => e.demo || e.wire).leng
   width: 48px;
   height: 48px;
   flex: none;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   background: var(--sec);
   color: #fff;
   box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--sec) 80%, transparent);
@@ -120,7 +120,7 @@ const withDemo = computed(() => inSec.value.filter((e) => e.demo || e.wire).leng
 h1 {
   margin: 0;
   font-size: 24px;
-  line-height: 1.3;
+  line-height: 32px;
   letter-spacing: -0.01em;
 }
 .intro {
@@ -145,8 +145,8 @@ h1 {
 .stats dd {
   margin: 0;
   font-size: 20px;
-  font-weight: 700;
-  line-height: 1.2;
+  font-weight: 600;
+  line-height: 28px;
   font-variant-numeric: tabular-nums;
 }
 .tools {
@@ -164,7 +164,7 @@ h1 {
   height: var(--control-h);
   padding: 0 12px;
   border: 1px solid var(--border-control);
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--surface-base);
   color: var(--text-secondary);
 }
@@ -188,7 +188,7 @@ h1 {
 .cats {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-2);
   min-width: 0;
 }
 .cats button {
@@ -202,8 +202,10 @@ h1 {
   background: var(--surface-raised);
   color: var(--text-secondary);
   font-size: 13px;
-  transition: all var(--dur) var(--ease);
-  transition-property: background-color, color, border-color;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
 }
 .cats button span {
   color: var(--text-secondary);
@@ -229,7 +231,6 @@ h1 {
   .hd {
     padding: var(--space-4);
     gap: var(--space-4);
-    border-radius: var(--radius-card);
   }
   .deco,
   .stats {
@@ -238,10 +239,10 @@ h1 {
   .tile {
     width: 40px;
     height: 40px;
-    border-radius: 12px;
   }
   h1 {
     font-size: 20px;
+    line-height: 28px;
   }
   .filter {
     flex: 1 1 100%;
@@ -260,5 +261,15 @@ h1 {
   .cats button {
     flex: none;
   }
+}
+@media (pointer: coarse) {
+  .filter {
+    position: relative;
+  }
+  .filter::before {
+    content: '';
+    position: absolute;
+    inset: -2px 0;
+  } /* 热区撑到 44px 高，视觉不变 */
 }
 </style>

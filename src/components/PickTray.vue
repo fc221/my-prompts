@@ -56,7 +56,7 @@ const items = computed(() => state.picks.map((id) => byId.get(id)).filter((e) =>
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-card);
   background: var(--surface-overlay);
-  box-shadow: var(--shadow-3);
+  box-shadow: var(--shadow-2);
   overflow: hidden;
 }
 .bar {
@@ -71,9 +71,9 @@ const items = computed(() => state.picks.map((id) => byId.get(id)).filter((e) =>
   gap: var(--space-3);
   flex: 1;
   min-width: 0;
-  padding: 6px 8px;
+  padding: 4px 8px;
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: none;
   text-align: left;
 }
@@ -88,21 +88,23 @@ const items = computed(() => state.picks.map((id) => byId.get(id)).filter((e) =>
   min-width: 28px;
   height: 28px;
   padding: 0 6px;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: var(--accent);
   color: var(--text-on-accent);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 14px;
+  font-variant-numeric: tabular-nums;
 }
 .tt {
   display: grid;
-  line-height: 1.3;
   font-size: 14px;
+  line-height: 22px;
   font-weight: 600;
 }
 .tt small {
   color: var(--text-secondary);
   font-size: 12px;
+  line-height: 20px;
   font-weight: 400;
 }
 .chev {
@@ -118,16 +120,16 @@ const items = computed(() => state.picks.map((id) => byId.get(id)).filter((e) =>
 }
 .goal {
   display: grid;
-  gap: 6px;
+  gap: var(--space-2);
   padding: var(--space-3) var(--space-3) var(--space-1);
   font-size: 12px;
   color: var(--text-secondary);
 }
 .goal input {
-  height: 36px;
-  padding: 0 10px;
-  border: 1px solid var(--border-strong, var(--border-subtle));
-  border-radius: 8px;
+  height: var(--control-h);
+  padding: 0 12px;
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-control);
   background: var(--surface-page);
   color: var(--text-primary);
   font: inherit;
@@ -137,10 +139,6 @@ const items = computed(() => state.picks.map((id) => byId.get(id)).filter((e) =>
   .goal input {
     font-size: 14px;
   }
-}
-.goal input:focus-visible {
-  outline: 2px solid var(--focus-ring, var(--accent));
-  outline-offset: 1px;
 }
 ul {
   list-style: none;
@@ -154,7 +152,7 @@ li {
   align-items: center;
   gap: var(--space-2);
   padding: 2px 4px 2px 8px;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
 }
 @media (hover: hover) {
   li:hover {
@@ -171,7 +169,7 @@ li {
 .name {
   flex: 1;
   min-width: 0;
-  padding: 6px 0;
+  padding: 8px 0;
   border: 0;
   background: none;
   font-size: 14px;

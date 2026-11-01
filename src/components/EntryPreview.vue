@@ -52,12 +52,12 @@ const snippet = computed(() => props.entry.prompt.replace(/\s+/g, ' ').slice(0, 
 .paper {
   height: 100%;
   padding: 12px 16px;
-  border-radius: 10px 10px 0 0;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
   background: var(--surface-raised);
   box-shadow: var(--shadow-1);
   display: grid;
   align-content: start;
-  gap: 6px;
+  gap: 4px;
   overflow: hidden;
 }
 .kicker {
@@ -70,7 +70,7 @@ const snippet = computed(() => props.entry.prompt.replace(/\s+/g, ' ').slice(0, 
   margin: 0;
   color: var(--text-primary);
   font-size: 13px;
-  line-height: 1.7;
+  line-height: 20px;
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
@@ -86,7 +86,7 @@ const snippet = computed(() => props.entry.prompt.replace(/\s+/g, ' ').slice(0, 
   align-items: flex-start;
   color: var(--text-primary);
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 20px;
 }
 .ck {
   display: -webkit-box;
@@ -100,9 +100,9 @@ const snippet = computed(() => props.entry.prompt.replace(/\s+/g, ' ').slice(0, 
 }
 .dot {
   display: inline-block;
-  width: 5px;
-  height: 5px;
-  margin: 0 10px 0 3px;
+  width: 6px;
+  height: 6px;
+  margin: 0 8px 0 2px;
   vertical-align: 3px;
   border-radius: 50%;
   background: var(--sec, var(--accent));

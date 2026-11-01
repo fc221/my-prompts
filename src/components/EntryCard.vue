@@ -81,7 +81,7 @@ const color = computed(() => sectionOf(props.entry).color ?? 'var(--accent)');
 @media (hover: hover) {
   .card:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-2);
+    box-shadow: var(--shadow-1);
     border-color: color-mix(in srgb, var(--sec) 45%, var(--border-subtle));
   }
 }
@@ -91,7 +91,7 @@ const color = computed(() => sectionOf(props.entry).color ?? 'var(--accent)');
   background: var(--surface-muted);
 }
 .demo.text {
-  height: 150px;
+  height: 152px;
 }
 .body {
   display: flex;
@@ -111,12 +111,11 @@ h2 {
   flex: 1;
   min-width: 0;
   font-size: 16px;
-  line-height: 1.4;
+  line-height: 24px;
 }
 .title {
   min-width: 24px;
-  min-height: 26px;
-  padding: 2px 0;
+  padding: 2px 0; /* 行高 24 加上下各 2px，标题热区 28px */
   border: 0;
   background: none;
   font: inherit;
@@ -142,7 +141,7 @@ h2 {
 .en {
   margin: -4px 0 0;
   color: var(--text-secondary);
-  font: 12px/1.4 var(--mono);
+  font: 12px/20px var(--mono);
 }
 .look {
   margin: 0;
@@ -160,5 +159,10 @@ h2 {
   margin-right: auto;
   padding: 0 8px;
   margin-left: -8px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .card:hover {
+    transform: none;
+  }
 }
 </style>

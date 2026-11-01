@@ -35,8 +35,10 @@ defineEmits<{ pick: [id: string] }>();
   color: var(--text-secondary);
   font-size: 12px;
   white-space: nowrap;
-  transition: all var(--dur) var(--ease);
-  transition-property: background-color, color, border-color;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
 }
 .cases.big {
   gap: 6px;

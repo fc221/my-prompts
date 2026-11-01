@@ -164,10 +164,9 @@ watch(
   inset: 0 auto 0 0;
   width: 100%;
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-card);
   background: var(--surface-raised);
-  box-shadow: var(--shadow-1);
-}
+} /* 0 级面板：只用边框，不加投影 */
 .rail-panel.animating {
   overflow: hidden;
 }
@@ -235,8 +234,8 @@ watch(
 }
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
-  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: var(--space-6);
 }
 .group {
   display: grid;
@@ -249,7 +248,7 @@ watch(
   gap: var(--space-2);
   margin: var(--space-2) 0 0;
   font-size: 16px;
-  line-height: 1.4;
+  line-height: 24px;
 }
 .gh span {
   color: var(--text-secondary);
@@ -263,7 +262,7 @@ watch(
   gap: var(--space-4);
   padding: var(--space-10) var(--space-4);
   border: 1px dashed var(--border-strong);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-card);
   color: var(--text-secondary);
   text-align: center;
   font-size: 14px;
@@ -276,6 +275,7 @@ watch(
 .empty b {
   color: var(--text-primary);
   font-size: 16px;
+  line-height: 24px;
 }
 .navdrawer {
   position: fixed;
@@ -299,7 +299,7 @@ watch(
   background: var(--scrim);
 }
 .navdrawer[open] {
-  animation: from-left 0.22s var(--ease);
+  animation: from-left 240ms var(--ease);
 }
 @keyframes from-left {
   from {
@@ -317,18 +317,24 @@ watch(
 }
 .toast span {
   display: block;
-  padding: 8px 16px;
+  padding: 12px 16px;
   border-radius: 999px;
   background: var(--surface-inverse);
   color: var(--text-inverse);
   font-size: 14px;
   box-shadow: var(--shadow-2);
-  animation: pop 0.2s var(--ease);
+  animation: pop 240ms var(--ease);
 }
 @keyframes pop {
   from {
     transform: translateY(-6px);
     opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .navdrawer[open],
+  .toast span {
+    animation: fade 160ms var(--ease);
   }
 }
 .rail.mini {

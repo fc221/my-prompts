@@ -113,7 +113,7 @@ function onBackdrop(ev: MouseEvent) {
   >
     <div v-if="e && head && sec" class="in" :style="{ '--sec': sec.color ?? 'var(--accent)' }">
       <header class="dh">
-        <span class="tile"><AppIcon :name="sec.icon ?? 'box'" :size="18" /></span>
+        <span class="tile"><AppIcon :name="sec.icon ?? 'box'" :size="20" /></span>
         <div class="tt">
           <h2 id="d-title">{{ head.zh }}</h2>
           <p>
@@ -167,7 +167,7 @@ function onBackdrop(ev: MouseEvent) {
           </div>
         </section>
         <p class="src">
-          <a :href="sourceUrl" target="_blank" rel="noopener"><AppIcon name="github" :size="14" />在 GitHub 查看这条</a>
+          <a :href="sourceUrl" target="_blank" rel="noopener"><AppIcon name="github" :size="16" />在 GitHub 查看这条</a>
           <a :href="issueUrl" target="_blank" rel="noopener">反馈这条</a>
         </p>
       </div>
@@ -181,7 +181,7 @@ function onBackdrop(ev: MouseEvent) {
             :disabled="idx <= 0"
             @click="openDetail(siblings[idx - 1].id)"
           >
-            <AppIcon name="chevron" :size="18" style="transform: rotate(180deg)" />
+            <AppIcon name="chevron" :size="20" style="transform: rotate(180deg)" />
           </button>
           <span>{{ idx + 1 }} / {{ siblings.length }}</span>
           <button
@@ -191,7 +191,7 @@ function onBackdrop(ev: MouseEvent) {
             :disabled="idx >= siblings.length - 1"
             @click="openDetail(siblings[idx + 1].id)"
           >
-            <AppIcon name="chevron" :size="18" />
+            <AppIcon name="chevron" :size="20" />
           </button>
         </div>
         <button type="button" class="btn" :aria-pressed="picked" :data-pick="e.id" @click="togglePick(e.id)">
@@ -226,11 +226,11 @@ function onBackdrop(ev: MouseEvent) {
   box-shadow: var(--shadow-3);
 }
 .drawer[open] {
-  animation: slide 0.26s var(--ease);
+  animation: slide 320ms var(--ease);
 }
 .drawer::backdrop {
   background: var(--scrim);
-  animation: fade 0.2s ease;
+  animation: fade 240ms var(--ease);
 }
 @keyframes slide {
   from {
@@ -238,9 +238,9 @@ function onBackdrop(ev: MouseEvent) {
     opacity: 0.4;
   }
 }
-@keyframes fade {
-  from {
-    opacity: 0;
+@media (prefers-reduced-motion: reduce) {
+  .drawer[open] {
+    animation: fade 160ms var(--ease);
   }
 }
 .in {
@@ -263,7 +263,7 @@ function onBackdrop(ev: MouseEvent) {
   width: 36px;
   height: 36px;
   flex: none;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--sec);
   color: #fff;
 }
@@ -274,7 +274,7 @@ function onBackdrop(ev: MouseEvent) {
 .tt h2 {
   margin: 0;
   font-size: 18px;
-  line-height: 1.35;
+  line-height: 26px;
 }
 .tt p {
   display: flex;
@@ -341,7 +341,8 @@ function onBackdrop(ev: MouseEvent) {
   align-items: baseline;
   gap: var(--space-2);
   margin: 0 0 var(--space-3);
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 24px;
 }
 .block h3 small {
   color: var(--text-secondary);
@@ -368,7 +369,7 @@ function onBackdrop(ev: MouseEvent) {
   margin: 0;
   padding: var(--space-4);
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 22px;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
@@ -377,7 +378,7 @@ function onBackdrop(ev: MouseEvent) {
   border-top: 1px dashed var(--border-subtle);
   color: var(--text-secondary);
   font-size: 13px;
-  line-height: 1.7;
+  line-height: 20px;
 }
 .db :deep(.xref) {
   color: var(--accent-text);
@@ -392,7 +393,7 @@ function onBackdrop(ev: MouseEvent) {
   color: var(--accent-text);
   font-weight: 600;
   background: var(--accent-soft);
-  border-radius: 4px;
+  border-radius: var(--radius-control);
   padding: 0 2px;
 }
 .src {

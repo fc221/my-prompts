@@ -150,7 +150,7 @@ const dr = computed(() => {
 .wg {
   position: relative;
   display: grid;
-  gap: 16px;
+  gap: var(--grid-gap, 24px); /* 桌面列间距 24，手机画布 16 */
   flex: 1;
   min-width: 0;
   min-height: 0;
@@ -175,13 +175,13 @@ const dr = computed(() => {
 .nest.lane {
   padding: 12px;
   background: #eceff3;
-  border-radius: 14px;
+  border-radius: 12px;
 }
 .nest.lane > .wg {
-  gap: 10px;
+  gap: 8px;
 }
 .nest {
-  border-radius: 14px;
+  border-radius: 12px;
 }
 .nest.dark {
   padding: 24px;
@@ -205,9 +205,9 @@ const dr = computed(() => {
   padding: 0;
 }
 .nest.card {
-  padding: 28px 32px;
+  padding: 24px;
   background: #fff;
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow:
     0 0 0 1px #e5e7eb,
     0 16px 36px -18px rgba(15, 23, 42, 0.3);
@@ -233,7 +233,7 @@ const dr = computed(() => {
   top: 0;
   bottom: 0;
   left: 0;
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 16px 40px -12px rgba(15, 23, 42, 0.45);
 }
 .drawer.left.bleed {
@@ -245,7 +245,7 @@ const dr = computed(() => {
   top: 0;
   bottom: 0;
   right: 0;
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 16px 40px -12px rgba(15, 23, 42, 0.45);
 }
 .drawer.right.bleed {
@@ -258,14 +258,14 @@ const dr = computed(() => {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 24px 60px -16px rgba(15, 23, 42, 0.5);
 }
 .drawer.bottom {
   left: 0;
   right: 0;
   bottom: 0;
-  border-radius: 18px 18px 0 0;
+  border-radius: 12px 12px 0 0;
   box-shadow: 0 -12px 32px -12px rgba(15, 23, 42, 0.35);
 }
 .drawer.bottom.bleed {
@@ -289,9 +289,9 @@ const dr = computed(() => {
   container-type: inline-size;
   flex: none;
 }
-/* 底部面板里的表单：把手上下 12px，两侧 16px，底部多留安全区 */
+/* 底部面板里的表单：把手上下 12px，两侧 16px，底部 16 内边距 + 16 安全区 */
 .drawer.bottom > :deep(.k-form) {
-  padding: 12px 16px 28px;
+  padding: 12px 16px 32px;
 }
 .drawer.center.nest > .wg,
 .drawer.right.nest > .wg {
@@ -324,18 +324,19 @@ const dr = computed(() => {
   border-color: #2563eb;
   background: rgba(37, 99, 235, 0.07);
 }
+/* 标签 20px 高，骑在区域边框上（top = −10）；尺寸都除以缩放比例，屏幕上就是 12px 字、6px 圆角 */
 .tag {
   position: absolute;
-  left: calc(10px / var(--k, 1));
-  top: calc(-9px / var(--k, 1));
+  left: calc(12px / var(--k, 1));
+  top: calc(-10px / var(--k, 1));
   z-index: 2;
-  max-width: calc(100% - 12px / var(--k, 1));
-  padding: calc(1px / var(--k, 1)) calc(7px / var(--k, 1));
-  border-radius: calc(5px / var(--k, 1));
+  max-width: calc(100% - 16px / var(--k, 1));
+  padding: 0 calc(8px / var(--k, 1));
+  border-radius: calc(6px / var(--k, 1));
   background: #334155;
   color: #fff;
   font:
-    600 calc(11px / var(--k, 1)) / 1.5 system-ui,
+    600 calc(12px / var(--k, 1)) / calc(20px / var(--k, 1)) system-ui,
     'PingFang SC',
     sans-serif;
   white-space: nowrap;
@@ -347,6 +348,6 @@ const dr = computed(() => {
   background: #2563eb;
 }
 .drawer.bottom.ann::after {
-  border-radius: 18px 18px 0 0;
+  border-radius: 12px 12px 0 0;
 }
 </style>

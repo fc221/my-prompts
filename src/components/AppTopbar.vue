@@ -18,7 +18,7 @@ defineEmits<{ picks: [] }>();
     </button>
     <p class="crumb">
       <span>{{ domain.name }}</span
-      ><AppIcon name="chevron" :size="14" /><b>{{ section?.name }}</b>
+      ><AppIcon name="chevron" :size="16" /><b>{{ section?.name }}</b>
     </p>
     <button type="button" class="search" @click="state.paletteOpen = true">
       <AppIcon name="search" :size="16" />
@@ -90,12 +90,12 @@ defineEmits<{ picks: [] }>();
   height: var(--control-h);
   padding: 0 8px 0 12px;
   border: 1px solid var(--border-control);
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--surface-raised);
   color: var(--text-secondary);
   font-size: 14px;
   text-align: left;
-  transition: border-color var(--dur) var(--ease);
+  transition: border-color var(--dur-fast) var(--ease);
 }
 @media (hover: hover) {
   .search:hover {
@@ -121,7 +121,7 @@ defineEmits<{ picks: [] }>();
   min-width: 20px;
   height: 20px;
   padding: 0 8px;
-  border-radius: 10px;
+  border-radius: 999px;
   background: var(--surface-muted);
   color: var(--text-secondary);
   font-size: 12px;
@@ -157,5 +157,15 @@ defineEmits<{ picks: [] }>();
   .gh {
     display: none;
   } /* 手机顶栏留给搜索，仓库入口在菜单底部和页脚 */
+}
+@media (pointer: coarse) {
+  .search {
+    position: relative;
+  }
+  .search::before {
+    content: '';
+    position: absolute;
+    inset: -2px 0;
+  } /* 热区撑到 44px 高，视觉不变 */
 }
 </style>

@@ -5,7 +5,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 8px;
-  padding: 8px 10px 10px;
+  padding: 8px;
   background: #f5f6f8;
   color: #1f2329;
   font:
@@ -27,7 +27,7 @@
   gap: 4px;
   margin: 0;
   color: #5b616e;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 16px;
   font-weight: 600;
 }
@@ -50,7 +50,7 @@
   overflow: hidden;
   background: #fff;
   border: 1px solid #e3e6eb;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 .fx-z {
   height: 100%;
@@ -58,7 +58,7 @@
 @container (min-width: 560px) {
   .fx {
     gap: 12px;
-    padding: 10px 14px 14px;
+    padding: 12px 16px 16px;
   }
   .fx-z {
     zoom: 1.55;

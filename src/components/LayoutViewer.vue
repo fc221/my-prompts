@@ -71,12 +71,7 @@ watch(open, async (o) => {
 .viewer[open] {
   display: flex;
   flex-direction: column;
-  animation: fade 0.2s ease;
-}
-@keyframes fade {
-  from {
-    opacity: 0;
-  }
+  animation: fade 240ms var(--ease);
 }
 .vh {
   display: flex;
@@ -98,7 +93,7 @@ watch(open, async (o) => {
   display: flex;
   gap: 2px;
   padding: 4px;
-  border-radius: 10px;
+  border-radius: 10px; /* 同心圆角：内 6 + 槽内边距 4 */
   background: var(--surface-muted);
 }
 .seg button {
@@ -108,7 +103,7 @@ watch(open, async (o) => {
   height: 28px;
   padding: 0 12px;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: none;
   color: var(--text-secondary);
   font-size: 13px;

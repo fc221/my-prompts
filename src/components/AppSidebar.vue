@@ -180,7 +180,7 @@ watch(mini, () => {
             :aria-controls="`${uid}-${d.key}`"
             @click="toggle(d.key)"
           >
-            <AppIcon name="chevron" :size="14" class="chev" /><span class="name">{{ d.name }}</span
+            <AppIcon name="chevron" :size="16" class="chev" /><span class="name">{{ d.name }}</span
             ><span class="n">{{ countOf(d.key) }}</span>
           </button>
           <div v-show="open.has(d.key)" :id="`${uid}-${d.key}`" class="items" role="group" :aria-label="d.name">
@@ -226,7 +226,7 @@ watch(mini, () => {
           title="收起侧栏"
           @click="state.collapsed = true"
         >
-          <AppIcon name="sidebar" :size="18" />
+          <AppIcon name="sidebar" :size="20" />
         </button>
       </template>
       <template v-else>
@@ -237,7 +237,7 @@ watch(mini, () => {
           :data-tip="`主题：${current.name}`"
           @click="setTheme(next.k, originOf($event))"
         >
-          <AppIcon :name="current.icon" :size="18" />
+          <AppIcon :name="current.icon" :size="20" />
         </button>
         <button
           type="button"
@@ -246,7 +246,7 @@ watch(mini, () => {
           data-tip="展开侧栏"
           @click="state.collapsed = false"
         >
-          <AppIcon name="sidebar-open" :size="18" />
+          <AppIcon name="sidebar-open" :size="20" />
         </button>
       </template>
     </div>
@@ -273,7 +273,7 @@ watch(mini, () => {
   width: 36px;
   height: 36px;
   flex: none;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #0ea5e9));
   color: var(--text-on-accent);
   box-shadow: 0 6px 14px -6px color-mix(in srgb, var(--accent) 70%, transparent);
@@ -309,7 +309,7 @@ watch(mini, () => {
   height: 32px;
   padding: 0 var(--space-2);
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: none;
   color: var(--text-secondary);
   font-size: 12px;
@@ -347,13 +347,13 @@ watch(mini, () => {
   height: 40px;
   padding: 0 var(--space-2);
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: none;
   color: var(--text-primary);
   font-size: 14px;
   text-align: left;
   white-space: nowrap;
-  transition: background-color var(--dur) var(--ease);
+  transition: background-color var(--dur-fast) var(--ease);
 }
 @media (hover: hover) {
   .item:hover {
@@ -370,7 +370,7 @@ watch(mini, () => {
   width: 28px;
   height: 28px;
   flex: none;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: color-mix(in srgb, var(--sec) 14%, var(--surface-raised));
   color: var(--sec);
 }
@@ -401,12 +401,12 @@ watch(mini, () => {
   display: flex;
   gap: 2px;
   padding: 4px;
-  border-radius: 10px;
+  border-radius: 10px; /* 同心圆角：内 6 + 槽内边距 4 */
   background: var(--surface-muted);
 }
 .theme .icon-btn {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
 }
 .theme .icon-btn[aria-pressed='true'] {
   background: var(--surface-raised);
@@ -444,16 +444,16 @@ watch(mini, () => {
   margin: 0;
   padding: var(--space-2);
   border: 1px solid var(--border-subtle);
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   background: var(--surface-overlay);
   color: var(--text-primary);
-  box-shadow: var(--shadow-3);
+  box-shadow: var(--shadow-2);
 }
 .fly:popover-open {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  animation: fly-in 0.14s var(--ease);
+  animation: fly-in 160ms var(--ease);
 }
 @keyframes fly-in {
   from {
@@ -465,13 +465,10 @@ watch(mini, () => {
   display: flex;
   justify-content: space-between;
   margin: 0;
-  padding: 4px var(--space-2) 6px;
+  padding: 4px var(--space-2);
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 600;
-}
-.fly .item {
-  height: 36px;
 }
 .mini .foot {
   flex-direction: column;
@@ -490,15 +487,25 @@ watch(mini, () => {
   top: 50%;
   z-index: 40;
   transform: translateY(-50%);
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: 4px 8px;
+  border-radius: var(--radius-control);
   background: var(--surface-inverse);
   color: var(--text-inverse);
   font-size: 13px;
   font-weight: 500;
-  line-height: 1.5;
+  line-height: 20px;
   white-space: nowrap;
   pointer-events: none;
   box-shadow: var(--shadow-2);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fly:popover-open {
+    animation: fade 160ms var(--ease);
+  }
+}
+@media (pointer: coarse) {
+  .theme .icon-btn::before {
+    inset: -6px 0;
+  } /* 32px 的主题按钮：上下撑到 44，左右不扩（相邻只隔 2px） */
 }
 </style>

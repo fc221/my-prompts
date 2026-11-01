@@ -40,8 +40,8 @@ button {
 .sp {
   display: inline-block;
   flex: none;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   border: 2px solid #c9ced6;
   border-top-color: #3b5bdb;
   border-radius: 50%;
@@ -55,6 +55,7 @@ button {
 .sw {
   display: inline-flex;
   align-items: center;
+  min-height: 24px;
   gap: 6px;
   color: #5b616e;
   font-size: 12px;
@@ -75,7 +76,7 @@ button {
   height: 16px;
   border-radius: 999px;
   background: #c9ced6;
-  transition: background 0.16s;
+  transition: background 0.1s;
 }
 .sw i::after {
   content: '';

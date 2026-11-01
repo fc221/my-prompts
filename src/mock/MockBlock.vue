@@ -295,7 +295,7 @@ const barRow = computed(() => BAR.has(props.kind));
                 ['待发货', '36'],
                 ['售后中', '8'],
                 ['库存预警', '5'],
-                ['今日退款', '¥1,260'],
+                ['今日退款', '¥1,260.00'],
                 ['新增评价', '42'],
               ]"
         :key="k[0]"
@@ -1226,7 +1226,7 @@ const barRow = computed(() => BAR.has(props.kind));
               ]
             : [
                 ['标准快递', '免运费 · 2–3 天'],
-                ['次日达', '¥12 · 明天送达'],
+                ['次日达', '¥12.00 · 明天送达'],
                 ['到店自提', '免费 · 文三路门店'],
               ]"
           :key="o[0]"
@@ -1325,18 +1325,23 @@ const barRow = computed(() => BAR.has(props.kind));
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 18px 20px;
+  gap: 12px;
+  padding: 20px;
   border-radius: 12px;
   background: var(--surf);
   border: 1px solid var(--line);
   color: var(--text);
   font:
-    14px/1.5 system-ui,
+    14px/22px system-ui,
     -apple-system,
     'PingFang SC',
     'Microsoft YaHei',
     sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+/* 字号阶梯的行高 = 字号 + 8（12→20、14→22、16→24、18→26、20→28、24→32、28→36、32→40）；需要别的行高的地方单独写 */
+.blk * {
+  line-height: calc(1em + 8px);
 }
 .blk.bare {
   border-color: transparent;
@@ -1350,7 +1355,7 @@ const barRow = computed(() => BAR.has(props.kind));
   min-height: 64px;
 }
 .k-segment {
-  min-height: 38px;
+  min-height: 32px;
 }
 .blk.dark {
   --ink: #f9fafb;
@@ -1365,7 +1370,7 @@ const barRow = computed(() => BAR.has(props.kind));
   border-color: var(--surf);
 }
 .blk.dark.bare {
-  padding: 18px 20px;
+  padding: 20px;
 }
 p {
   margin: 0;
@@ -1383,26 +1388,22 @@ i {
 .sp {
   flex: 1;
 }
-.num,
-.big,
-.price {
-  font-variant-numeric: tabular-nums;
-}
 .mono {
   font-family: ui-monospace, Menlo, monospace;
-  font-size: 13px;
 }
+/* 控件高度：桌面 32，手机画布 --tap 44（触控目标）；大号 40、小号 28 */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 34px;
-  padding: 0 16px;
+  min-height: var(--tap, 32px);
+  padding: 4px 16px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--surf);
   color: var(--ink);
   font-size: 14px;
+  font-weight: 600;
   font-weight: 500;
   white-space: nowrap;
   flex: none;
@@ -1413,15 +1414,13 @@ i {
   color: #fff;
 }
 .btn.lg {
-  height: 44px;
-  padding: 0 24px;
-  font-size: 15px;
-  border-radius: 10px;
+  min-height: max(40px, var(--tap, 32px));
+  padding: 0 20px;
+  font-size: 16px;
 }
 .btn.sm {
-  height: 30px;
+  min-height: 28px;
   padding: 0 12px;
-  font-size: 13px;
 }
 .btn.danger {
   border-color: #fca5a5;
@@ -1429,7 +1428,7 @@ i {
 }
 .pill {
   display: inline-block;
-  padding: 1px 8px;
+  padding: 2px 8px;
   border-radius: 999px;
   font-size: 12px;
   line-height: 20px;
@@ -1460,13 +1459,13 @@ i {
   border-radius: 50%;
   background: #dbe4ff;
   color: #3b4ea8;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 .av.sm {
   width: 24px;
   height: 24px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .av.xl {
   width: 56px;
@@ -1479,11 +1478,11 @@ i {
   width: 32px;
   height: 32px;
   flex: none;
-  border-radius: 9px;
+  border-radius: 6px;
   background: var(--acc);
   color: #fff;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
 }
 .card-h {
   display: flex;
@@ -1493,7 +1492,7 @@ i {
   flex: none;
 }
 .card-h b {
-  font-size: 15px;
+  font-size: 16px;
 }
 .tone-0 {
   background: linear-gradient(135deg, #dbeafe, #e0e7ff);
@@ -1507,8 +1506,8 @@ i {
 
 /* 侧栏：矮宽时排成一行（顶栏里的导航），很窄时只留图标 */
 .k-nav {
-  padding: 20px 14px;
-  gap: 18px;
+  padding: 20px 16px;
+  gap: 24px;
 }
 /* 放在整条顶栏里：横排、不带品牌、不画外框 */
 .k-nav.inline {
@@ -1528,36 +1527,36 @@ i {
   display: none;
 }
 .k-nav.inline .nav-i {
-  height: 36px;
-  padding: 0 14px;
+  min-height: 32px;
+  padding: 0 12px;
 }
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   padding: 0 8px;
   white-space: nowrap;
 }
 .nav-brand b {
-  font-size: 17px;
+  font-size: 18px;
 }
 .nav-h {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 .nav-g {
-  margin: 10px 8px 6px;
+  margin: 16px 8px 8px;
   color: var(--mute);
   font-size: 12px;
 }
 .nav-i {
   display: flex;
   align-items: center;
-  gap: 10px;
-  height: 38px;
-  padding: 0 10px;
-  border-radius: 8px;
+  gap: 8px;
+  min-height: var(--tap, 40px);
+  padding: 0 12px;
+  border-radius: 6px;
   color: var(--text);
   white-space: nowrap;
 }
@@ -1588,8 +1587,8 @@ i {
   font-weight: 600;
 }
 .nav-i.sub {
-  padding-left: 36px;
-  height: 36px;
+  padding-left: 36px; /* 12 内边距 + 16 图标 + 8 间距：子项文字和父项文字对齐 */
+  min-height: var(--tap, 32px);
 }
 .nav-foot {
   display: flex;
@@ -1599,18 +1598,17 @@ i {
   padding: 12px 8px 0;
   border-top: 1px solid var(--line);
   color: var(--text);
-  font-size: 13px;
   white-space: nowrap;
   flex: none;
 }
 .nf-i {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: var(--tap, 32px);
+  height: var(--tap, 32px);
   border-radius: 50%;
   color: var(--mute);
-  font-size: 15px;
+  font-size: 20px;
 }
 @container (max-width: 120px) {
   .nav-foot > span {
@@ -1677,30 +1675,30 @@ i {
   color: #d1d5db;
 }
 .top-search {
+  display: inline-flex;
+  align-items: center;
   width: 240px;
-  height: 34px;
-  padding: 0 12px;
+  min-height: var(--ctl, 32px);
+  padding: 4px 12px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--mute);
-  line-height: 32px;
-  font-size: 13px;
   white-space: nowrap;
 }
 .ico-btn {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
+  width: var(--tap, 32px);
+  height: var(--tap, 32px);
+  border-radius: 6px;
   border: 1px solid var(--line);
   color: var(--mute);
   flex: none;
-  font-size: 18px;
+  font-size: 20px;
 }
 .ico-btn svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
@@ -1720,6 +1718,7 @@ i {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-height: var(--tap, 32px);
   white-space: nowrap;
   color: var(--ink);
   font-weight: 500;
@@ -1727,8 +1726,8 @@ i {
 /* 手机顶栏：圆角卡片，左边 ☰ 和页面名，右边铃铛、头像 */
 @container (max-width: 560px) {
   .k-topbar {
-    padding: 0 10px 0 6px;
-    gap: 6px;
+    padding: 0 8px 0 4px;
+    gap: 8px;
     min-height: 56px;
   }
   .k-topbar .ico-btn {
@@ -1760,13 +1759,16 @@ i {
 .tb {
   display: grid;
   justify-items: center;
-  gap: 2px;
+  align-content: center;
+  gap: 4px;
+  min-width: 44px;
+  min-height: 44px;
   color: var(--mute);
-  font-size: 11px;
+  font-size: 12px;
 }
 .tb i {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 6px;
   border: 1.5px solid currentColor;
 }
@@ -1778,21 +1780,20 @@ i {
     flex-direction: column;
     justify-content: flex-start;
     padding-top: 20px;
-    gap: 22px;
+    gap: 24px;
     border-top: 0;
   }
 }
 
 /* 指标 */
 .k-kpi {
-  gap: 6px;
+  gap: 4px;
   justify-content: center;
 }
 .big {
   color: var(--ink);
   font-size: 28px;
-  font-weight: 700;
-  line-height: 1.2;
+  font-weight: 600;
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
@@ -1828,13 +1829,13 @@ i {
 }
 @container (max-width: 180px) {
   .big {
-    font-size: 22px;
+    font-size: 24px;
   }
   .delta .muted {
     display: none;
   }
   .k-kpi {
-    padding: 14px;
+    padding: 16px;
   }
 }
 .k-strip {
@@ -1848,7 +1849,7 @@ i {
 .st {
   flex: 1;
   display: grid;
-  gap: 2px;
+  gap: 4px;
   padding: 0 16px;
   border-left: 1px solid var(--line);
   white-space: nowrap;
@@ -1861,8 +1862,7 @@ i {
   font-size: 12px;
 }
 .st b {
-  font-size: 18px;
-  font-variant-numeric: tabular-nums;
+  font-size: 24px;
 }
 @container (max-width: 560px) {
   .st:nth-child(n + 4) {
@@ -1874,7 +1874,7 @@ i {
     display: none;
   }
   .st {
-    padding: 0 10px;
+    padding: 0 12px;
   }
 }
 
@@ -1936,7 +1936,7 @@ i {
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 .bar i {
   width: 100%;
@@ -1985,7 +1985,7 @@ i {
 }
 .donut .lg {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   font-size: 13px;
   color: var(--text);
 }
@@ -2020,7 +2020,7 @@ i {
     display: none;
   }
   .bars {
-    gap: 6px;
+    gap: 8px;
   }
 }
 
@@ -2035,19 +2035,22 @@ i {
 .tbl {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
 }
+/* 表头、按钮这类必须看得出的强调用 600（f-type-weight） */
 .tbl th {
   padding: 12px 16px;
   background: #f8fafc;
   color: var(--mute);
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
   text-align: left;
   white-space: nowrap;
   border-bottom: 1px solid var(--line);
 }
+/* 常规密度：行高 48（表格单元格的 height 是最小高度，状态标签比一行字高也不撑开） */
 .tbl td {
-  padding: 13px 16px;
+  height: 48px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--line2);
   white-space: nowrap;
   color: var(--text);
@@ -2062,21 +2065,21 @@ i {
 .cards-m {
   display: none;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   padding: 4px 0;
 }
 .cm {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 12px;
+  padding: 12px 16px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--surf);
 }
 .cm > span {
   display: grid;
-  gap: 2px;
+  gap: 4px;
 }
 .cm-r {
   justify-items: end;
@@ -2101,7 +2104,7 @@ i {
   flex-wrap: wrap;
   align-items: flex-end;
   align-content: center;
-  gap: 12px 16px;
+  gap: 16px;
   padding: 16px 20px;
   background: var(--surf);
   border: 1px solid var(--line);
@@ -2109,24 +2112,27 @@ i {
 }
 .fld-i {
   display: grid;
-  gap: 6px;
+  gap: 8px;
 }
 .fld-i em {
   font-style: normal;
   color: var(--mute);
   font-size: 12px;
 }
+/* 输入框：桌面 32 / 手机画布 --ctl 40，手机字号 --fs-input 16；上下内边距 = (控件高 − 边框 2 − 行高 22) / 2，文字正好居中，还能用 text-overflow */
 .sel,
 .inp,
 .inp-s {
   display: block;
-  height: 32px;
-  padding: 0 32px 0 12px;
+  min-height: var(--ctl, 32px);
+  padding-block: calc((var(--ctl, 32px) - 24px) / 2);
+  padding-inline: 12px 32px;
   border: 1px solid #d1d5db;
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--surf);
   color: var(--ink);
-  line-height: 34px;
+  font-size: var(--fs-input, 14px);
+  line-height: 22px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2136,23 +2142,25 @@ i {
 .sel::after {
   content: '⌄';
   position: absolute;
-  right: 10px;
-  top: -2px;
+  right: 12px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
   color: var(--mute);
 }
 .inp {
-  padding-right: 12px;
+  padding-inline: 12px;
   min-width: 0;
 }
 .inp.area {
-  height: 72px;
-  line-height: 1.6;
+  min-height: 72px;
   padding-top: 8px;
   white-space: normal;
 }
 .inp-s {
   color: var(--mute);
-  padding-right: 12px;
+  padding-inline: 12px;
   min-width: 200px;
 }
 .inp-s.full {
@@ -2184,7 +2192,7 @@ i {
   gap: 8px;
 }
 .k-select.inline .fld-i em {
-  font-size: 13px;
+  font-size: 14px;
   white-space: nowrap;
 }
 .k-select.inline .sel {
@@ -2197,17 +2205,17 @@ i {
 .k-input label,
 .frow label {
   color: var(--ink);
-  font-size: 13px;
   font-weight: 500;
 }
 
+/* 表单项间距：桌面 16（紧凑档），手机画布 --gap-form 20 */
 .k-form {
-  gap: 16px;
+  gap: var(--gap-form, 16px);
 }
 .sec-h {
   display: grid;
   gap: 4px;
-  padding-bottom: 14px;
+  padding-bottom: 16px;
   border-bottom: 1px solid var(--line2);
   flex: none;
 }
@@ -2220,7 +2228,7 @@ i {
 .fgrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px 20px;
+  gap: 16px 24px;
 }
 @container (max-width: 560px) {
   .fgrid {
@@ -2228,23 +2236,12 @@ i {
   }
 }
 .k-switches:has(.sec-h) {
-  padding-top: 18px;
+  padding-top: 20px;
 }
 .k-form:has(.handle) {
-  border-radius: 18px 18px 0 0;
+  border-radius: 12px 12px 0 0;
   box-shadow: 0 -10px 30px -12px rgba(15, 23, 42, 0.25);
   padding-top: 12px;
-}
-/* 手机画布：控件 40px、表单项间距 20px */
-@container (max-width: 600px) {
-  .sel,
-  .inp,
-  .inp-s {
-    height: 40px;
-  }
-  .k-form {
-    gap: 20px;
-  }
 }
 .form-t {
   font-size: 16px;
@@ -2259,21 +2256,23 @@ i {
 }
 .frow.btns {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-top: 4px;
 }
-/* 高度不够时从后往前藏字段，保存按钮和分组标题始终留着（阈值按内容区高度算：字段约 78px 一行，按钮行约 54px，标题约 40px） */
-@container (max-height: 541px) {
+/* 高度不够时从后往前藏字段，保存按钮和分组标题始终留着。
+   阈值 = 放得下 N 个字段所需的内容区高度 − 1（桌面尺寸）：字段 62（标签 22 + 8 + 控件 32）、第 6 个字段是文本域 102、字段间距 16、按钮行 52（16 + 4 + 32）、标题 40（24 + 16）。
+   手机画布控件 40、间距 20，字段更高，这里不另算，手机上会略晚一步藏字段 */
+@container (max-height: 543px) {
   .k-form:has(.btns) .frow:not(.btns):nth-of-type(n + 6) {
     display: none;
   }
 }
-@container (max-height: 487px) {
+@container (max-height: 491px) {
   .frow:not(.btns):nth-of-type(n + 6) {
     display: none;
   }
 }
-@container (max-height: 427px) {
+@container (max-height: 425px) {
   .k-form:has(.btns) .frow:not(.btns):nth-of-type(n + 5) {
     display: none;
   }
@@ -2283,17 +2282,17 @@ i {
     display: none;
   }
 }
-@container (max-height: 385px) {
+@container (max-height: 347px) {
   .k-form:has(.btns) .frow:not(.btns):nth-of-type(n + 4) {
     display: none;
   }
 }
-@container (max-height: 331px) {
+@container (max-height: 295px) {
   .frow:not(.btns):nth-of-type(n + 4) {
     display: none;
   }
 }
-@container (max-height: 271px) {
+@container (max-height: 269px) {
   .k-form:has(.btns) .frow:not(.btns):nth-of-type(n + 3) {
     display: none;
   }
@@ -2308,7 +2307,7 @@ i {
     display: none;
   }
 }
-@container (max-height: 193px) {
+@container (max-height: 191px) {
   .k-form:has(.btns) .frow:not(.btns):nth-of-type(n + 2) {
     display: none;
   }
@@ -2331,14 +2330,12 @@ i {
 .comp {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 52px;
-  padding: 0 10px 0 16px;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 8px 0 16px;
   border: 1px solid #d1d5db;
-  border-radius: 16px;
+  border-radius: 12px;
   background: var(--surf);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
-  font-size: 13px;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -2346,8 +2343,8 @@ i {
 .send {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: var(--tap, 32px);
+  height: var(--tap, 32px);
   border-radius: 50%;
   flex: none;
 }
@@ -2375,16 +2372,15 @@ i {
 }
 .msg {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: flex-start;
   max-width: 86%;
 }
 .msg p {
-  padding: 10px 14px;
-  border-radius: 14px;
+  padding: 8px 12px;
+  border-radius: 12px;
   background: #f3f4f6;
   color: var(--text);
-  line-height: 1.6;
 }
 .msg.me {
   align-self: flex-end;
@@ -2397,7 +2393,7 @@ i {
 .av.ai {
   background: #111827;
   color: #fff;
-  font-size: 11px;
+  font-size: 12px;
 }
 .k-chat .msg:first-child:not(:only-child) {
   display: none;
@@ -2426,7 +2422,7 @@ i {
 .hero-b {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: auto;
 }
 .k-hero:has(.hero-b) {
@@ -2454,27 +2450,26 @@ i {
 .h1 {
   margin: 0;
   color: var(--ink);
-  font-size: 44px;
-  line-height: 1.2;
+  font-size: 40px;
   letter-spacing: -0.02em;
   white-space: pre-line;
 }
 .sub {
   color: var(--mute);
-  font-size: 17px;
+  font-size: 18px;
   max-width: 30em;
 }
 .row-btn {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   margin-top: 8px;
 }
 @container (max-width: 520px) {
   .h1 {
-    font-size: 30px;
+    font-size: 32px;
   }
   .sub {
-    font-size: 15px;
+    font-size: 16px;
   }
 }
 @container (max-width: 360px) {
@@ -2498,7 +2493,7 @@ i {
 .k-btnpair {
   flex-direction: row;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 @container (max-width: 360px) {
   .k-btnpair .btn:last-child {
@@ -2512,8 +2507,7 @@ i {
 .h2 {
   margin: 0;
   color: var(--ink);
-  font-size: 26px;
-  line-height: 1.3;
+  font-size: 24px;
   letter-spacing: -0.01em;
 }
 .h3 {
@@ -2539,14 +2533,14 @@ i {
 }
 .shot {
   height: 100%;
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 7% 7% 0;
   overflow: hidden;
 }
 .shot-ui {
   display: flex;
   height: 100%;
-  border-radius: 10px 10px 0 0;
+  border-radius: 12px 12px 0 0;
   background: #fff;
   box-shadow: 0 20px 40px -20px rgba(15, 23, 42, 0.35);
   overflow: hidden;
@@ -2585,12 +2579,12 @@ i {
   border: 1px solid #e5e7eb;
 }
 .k-card {
-  padding: 0 0 16px;
+  padding: 0 0 20px;
   gap: 8px;
 }
 .k-card > b,
 .k-card > p {
-  padding: 0 18px;
+  padding: 0 20px;
 }
 .cimg {
   flex: 1;
@@ -2603,7 +2597,7 @@ i {
   width: 78%;
   height: 78%;
   align-self: end;
-  border-radius: 10px 10px 0 0;
+  border-radius: 12px 12px 0 0;
 }
 .photo {
   width: 22%;
@@ -2613,12 +2607,12 @@ i {
 .fi {
   display: none;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 12px;
   background: #fff;
   color: var(--acc);
-  font-size: 22px;
+  font-size: 24px;
   font-style: normal;
   box-shadow: 0 6px 16px -8px rgba(15, 23, 42, 0.3);
 }
@@ -2644,7 +2638,7 @@ i {
   justify-content: space-between;
   gap: 24px;
   padding: 32px 40px;
-  border-radius: 16px;
+  border-radius: 12px;
   background: linear-gradient(120deg, #1d4ed8, #2563eb);
   border: 0;
 }
@@ -2691,8 +2685,8 @@ i {
   }
 }
 .k-quote {
-  gap: 14px;
-  padding: 28px;
+  gap: 16px;
+  padding: 24px;
 }
 .qm {
   color: var(--acc);
@@ -2714,7 +2708,7 @@ i {
 .who {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-top: auto;
 }
 .who > span {
@@ -2723,16 +2717,16 @@ i {
 }
 .k-pricing {
   flex-direction: row;
-  gap: 16px;
+  gap: 24px;
 }
 .plan {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 22px;
+  padding: 24px;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--surf);
   min-width: 0;
 }
@@ -2742,8 +2736,8 @@ i {
 }
 .price {
   color: var(--ink);
-  font-size: 30px;
-  font-weight: 700;
+  font-size: 32px;
+  font-weight: 600;
 }
 .price small {
   color: var(--mute);
@@ -2762,7 +2756,7 @@ i {
 }
 .rec {
   margin-left: 8px;
-  vertical-align: 2px;
+  vertical-align: 2px; /* 标签比套餐名字矮，抬 2px 对齐视觉中心 */
 }
 @container (max-height: 220px) {
   .plan.one .feat {
@@ -2792,16 +2786,16 @@ i {
 }
 .q-h i {
   color: var(--mute);
-  font-size: 18px;
+  font-size: 20px;
 }
 .k-row {
   justify-content: center;
-  min-height: 52px;
+  min-height: 48px;
   box-shadow: inset 0 -1px var(--line);
 }
 .k-footer {
   justify-content: space-between;
-  gap: 20px;
+  gap: 24px;
   padding: 32px 40px;
   background: #f8fafc;
   border: 0;
@@ -2862,11 +2856,11 @@ i {
 .code {
   flex: 1;
   margin: 0;
-  padding: 18px 20px;
+  padding: 20px;
   background: #0f172a;
   border-radius: 12px;
   font:
-    13px/1.7 ui-monospace,
+    14px/22px ui-monospace,
     Menlo,
     monospace;
   color: #e2e8f0;
@@ -2891,11 +2885,11 @@ i {
 .pf {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 .pf > span {
   display: grid;
-  gap: 2px;
+  gap: 4px;
 }
 .pf b {
   font-size: 18px;
@@ -2911,7 +2905,7 @@ i {
   justify-items: center;
 }
 .pf-s b {
-  font-size: 18px;
+  font-size: 24px;
 }
 .pf-s em {
   font-style: normal;
@@ -2937,8 +2931,7 @@ i {
 .nt {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 13px;
+  gap: 8px;
   color: var(--text);
   white-space: nowrap;
   flex: none;
@@ -2955,7 +2948,7 @@ i {
   }
 }
 .k-timeline {
-  gap: 14px;
+  gap: 12px;
   justify-content: center;
 }
 .lane {
@@ -2972,15 +2965,15 @@ i {
 .track {
   position: relative;
   flex: 1;
-  height: 30px;
-  border-radius: 8px;
+  height: 32px;
+  border-radius: 6px;
   background: #f3f4f6;
 }
 .seg {
   position: absolute;
-  top: 3px;
-  bottom: 3px;
-  padding: 0 10px;
+  top: 4px;
+  bottom: 4px;
+  padding: 0 8px;
   border-radius: 6px;
   color: #fff;
   font-size: 12px;
@@ -3000,14 +2993,11 @@ i {
 .k-event {
   justify-content: center;
   border: 0;
-  gap: 2px;
+  gap: 4px;
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--acc-soft);
   box-shadow: inset 0 0 0 1px #c7d7fb;
-}
-.k-event b {
-  font-size: 13px;
 }
 .k-event .muted {
   font-size: 12px;
@@ -3022,14 +3012,14 @@ i {
 }
 .k-kanban {
   flex-direction: row;
-  gap: 14px;
+  gap: 16px;
 }
 .kc {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 14px;
+  gap: 8px;
+  padding: 12px;
   border-radius: 12px;
   background: #f1f3f6;
   min-width: 0;
@@ -3042,12 +3032,10 @@ i {
 }
 .kcard {
   padding: 12px;
-  border-radius: 8px;
+  border-radius: 12px;
   background: var(--surf);
   border: 1px solid var(--line);
-  font-size: 13px;
   color: var(--ink);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
 }
 @container (max-width: 560px) {
   .kc:nth-child(n + 2) {
@@ -3059,7 +3047,7 @@ i {
   padding: 8px 16px;
 }
 .k-list .card-h {
-  padding: 8px 4px 10px;
+  padding: 8px 4px;
 }
 .li {
   display: flex;
@@ -3071,7 +3059,7 @@ i {
 }
 .li.on {
   background: var(--acc-soft);
-  border-radius: 8px;
+  border-radius: 6px;
   padding-inline: 8px;
 }
 .li-t {
@@ -3094,43 +3082,46 @@ i {
     display: none;
   }
   .k-list {
-    padding: 4px 10px;
+    padding: 4px 12px;
   }
 }
 .k-text {
   gap: 12px;
 }
 .tx-t {
-  font-size: 16px;
+  font-size: 20px;
 }
+/* 阅读型正文：16 / 26 */
 .tx {
   color: var(--text);
-  line-height: 1.8;
+  font-size: 16px;
+  line-height: 26px;
 }
 .tx-m {
   font-size: 12px;
-  margin-top: -6px;
+  margin-top: -8px;
 }
 .tx-h {
-  margin-top: 6px;
-  font-size: 15px;
+  margin-top: 12px;
+  font-size: 18px;
 }
 .tx-l {
   margin: 0;
   padding-left: 20px;
   color: var(--text);
-  line-height: 1.9;
+  font-size: 16px;
+  line-height: 26px;
 }
 .k-brand {
   flex-direction: row;
   align-items: center;
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: 10px;
+  gap: 8px;
 }
 .contact {
   display: grid;
-  gap: 6px;
+  gap: 8px;
   flex-basis: 100%;
   margin-top: 12px;
   color: var(--mute);
@@ -3140,7 +3131,7 @@ i {
   font-size: 18px;
 }
 .sn {
-  margin-left: 18px;
+  margin-left: 24px;
   white-space: nowrap;
 }
 @container (max-width: 520px) {
@@ -3158,7 +3149,7 @@ i {
 .k-steps {
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   padding: 0 12px;
 }
 .step {
@@ -3176,7 +3167,7 @@ i {
   height: 28px;
   border-radius: 50%;
   border: 2px solid var(--line);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   flex: none;
 }
@@ -3217,12 +3208,12 @@ i {
   padding: 0 12px;
   background: var(--surf);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 12px;
 }
 .k-tabs {
   flex-direction: row;
   align-items: flex-end;
-  gap: 28px;
+  gap: 24px;
   padding: 0 4px;
   border-bottom: 1px solid var(--line);
 }
@@ -3238,7 +3229,7 @@ i {
 }
 @container (max-width: 420px) {
   .k-tabs {
-    gap: 18px;
+    gap: 16px;
   }
   .tab:nth-child(n + 4) {
     display: none;
@@ -3250,10 +3241,10 @@ i {
 }
 .k-toc > .muted {
   font-size: 12px;
-  margin: 0 0 6px 14px;
+  margin: 0 0 8px 14px; /* 14 = 条目的 2px 左边线 + 12 内边距，和条目文字对齐 */
 }
 .toc-i {
-  padding: 6px 12px;
+  padding: 8px 12px;
   border-left: 2px solid var(--line);
   color: var(--mute);
   white-space: nowrap;
@@ -3274,7 +3265,7 @@ i {
   display: none;
 }
 .hz .toc-i {
-  padding: 10px 12px;
+  padding: 12px;
   border-left: 0;
 }
 .hz .toc-i.on {
@@ -3283,7 +3274,7 @@ i {
 .k-actions {
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   padding: 0 20px;
   background: var(--surf);
   border-top: 1px solid var(--line);
@@ -3301,7 +3292,7 @@ i {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
 }
 .k-button {
   justify-content: flex-start;
@@ -3349,16 +3340,15 @@ i {
 .k-pager {
   flex-direction: row;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
+  gap: 8px;
 }
 .pg {
   display: grid;
   place-items: center;
-  min-width: 32px;
-  height: 32px;
+  min-width: var(--tap, 32px);
+  height: var(--tap, 32px);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--surf);
   color: var(--text);
 }
@@ -3382,8 +3372,7 @@ i {
 }
 .k-danger > span:first-child {
   display: grid;
-  gap: 2px;
-  font-size: 13px;
+  gap: 4px;
 }
 @container (max-width: 420px) {
   .k-danger .muted {
@@ -3395,19 +3384,22 @@ i {
   flex-direction: row;
   align-items: center;
 }
+/* 分段控件：选项 28 + 槽内边距 2 = 32；同心圆角 外 8 = 内 6 + 2 */
 .segs {
   display: inline-flex;
   gap: 2px;
-  padding: 3px;
-  border-radius: 10px;
+  padding: 2px;
+  border-radius: 8px;
   background: #eef0f4;
 }
 .sg {
-  padding: 6px 14px;
-  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 12px;
+  border-radius: 6px;
   color: var(--mute);
   white-space: nowrap;
-  font-size: 13px;
 }
 .sg.on {
   background: var(--acc);
@@ -3417,11 +3409,11 @@ i {
 .k-pagehead {
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 .ph-t {
   display: grid;
-  gap: 2px;
+  gap: 4px;
   min-width: 0;
 }
 .k-pagehead .muted {
@@ -3441,7 +3433,9 @@ i {
 .cl {
   display: flex;
   justify-content: space-between;
-  padding: 14px 0;
+  align-items: center;
+  min-height: 48px;
+  padding: 12px 0;
   border-bottom: 1px solid var(--line2);
   color: var(--ink);
   flex: none;
@@ -3456,14 +3450,14 @@ i {
 .k-empty {
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   border-style: dashed;
   border-color: #d1d5db;
   background: transparent;
 }
 .ebox {
-  width: 36px;
-  height: 28px;
+  width: 40px;
+  height: 32px;
   border: 2px solid #d1d5db;
   border-radius: 6px;
   margin-bottom: 4px;
@@ -3472,7 +3466,7 @@ i {
   align-items: center;
   justify-content: center;
   background: #f3f4f6;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 .k-block.dark {
   background: rgba(15, 23, 42, 0.55);
@@ -3494,12 +3488,12 @@ i {
 
 /* 通用页面内容 */
 .k-content {
-  gap: 16px;
+  gap: 24px;
 }
 .ct-k {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  gap: 16px;
   height: 112px;
   flex: none;
 }
@@ -3523,8 +3517,8 @@ i {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   align-content: start;
-  gap: 18px 24px;
-  padding: 20px 24px;
+  gap: 16px 24px;
+  padding: 20px;
 }
 .fv {
   display: grid;
@@ -3551,8 +3545,10 @@ i {
   .fv {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 16px;
-    padding: 11px 0;
+    min-height: 48px;
+    padding: 12px 0;
     border-bottom: 1px solid var(--line2);
   }
   .fv:last-child {
@@ -3563,7 +3559,7 @@ i {
 .k-objhead {
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 .oh {
   display: grid;
@@ -3573,7 +3569,7 @@ i {
 .oh-t {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 .oh-t b {
   font-size: 20px;
@@ -3596,7 +3592,7 @@ i {
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 8px;
 }
 @container (max-width: 420px) {
   .k-opbtns .btn {
@@ -3609,12 +3605,12 @@ i {
   grid-template-columns: 1fr auto;
   align-content: center;
   gap: 4px 12px;
-  padding: 14px 16px;
+  padding: 16px;
 }
 .rc-l,
 .rc-r {
   display: grid;
-  gap: 2px;
+  gap: 4px;
   min-width: 0;
 }
 .rc-r {
@@ -3640,11 +3636,13 @@ i {
   gap: 8px;
 }
 .chip {
-  padding: 5px 12px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 12px;
   border-radius: 999px;
   background: #eef0f4;
   color: var(--text);
-  font-size: 13px;
   white-space: nowrap;
 }
 .chip.on {
@@ -3657,7 +3655,6 @@ i {
   color: var(--acc);
 }
 .a.sm {
-  font-size: 13px;
   font-weight: 500;
 }
 .k-chips .muted {
@@ -3670,13 +3667,13 @@ i {
   }
 }
 .k-facets {
-  gap: 18px;
+  gap: 24px;
 }
 .handle {
   align-self: center;
   width: 40px;
   height: 4px;
-  border-radius: 2px;
+  border-radius: 999px;
   background: #d1d5db;
   flex: none;
 }
@@ -3700,23 +3697,22 @@ i {
   flex-basis: 100%;
   font-style: normal;
   color: var(--ink);
-  font-size: 13px;
   font-weight: 500;
 }
 .ck {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  min-height: var(--ctl, 32px);
+  padding: 0 12px;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  font-size: 13px;
+  border-radius: 6px;
   color: var(--text);
   white-space: nowrap;
 }
 .ck i {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   border-radius: 4px;
   border: 1.5px solid #cbd5e1;
 }
@@ -3742,14 +3738,14 @@ i {
 }
 .fc-b {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-top: auto;
 }
 .fc-b .btn:last-child {
   flex: 1;
 }
 .k-facets:has(.handle) {
-  border-radius: 18px 18px 0 0;
+  border-radius: 12px 12px 0 0;
   box-shadow: 0 -10px 30px -12px rgba(15, 23, 42, 0.25);
 }
 /* 操作记录 */
@@ -3788,8 +3784,7 @@ i {
 }
 .act-t {
   display: grid;
-  gap: 2px;
-  font-size: 13px;
+  gap: 4px;
 }
 .act-t .muted {
   font-size: 12px;
@@ -3803,31 +3798,32 @@ i {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 14px 0;
+  padding: 12px 0;
   border-bottom: 1px solid var(--line2);
   flex: none;
 }
 .sw:last-child {
   border-bottom: 0;
 }
-@container (max-height: 283px) {
+/* 高度不够时藏开关行：每行 72（12 + 22 + 4 + 21 + 12 + 1 边线），末行无边线，阈值 = 放得下 N 行的高度 − 1 */
+@container (max-height: 286px) {
   .sw:nth-child(n + 4) {
     display: none;
   }
 }
-@container (max-height: 212px) {
+@container (max-height: 214px) {
   .sw:nth-child(n + 3) {
     display: none;
   }
 }
-@container (max-height: 141px) {
+@container (max-height: 142px) {
   .sw:nth-child(n + 2) {
     display: none;
   }
 }
 .sw-t {
   display: grid;
-  gap: 2px;
+  gap: 4px;
   flex: 1;
   min-width: 0;
 }
@@ -3840,7 +3836,7 @@ i {
 .tg {
   position: relative;
   width: 40px;
-  height: 22px;
+  height: 24px;
   border-radius: 999px;
   background: #d1d5db;
   flex: none;
@@ -3848,10 +3844,10 @@ i {
 .tg::after {
   content: '';
   position: absolute;
-  left: 3px;
-  top: 3px;
-  width: 16px;
-  height: 16px;
+  left: 2px;
+  top: 2px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: #fff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -3860,7 +3856,7 @@ i {
   background: var(--acc);
 }
 .tg.on::after {
-  left: 21px;
+  left: 18px;
 }
 /* 看板列头、任务卡 */
 .k-colhead {
@@ -3870,7 +3866,7 @@ i {
   padding: 4px 4px;
 }
 .k-colhead b {
-  font-size: 15px;
+  font-size: 16px;
 }
 .cnt {
   font-style: normal;
@@ -3883,12 +3879,11 @@ i {
 }
 .add {
   color: var(--mute);
-  font-size: 18px;
+  font-size: 20px;
 }
 .k-task {
   gap: 12px;
-  padding: 14px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  padding: 16px;
 }
 .k-task > b {
   font-size: 14px;
@@ -3907,7 +3902,7 @@ i {
 }
 /* 日程列表 */
 .k-agenda {
-  gap: 10px;
+  gap: 8px;
 }
 .ag {
   display: flex;
@@ -3915,21 +3910,20 @@ i {
   flex: none;
 }
 .ag-t {
-  width: 44px;
+  width: 48px;
   flex: none;
-  padding-top: 10px;
+  padding-top: 8px;
   color: var(--mute);
   font-size: 13px;
-  font-variant-numeric: tabular-nums;
 }
 .ag-c {
   flex: 1;
   display: grid;
-  gap: 2px;
-  padding: 10px 14px;
-  border-radius: 10px;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 12px;
   background: var(--acc-soft);
-  box-shadow: inset 3px 0 var(--acc);
+  box-shadow: inset 4px 0 var(--acc);
 }
 .ag-c .muted {
   font-size: 12px;
@@ -3959,13 +3953,13 @@ i {
   min-height: 44px;
 }
 .k-mtop b {
-  font-size: 17px;
+  font-size: 18px;
 }
 .mt-i {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: var(--tap, 32px);
+  height: var(--tap, 32px);
   color: var(--ink);
   font-size: 20px;
   flex: none;
@@ -3973,20 +3967,22 @@ i {
 .k-aitop {
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 .k-aitop b {
-  font-size: 15px;
+  font-size: 16px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .mdl {
-  padding: 4px 10px;
-  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 12px;
+  border-radius: 6px;
   background: #f3f4f6;
   color: var(--text);
-  font-size: 13px;
   white-space: nowrap;
 }
 @container (max-width: 420px) {
@@ -3995,8 +3991,8 @@ i {
   }
 }
 .k-session {
-  gap: 2px;
-  padding: 10px 12px;
+  gap: 4px;
+  padding: 8px 12px;
   border-color: transparent;
   background: transparent;
 }
@@ -4041,13 +4037,13 @@ i {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 8px;
+  padding: 12px 16px;
   flex: none;
 }
 .af > span {
   display: grid;
-  gap: 2px;
+  gap: 4px;
 }
 .af .muted {
   font-size: 12px;
@@ -4064,7 +4060,7 @@ i {
 }
 .cmp.y {
   color: var(--acc);
-  font-weight: 700;
+  font-weight: 600;
 }
 /* 客户 Logo、展开的回答、滑块验证、卖点 */
 .k-wordmark {
@@ -4076,7 +4072,8 @@ i {
 }
 .ans {
   color: var(--text);
-  line-height: 1.8;
+  font-size: 16px;
+  line-height: 26px;
 }
 .k-captcha {
   justify-content: center;
@@ -4087,21 +4084,20 @@ i {
   gap: 12px;
   height: 40px;
   padding-right: 12px;
-  border-radius: 8px;
+  border-radius: 6px;
   background: #f3f4f6;
-  font-size: 13px;
   overflow: hidden;
 }
 .cap-k {
   display: grid;
   place-items: center;
-  width: 44px;
+  width: 40px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--surf);
   border: 1px solid var(--line);
   color: var(--acc);
-  font-weight: 700;
+  font-weight: 600;
   flex: none;
 }
 .k-bullets {
@@ -4110,12 +4106,12 @@ i {
 }
 .bl {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   color: var(--text);
 }
 .bl i {
   color: var(--acc);
-  font-weight: 700;
+  font-weight: 600;
 }
 .dark .bl i {
   color: #93b4ff;
@@ -4123,8 +4119,8 @@ i {
 
 /* 设置页 */
 .hex {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   flex: none;
   fill: none;
   stroke: currentColor;
@@ -4140,7 +4136,7 @@ i {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 18px 20px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--line2);
   color: #cbd5e1;
   flex: none;
@@ -4168,22 +4164,22 @@ i {
   text-overflow: ellipsis;
 }
 .k-catcard {
-  gap: 6px;
+  gap: 8px;
   padding: 20px;
 }
 .cc-ic {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
-  margin-bottom: 6px;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
   border-radius: 12px;
   background: var(--acc-soft);
   color: var(--acc);
 }
 .cc-ic .hex {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
 }
 .k-catcard > b {
   font-size: 16px;
@@ -4195,7 +4191,7 @@ i {
   display: flex;
   justify-content: space-between;
   margin-top: 8px;
-  padding-top: 10px;
+  padding-top: 12px;
   border-top: 1px solid var(--line2);
   font-size: 12px;
 }
@@ -4204,7 +4200,7 @@ i {
   color: var(--mute);
 }
 .k-secdesc {
-  gap: 6px;
+  gap: 4px;
   justify-content: flex-start;
   padding-top: 4px;
 }
@@ -4213,7 +4209,6 @@ i {
 }
 .k-secdesc .muted {
   font-size: 13px;
-  line-height: 1.6;
 }
 .k-setrows {
   gap: 0;
@@ -4223,7 +4218,7 @@ i {
   display: flex;
   align-items: center;
   gap: 24px;
-  padding: 14px 20px;
+  padding: 12px 20px;
   border-bottom: 1px solid var(--line2);
   flex: none;
 }
@@ -4231,11 +4226,11 @@ i {
   border-bottom: 0;
 }
 .srow.mod {
-  box-shadow: inset 3px 0 var(--acc);
+  box-shadow: inset 4px 0 var(--acc);
 }
 .sr-t {
   display: grid;
-  gap: 3px;
+  gap: 4px;
   flex: 1;
   min-width: 0;
 }
@@ -4261,8 +4256,8 @@ i {
 @container (max-width: 420px) {
   .srow {
     flex-wrap: wrap;
-    gap: 10px;
-    padding: 12px 14px;
+    gap: 8px;
+    padding: 12px 16px;
   }
   .sr-c {
     width: 100%;
@@ -4281,11 +4276,11 @@ i {
 .k-dlghead {
   flex-direction: row;
   align-items: center;
-  padding: 0 4px 14px;
+  padding: 0 4px 16px;
   border-bottom: 1px solid var(--line);
 }
 .k-dlghead b {
-  font-size: 17px;
+  font-size: 18px;
 }
 .k-prefs {
   gap: 12px;
@@ -4293,16 +4288,15 @@ i {
 }
 .pf-h {
   color: var(--ink);
-  font-size: 13px;
   font-weight: 600;
-  margin-top: 6px;
+  margin-top: 12px;
 }
 .k-prefs .segs {
   align-self: flex-start;
 }
 .dots {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 .dots i {
   width: 24px;
@@ -4317,11 +4311,11 @@ i {
 .lps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 8px;
 }
 .lp {
   display: grid;
-  gap: 6px;
+  gap: 8px;
   justify-items: center;
   font-size: 12px;
   color: var(--text);
@@ -4333,7 +4327,7 @@ i {
   position: relative;
   width: 100%;
   aspect-ratio: 4 / 3;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1.5px solid var(--line);
   background: #f8fafc;
   overflow: hidden;
@@ -4381,13 +4375,13 @@ i {
   width: 22%;
 }
 .k-prefs .sw {
-  padding: 10px 0;
+  padding: 8px 0;
 }
 .pf-f {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-top: auto;
-  padding-top: 14px;
+  padding-top: 16px;
   border-top: 1px solid var(--line);
 }
 .pf-f {
@@ -4398,7 +4392,7 @@ i {
   border-top: 1px solid var(--line2);
 }
 .cl-h {
-  padding: 14px 0 6px;
+  padding: 16px 0 8px;
   font-size: 13px;
   color: var(--mute);
   font-weight: 500;
@@ -4419,7 +4413,7 @@ i {
 .rs {
   display: grid;
   gap: 4px;
-  padding: 14px 0;
+  padding: 16px 0;
   border-top: 1px solid var(--line2);
   flex: none;
 }
@@ -4431,16 +4425,15 @@ i {
 }
 .rs-t {
   color: var(--acc);
-  font-size: 15px;
+  font-size: 16px;
 }
 .rs-s {
   color: var(--text);
   font-size: 13px;
-  line-height: 1.6;
 }
 .k-gallery {
   padding: 0;
-  gap: 10px;
+  gap: 8px;
   background: transparent;
   border-color: transparent;
 }
@@ -4450,7 +4443,7 @@ i {
   min-height: 0;
   display: grid;
   place-items: center;
-  border-radius: 14px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #fde7c8, #f6d2a8);
 }
 .gl-m .photo {
@@ -4462,7 +4455,7 @@ i {
   right: 12px;
   bottom: 12px;
   padding: 2px 8px;
-  border-radius: 99px;
+  border-radius: 999px;
   background: rgba(15, 23, 42, 0.5);
   color: #fff;
   font-size: 12px;
@@ -4475,7 +4468,7 @@ i {
 }
 .gl-t i {
   aspect-ratio: 1;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 .gl-t i.on {
   box-shadow: 0 0 0 2px var(--acc);
@@ -4487,8 +4480,7 @@ i {
   border-color: transparent;
 }
 .bb-n {
-  font-size: 22px;
-  line-height: 1.35;
+  font-size: 24px;
 }
 .bb-r {
   font-size: 13px;
@@ -4496,15 +4488,14 @@ i {
 .bb-p {
   display: flex;
   align-items: baseline;
-  gap: 10px;
+  gap: 8px;
   padding: 12px 16px;
   border-radius: 12px;
   background: #fff7ed;
 }
 .bb-p b {
   color: #c2410c;
-  font-size: 30px;
-  font-variant-numeric: tabular-nums;
+  font-size: 32px;
 }
 .bb-p s {
   font-size: 14px;
@@ -4516,7 +4507,7 @@ i {
   gap: 8px;
 }
 .bb-s em {
-  width: 44px;
+  width: 48px;
   font-style: normal;
   color: var(--mute);
   font-size: 13px;
@@ -4525,15 +4516,15 @@ i {
   display: inline-flex;
   align-items: center;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
 }
 .qty i,
 .qty b {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 34px;
+  width: var(--ctl, 32px);
+  height: var(--ctl, 32px);
 }
 .qty b {
   border-inline: 1px solid var(--line);
@@ -4541,7 +4532,7 @@ i {
 }
 .bb-b {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   margin-top: 4px;
 }
 .bb-b .btn {
@@ -4579,24 +4570,26 @@ i {
   gap: 12px;
 }
 .rc-h {
-  font-size: 15px;
+  font-size: 16px;
 }
 .rcs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 12px;
 }
 .rcd {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: flex-start;
-  padding: 12px 14px;
+  padding: 12px 16px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 12px;
 }
 .rcd > span {
   display: grid;
-  gap: 2px;
+  gap: 4px;
+}
+.rcd .muted {
   font-size: 13px;
 }
 .rcd.on {
@@ -4618,10 +4611,10 @@ i {
 @container (max-width: 560px) {
   .rcs {
     grid-template-columns: 1fr;
-    gap: 6px;
+    gap: 8px;
   }
   .rcd {
-    padding: 9px 12px;
+    padding: 12px;
     align-items: center;
   }
   .rcd .muted {
@@ -4629,7 +4622,7 @@ i {
   }
 }
 .k-summary {
-  gap: 10px;
+  gap: 8px;
 }
 .sm-h {
   font-size: 16px;
@@ -4639,11 +4632,10 @@ i {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  font-size: 13px;
   color: var(--text);
 }
 .sm-r.tl {
-  padding-top: 10px;
+  padding-top: 12px;
   border-top: 1px solid var(--line2);
 }
 .sm-r.tt {
@@ -4653,14 +4645,13 @@ i {
 }
 .sm-r.tt b:last-child {
   color: #c2410c;
-  font-size: 22px;
-  font-variant-numeric: tabular-nums;
+  font-size: 24px;
 }
 .dn {
   color: var(--ok);
 }
 .k-summary .btn {
-  margin-top: 6px;
+  margin-top: 8px;
 }
 .sm-n {
   font-size: 12px;
@@ -4670,8 +4661,8 @@ i {
   flex-direction: row;
   align-items: center;
   gap: 12px;
-  padding: 10px 14px;
-  border-radius: 14px;
+  padding: 12px 16px;
+  border-radius: 12px;
   box-shadow: 0 -6px 18px -10px rgba(15, 23, 42, 0.3);
 }
 .pb-t {
@@ -4680,8 +4671,7 @@ i {
 }
 .pb-t b {
   color: #c2410c;
-  font-size: 20px;
-  font-variant-numeric: tabular-nums;
+  font-size: 24px;
 }
 .k-searchhero {
   align-items: center;
@@ -4689,16 +4679,15 @@ i {
   gap: 16px;
   padding: 40px 24px;
   border: 0;
-  border-radius: 16px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #eef3ff, #f5f0ff);
   text-align: center;
 }
 .sh-i {
   width: min(560px, 100%);
-  height: 48px;
-  line-height: 46px;
-  font-size: 15px;
-  border-radius: 12px;
+  min-height: 48px;
+  padding-block: 12px;
+  font-size: 16px;
   text-align: left;
 }
 .sh-k {
@@ -4714,18 +4703,18 @@ i {
 }
 .k-checklist {
   gap: 12px;
-  padding: 22px 24px;
+  padding: 24px;
 }
 .k-byline {
   flex-direction: row;
   align-items: center;
   gap: 12px;
-  padding: 4px 0 14px;
+  padding: 4px 0 16px;
   border-bottom: 1px solid var(--line2);
 }
 .by-t {
   display: grid;
-  gap: 2px;
+  gap: 4px;
 }
 .by-t .muted {
   font-size: 13px;
@@ -4733,16 +4722,16 @@ i {
 .icn {
   display: grid;
   justify-items: center;
-  gap: 2px;
+  gap: 4px;
   width: 40px;
   color: var(--text);
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1;
   flex: none;
 }
 .icn em {
   font-style: normal;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--mute);
 }
 @container (max-width: 420px) {
@@ -4757,11 +4746,11 @@ i {
   align-items: baseline;
 }
 .ob-h b {
-  font-size: 17px;
+  font-size: 18px;
 }
 .ob-bar {
   height: 6px;
-  border-radius: 99px;
+  border-radius: 999px;
   background: var(--line2);
   overflow: hidden;
   flex: none;
@@ -4775,7 +4764,7 @@ i {
 .ob {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   padding: 12px 0;
   border-top: 1px solid var(--line2);
   flex: none;
@@ -4788,7 +4777,7 @@ i {
   border-radius: 50%;
   border: 2px solid var(--line);
   color: var(--mute);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   flex: none;
 }
@@ -4807,14 +4796,11 @@ i {
 }
 .ob-t {
   display: grid;
-  gap: 2px;
+  gap: 4px;
   flex: 1;
   min-width: 0;
 }
 .ob-t .muted {
-  font-size: 13px;
-}
-.ob-l {
   font-size: 13px;
 }
 .k-calendar {
@@ -4827,8 +4813,8 @@ i {
   gap: 8px;
 }
 .cal-h b {
-  font-size: 17px;
-  margin-right: 6px;
+  font-size: 18px;
+  margin-right: 8px;
 }
 .cal-g {
   flex: 1;
@@ -4849,8 +4835,8 @@ i {
 .cal-d {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: 6px;
+  gap: 4px;
+  padding: 4px;
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   min-height: 0;
@@ -4858,7 +4844,6 @@ i {
 }
 .cal-d em {
   font-style: normal;
-  font-size: 13px;
   color: var(--text);
 }
 .cal-d.out em {
@@ -4874,10 +4859,10 @@ i {
   color: #fff;
 }
 .cal-d i {
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-size: 11px;
-  line-height: 18px;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 20px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
