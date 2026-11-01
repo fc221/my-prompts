@@ -2,6 +2,7 @@
 zh: 通栏横带
 en: Full-width bands
 order: 20
+of: l-dash-arrange
 ---
 
 ## 是什么
@@ -28,3 +29,41 @@ order: 20
 ## 提示词
 
 {产品}{页面}用「通栏横带」：页面分三条全宽横带——概览数字（{指标}，4–5 个）→ 趋势图（{图表}）→ 明细列表；带内共用 12 列网格、间距 16px，带与带之间 48px；每条带有标题和口径说明，时间范围写在页头一次；明细超过 10 行加“查看全部”；窄屏带内改单列、概览数字两列。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr',
+  rows: '20% 36% 1fr',
+  areas: ['k', 'ch', 'tb'],
+  boxes: {
+    k: {
+      inner: {
+        cols: '1fr 1fr 1fr 1fr',
+        rows: '1fr',
+        areas: ['a b c d'],
+        boxes: { a: '数字', b: '数字', c: '数字', d: '数字' },
+      },
+    },
+    ch: {
+      inner: { cols: '2fr 1fr', rows: '1fr', areas: ['a b'], boxes: { a: { label: '趋势图', acc: true }, b: '分布' } },
+    },
+    tb: '明细列表',
+  },
+};
+export const wireMobile = {
+  cols: '1fr 1fr',
+  rows: 'auto 13% 13% 30% 1fr',
+  areas: ['top top', 'a b', 'c d', 'ch ch', 'tb tb'],
+  boxes: {
+    top: { label: '顶栏 ☰', text: '经营概览' },
+    a: '数字',
+    b: '数字',
+    c: '数字',
+    d: '数字',
+    ch: { label: '趋势图', acc: true },
+    tb: '明细',
+  },
+};
+```

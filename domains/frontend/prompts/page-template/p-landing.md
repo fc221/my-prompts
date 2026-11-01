@@ -1,6 +1,7 @@
 ---
 zh: 产品落地页
 en: Landing page
+preview: l-hero-center
 order: 70
 ---
 

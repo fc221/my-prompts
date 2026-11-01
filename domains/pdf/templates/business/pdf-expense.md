@@ -41,3 +41,20 @@ OA、费控系统提交报销后导出 PDF 打印签字或电子归档；差旅�
 4. 页眉重复单号，页脚“第 X 页 / 共 Y 页”。
 5. 附件：主单生成后，把发票文件按明细序号接在后面，每张附件页的页眉盖上“单号 附件 i / n”；发票原件另行归档，不被覆盖。
 用 4 条和 45 条明细各生成一份，说明改了哪些文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, page({
+    pages: [
+      { head: 'BX-202610-00087 · 附单据 7 张', foot: '第 {p} / {n} 页', label: '报销单：明细 → 汇总 → 账户 → 审批', blocks: ['title:差旅费报销单', 'kv:2', 'h:报销人信息', 'kv:3', 'table:4', 'total:¥ 3,486.50', 'text:收款账户 6222 **** **** 1234', 'h:审批记录', 'text:部门负责人 张伟 同意 2026-10-29 16:20', 'text:财务审核 刘洋 同意 2026-10-30 10:05'] },
+      { head: 'BX-202610-00087 附件 3 / 7', label: '附件页：按明细序号排，单独计数', blocks: ['text:明细 3 · 酒店住宿 · 电子普通发票（副本）', 'img', 'img'] },
+    ],
+    notes: ['合计等于明细之和', '卡号只留前后 4 位', '审批记录整块不分页'],
+  }), { center: true, min: 0.3 });
+}
+</script>

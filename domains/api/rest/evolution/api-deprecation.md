@@ -42,3 +42,17 @@ order: 30
 5. 给出通知计划：宣布、每月跟进、关闭前 30 天和 7 天提醒、一次 1 小时的限时关闭演练。
 6. 到期后接口返回 410 和迁移文档地址，保留 3 个月再删代码。
 最后列出改动文件和时间表。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '标记弃用', note: 'Deprecation + Sunset + Link 头', acc: true }, { t: '迁移期', note: '至少 6 个月，开放平台 12 个月' }, { t: '按调用方跟进', note: '每月通知，关闭前 30、7 天再提醒' }],
+    [{ t: '限时关闭演练', note: '低峰期 1 小时返回 410' }, { t: '正式关闭', note: '410 Gone + 迁移文档地址', bad: true, via: '到期' }, { t: '删路由', note: '410 至少保留 3 个月', via: '3 个月后' }],
+  ]), { title: '弃用与下线 · Sunset: Thu, 31 Dec 2026 16:00:00 GMT' });
+}
+</script>

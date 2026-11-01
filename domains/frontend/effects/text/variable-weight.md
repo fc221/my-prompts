@@ -2,7 +2,7 @@
 zh: 字重随动
 en: Variable weight follow
 aka: 可变字体 字重动画 字体粗细跟随 variable font weight
-order: 160
+order: 190
 ---
 
 ## 是什么
@@ -34,3 +34,75 @@ order: 160
 ## 提示词
 
 给{标题}加「字重随动」：用系统可变字体（system-ui、Segoe UI Variable，后备普通无衬线），把标题拆成单个字母，每个字母放进按 900 字重量好宽度的 inline-block 格子里居中，变粗时整行不抖；标题保留完整文字给读屏，拆开的字母 aria-hidden。指针在标题区域移动时，每个字母按与指针的距离算目标字重（200 到 900，影响半径约 3 个字宽，按距离平方衰减），用 requestAnimationFrame 每帧向目标插值 18%，全部到位后停止循环；指针离开后回到 300。字体有 wdth 轴时可同时把 font-stretch 从 75% 拉到 125%。触屏按住拖动时跟手，松手回到静止字重。只用在{英文或数字大标题}上，正文和按钮不用；减少动态效果时固定为 700。
+
+## 示例
+
+<style>
+:host{container-type:size}
+.st{position:relative;height:100%;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px 16px;background:#f4f1ea;color:#16140f;font:12px/1.4 system-ui,-apple-system,"PingFang SC",sans-serif;touch-action:none;user-select:none;-webkit-user-select:none}
+.k{margin:0;color:#6b6457;font:11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em}
+.word{margin:0;font:300 min(18cqw,32cqh)/1 system-ui,-apple-system,"Segoe UI Variable Display","Segoe UI Variable","Helvetica Neue",Arial,sans-serif;letter-spacing:0;white-space:nowrap}
+.ls{display:flex}
+.c{display:inline-flex;flex-direction:column;align-items:center}
+.c i{font-style:normal}
+.c small{display:none;margin-top:6px;color:#8a8273;font:10px/1 ui-monospace,Menlo,monospace;font-weight:400;font-variant-numeric:tabular-nums}
+.cap{margin:0;color:#4a4437}
+.ctl{position:absolute;right:12px;bottom:10px;height:28px;padding:0 10px;font-size:12px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@container (max-width:310px){.ctl{display:none}
+}
+@container (min-height:260px){.st{gap:10px}
+.k{font-size:12px}
+.c small{display:block}
+.cap{font-size:14px}
+.ctl{right:16px;bottom:14px;height:32px}
+}
+</style>
+
+<div class="st"><p class="k">AUTUMN DROP · 2026</p><h2 class="word"><span class="sr">GRAVITY</span><span class="ls" aria-hidden="true"></span></h2><p class="cap">指针越靠近，字越有分量</p><button type="button" class="ctl">重播</button></div>
+
+<script type="module">
+export default function demo(root) {
+  const st = root.querySelector('.st'), ls = root.querySelector('.ls'), MIN = 200, MAX = 900, REST = 300;
+  const cells = [...'GRAVITY'].map((ch) => { const c = document.createElement('span'); c.className = 'c'; c.innerHTML = `<i>${ch}</i><small></small>`; ls.appendChild(c); return c; });
+  const glyphs = cells.map((c) => c.querySelector('i')), nums = cells.map((c) => c.querySelector('small'));
+  const w = cells.map(() => REST), t = cells.map(() => REST);
+  const draw = () => glyphs.forEach((g, i) => { g.style.fontWeight = Math.round(w[i]); nums[i].textContent = Math.round(w[i]); });
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { w.fill(700); draw(); root.querySelector('.ctl').hidden = true; return; }
+  // 每个字母的格子按 900 字重量好宽度，变粗时整行不抖
+  const measure = () => { glyphs.forEach((g) => { g.style.fontWeight = MAX; }); cells.forEach((c) => { c.style.width = ''; }); const ws = glyphs.map((g) => g.getBoundingClientRect().width); cells.forEach((c, i) => { c.style.width = ws[i] + 'px'; }); draw(); };
+  let raf = 0, virt = null;
+  const aim = (x, y) => {
+    const rs = cells.map((c) => c.getBoundingClientRect()), R = 3 * (rs.reduce((s, r) => s + r.width, 0) / rs.length);
+    rs.forEach((r, i) => { const d = Math.hypot(x - (r.left + r.width / 2), (y - (r.top + r.height / 2)) * 0.6); t[i] = MIN + (MAX - MIN) * Math.max(0, 1 - d / R) ** 2; });
+    run();
+  };
+  const rest = () => { t.fill(REST); run(); };
+  // 每帧向目标插值 18%，全部到位就停
+  const tick = () => {
+    raf = 0; if (!root.host.isConnected) return;
+    let moving = false; w.forEach((v, i) => { const d = t[i] - v; if (Math.abs(d) < 1) w[i] = t[i]; else { w[i] = v + d * 0.18; moving = true; } });
+    draw(); if (moving) raf = requestAnimationFrame(tick);
+  };
+  const run = () => { if (!raf) raf = requestAnimationFrame(tick); };
+  st.addEventListener('pointermove', (e) => { if (e.pointerType === 'touch' && !e.buttons) return; virt = null; aim(e.clientX, e.clientY); });
+  st.addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch') { virt = null; aim(e.clientX, e.clientY); } });
+  st.addEventListener('pointerleave', () => { if (!virt) rest(); });
+  st.addEventListener('pointerup', (e) => { if (e.pointerType === 'touch') rest(); });
+  // 演示：一个看不见的指针从左扫到右，停在第三个字母上
+  const sweep = () => {
+    const a = cells[0].getBoundingClientRect(), b = cells[6].getBoundingClientRect(), end = cells[2].getBoundingClientRect(), y = a.top + a.height / 2, t0 = performance.now(), me = (virt = {});
+    const x0 = a.left, x1 = b.right, xe = end.left + end.width / 2;
+    const step = (now) => {
+      if (virt !== me || !root.host.isConnected) return;
+      const p = Math.min(1, (now - t0) / 1600), x = p < 0.7 ? x0 + (x1 - x0) * (p / 0.7) : x1 + (xe - x1) * ((p - 0.7) / 0.3);
+      aim(x, y); if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  root.querySelector('.ctl').addEventListener('click', sweep);
+  new ResizeObserver(measure).observe(st);
+  measure();
+  setTimeout(() => { if (root.host.isConnected) sweep(); }, 200);
+}
+</script>

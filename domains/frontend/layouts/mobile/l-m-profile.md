@@ -28,3 +28,32 @@ order: 50
 ## 提示词
 
 {产品}「个人中心」：顶部头像 64px + 昵称 + 一行账户信息（点击编辑资料）；下面一行 {数据项数} 项关键数据（{数据项}），数字在上、名称在下，各自可点；再往下是分组单元格列表（{分组}），每行 52px，图标 + 名称 + 右侧信息或箭头，组间 12px；退出登录单独放在最底部并二次确认；平板以上内容最大宽度 640px 居中。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 56% 1fr',
+  rows: '26% 12% 1fr 1fr',
+  areas: ['. head .', '. stats .', '. g1 .', '. g2 .'],
+  boxes: {
+    head: { label: '头像 昵称', acc: true },
+    stats: '关键数据',
+    g1: { label: '单元格分组', text: '订单' },
+    g2: { label: '单元格分组', text: '账户' },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: '20% 11% 1fr 1fr 11% 11%',
+  areas: ['head', 'stats', 'g1', 'g2', 'out', 'tab'],
+  boxes: {
+    head: { label: '头像 昵称', acc: true },
+    stats: '关键数据',
+    g1: { label: '单元格组', text: '订单' },
+    g2: { label: '单元格组', text: '账户' },
+    out: '退出',
+    tab: '标签栏',
+  },
+};
+```

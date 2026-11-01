@@ -40,3 +40,47 @@ order: 30
 3. 记账表顶部做汇总区：年份和期间（全年或 1–12 月）下拉，收入、支出、结余、账户余额四张指标卡，按月汇总和按类别汇总两张小表，月度趋势柱形图和类别占比环形图；分类为“转账”的不计入收入和支出。
 4. 账户对账区：每个账户的表内余额、实际余额和差额，差额不为 0 标红。
 交付时说明哪些格需要手填、哪些是公式，并放 8–10 行示例数据（含一笔转账）演示汇总和对账。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-top{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) minmax(0,1.3fr);gap:8px;margin-bottom:8px}
+.m-k{padding:6px 10px;border:1px solid #e1e5ea;border-radius:6px;background:#fff}
+.m-k p{margin:0;color:#5d6675;font-size:10.5px}
+.m-k b{display:block;font-size:16px;font-weight:700;line-height:1.3;font-variant-numeric:tabular-nums;color:#101828}
+.m-k.up b{color:#067647}
+.m-k.dn b{color:#b42318}
+.m-cat{display:grid;gap:3px}
+.m-cat span{display:grid;grid-template-columns:34px minmax(0,1fr) 30px;align-items:center;gap:5px;font-size:10.5px;color:#5d6675}
+.m-cat i{height:7px;border-radius:2px;background:#eb6834}
+.m-cat em{text-align:right;font-style:normal;font-variant-numeric:tabular-nums}
+</style>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const kpi = (t, v, c = '') => '<div class="m-k ' + c + '"><p>' + t + '</p><b>' + v + '</b></div>';
+  const cat = [['原料', 46], ['房租', 31], ['人工', 15], ['其他', 8]]
+    .map(([n, p]) => '<span>' + n + '<i style="width:' + p + '%"></i><em>' + p + '%</em></span>').join('');
+  const top = '<div class="m-top">'
+    + kpi('10 月收入', '38,460.00', 'up') + kpi('10 月支出', '29,315.00', 'dn')
+    + kpi('结余', '9,145.00') + kpi('账户余额', '52,780.00')
+    + '<div class="m-k"><p>支出占比</p><div class="m-cat">' + cat + '</div></div></div>';
+  draw(root, top + sheet({
+    head: ['日期', '摘要', '分类', '账户', '收入', '支出', '余额'],
+    widths: [50, 118, 64, 70, 70, 70, 76],
+    rows: [
+      ['10-26', '门店营业款', '营业收入 ▾', '对公账户 ▾', '4,280.00', '', '55,140.00'],
+      ['10-27', '采购牛奶和糖浆', '原料 ▾', '对公账户 ▾', '', '1,960.00', '53,180.00'],
+      ['10-28', '备用金取现', '转账 ▾', '对公账户 ▾', '', '1,000.00', '52,180.00'],
+      ['10-28', '备用金取现', '转账 ▾', '现金 ▾', '1,000.00', '', '53,180.00'],
+      ['10-29', '店员加班餐', '其他 ▾', '现金 ▾', '', '400.00', '52,780.00'],
+    ],
+    fx: ['G6', '=期初合计+SUM(INDEX([收入],1):[@收入])-SUM(INDEX([支出],1):[@支出])'],
+    marks: { C4: 'warn', C5: 'warn' },
+    tabs: ['记账', '参数'],
+    freeze: true,
+  }), { title: '收支记账表 · 上面汇总区、下面明细，转账一出一进不计收支', min: 0.45 });
+}
+</script>

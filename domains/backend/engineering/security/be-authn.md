@@ -39,3 +39,22 @@ order: 10
 2. 按规则改：密码改用 Argon2id 或 bcrypt，旧哈希在用户下次登录成功时迁移；Web 用 HttpOnly、Secure、SameSite Cookie 会话，登录后更换会话 ID；App 用 15 分钟访问令牌加可轮换、可吊销的刷新令牌；加失败锁定和验证码；短信验证码按 6 位、5 分钟、5 次、60 秒间隔执行；敏感操作二次验证；记录登录事件。
 3. 补测试：错误密码 5 次后要求验证码；改密码后旧刷新令牌失效；刷新令牌重放时整族作废。
 4. 汇报：改动文件、旧密码哈希和旧令牌的过渡方案、测试结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['App', '认证服务', 'Redis'], [
+    [0, 1, '手机号 + 密码'],
+    [1, 1, 'Argon2id 校验密码'],
+    [1, 2, '只存刷新令牌的哈希'],
+    [1, 0, '返回两个令牌', 'r'],
+    [0, 1, '用刷新令牌换新的'],
+    [1, 0, '新的一对，旧的作废', 'r'],
+    [0, 1, '重放旧令牌 → 全吊销', 'x'],
+  ]), { title: '登录认证 · 访问令牌 15 分钟，刷新令牌每次轮换' });
+}
+</script>

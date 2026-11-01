@@ -1,7 +1,8 @@
 ---
-zh: 表格看不清
+zh: 优化表格可读性
 en: Unreadable table
-order: 100
+aka: 表格看不清
+order: 150
 ---
 
 ## 是什么
@@ -25,3 +26,36 @@ order: 100
 6. 状态用小色点加文字，不用大色块；空值写“—”。
 7. 操作列固定在右侧，最多露出 2 个文字按钮，其余收进“更多”；删除用中性色，确认时才用危险色。
 8. 数据多时表头吸顶；横向超出时只在表格容器内滚动，并固定首列。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/fix.css">
+<style>
+.c{padding:8px 4px;font-size:8px;line-height:11px}
+.g{display:grid;align-items:center}
+.g>div{padding:0 3px;min-width:0}
+.h{color:#5b616e}
+.r{border-top:1px solid #eef0f3}
+/* 改前：表头重底加粗，门店列太窄换行、行高错位，数字左对齐格式不一，状态大色块，斑马纹加分割线，空值留白 */
+.bad .g{grid-template-columns:30px minmax(0,1fr) auto}
+.bad .h{padding:3px 0;background:#dfe3e8;color:#1f2329;font-weight:700}
+.bad .r{padding:3px 0}
+.bad .r:nth-child(odd){background:#f3f4f6}
+.bad .chip{display:inline-block;padding:1px 4px;border-radius:3px;color:#fff;font-size:7px;line-height:10px;white-space:nowrap}
+.bad .chip.ok{background:#2f9e44}
+.bad .chip.w{background:#e8590c}
+/* 改后：表头 7px 次要色不加底，门店列最多两行，金额右对齐、两位小数、等宽数字，状态小色点，空值写 —，只用分割线 */
+.good .g{grid-template-columns:minmax(0,1fr) 42px 40px}
+.good .g>div:last-child{white-space:nowrap}
+.good .h{padding:2px 0;font-size:7px}
+.good .r{height:24px}
+.good .n{text-align:right;font-variant-numeric:tabular-nums}
+.good .t{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;line-height:10px}
+.good .dot{display:inline-block;width:5px;height:5px;margin-right:3px;border-radius:50%;background:#2f9e44;vertical-align:1px}
+.good .dot.w{background:#e8590c}
+</style>
+
+<div class="fx">
+  <section class="fx-p"><h4>改前</h4><div class="fx-b"><div class="fx-z c bad"><div class="g h"><div>门店</div><div>金额</div><div>状态</div></div><div class="g r"><div>朝阳大悦城店</div><div>1200</div><div><span class="chip ok">已完成</span></div></div><div class="g r"><div>望京店</div><div>88.5</div><div><span class="chip w">待处理</span></div></div><div class="g r"><div>西单店</div><div>3,060.00</div><div></div></div></div></div></section>
+  <section class="fx-p ok"><h4>改后</h4><div class="fx-b"><div class="fx-z c good"><div class="g h"><div>门店</div><div class="n">金额</div><div>状态</div></div><div class="g r"><div class="t">朝阳大悦城店</div><div class="n">1,200.00</div><div><i class="dot"></i>已完成</div></div><div class="g r"><div class="t">望京店</div><div class="n">88.50</div><div><i class="dot w"></i>待处理</div></div><div class="g r"><div class="t">西单店</div><div class="n">3,060.00</div><div class="h">—</div></div></div></div></section>
+</div>

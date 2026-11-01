@@ -2,6 +2,7 @@
 zh: 对话 + 产物分栏
 en: Chat + artifact panel
 order: 30
+of: l-ai-page
 ---
 
 ## 是什么
@@ -29,3 +30,32 @@ order: 30
 ## 提示词
 
 {产品}用「对话 + 产物分栏」：左侧对话栏 420px（消息流 + 吸底输入框），右侧产物面板 1fr，顶部放标题、版本切换、预览 / 代码切换、复制、下载和全屏；分隔条可拖动并记住宽度；对话里每个产物显示成一张卡片，点击在面板打开；修改时高亮变化处；面板可关闭回到单栏；窄屏点卡片打开全屏产物页。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '38% 1fr',
+  rows: '12% 1fr 17%',
+  areas: ['ct pt', 'chat pv', 'inp pv'],
+  boxes: {
+    ct: { label: '对话', kind: 'aitop', text: '生成订单看板' },
+    pt: '版本 · 复制 · 全屏',
+    chat: '消息流',
+    inp: '输入框',
+    pv: { label: '产物预览 / 画布', acc: true, kind: 'image' },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto 200px auto 1fr auto',
+  areas: ['top', 'm1', 'card', 'm2', '.', 'inp'],
+  boxes: {
+    top: { label: '标题', kind: 'mtop', text: '生成订单看板' },
+    m1: '提问',
+    card: { label: '产物卡片', acc: true, kind: 'artcard' },
+    m2: '回答',
+    inp: '输入框',
+  },
+};
+```

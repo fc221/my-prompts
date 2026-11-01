@@ -1,7 +1,7 @@
 <script setup lang="ts">
-// 顶栏：手机上的菜单按钮、当前位置、全局搜索入口、组合入口
+// 顶栏：手机上的菜单按钮、当前位置、全局搜索入口、组合入口、仓库链接
 import { computed } from 'vue';
-import { domainOf } from '../kb';
+import { domainOf, REPO_URL } from '../kb';
 import { state, toast } from '../state';
 import AppIcon from './AppIcon.vue';
 
@@ -18,7 +18,7 @@ defineEmits<{ picks: [] }>();
     </button>
     <p class="crumb">
       <span>{{ domain.name }}</span
-      ><AppIcon name="chevron" :size="14" /><b>{{ section?.name }}</b>
+      ><AppIcon name="chevron" :size="16" /><b>{{ section?.name }}</b>
     </p>
     <button type="button" class="search" @click="state.paletteOpen = true">
       <AppIcon name="search" :size="16" />
@@ -36,6 +36,16 @@ defineEmits<{ picks: [] }>();
       <AppIcon name="stack" :size="16" /><span class="pl">组合</span
       ><span v-if="state.picks.length" class="badge">{{ state.picks.length }}</span>
     </button>
+    <a
+      class="btn gh"
+      :href="REPO_URL"
+      target="_blank"
+      rel="noopener"
+      aria-label="GitHub 仓库（新窗口打开）"
+      title="GitHub 仓库"
+    >
+      <AppIcon name="github" :size="16" />
+    </a>
   </header>
 </template>
 
@@ -80,12 +90,12 @@ defineEmits<{ picks: [] }>();
   height: var(--control-h);
   padding: 0 8px 0 12px;
   border: 1px solid var(--border-control);
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--surface-raised);
   color: var(--text-secondary);
   font-size: 14px;
   text-align: left;
-  transition: border-color var(--dur) var(--ease);
+  transition: border-color var(--dur-fast) var(--ease);
 }
 @media (hover: hover) {
   .search:hover {
@@ -103,11 +113,15 @@ defineEmits<{ picks: [] }>();
 .picks {
   gap: 6px;
 }
+.gh {
+  width: var(--control-h);
+  padding: 0;
+}
 .badge {
   min-width: 20px;
   height: 20px;
   padding: 0 8px;
-  border-radius: 10px;
+  border-radius: 999px;
   background: var(--surface-muted);
   color: var(--text-secondary);
   font-size: 12px;
@@ -139,8 +153,19 @@ defineEmits<{ picks: [] }>();
   .search kbd {
     display: none;
   }
-  .pl {
+  .pl,
+  .gh {
     display: none;
+  } /* 手机顶栏留给搜索，仓库入口在菜单底部和页脚 */
+}
+@media (pointer: coarse) {
+  .search {
+    position: relative;
   }
+  .search::before {
+    content: '';
+    position: absolute;
+    inset: -2px 0;
+  } /* 热区撑到 44px 高，视觉不变 */
 }
 </style>

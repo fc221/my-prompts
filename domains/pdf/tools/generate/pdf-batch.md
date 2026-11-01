@@ -42,3 +42,17 @@ order: 20
 5. 单份超过 500 页的分段生成再用 qpdf 合并；产物存对象存储，返回 10 分钟有效的签名下载链接，整批完成后可选打包成 zip。
 6. 加指标：队列积压、单份耗时 P95、失败率；给出并发 1、4、8 时的每秒份数和内存峰值。
 最后说明改了哪些文件，以及怎么在本地跑一批 100 份验证。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '提交任务', note: '立即返回 202 + id' }, { t: '队列', note: '单号+模板版本+摘要去重' }, { t: '工作进程', note: '≤ CPU 核数个页面', acc: true, via: '取任务' }, { t: '对象存储', note: '签名链接 10 分钟' }],
+    [{ t: '单份失败', note: '超时 30 秒关页面', bad: true }, { t: '退避重试', note: '网络类最多 3 次', via: '可重试' }, { t: '标 failed', note: '缺字段、模板错直接标', bad: true, via: '仍失败' }],
+  ]), { title: '批量生成 · 并发上限按 CPU 核数' });
+}
+</script>

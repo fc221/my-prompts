@@ -1,6 +1,7 @@
 ---
 zh: 设置页
 en: Settings page
+preview: l-admin-settings
 order: 40
 ---
 

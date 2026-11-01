@@ -40,3 +40,17 @@ order: 60
 4. 7 天这类长延迟先存表，到期前 10 分钟再搬进延迟队列。
 5. 关单后又收到支付成功，走自动退款。
 最后给出压测和对账方法：一次投递 10 万个 1 分钟后到期的任务，统计触发延迟 P99 和重复执行次数；杀掉消费者再启动，确认不丢；每天核对 expire_at 已过仍为 PENDING 的单数为 0。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '下单', note: 'expire_at = 下单 + 30 分钟' }, { t: 'ZADD 延迟集合', note: '分数 = 到期毫秒数' }, { t: '每秒取到期', note: 'Lua 取出移入处理中', acc: true }, { t: '条件关单', note: "仅 status = 'PENDING'" }],
+    [{ t: '消费者崩溃', note: '处理中超 60 秒', bad: true, via: '失败时' }, { t: '巡检放回', note: '重新投递' }, { t: '兜底扫描', note: '每 5 分钟，补关就告警' }, { t: '已支付 · 0 行', note: '确认消息，不关单' }],
+  ]), { title: '订单 30 分钟未支付自动关闭' });
+}
+</script>

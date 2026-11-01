@@ -42,11 +42,11 @@ figure {
 }
 .b {
   height: 32px;
-  padding: 0 14px;
+  padding: 0 16px;
   border: 1px solid #e3e6eb;
-  border-radius: 8px;
+  border-radius: 6px;
   background: #fff;
-  font-size: 13px;
+  font-size: 14px;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
@@ -80,14 +80,14 @@ figure {
   border-color: transparent;
   background: none;
   color: #3b5bdb;
-  padding: 0 8px;
+  padding: 0 12px;
 }
 .b.t:hover {
   background: #edf1ff;
 }
 .b.sm {
   height: 28px;
-  padding: 0 10px;
+  padding: 0 12px;
   font-size: 12px;
 }
 .b[aria-disabled='true'],
@@ -100,7 +100,7 @@ figure {
   height: 32px;
   flex: none;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: none;
   font-size: 20px;
   line-height: 1;
@@ -125,7 +125,7 @@ figure {
 .ln {
   display: block;
   height: 10px;
-  border-radius: 5px;
+  border-radius: 999px;
   background: #eceef2;
 }
 .seg {
@@ -171,7 +171,9 @@ figure {
 .panel {
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(15, 17, 22, 0.2);
+  box-shadow:
+    0 2px 6px rgba(15, 17, 22, 0.16),
+    0 12px 32px rgba(15, 17, 22, 0.18);
   transform: scale(0.96);
   transition: transform 0.16s cubic-bezier(0.4, 0, 1, 1);
 }

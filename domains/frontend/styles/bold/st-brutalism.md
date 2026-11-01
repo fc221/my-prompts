@@ -2,6 +2,7 @@
 zh: 粗野主义
 en: Neo-brutalism
 order: 10
+tab: 基础
 ---
 
 ## 是什么
@@ -29,3 +30,23 @@ order: 10
 ## 提示词
 
 把{产品}的{页面}做成粗野主义风：亮黄 #ffe14d 或白底，近黑 #111 文字和 3px 黑框，撞色 {品牌色} 做大色块；圆角 0，硬投影 6px 6px 0 #111，悬停投影加到 8px 并反向位移 2px，按下投影收回；标题 800–900 大字直说，标签用等宽字体；可以轻微倾斜和压叠，但正文水平对齐、16px / 1.6；窄屏取消倾斜、色块上下堆叠；减少动态效果时去掉位移；色块上的文字对比度 ≥ 4.5:1。
+
+## 示例
+
+<style>
+:host{container-type:size}
+.s{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:16px 20px;overflow:hidden;background:#ffe14d;color:#111;font:13px/1.4 system-ui,"PingFang SC",sans-serif}
+.tag{position:relative;display:inline-block;padding:2px 8px;border:2px solid #111;background:#fff;font:700 12px/1.4 ui-monospace,Menlo,monospace;transform:rotate(-2deg)}
+h1{position:relative;margin:8px 0 12px;font-size:clamp(24px,15cqh,52px);line-height:1.1;font-weight:900}
+.row{position:relative;display:flex;align-items:center;gap:20px}
+a{display:inline-flex;height:36px;align-items:center;padding:0 16px;border:3px solid #111;background:#ff5c39;color:#111;font-weight:800;box-shadow:6px 6px 0 #111;cursor:pointer;transition:transform .12s linear,box-shadow .12s linear}
+a:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 #111}
+a:active{transform:translate(6px,6px);box-shadow:0 0 0 #111}
+.st{padding:2px 8px;border:3px solid #111;background:#fff;font-weight:900;font-size:16px;transform:rotate(4deg)}
+.blk{position:absolute;right:-24px;top:20px;width:36%;height:72%;border:3px solid #111;background:repeating-linear-gradient(-45deg,#4d7cff 0 12px,#3d6cf0 12px 24px);box-shadow:6px 6px 0 #111;transform:rotate(5deg)}
+@media (prefers-reduced-motion:reduce){a{transition:none}
+a:hover{transform:none}
+}
+</style>
+
+<div class="s"><div class="blk" aria-hidden="true"></div><span class="tag">NEW · 限量 300 件</span><h1>不修边幅，<br>但说人话。</h1><div class="row"><a>立即预购</a><span class="st">¥199</span></div></div>

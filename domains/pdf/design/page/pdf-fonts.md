@@ -40,3 +40,32 @@ PDF 里用到的字体要嵌进文件，对方电脑没装也能原样显示；�
 4. 生成后用 pdffonts 检查：只出现这几款字体，emb、sub、uni 都是 yes；复制一段中文和一行金额粘贴出来核对。
 5. 加缺字检查：数据里有字体覆盖不到的字时报错并列出这些字。
 最后说明改了哪些文件、字体文件的许可证和生成后的字体列表。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: 'fonts/ 随项目部署', text: `
+@font-face {
+  font-family: "Noto Sans SC";
+  src: url(fonts/NotoSansSC-Regular.otf);
+}
+body { font: 10.5pt/1.5 "Noto Sans SC";
+       font-synthesis: none; }
+.amount {
+  font-variant-numeric: tabular-nums; }
+` },
+    { t: '生成后检查', text: `
+$ pdffonts receipt.pdf
+name                       emb sub uni
+XKQZAB+NotoSansSC-Regular  yes yes yes
+XKQZAB+NotoSansSC-Bold     yes yes yes
+# uni 为 no：复制出来是乱码
+` },
+  ]), { title: '中文字体：子集嵌入 · Regular / Bold 两个静态字重' });
+}
+</script>

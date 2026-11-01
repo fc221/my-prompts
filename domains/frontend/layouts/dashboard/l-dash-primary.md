@@ -2,6 +2,7 @@
 zh: 主次布局
 en: Primary + secondary
 order: 10
+of: l-dash-arrange
 ---
 
 ## 是什么
@@ -29,3 +30,34 @@ order: 10
 ## 提示词
 
 {产品}{页面}用「主次布局」回答“{核心问题}”：12 列网格，主模块占 8 列、纵跨两行，面积超过首屏一半，用全页最大的读数或唯一的彩色图表；次要指标做成 4 列宽小模块，右侧 2 个、下方 3 个；间距 16px，主次卡圆角 20 / 14；强调色只给主模块的关键数和需要处理的项；窄屏主模块排第一，次要模块两列。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 1fr 1fr',
+  rows: '1fr 1fr 30%',
+  areas: ['main main s1', 'main main s2', 'b1 b2 b3'],
+  boxes: {
+    main: { label: '主模块 · 核心问题', acc: true, text: '本周销售趋势' },
+    s1: '次要',
+    s2: '次要',
+    b1: '次要',
+    b2: '次要',
+    b3: '次要',
+  },
+};
+export const wireMobile = {
+  cols: '1fr 1fr',
+  rows: 'auto 40% 1fr 1fr',
+  areas: ['top top', 'main main', 's1 s2', 's3 s4'],
+  boxes: {
+    top: { label: '顶栏 ☰', text: '经营概览' },
+    main: { label: '主模块', acc: true, text: '本周销售趋势' },
+    s1: '次要',
+    s2: '次要',
+    s3: '次要',
+    s4: '次要',
+  },
+};
+```

@@ -1,6 +1,7 @@
 ---
-zh: 大白话 → 结构化需求
+zh: 把大白话整理成需求
 en: Clarify first
+aka: 大白话→结构化需求
 order: 10
 ---
 
@@ -40,3 +41,21 @@ order: 10
 【待确认】最多 3 个会影响结果的问题，每个附上推荐答案；我不回答就按推荐做。
 
 可逆的视觉选择直接给默认值，不要问我；只有真实数据来源、删除能否恢复、权限、费用、是否真的发送这类问题才问。我确认后再开始实现。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/fix.css">
+<style>
+.c{padding:8px}
+.say{margin:0;padding:6px 8px;border-radius:8px 8px 8px 2px;background:#eef0f3;font-size:11px;line-height:16px}
+.q{margin:6px 0 0;color:#5b616e;font-size:10px;line-height:14px}
+.r{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 6px;margin:0;font-size:10px;line-height:14px}
+.r dt{color:#5b616e}
+.r dd{margin:0}
+.ask{margin-top:6px;padding-top:4px;border-top:1px solid #e3e6eb;color:#3b5bdb;font-size:10px;line-height:14px}
+</style>
+
+<div class="fx">
+  <section class="fx-p"><h4>你说的</h4><div class="fx-b"><div class="fx-z c"><p class="say">帮我做个会员积分页，要好看一点，能看积分能兑换东西。</p><p class="q">AI 只好自己猜：谁在用、在哪用、什么算做完。</p></div></div></section>
+  <section class="fx-p ok"><h4>AI 先复述</h4><div class="fx-b"><div class="fx-z c"><dl class="r"><dt>给谁</dt><dd>门店会员，手机上用</dd><dt>做什么</dt><dd>看余额、明细，兑换商品</dd><dt>完成</dt><dd>下单成功并扣减积分</dd></dl><div class="ask">确认前先问：积分会过期吗？</div></div></div></section>
+</div>

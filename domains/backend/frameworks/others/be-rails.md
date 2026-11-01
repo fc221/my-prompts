@@ -41,3 +41,29 @@ Rails 8（以 8.1 为准）项目的约定：照 Rails 的目录和命名走（�
 新建时：用 bin/rails generate 生成模型和迁移，写控制器、路由、strong params 和模型校验，流程复杂的放进 service，补上覆盖创建成功、422、404 的集成测试。
 检查时：先找有副作用的模型回调、缺少 strong params、列表的 N+1、明文密钥、被改过的已执行迁移；逐条列出文件和改法，会改变响应的先问我。
 最后列出改动的文件和验证命令（有 bin/ci 的跑 bin/ci，否则 bin/rails test 和 bin/rubocop）。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+app/
+  models/
+*   order.rb                模型单数，validates 写规则
+  controllers/
+*   orders_controller.rb    控制器复数，params.expect
+  services/
+    create_order.rb         只有一个公开的 call
+  jobs/                     继承 ApplicationJob
+config/
+  routes.rb                 resources :orders
+  environments/             development.rb、production.rb
+db/
+  migrate/
+  schema.rb                 和迁移一起提交
+`), { title: 'Rails · 照约定命名' });
+}
+</script>

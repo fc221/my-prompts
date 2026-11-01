@@ -39,3 +39,17 @@ order: 30
 3. 只有单条 SQL 加索引仍达不到{性能目标，如 P95 300ms}时，才建冗余读表，由事件或定时任务更新，同时给出重建脚本和延迟监控。
 4. 说明哪些页面会受最终一致影响，以及怎么处理。
 最后列出改动文件、新增的索引和改动前后的耗时对比。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '下单命令', note: 'POST /orders' }, { t: '写模型', note: '校验规则，写订单表', acc: true }, { t: '领域事件', note: 'OrderPlaced', via: '提交后' }],
+    [{ t: '投影器', note: '订阅事件' }, { t: '读模型', note: '门店看板宽表', acc: true, via: '异步更新' }, { t: '查询', note: 'GET /dashboard', via: '只读' }],
+  ]), { title: '读写分离 · 读模型最终一致' });
+}
+</script>

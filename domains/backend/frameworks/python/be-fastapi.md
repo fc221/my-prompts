@@ -41,3 +41,28 @@ async def 路由里不能调用阻塞代码（requests、同步数据库驱动�
 新建时：建 app/{模块}/，写 schemas、models、service、router 和 dependencies，在 main.py 注册路由，用 Alembic 生成迁移并检查内容，补上覆盖 201、404、422 的接口测试。
 检查时：先找三类会直接出问题的：async 路由里的阻塞调用、全局共享的会话、返回 ORM 对象却没有 response_model；再找 Pydantic v1 写法和散落各处的配置读取。逐条列出位置和改法，改动响应字段或状态码的先问我。
 最后列出改动的文件，以及跑测试和本地启动的命令。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+app/
+  main.py            创建应用、注册路由和异常处理
+  core/
+    config.py        Settings，pydantic-settings
+    db.py            engine 和会话
+* orders/            按业务分包
+    router.py
+    schemas.py       OrderCreate、OrderRead
+    service.py       会话作为参数传入
+    models.py        SQLAlchemy 2.0
+*   dependencies.py  SessionDep = Annotated[…]
+alembic/versions/    autogenerate 后人工检查
+tests/               同样的包结构
+`), { title: 'FastAPI · 按业务分包' });
+}
+</script>

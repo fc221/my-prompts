@@ -40,3 +40,20 @@ order: 10
 4. 控制在 {页数上限} 页以内：超出时先减少个人优势和早期经历的条数，不缩小字号；单段经历不跨页，第 2 页页眉重复姓名和电话。
 5. 全部内容是可选中的文字，不用图片或图标代替文字；文件名“姓名-求职意向-简历.pdf”。
 生成后把 PDF 复制成纯文本，确认字段完整、顺序正确，说明改了哪些文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, page({
+    pages: [
+      { foot: '{p} / {n}', label: '第 1 页：头部 → 优势 → 工作经历', blocks: ['title:林子航', 'text:求职意向 数据工程师 · 深圳', 'text:电话 138 0013 6621', 'h:个人优势', 'p:3', 'h:工作经历', 'text:星河连锁 · 数据工程师 · 2022.07 – 至今', 'p:4', 'text:云帆科技 · 数据分析师 · 2019.07 – 2022.06', 'p:3'] },
+      { head: '林子航 · 138 0013 6621', foot: '{p} / {n}', label: '第 2 页：页眉重复姓名和电话', blocks: ['h:项目经历', 'text:门店日报自动化 · 2024.03 – 2024.09', 'p:3', 'h:教育背景', 'text:统计学 本科 · 2015.09 – 2019.06', 'h:技能与证书', 'p:2'] },
+    ],
+    notes: ['单栏、文字可选中，系统能解析', '经历倒序，日期统一 yyyy.MM', '单段经历不跨页'],
+  }), { center: true, min: 0.3 });
+}
+</script>

@@ -39,3 +39,35 @@ order: 30
 2. 按规则改：多对一关联用 JOIN 一次取回；一对多先分页取主表 ID，再 IN 批量查子表（超过 1000 个分批），不用 JOIN 抓取集合再分页；跨服务改调批量接口；接口返回 DTO；开发环境打开懒加载检测。
 3. 加测试：断言该接口在 1 条和 50 条数据下查询次数相同，并在用例里写明期望次数。
 4. 汇报：每个接口改前改后的查询次数和耗时、改动文件、新增测试。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: 'N+1：41 次查询', text: `
+SELECT … FROM orders
+  LIMIT 20;
+-- 循环 20 次，每单两条
+SELECT … FROM order_item
+  WHERE order_id = ?;
+SELECT … FROM member
+  WHERE id = ?;
+-- 1 + 20 × 2 = 41 次
+` },
+    { t: '批量：2 次查询', text: `
+-- 多对一：JOIN 一次取回
+SELECT … FROM orders
+  JOIN member ON …
+  LIMIT 20;
+-- 一对多：IN 批量查
+SELECT … FROM order_item
+  WHERE order_id IN (…);
+-- 20 条和 50 条都是 2 次
+` },
+  ]), { title: '列表页 20 个订单 · 查询次数和条数无关' });
+}
+</script>

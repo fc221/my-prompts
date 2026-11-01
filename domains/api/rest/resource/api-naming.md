@@ -41,3 +41,29 @@ order: 10
 4. 旧路径保留并转发到新实现，响应加 Deprecation 头，按「弃用与下线」排下线时间。
 5. 最后说明改了哪些文件，并给出新旧路径各一条 curl 验证命令。
 需要特别处理的资源：{资源名}。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+/api/v1/
+  orders/            集合用复数名词
+    :id/             单个资源
+      cancel         POST 动作子路径
+      items/         子集合，嵌套最多两层
+  stores/
+    :storeId/
+      tickets/       只用来按门店创建和列出
+      settings       一对一从属用单数
+* tickets/
+*   :id              详情走顶层地址
+  expense-reports/   多个单词用 kebab-case
+    :id/
+      approvals/     带历史的动作建成子资源
+`), { title: '名词表示资源，方法表示动作' });
+}
+</script>

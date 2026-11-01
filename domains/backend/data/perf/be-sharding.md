@@ -39,3 +39,18 @@ order: 40
 2. 先判断要不要分片：用数据说明索引、归档、分区、缓存能否解决。只需读写分离的，补齐强制主库规则（事务内、写后 3 秒内、余额库存类读）和延迟超阈值切回主库。
 3. 确需分片的，给出方案：分片键和理由、分片数（2 的幂）、全局 ID 方案、不带分片键的查询改走索引表或搜索引擎、迁移步骤（双写、对账、切读、停旧写）及每步回退办法。
 4. 汇报：现状数据、结论、改动文件或方案文档、验证方式（对账 SQL、模拟主从延迟的测试）。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '先别急着分', items: ['索引', '缓存', '归档近 6 个月', '按月分区'], note: '千万行、几十 GB 量级先用这些' },
+    { t: '读写分离', items: ['写 → 主库', '写后 3 秒内读 → 主库', '列表报表 → 从库'], note: '主从延迟超过 5 秒，读切回主库并告警' },
+    { t: '分库分表', items: ['hash(buyer_id) 取模', '16 库 × 64 表'], note: '不带分片键的查询在中间件层拦截', acc: true },
+  ], { arrow: '单库扛不住再往下走' }), { title: '订单表扩容 · 由轻到重' });
+}
+</script>

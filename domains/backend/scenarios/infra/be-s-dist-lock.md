@@ -42,3 +42,21 @@ Redis 锁是一份有过期时间的租约，不是严格互斥：持锁进程 G
 5. 被保护的写入带 INCR 生成的防护令牌，下游用条件更新拒绝旧令牌。
 6. 要求严格互斥时改用{etcd / ZooKeeper}。
 最后给出压测和对账方法：20 个实例同时抢锁执行 1000 次，断言任一时刻只有一个持有者；注入 40 秒停顿让锁过期，确认旧持有者的写入被令牌拒绝；核对业务结果没有重复执行，如每个门店每天只有一条日结记录。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['实例 A', '实例 B', 'Redis', '账务库'], [
+    [0, 2, 'SET NX PX 30000 · 令牌 33'],
+    [0, 0, 'GC 停顿 40 秒'],
+    [1, 2, '拿锁 · 令牌 34'],
+    [1, 3, '写入 token = 34'],
+    [0, 3, '醒来写入 token = 33'],
+    [3, 0, '33 < 34，拒绝', 'rx'],
+  ]), { title: '锁过期后，防护令牌挡住旧持有者' });
+}
+</script>

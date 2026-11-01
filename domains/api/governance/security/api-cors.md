@@ -43,3 +43,27 @@ CORS 只管浏览器能不能读到响应，拦不住请求到达服务端。带
 5. 前端要读的 X-Request-Id、ETag、Location、RateLimit、Retry-After 加进 Expose-Headers。
 6. 401、403、500 这类错误响应同样带 CORS 头。
 最后说明改了哪些文件，并用 curl 分别带白名单内、白名单外、伪造后缀的 Origin 发预检和正式请求，贴出响应头对比。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: '预检请求和响应', text: `
+OPTIONS /orders/ord_8F3k2
+Origin: <管理后台的源>
+Access-Control-Request-Method: PATCH
+Access-Control-Request-Headers: authorization, content-type
+
+204 No Content
+Access-Control-Allow-Origin: <同一个源，白名单精确匹配才回写>
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Methods: GET, POST, PATCH, DELETE
+Access-Control-Allow-Headers: Authorization, Content-Type, Idempotency-Key
+Access-Control-Max-Age: 7200
+Vary: Origin
+` }]), { title: 'CORS 预检 · 带凭证时都不能写 *' });
+}
+</script>

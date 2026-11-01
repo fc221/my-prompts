@@ -39,3 +39,17 @@ order: 10
 2. 按规则改：提交后入队或走发件箱；载荷只放 ID、tenant_id、trace_id 和格式版本号；处理器用业务键加唯一约束保证幂等；可重试错误按退避最多 5 次，不可重试错误直接失败；超限进死信并告警；处理完再确认，设执行超时；按 critical、default、bulk 拆队列并设并发。
 3. 补测试：同一任务执行两次结果不变；模拟第三方失败后按退避重试，最终进入死信。
 4. 汇报：任务清单（名称、队列、重试策略、幂等键）、改动文件、测试结果和新增的监控指标。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '入队', note: '事务提交后，只放 order_id' }, { t: 'worker 执行', note: '按业务键去重', acc: true }, { t: '确认', note: '处理完再 ack' }],
+    [{ t: '执行失败', note: '超时、5xx', bad: true }, { t: '退避重试', note: '10s、1m、5m…最多 5 次' }, { t: '死信队列', note: '告警，后台可重放', bad: true }],
+  ], { lanes: ['成功', '失败'] }), { title: '后台任务 · points_grant:SO2026102900017' });
+}
+</script>

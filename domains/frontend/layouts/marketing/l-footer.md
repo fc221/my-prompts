@@ -28,3 +28,58 @@ order: 110
 ## 提示词
 
 {产品}页脚：与正文同宽，左侧放 Logo、一句介绍和{联系方式}，右侧 {链接组数} 组竖排链接（{分组名称}），组标题用 h3，每个链接整行可点、行高至少 24px；底部一行放版权、隐私政策和备案号，次要文字对比度 ≥ 4.5:1；窄屏分组改两列，或折叠成可展开的标题。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr',
+  rows: '64px 30% 1fr',
+  areas: ['prev', 'up', 'ft'],
+  boxes: {
+    prev: { label: '上一节（只露一条）', kind: 'logos' },
+    up: { label: '收尾行动区', kind: 'cta' },
+    ft: {
+      dark: true,
+      inner: {
+        cols: '28% 1fr 1fr 1fr 1fr',
+        rows: '1fr auto',
+        areas: ['br g1 g2 g3 g4', 'lg lg lg lg lg'],
+        boxes: {
+          br: 'Logo 联系方式',
+          g1: { label: '产品', acc: true, kind: 'linkcol' },
+          g2: { label: '方案', acc: true, kind: 'linkcol' },
+          g3: { label: '资源', acc: true, kind: 'linkcol' },
+          g4: { label: '公司', acc: true, kind: 'linkcol' },
+          lg: '版权 · 隐私 · 备案',
+        },
+      },
+    },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: '64px 22% 1fr',
+  areas: ['prev', 'up', 'ft'],
+  boxes: {
+    prev: { label: '上一节（只露一条）', kind: 'logos' },
+    up: { label: '收尾行动区', kind: 'cta' },
+    ft: {
+      dark: true,
+      inner: {
+        cols: '1fr 1fr',
+        rows: 'auto 1fr 1fr auto',
+        areas: ['br br', 'g1 g2', 'g3 g4', 'lg lg'],
+        boxes: {
+          br: 'Logo',
+          g1: { label: '产品', acc: true, kind: 'linkcol' },
+          g2: { label: '方案', acc: true, kind: 'linkcol' },
+          g3: { label: '资源', acc: true, kind: 'linkcol' },
+          g4: { label: '公司', acc: true, kind: 'linkcol' },
+          lg: '版权 备案',
+        },
+      },
+    },
+  },
+};
+```

@@ -42,3 +42,31 @@ Merge Patch 里“没传”表示不动，“传了 null”表示清空，后端
 5. 成功返回 200 和完整资源；只更新改动的列，并写审计记录（操作人、字段、旧值、新值）。
 6. 测试：只改一个字段、传 null 清空、传只读字段、ETag 过期、两人先后修改。
 最后说明改了哪些文件，并给出一条 curl 示例。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+PATCH /members/mbr_93Kd1
+Content-Type: application/merge-patch+json
+If-Match: "v12"
+
+"nickname": "MyPrompts",
+"remark": null
+// 没传的字段不动，null 清空
+`, `
+200 OK
+ETag: "v13"
+
+"id": "mbr_93Kd1",
+"nickname": "MyPrompts",
+"remark": null,
+"phone": "138****5678",
+"level": "GOLD"
+`), { title: 'JSON Merge Patch · 返回完整资源' });
+}
+</script>

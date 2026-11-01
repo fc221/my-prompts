@@ -43,3 +43,44 @@ N+1 是默认行为：列表里每个订单都会去查一次门店，所以每�
 5. 要改名或删除的字段先加 @deprecated 并写明替代字段，不直接删。
 6. 字段级权限在 resolver 里检查，无权访问的字段返回 null，并在 errors 里说明原因。
 最后说明改了哪些文件；用一条取 50 个订单及其门店和会员的三层查询，对比改前改后的数据库查询次数，再用一条超深查询证明会被拒绝。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: '查询：连接分页', text: `
+type Query {
+  orders(first: Int = 20, after: String)
+    : OrderConnection!
+}
+type OrderConnection {
+  edges: [OrderEdge!]!   # node + cursor
+  pageInfo: PageInfo!    # hasNextPage
+}
+type Order {
+  id: ID!
+  store: Store           # DataLoader，可空
+}
+` },
+    { t: '变更：payload + userErrors', text: `
+type Mutation {
+  cancelOrder(input: CancelOrderInput!)
+    : CancelOrderPayload!
+}
+type CancelOrderPayload {
+  order: Order
+  userErrors: [UserError!]!
+}
+type UserError {
+  field: [String!]
+  code: String!    # ORDER_ALREADY_SHIPPED
+  message: String!
+}
+` },
+  ]), { title: 'GraphQL Schema' });
+}
+</script>

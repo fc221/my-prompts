@@ -34,3 +34,100 @@ order: 60
 ## 提示词
 
 给{编辑器 / 画布}的拖动加「拖动时的对齐线」：每个元素取左、中、右、上、中、下 6 条参考线，画布四边和中线也算；拖动中任一参考线和目标相差 ≤ 6px（按屏幕像素算，不随缩放变）就吸附过去，横纵向各取最近一条；吸附时画 1px 醒目色对齐线，覆盖两个元素并各向外多出 6px，松手消失；按住 Alt 拖动临时关闭吸附；方向键移 1px、Shift+方向键移 10px，不吸附但正好对齐时也显示对齐线；松手后用 role="status" 播报对齐结果；只和视口内附近的元素比较；拖动只改 transform；整组拖动时按整组外框计算。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/interactions-base.css">
+<style>
+.st{display:grid;grid-template-rows:minmax(0,1fr) auto;background:#f3f4f7}
+.bd{position:relative;overflow:hidden;background-image:radial-gradient(#cfd4dc 1px,transparent 1.4px);background-size:16px 16px;touch-action:none;user-select:none}
+.cd{position:absolute;left:0;top:0;z-index:1;display:grid;place-items:center;padding:0 6px;border:1px solid rgba(16,24,40,.1);border-radius:6px;background:#fff;color:#1f2329;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 1px 2px rgba(16,24,40,.1);cursor:grab;transition:none}
+.cd.a{width:40%;height:46%;background:linear-gradient(135deg,#a5d8ff,#d0bfff);color:#1f2a5a}
+.cd.b{width:34%;height:20%}
+.cd.c{width:26%;height:18%;border-color:#3b5bdb;background:#3b5bdb;color:#fff}
+.cd.drag{z-index:3;cursor:grabbing;box-shadow:0 6px 16px rgba(16,24,40,.2)}
+.gl{position:absolute;left:0;top:0;z-index:2;background:#e8590c;pointer-events:none;transition:none}
+.gl.v{width:1px}
+.gl.h{height:1px}
+.ft{display:flex;align-items:center;height:28px;padding:0 12px;border-top:1px solid #e3e6eb;background:#fff}
+.msg{margin:0;min-width:0;color:#5b616e;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@container (min-width:560px){.ft{height:32px;padding:0 16px}
+.cd{font-size:13px}
+}
+</style>
+
+<div class="st"><div class="bd" role="group" aria-label="海报画布：拖动元素靠近其他元素会吸附对齐，按住 Alt 自由放置；聚焦元素后方向键微调"><button type="button" class="cd a" data-k="a" data-n="封面图">封面图</button><button type="button" class="cd b" data-k="b" data-n="活动标题">活动标题</button><button type="button" class="cd c" data-k="c" data-n="报名按钮">立即报名</button><i class="gl v" hidden></i><i class="gl h" hidden></i></div><div class="ft"><p class="msg" role="status">拖动会吸附对齐，按住 Alt 自由放置</p></div></div>
+
+<script type="module">
+const T = 6; // 吸附阈值（屏幕像素）
+const START = { a: [0.07, 0.12], b: [0.56, 0.12], c: [0.52, 0.66] };
+const EDGE = { 左: '左边', 中: '中线', 右: '右边', 上: '顶边', 下: '底边' };
+export default function demo(root) {
+  const bd = root.querySelector('.bd'), msg = root.querySelector('.msg'), gv = root.querySelector('.gl.v'), gh = root.querySelector('.gl.h');
+  const items = [...bd.querySelectorAll('.cd')].map((el) => ({ el, name: el.dataset.n, x: 0, y: 0, w: el.offsetWidth, h: el.offsetHeight }));
+  const bw = bd.clientWidth, bh = bd.clientHeight, board = { name: '画布', x: 0, y: 0, w: bw, h: bh };
+  const place = (it) => { it.el.style.transform = `translate(${it.x}px,${it.y}px)`; };
+  items.forEach((it) => { const [fx, fy] = START[it.el.dataset.k]; it.x = Math.round(fx * bw); it.y = Math.round(fy * bh); place(it); });
+  const lx = (r) => [[r.x, '左'], [r.x + r.w / 2, '中'], [r.x + r.w, '右']];
+  const ly = (r) => [[r.y, '上'], [r.y + r.h / 2, '中'], [r.y + r.h, '下']];
+  // 横纵各找最近的一条参考线；tol 为 0 时只认正好对齐（键盘微调用）
+  const snap = (m, x, y, tol) => {
+    let bx = null, by = null; const me = { x, y, w: m.w, h: m.h };
+    for (const t of [board, ...items.filter((o) => o !== m)]) {
+      for (const [tv, tn] of lx(t)) for (const [mv] of lx(me)) { const d = tv - mv; if (Math.abs(d) <= tol + 0.4 && (!bx || Math.abs(d) < Math.abs(bx.d))) bx = { d, v: tv, t, tn }; }
+      for (const [tv, tn] of ly(t)) for (const [mv] of ly(me)) { const d = tv - mv; if (Math.abs(d) <= tol + 0.4 && (!by || Math.abs(d) < Math.abs(by.d))) by = { d, v: tv, t, tn }; }
+    }
+    return { x: x + (bx?.d ?? 0), y: y + (by?.d ?? 0), bx, by };
+  };
+  const draw = (m, s) => {
+    gv.hidden = !s.bx; gh.hidden = !s.by;
+    if (s.bx) { const t = s.bx.t, a = Math.max(0, Math.min(t.y, s.y) - 6), b = Math.min(bh, Math.max(t.y + t.h, s.y + m.h) + 6); gv.style.transform = `translate(${Math.min(bw - 1, Math.round(s.bx.v))}px,${a}px)`; gv.style.height = b - a + 'px'; }
+    if (s.by) { const t = s.by.t, a = Math.max(0, Math.min(t.x, s.x) - 6), b = Math.min(bw, Math.max(t.x + t.w, s.x + m.w) + 6); gh.style.transform = `translate(${a}px,${Math.min(bh - 1, Math.round(s.by.v))}px)`; gh.style.width = b - a + 'px'; }
+  };
+  const hide = () => { gv.hidden = gh.hidden = true; };
+  const say = (s) => { const p = [s?.bx, s?.by].filter(Boolean).map((k) => `「${k.t.name}」${EDGE[k.tn]}`); msg.textContent = p.length ? `已对齐${p.join('、')}` : '已放下，没有对齐'; };
+  const clampX = (m, x) => Math.max(0, Math.min(bw - m.w, x)), clampY = (m, y) => Math.max(0, Math.min(bh - m.h, y));
+
+  // 自动演示：把“报名按钮”拖到封面图下方，靠近时吸到封面图左边
+  let auto = true, raf = 0, tm = 0;
+  const stopAuto = () => { if (!auto) return; auto = false; cancelAnimationFrame(raf); clearTimeout(tm); items[2].el.classList.remove('drag'); hide(); };
+  {
+    const c = items[2], a = items[0], x0 = c.x, y0 = c.y, x1 = a.x + 4, y1 = clampY(c, a.y + a.h + 12), t0 = performance.now() + 250, dur = 900;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const release = () => { tm = setTimeout(() => { if (!auto || !root.host.isConnected) return; const s = snap(c, c.x, c.y, 0); c.el.classList.remove('drag'); hide(); say(s); auto = false; }, 1300); };
+    const step = (now) => {
+      if (!auto || !root.host.isConnected) return;
+      const k = reduce ? 1 : Math.min(1, Math.max(0, (now - t0) / dur)), e = 1 - (1 - k) ** 3;
+      c.el.classList.toggle('drag', k > 0);
+      const s = snap(c, x0 + (x1 - x0) * e, y0 + (y1 - y0) * e, T); c.x = s.x; c.y = s.y; place(c); draw(c, s);
+      if (k < 1) raf = requestAnimationFrame(step); else release();
+    };
+    raf = requestAnimationFrame(step);
+  }
+
+  let drag = null;
+  bd.addEventListener('pointerdown', (e) => {
+    const it = items.find((i) => i.el === e.target.closest('.cd')); if (!it || e.button) return;
+    stopAuto(); e.preventDefault(); it.el.focus({ preventScroll: true });
+    try { bd.setPointerCapture(e.pointerId); } catch {}
+    const r = bd.getBoundingClientRect(), f = bw / r.width;
+    drag = { it, r, f, ox: (e.clientX - r.left) * f - it.x, oy: (e.clientY - r.top) * f - it.y, last: null }; it.el.classList.add('drag');
+  });
+  bd.addEventListener('pointermove', (e) => {
+    if (!drag) return; const { it, r, f } = drag;
+    const s = snap(it, clampX(it, (e.clientX - r.left) * f - drag.ox), clampY(it, (e.clientY - r.top) * f - drag.oy), e.altKey ? -1 : T * f);
+    it.x = s.x; it.y = s.y; place(it); draw(it, s); drag.last = s;
+  });
+  const end = () => { if (!drag) return; const { it, last } = drag; drag = null; it.el.classList.remove('drag'); hide(); say(last); };
+  bd.addEventListener('pointerup', end); bd.addEventListener('pointercancel', end);
+  // 键盘微调：不吸附，正好对齐时显示对齐线
+  bd.addEventListener('keydown', (e) => {
+    const it = items.find((i) => i.el === e.target); if (!it || !e.key.startsWith('Arrow')) return;
+    e.preventDefault(); stopAuto(); const d = e.shiftKey ? 10 : 1;
+    it.x = clampX(it, it.x + (e.key === 'ArrowLeft' ? -d : e.key === 'ArrowRight' ? d : 0));
+    it.y = clampY(it, it.y + (e.key === 'ArrowUp' ? -d : e.key === 'ArrowDown' ? d : 0));
+    place(it); const s = snap(it, it.x, it.y, 0); draw(it, s); clearTimeout(tm); tm = setTimeout(hide, 900);
+    if (s.bx || s.by) say(s); else msg.textContent = `${it.name} 位置 ${Math.round(it.x)}, ${Math.round(it.y)}`;
+  });
+}
+</script>

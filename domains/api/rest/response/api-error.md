@@ -43,3 +43,29 @@ detail 是给人看的，文案会改；客户端的分支判断只认 code 或 
 6. 同步改前端请求层：按 code 分支，按 errors 把消息标到表单字段上。
 7. 每类错误一条测试，断言状态码、Content-Type 和 code。
 最后列出改动文件，并说明旧错误格式怎么过渡（兼容期内是否两种都支持）。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+POST /orders/ord_8F3k2/cancel
+Authorization: Bearer <token>
+Accept-Language: zh-CN
+`, `
+409 Conflict
+Content-Type: application/problem+json
+
+"type": "/problems/order-not-cancelable",
+"title": "订单当前状态不能取消",
+"status": 409,
+"detail": "订单 ord_8F3k2 已发货，不能取消",
+"instance": "/orders/ord_8F3k2",
+"code": "ORDER_ALREADY_SHIPPED",
+"traceId": "4bf92f3577b34da6"
+`), { title: 'Problem Details · 客户端只认 code' });
+}
+</script>

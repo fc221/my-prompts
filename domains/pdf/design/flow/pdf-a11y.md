@@ -40,3 +40,24 @@ order: 50
 4. 按工具开启标签和 PDF/UA 输出：WeasyPrint 的 pdf/ua-1 变体、Prince 的 PDF/UA-1 配置、Typst 的 ua-1 标准；Chromium 路线开 tagged，并说明它只能做到基础标签。
 5. 用 veraPDF 跑 PDF/UA-1 规则，把报错按“已修复 / 工具限制 / 需人工确认”分类列出。
 最后说明改了哪些文件，以及读屏软件朗读首页的顺序是否正确。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+* Document/   标题元数据 · lang zh-CN
+    H1        2026 年 10 月经营报告
+    P         正文，按源码顺序朗读
+    H2        一、销售分析
+  * Figure    alt：10 月营业额环比增长 12.3%
+    Table/    表格不拿来排版
+      TH      scope="col"
+      TD
+    Artifact  页眉页脚、装饰线，不朗读
+`), { title: '标签树 · PDF/UA-1 · veraPDF 验证' });
+}
+</script>

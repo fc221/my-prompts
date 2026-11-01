@@ -41,3 +41,18 @@ order: 20
 4. 一个事务只改这一个聚合，需要联动别的聚合时发领域事件。
 5. 每个业务方法写单测，覆盖合法流转、非法流转和边界值（金额为 0、明细为空）。
 持久化映射保持现有表结构。最后用文字列出状态流转（从哪个状态、什么动作、到哪个状态）和改动文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '订单聚合', items: ['Order 聚合根', 'OrderLine 订单行', 'Money 值对象', 'cancel(reason)', '总额 = 各行之和'], acc: true },
+    { t: '会员聚合', items: ['Member 实体', '订单里只存 memberId'] },
+    { t: '积分聚合', items: ['收到 OrderPlaced', '自己的事务里扣减', 'Points 不能为负'] },
+  ], { cols: 3, note: '一个事务只改一个聚合，聚合之间只用 ID 引用' }), { title: '实体、值对象与聚合 · 下单扣积分' });
+}
+</script>

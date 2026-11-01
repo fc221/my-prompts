@@ -40,3 +40,24 @@ order: 10
 
 做法：仓库里已经有服务的，先读一遍，列出现有的语言、框架、公共库和部署方式。挑 2–3 个候选，按上面的条件逐条判断，每条写依据（团队经验、压测数据、SDK 维护情况、现有流水线、招聘情况），拿不到的数据标“待确认”，不要估。没有可量化的理由时，选团队已在生产使用的栈。
 输出一页决策记录，再列出选定框架开工第一周要定下的约定：目录结构、配置和环境、错误响应格式、日志、迁移工具、测试和常用命令。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '没有可量化的理由', items: ['→ 团队在生产跑熟的那套', '至少 2 人排过障'], acc: true },
+    { t: '单实例上万长连接', items: ['推送、IM、网关', '→ Go、Node.js、Rust、Java 21、ASP.NET Core'] },
+    { t: 'CPU 密集、P99 几十毫秒', items: ['→ Go、Rust、Java、ASP.NET Core'] },
+    { t: '机器学习、数据处理多', items: ['→ Python'] },
+    { t: '政企、信创适配', items: ['→ Java，生态最全'] },
+    { t: '单文件、镜像小、冷启动快', items: ['→ Go 或 Rust'] },
+    { t: '快速做完整业务', items: ['→ 全家桶：Spring Boot、Django、Rails、Laravel、NestJS'] },
+    { t: '只做 API、网关、BFF', items: ['→ 轻量：FastAPI、Express / Fastify、Gin、Axum'] },
+    { t: '只有 1 人会或都没用过', items: ['→ 排期加 2–4 周样板项目', '排不出时间就不选'] },
+  ], { cols: 3, note: '同一团队后端语言不超过 2 种，结论写成一页决策记录' }), { title: '后端选型 · 判断条件 → 推荐' });
+}
+</script>

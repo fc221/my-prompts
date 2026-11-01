@@ -2,6 +2,7 @@
 zh: 首屏不对称 / 满版图
 en: Asymmetric / full-bleed hero
 order: 30
+of: l-hero
 ---
 
 ## 是什么
@@ -29,3 +30,25 @@ order: 30
 ## 提示词
 
 {产品}首屏用「不对称大图」：右侧 60% 放{主图}并顶到视口右缘和顶部，左侧 40% 放标题“{价值主张}”、一句副标题和主按钮“{主行动}”，文字块压进图片约 40px；导航透明压在图上，滚动后补底色；图上有文字的地方加局部渐变遮罩，对比度 ≥ 4.5:1；窄屏改为图在上约 50vh、文字在下，用竖版裁切。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '38% 1fr',
+  rows: '13% 1fr 20%',
+  areas: ['nav img', 'txt img', 'cta img'],
+  boxes: {
+    nav: 'Logo · 导航',
+    txt: { label: '大标题', acc: true, kind: 'hero' },
+    cta: '主按钮',
+    img: { label: '大图（顶到边缘）', dark: true },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: '48% 1fr 13%',
+  areas: ['img', 'txt', 'cta'],
+  boxes: { img: { label: '竖版大图', dark: true }, txt: { label: '标题', acc: true, kind: 'hero' }, cta: '按钮' },
+};
+```

@@ -41,3 +41,20 @@ order: 60
 4. 故障排除表（现象、可能原因、处理方法）和规格参数表（参数、数值和单位）按标准表格结构写。
 5. 页码放外侧，工具支持时页眉显示当前章节名；书签到二级。
 说明改了哪些文件、最终页数，以及印刷版补了几页。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, page({
+    pages: [
+      { head: '四、安装', foot: '第 8 页', label: '左页：警告在前，配图紧跟步骤', blocks: ['h:警告', 'text:安装前取出电池，避免误触电机', 'text:1. 按开孔图在门上定位', 'img', 'text:2. 装入前面板，线缆穿到门内', 'p:3'] },
+      { head: '七、故障排除', foot: '第 19 页', label: '右页：页眉是当前章节名', blocks: ['h:七、故障排除', 'table:6', 'h:八、规格参数', 'table:3'] },
+    ],
+    notes: ['A5 148×210mm，左右页镜像', '内侧 18mm · 外侧 13mm', '骑马钉页数补到 4 的倍数'],
+  }), { center: true, min: 0.3 });
+}
+</script>

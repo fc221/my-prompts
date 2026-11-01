@@ -41,3 +41,57 @@ order: 30
 4. 报告：开头概述，主体按主要工作、存在问题、下步打算分层，用数据说话，结语“特此报告。”，全文不出现请求批准的句子。
 5. 版式按 GB/T 9704 通用格式，层次序号“一、（一）1.（1）”。
 交付时附一段说明：主送和抄送是怎么定的，哪些数字需要我核实。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-wrap{display:flex;gap:14px;align-items:flex-start}
+.m-pg{position:relative;flex:none;width:436px;padding:24px 40px 18px 46px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25);color:#111;font:12.5px/1.72 "STFangsong","FangSong","Songti SC",serif}
+.m-pg .m-org{text-align:center;color:#d4000f;font:700 25px/1.2 "STSong","Songti SC","SimSun",serif;letter-spacing:.06em}
+.m-pg .m-no{display:flex;justify-content:space-between;margin-top:14px;padding:0 1em}
+.m-no i{font-family:"STKaiti","KaiTi",serif}
+.m-line{margin-top:4px;border-top:2px solid #d4000f}
+.m-pg .m-title{margin:16px 0 10px;text-align:center;font:700 16px/1.45 "STSong","Songti SC","SimSun",serif}
+.m-pg .m-p{text-indent:2em}
+.m-pg .m-sign{margin-top:8px;padding-right:4em;text-align:right;line-height:1.6}
+.m-pg .m-note{padding-left:2em;line-height:1.6}
+.m-ann{display:grid;width:150px;padding-top:10px;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-ann p{margin:0;padding:5px 0 5px 12px;border-left:2px solid #d4000f}
+.m-ann b{display:block;color:#101828;font-size:11.5px}
+.m-ann span{color:#667085}
+.m-ann .m-vs{margin-top:8px;padding:7px 9px;border:1px solid #d0d5dd;border-radius:6px;background:#fff}
+.m-vs b{margin-bottom:2px}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, `<div class="m-wrap"><div class="m-pg">
+    <p class="m-org">××区卫生健康局文件</p>
+    <p class="m-no"><span>×卫健〔2026〕31号</span><span>签发人：<i>林卫东</i></span></p>
+    <div class="m-line"></div>
+    <p class="m-title">××区卫生健康局关于增设两处<br>社区卫生服务站的请示</p>
+    <p>××区人民政府：</p>
+    <p class="m-p">滨江、云栖两个街道近三年新增常住人口 4.2 万人，辖区 3 家社区卫生服务中心日均门诊量已超出设计能力 40%，居民就近就医需求难以满足。</p>
+    <p class="m-p">为此，拟在两个街道各增设 1 处社区卫生服务站，每处建筑面积约 300 平方米，开办经费共 186 万元，建议从区卫生健康专项资金中列支。</p>
+    <p class="m-p">妥否，请批示。</p>
+    <p class="m-sign">××区卫生健康局<br>2026 年 10 月 20 日</p>
+    <p class="m-note">（联系人：吴婷，电话：××××××××）</p>
+  </div><div class="m-ann">
+    <p><b>签发人</b><span>上行文标注，字号居左、签发人居右</span></p>
+    <p><b>标题</b><span>××关于××的请示</span></p>
+    <p><b>主送</b><span>只写一个直接上级</span></p>
+    <p><b>缘由</b><span>现状和问题，用数字</span></p>
+    <p><b>请求事项</b><span>数量、金额、来源，带倾向意见</span></p>
+    <p><b>结语</b><span>另起一行空两字</span></p>
+    <p><b>附注</b><span>日期下一行，联系人和电话</span></p>
+    <p class="m-vs"><b>请示 / 报告</b><span>请示：事前、要批复、一文一事<br>报告：事后、不批复、不夹带请示</span></p>
+  </div></div>`, { center: true, min: 0.35 });
+}
+</script>

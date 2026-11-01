@@ -39,3 +39,22 @@ order: 10
 2. 按规则改：读走 Cache-Aside；写在事务提交后删除缓存，删除失败进入重试；键名统一为 服务:实体:标识:版本；TTL 按变化频率定基础值再加 0–20% 随机抖动；缓存操作超时 100ms 以内，Redis 不可用时降级查库。
 3. 补测试：更新后再读拿到新值；停掉 Redis 后接口仍然正常返回。
 4. 汇报：缓存了哪些数据、键名和 TTL 一览、改动文件、压测或线上日志里的命中率对比。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['商品服务', 'Redis', '数据库'], [
+    [0, 1, 'GET 详情 10086'],
+    [1, 0, '未命中', 'r'],
+    [0, 2, '查库'],
+    [0, 1, 'SET，TTL 30 分钟'],
+    [0, 2, '改价：提交事务'],
+    [0, 1, '提交后 DEL 键'],
+    [1, 0, '失败 → 重试队列', 'rx'],
+  ]), { title: 'Cache-Aside · 先提交数据库，再删缓存' });
+}
+</script>

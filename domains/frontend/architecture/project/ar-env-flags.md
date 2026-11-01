@@ -41,3 +41,17 @@ order: 40
 4. 按环境不同的地址改成运行时配置，做到同一份构建产物可部署到{环境列表}。
 5. 功能开关集中定义：名称、默认值、负责人、计划删除日期；拉取失败或超过 1 秒用默认值；每个功能只在入口判断一次。
 完成后汇报变量清单、开关清单和改了哪些文件；验证：同一份构建产物换配置后接口地址正确切换，删掉一个必填变量时启动报错，开关接口不可用时页面按默认值正常显示。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '构建', note: 'VITE_ 前缀，各环境相同的值' }, { t: '同一份产物', note: '测试、预发、生产共用' }, { t: '运行时配置', note: '启动时请求 /config.json', acc: true }, { t: 'zod 校验', note: '缺变量直接启动失败' }],
+    [{ t: '拉取开关', note: 'order-batch-refund' }, { t: '失败或超 1 秒', note: '用默认值：关闭', bad: true }, { t: '入口判断一次', note: '路由、菜单、组件根', acc: true }, { t: '全量后删掉', note: '两个版本周期内' }],
+  ]), { title: '一次构建多处部署 · 开关有兜底' });
+}
+</script>

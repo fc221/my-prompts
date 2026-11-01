@@ -1,7 +1,7 @@
 ---
-zh: 后端需求整理
+zh: 把需求整理成后端方案
 en: Backend requirement brief
-aka: 需求分析 需求拆解 领域建模 接口梳理
+aka: 后端需求整理 需求分析 需求拆解 领域建模 接口梳理
 order: 10
 ---
 

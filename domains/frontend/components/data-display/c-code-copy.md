@@ -18,13 +18,51 @@ order: 120
 
 ## 要点
 
-- 代码块等宽字体 13–14px、行高 22px，内边距 12–16px，浅灰底或深色底全站二选一；长行横向滚动，不自动换行（或给换行开关）
-- 复制按钮在右上角，图标 + “复制”或带 aria-label 的图标按钮；成功后 1.5–2s 显示“已复制 ✓”再恢复，并用 role="status" 播报
-- 按钮预留最小宽度，切换文案时不挤动旁边的内容
+- 用组件库能用的部分：Naive UI n-code（code、language、word-wrap、show-line-numbers，高亮要在 n-config-provider 传 hljs），Ant Design Vue a-typography-paragraph / a-typography-text 的 code 和 copyable（text、onCopy、tooltip）；Element Plus 没有代码块和复制组件，代码块用 pre + code 自己排，复制按钮用 el-button 调 navigator.clipboard.writeText
+- 代码块等宽字体 14px、行高 22px，内边距 16px，浅灰底或深色底全站二选一；长行横向滚动，不自动换行（或给换行开关，Naive UI 用 word-wrap）
+- 复制按钮在右上角，图标 + “复制”或带可访问名称的图标按钮；成功后 1.5–2 秒显示“已复制”再恢复并播报（Ant Design Vue 的 copyable 自带切换和提示）；按钮预留最小宽度，切换文案时不挤动旁边的内容
 - 复制失败（没有剪贴板权限）时自动选中文字并提示手动复制
-- 可复制字段：只读样式 + 右侧复制按钮，同高 32px；值过长时省略显示，但复制完整值
+- 可复制字段：只读输入框（el-input / n-input / a-input 开 readonly）+ 右侧复制按钮，同一个 size；值过长时省略显示，但复制完整值（copyable 的 text 传完整值）
 - 密钥默认打码只露前后 4 位，“显示”需要确认身份或只在创建时展示一次；不写进 URL、日志和埋点
 
 ## 提示词
 
-在{接入指南页}放代码块和密钥字段：代码块浅灰底、等宽 13px、行高 22px、内边距 16px，长行横向滚动；右上角“复制”按钮，成功后 2 秒内显示“已复制 ✓”并用 role="status" 播报，失败时自动选中文字并提示手动复制；上方用标签页切换{cURL / Python / Node}并记住选择；API Key 字段为只读样式，默认打码只露前后 4 位，右侧“显示”“复制”按钮同高 32px，复制的是完整值；窄屏代码块在自身容器内横向滚动。
+在{接入指南页}放代码块和密钥字段：用项目组件库能用的部分（Naive UI n-code language、word-wrap，hljs 走 n-config-provider；Ant Design Vue a-typography-paragraph code + copyable 的 text / onCopy；Element Plus 没有现成的，用 pre + code 排，复制按钮 el-button 调 navigator.clipboard），布局和行为按下面的要求：代码块浅灰底、等宽 14px、行高 22px、内边距 16px，长行横向滚动；右上角“复制”按钮，成功后 2 秒内显示“已复制”并播报，失败时自动选中文字并提示手动复制；上方用标签页切换{cURL / Python / Node}并记住选择；API Key 字段为只读输入框，默认打码只露前后 4 位，右侧“显示”“复制”按钮与输入框同一个 size，复制的是完整值；窄屏代码块在自身容器内横向滚动。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/components-core.css">
+<style>
+.s{background:#fff}
+.w{width:100%;max-width:420px;display:flex;flex-direction:column;gap:8px}
+.kf{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;gap:8px}
+.key{flex:1;min-width:0;display:block;height:32px;padding:0 12px;border:1px solid #e3e6eb;border-radius:6px;background:#f5f6f8;font:13px/30px ui-monospace,Menlo,Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sm{padding:0 12px}
+.cpy{min-width:80px}
+.cpy.ok{color:#12805c;border-color:#12805c}
+.cb{border:1px solid #e3e6eb;border-radius:8px;background:#f5f6f8;overflow:hidden}
+.ch{display:flex;align-items:center;justify-content:space-between;height:28px;padding:0 2px 0 12px;border-bottom:1px solid #e3e6eb;font-size:12px;color:#5b616e}
+.t.cpy{min-width:72px;height:24px;padding:0 8px;border:0;border-radius:4px;background:none;color:#3b5bdb;font-size:12px;cursor:pointer}
+.t.cpy:hover{background:#e3e6eb}
+.t.cpy.ok{color:#12805c}
+pre{margin:0;padding:6px 12px;overflow-x:auto;font:13px/22px ui-monospace,Menlo,Consolas,monospace}
+</style>
+
+<div class="s"><div class="w"><div class="kf"><span class="lab" id="kl">API Key</span><div class="row"><code class="key" aria-labelledby="kl"></code><button type="button" class="btn sm" data-a="show" aria-pressed="false">显示</button><button type="button" class="btn sm cpy" data-a="key">复制</button></div></div><div class="cb"><div class="ch"><span>cURL</span><button type="button" class="t cpy" data-a="code">复制</button></div><pre><code>curl "$BASE_URL/v1/chat" \
+  -H "Authorization: Bearer $API_KEY"</code></pre></div><p class="sr" role="status"></p></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const FULL = 'sk-4f9a1d7e8b2c6a03c21b', key = root.querySelector('.key'), st = root.querySelector('[role=status]'), show = root.querySelector('[data-a=show]');
+  const mask = () => { const on = show.getAttribute('aria-pressed') === 'true'; key.textContent = on ? FULL : FULL.slice(0, 7) + '••••••••' + FULL.slice(-4); };
+  show.addEventListener('click', () => { show.setAttribute('aria-pressed', String(show.getAttribute('aria-pressed') !== 'true')); show.textContent = show.getAttribute('aria-pressed') === 'true' ? '隐藏' : '显示'; mask(); });
+  root.querySelectorAll('.cpy').forEach((b) => b.addEventListener('click', async () => {
+    const isKey = b.dataset.a === 'key', text = isKey ? FULL : root.querySelector('pre code').textContent; let ok = true;
+    try { await navigator.clipboard.writeText(text); } catch { ok = false; if (isKey) { show.setAttribute('aria-pressed', 'true'); show.textContent = '隐藏'; mask(); } getSelection().selectAllChildren(isKey ? key : root.querySelector('pre code')); }
+    b.textContent = ok ? '已复制 ✓' : '复制失败'; b.classList.toggle('ok', ok); st.textContent = ok ? '已复制到剪贴板' : '已选中文字，请按 ⌘C 复制';
+    setTimeout(() => { b.textContent = '复制'; b.classList.remove('ok'); }, 1800);
+  }));
+  mask();
+}
+</script>

@@ -42,3 +42,25 @@ PDF 的坐标单位是 pt（1pt = 1/72 英寸 ≈ 0.353mm），A4 是 595.28 × 
 5. 批量模式：输入一份 CSV，每行出一份 PDF，文件名用证书编号；单行出错跳过并记录，结束后输出成功和失败清单。
 6. 生成后抽 3 份用 pdftotext 检查文字能正确复制出来。
 最后说明改了哪些文件，并附一张调试图：调试模式下把每个字段框画成红色细线叠在底版上。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: 'pdf-lib 套打结业证书', text: `
+const pdf = await PDFDocument.load(底版)
+pdf.registerFontkit(fontkit)
+const font = await pdf.embedFont(字体, { subset: true })
+const page = pdf.getPage(0)  // A4 = 595.28 × 841.89 pt
+// 原点在左下角；每个字段的坐标框写在 fields.json
+for (const f of fields) {
+  const t = row[f.key]; let size = f.size
+  while (font.widthOfTextAtSize(t, size) > f.w && size > 8) size--
+  page.drawText(t, { x: f.x, y: f.y, size, font })
+}
+` }]), { title: '代码直接绘制 · 按坐标写字' });
+}
+</script>

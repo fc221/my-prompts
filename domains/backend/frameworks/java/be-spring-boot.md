@@ -41,3 +41,29 @@ Spring Boot 4（Java 17+）服务的目录、分包和配置约定：主类放�
 新建时：在根包下建 {模块} 功能包，写好 Controller、Service、Repository、实体、请求和响应 DTO，加一条迁移脚本，再各写一个 Service 单测和 @WebMvcTest。项目已有写法和上面不一致的（比如已经在用 Liquibase），跟项目走，并在最后列出差异。
 检查时：逐条对照，列出偏离的位置、问题和改法；移动包、改配置键、动迁移这类影响大的先列清单等我确认，确认后分批改，每批跑一次 ./mvnw test。
 最后说明改了哪些文件、新增了哪些配置项，以及本地怎么启动和验证。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+* src/main/java/com/mall/
+    MallApplication.java   主类放根包，扫描它和子包
+*   order/                 按功能分包
+      OrderController.java  接收、校验、转 DTO
+      OrderService.java     业务和事务
+      OrderRepository.java  JpaRepository 或 Mapper
+      dto/                  CreateOrderRequest 等 record
+    member/
+    common/                 异常、统一返回、工具
+    config/                 配置类
+  src/main/resources/
+    application.yml         公共配置
+    application-prod.yml    只放差异
+*   db/migration/           V1__init.sql
+`), { title: 'Spring Boot · 按功能分包' });
+}
+</script>

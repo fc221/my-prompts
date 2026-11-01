@@ -161,7 +161,7 @@ onBeforeUnmount(() => {
   background: #f5f7fa;
 }
 .desk {
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow:
     0 0 0 1px #d8dde6,
     0 12px 28px -14px rgba(15, 23, 42, 0.35);
@@ -169,8 +169,8 @@ onBeforeUnmount(() => {
 .chrome {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 0 10px;
+  gap: 4px;
+  padding: 0 12px;
   background: #fff;
   border-bottom: 1px solid #e8ebf0;
 }
@@ -181,7 +181,7 @@ onBeforeUnmount(() => {
   background: #d4d8df;
 }
 .chrome span {
-  margin-left: 10px;
+  margin-left: 8px;
   width: 30%;
   height: 40%;
   max-height: 10px;
@@ -204,9 +204,15 @@ onBeforeUnmount(() => {
   padding: var(--pt) var(--px) var(--px);
   background: #f5f7fa;
 }
+/* 手机画布：页面边距 16；控件 40、触控目标 44、输入框字号 16、表单项间距 20（桌面默认 32 / 32 / 14 / 16，在 MockBlock 里取用） */
 .phone-c {
   --pt: 44px;
-  --px: 14px;
+  --px: 16px;
+  --ctl: 40px;
+  --tap: 44px;
+  --fs-input: 16px;
+  --gap-form: 20px;
+  --grid-gap: 16px;
 }
 /* 标注时标签骑在区域边框上：给画布留出边距（换算成屏幕上约 14px），最上面一排的标签不被裁掉 */
 .canvas.ann {
@@ -220,7 +226,7 @@ onBeforeUnmount(() => {
   margin: 0;
   display: grid;
   justify-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 .pfig figcaption {
   color: var(--text-secondary, #6b7280);
@@ -255,8 +261,8 @@ onBeforeUnmount(() => {
 }
 .m-card .phone {
   position: absolute;
-  right: 14px;
-  bottom: 10px;
+  right: 16px;
+  bottom: 12px;
   border-radius: 14px;
   box-shadow:
     0 0 0 2px #1f2937,

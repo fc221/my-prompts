@@ -40,3 +40,29 @@ order: 50
 3. 转换放在接口层的 mapper 里，service 的参数和返回值里没有 HTTP 类型。
 4. 命名后缀沿用项目已有的那一套。
 接口返回的字段名和格式保持和现在一致；需要去掉的不该返回的字段单独列出，等我确认。最后补一条测试：请求里多传一个服务端字段时不会被写入。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, stack, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    stack([
+      { t: '请求对象', items: ['CreateOrderRequest'], note: '只含客户端可写字段' },
+      { t: '领域对象', items: ['Order'], note: '状态、金额只由服务端赋值', acc: true },
+      { t: '响应对象', items: ['OrderListItem', 'OrderDetail'], note: '白名单，按场景裁剪' },
+    ], { arrow: '在接口层转换' }),
+    tree(`
+src/order/
+* api/
+    request/
+    response/
+*   order_mapper    转换集中在这里
+  domain/           Order
+  persistence/      数据库映射
+`),
+  ], { title: '接口模型与领域模型分开' });
+}
+</script>

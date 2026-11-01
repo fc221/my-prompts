@@ -40,3 +40,42 @@ MATCH 找到值在第几行（或第几列），INDEX 按位置取值，两个�
 4. 查不到时用 IFNA 显示“{缺失提示，如 无报价}”。
 5. {二维表，如 运费表按 地区 × 重量段} 用 INDEX 加两个 MATCH 交叉取值。
 交付时说明每个公式需要的版本和输入方式（直接回车还是三键），并用 3 行示例数据验证结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-tag{margin:0 0 5px!important;font-size:11.5px;font-weight:650;color:#5d6675}
+.m-gap{height:10px}
+</style>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const tag = (t) => '<p class="m-tag">' + t + '</p>';
+  draw(root, [
+    tag('订单：按 门店 + 商品 查单价') + sheet({
+      head: ['订单号', '门店', '商品', '数量', '单价'],
+      widths: [70, 56, 70, 40, 56],
+      rows: [
+        ['DD260201', '西湖店', '经典拿铁', '6', '24.00'],
+        ['DD260202', '滨江店', '冷萃咖啡', '4', '28.00'],
+        ['DD260203', '湖滨店', '经典拿铁', '2', '无报价'],
+      ],
+      fx: ['E2', '=IFNA(INDEX(价格表[单价],MATCH(1,(价格表[门店]=B2)*(价格表[商品]=C2),0)),"无报价")'],
+      marks: { E4: 'warn' },
+      tabs: ['订单', '价格表'],
+    }) + '<div class="m-gap"></div>' + tag('价格表（超级表）') + sheet({
+      head: ['门店', '商品', '单价'],
+      widths: [56, 70, 56],
+      rows: [
+        ['滨江店', '经典拿铁', '26.00'],
+        ['滨江店', '冷萃咖啡', '28.00'],
+        ['西湖店', '经典拿铁', '24.00'],
+        ['西湖店', '冷萃咖啡', '27.00'],
+      ],
+      marks: { A4: 'good', B4: 'good', C4: 'good' },
+    }),
+  ], { title: '多条件查找 · 两个条件相乘，同时成立的位置是 1', min: 0.45 });
+}
+</script>

@@ -42,3 +42,22 @@ order: 40
 5. 周榜用 ZUNIONSTORE 合并日榜。
 6. 周期结束先快照到数据库再发奖。
 最后给出压测和对账方法：100 万成员、每秒 1 万次加分时测 ZREVRANK 和前 100 名的 P99；周期结束按业务流水重算每个成员的分数，与快照逐一比对，列出名次差异。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: '门店销售日榜 rank:sales:20261029', text: `
+ZINCRBY rank:sales:20261029 1280 store:21
+# 订单已支付才加分，退款加负数
+ZREVRANGE rank:sales:20261029 0 99 WITHSCORES
+# 前 100 名，结果缓存 5 秒
+ZREVRANK rank:sales:20261029 store:21
+# (integer) 6 → 第 7 名
+# 同分先到先得：真实分 × 10^8 + 距结束秒数
+` }]), { title: '排行榜 · 有序集合' });
+}
+</script>

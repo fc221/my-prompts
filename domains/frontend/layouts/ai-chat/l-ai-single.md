@@ -2,6 +2,7 @@
 zh: 单栏对话
 en: Single-column chat
 order: 10
+of: l-ai-page
 ---
 
 ## 是什么
@@ -29,3 +30,32 @@ order: 10
 ## 提示词
 
 {产品}AI 对话用「单栏对话」：消息列最大宽度 740px 居中，用户消息靠右带浅色底，回答靠左按正文排版；输入框吸底、随内容增高到 8 行后内部滚动，Enter 发送、Shift+Enter 换行，处理输入法组字；等待首字显示三个点，流式只渐显新增片段；贴底时跟随，上翻停止跟随并出现“回到最新”；停止生成后保留已输出内容；空会话给 3–4 个示例问题。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '16% 1fr 16%',
+  rows: 'auto auto auto auto 1fr auto',
+  areas: ['top top top', '. m1 .', '. m2 .', '. m3 .', '. . .', '. inp .'],
+  boxes: {
+    top: '顶栏 · 模型',
+    m1: { inner: { cols: '45% 1fr', rows: 'auto', areas: ['. u'], boxes: { u: '提问' } } },
+    m2: { label: '回答（流式）', acc: true },
+    m3: { inner: { cols: '45% 1fr', rows: 'auto', areas: ['. u'], boxes: { u: '追问' } } },
+    inp: '输入框（自动增高）',
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto auto auto 1fr auto',
+  areas: ['top', 'm1', 'm2', 'm3', '.', 'inp'],
+  boxes: {
+    top: { label: '标题', kind: 'mtop', text: '新对话' },
+    m1: { inner: { cols: '25% 1fr', rows: 'auto', areas: ['. u'], boxes: { u: '提问' } } },
+    m2: { label: '回答', acc: true },
+    m3: { inner: { cols: '25% 1fr', rows: 'auto', areas: ['. u'], boxes: { u: '追问' } } },
+    inp: '输入框',
+  },
+};
+```

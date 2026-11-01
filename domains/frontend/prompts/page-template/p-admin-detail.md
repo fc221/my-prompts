@@ -1,6 +1,7 @@
 ---
 zh: 后台详情页
 en: Admin detail page
+preview: l-admin-detail
 order: 20
 ---
 

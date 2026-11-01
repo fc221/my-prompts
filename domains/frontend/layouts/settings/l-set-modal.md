@@ -2,6 +2,7 @@
 zh: 弹窗式偏好设置
 en: Preferences dialog
 order: 70
+of: l-settings-page
 ---
 
 ## 是什么
@@ -28,3 +29,44 @@ order: 70
 ## 提示词
 
 {产品}的{偏好设置}用「弹窗」：在当前页面上打开约 820×560px 的弹窗，顶部标题“{标题}”和关闭按钮，左侧 190px 设置分类（{分类列表}），右侧当前分类的设置独立滚动；改动即时生效，不放保存按钮；Esc、关闭按钮、点遮罩都能关，有未保存内容先提示；打开时焦点进入弹窗、关闭后回到触发按钮，背景不滚动；分类写进 URL；窄于 640px 改成全屏页面，分类变顶部横滑 Tab。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr',
+  rows: '1fr',
+  areas: ['pg'],
+  boxes: { pg: { label: '背后的页面', kind: 'content' } },
+  drawer: {
+    side: 'center',
+    size: '820px',
+    height: '560px',
+    open: true,
+    box: {
+      label: '设置弹窗',
+      inner: {
+        cols: '190px 1fr',
+        rows: 'auto 1fr',
+        areas: ['hd hd', 'nav body'],
+        boxes: {
+          hd: { label: '标题 · 关闭', kind: 'dlghead', text: '偏好设置' },
+          nav: { label: '设置分类', kind: 'nav' },
+          body: { label: '分组卡片', kind: 'form', acc: true, text: '工作区信息' },
+        },
+      },
+    },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto auto auto 1fr',
+  areas: ['nav', 'tb', 'f1', 'f2', '.'],
+  boxes: {
+    nav: { label: '‹ 返回（全屏页面）', kind: 'mtop', text: '偏好设置' },
+    tb: { label: '分类 Tab', kind: 'tabs', text: '通用|通知|快捷键|账号' },
+    f1: { label: '分组卡片', kind: 'form', acc: true, text: '工作区信息' },
+    f2: { label: '分组卡片（开关行）', kind: 'switches', text: '通知' },
+  },
+};
+```

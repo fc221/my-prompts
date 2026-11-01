@@ -41,3 +41,28 @@ Spring Boot 代码里反复出现的写法约定：构造器注入、事务只�
 实现时：给 {模块} 写创建、详情、分页列表三个 API，含请求和响应 DTO、校验注解和业务异常，并用 @WebMvcTest 覆盖 200、400 字段错误、404 三种情况。
 审查时：逐条列出违规位置（类、方法、问题、改法），先改事务失效、异常被吞这类会出错的，再改注入方式、日志和命名；会改变响应格式或状态码的单独标出，等我确认再改。
 最后列出改动的文件和验证命令。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/main/java/com/mall/
+  order/
+    OrderController.java     @Valid @RequestBody，不写 try-catch
+*   OrderService.java        private final 构造器注入，@Transactional
+    OrderRepository.java     不加事务
+    dto/
+      CreateOrderRequest.java  record + @NotBlank、@Size
+      OrderResponse.java       不返回 JPA 实体
+  common/
+    BizException.java        错误码 + HTTP 状态
+*   GlobalExceptionHandler.java  @RestControllerAdvice，统一出错误响应
+src/main/resources/
+  application.yml          problemdetails、虚拟线程开关
+`), { title: 'Spring 常见约定 · 每层写什么' });
+}
+</script>

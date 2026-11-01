@@ -1,7 +1,7 @@
 ---
 zh: 文字上的扫光
 en: Shimmering text
-order: 90
+order: 150
 ---
 
 ## 是什么
@@ -32,3 +32,43 @@ order: 90
 ## 提示词
 
 给{发布页标题}加「文字上的扫光」：文字本身用清楚的颜色（对比度 ≥ 4.5:1），上面用 background-clip: text 叠一条窄亮带（约占文字宽度 20%，深色底用暖白），渐变铺 300% 宽、用 background-position 从左扫到右，单次约 1.4 秒，共扫 2 次，中间停 0.3 秒，结束后停在纯色；容器宽度贴合文字；不支持文字裁切时显示普通文字；减少动态效果时不扫光。
+
+## 示例
+
+<style>
+:host{display:block;height:100%}
+.st{position:relative;height:100%;overflow:hidden;container-type:size;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 22px 8px;background:radial-gradient(120% 90% at 100% 0%,#272b3c 0,#101219 62%);color:#e8eaef;font:13px/1.5 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.pill{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.06);color:#d3d7df;font-size:11.5px}
+.pill i{width:6px;height:6px;border-radius:50%;background:#ffcf7a;box-shadow:0 0 8px #ffcf7a}
+.sh{width:fit-content;margin:12px 0 6px;font-size:26px;line-height:1.25;font-weight:700;color:#b9bec9}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){.sh{color:transparent;background:linear-gradient(100deg,#b9bec9 0 46%,#fff4dc 50%,#b9bec9 54% 100%) 0 0/300% 100% no-repeat;-webkit-background-clip:text;background-clip:text}
+.sh.run{animation:sweep 1.7s cubic-bezier(.45,0,.25,1) 2}
+}
+@keyframes sweep{0%{background-position:100% 0}
+82%,100%{background-position:0 0}
+}
+.sub{margin:0;color:#9aa0ad;font-size:12.5px}
+.re{position:absolute;right:14px;bottom:14px}
+@container (max-width:310px){.sh{font-size:23px}
+}
+@container (min-height:280px){.st{padding:0 44px 12px}
+.pill{height:28px;font-size:12.5px}
+.sh{margin:16px 0 10px;font-size:44px}
+.sub{font-size:14px}
+.re{right:24px;bottom:20px}
+}
+@media (prefers-reduced-motion:reduce){.sh.run{animation:none}
+}
+</style>
+
+<div class="st"><span class="pill"><i aria-hidden="true"></i>新功能 · 会议纪要</span><h3 class="sh">开完会，纪要已经写好</h3><p class="sub">录音转文字、要点和待办，散会前就整理好</p><button type="button" class="ctl re">重播</button></div>
+
+<script type="module">
+export default function demo(root) {
+  const sh = root.querySelector('.sh');
+  // 扫 2 次后动画结束，停在纯底色；重播就重新挂上
+  const run = () => { sh.classList.remove('run'); void sh.offsetWidth; sh.classList.add('run'); };
+  root.querySelector('.re').addEventListener('click', run);
+  run();
+}
+</script>

@@ -42,3 +42,22 @@ order: 40
 5. 需要按{分区键，如 订单号}保证顺序的，用它做分区键，消费者丢弃版本号更旧的消息。
 6. 加消费延迟和死信数量两个监控指标。
 补测试：同一条消息投递两次只生效一次；处理抛错时不确认。最后列出改动文件和验证步骤。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['订单服务', 'MQ', '积分服务', '死信队列'], [
+    [0, 1, '发 trade.order.paid'],
+    [1, 2, '投递（至少一次）'],
+    [2, 2, '按 eventId 去重后加积分'],
+    [2, 1, '提交事务后再 ack', 'r'],
+    [1, 2, '重复投递同一条'],
+    [2, 1, '已处理过，直接 ack', 'r'],
+    [1, 3, '重试 3–5 次仍失败 → 死信 + 告警', 'x'],
+  ]), { title: '消息队列 · 至少一次投递，消费者幂等' });
+}
+</script>

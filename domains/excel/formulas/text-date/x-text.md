@@ -41,3 +41,38 @@ order: 10
 4. 清掉首尾空格和不可见字符，手机号在展示列打码，原始列保留。
 5. 结果列都用公式，原始数据不覆盖。
 交付时说明每个新列的公式和需要的版本，并用 3 行数据演示拆分和合并的结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-gap{height:10px}
+</style>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, sheet({
+    head: ['订单号', '商品规格', '品名', '克重', '烘焙度'],
+    widths: [70, 120, 60, 50, 56],
+    rows: [
+      ['DD260301', '咖啡豆-500g-深烘', '咖啡豆', '500g', '深烘'],
+      ['DD260302', '挂耳-10包-中烘', '挂耳', '10包', '中烘'],
+      ['DD260303', '冷萃液-1L-浅烘', '冷萃液', '1L', '浅烘'],
+    ],
+    fx: ['C2', '=TEXTSPLIT(B2,"-")'],
+    marks: { C2: 'acc', D2: 'acc', E2: 'acc' },
+  }) + '<div class="m-gap"></div>' + sheet({
+    head: ['收货人', '手机号', '城市', '详细地址', '收货信息'],
+    widths: [50, 86, 50, 96, 230],
+    rows: [
+      ['陈立', '13812345678', '杭州', '文三路 90 号', '陈立 138****5678 杭州 文三路 90 号'],
+      ['周敏', '13900001234', '宁波', '', '周敏 139****1234 宁波'],
+    ],
+    fx: ['E2', '=TEXTJOIN(" ",TRUE,A2,REPLACE(B2,4,4,"****"),C2:D2)'],
+    marks: { D3: 'warn' },
+  }), { title: '拆分：TEXTSPLIT 一格溢出成三格 · 合并：TEXTJOIN 跳过空格子', min: 0.45 });
+  // 手机号存成文本，靠左
+  root.querySelectorAll('.xc.r').forEach((c) => { if (/^1\d{10}$/.test(c.textContent)) c.classList.remove('r'); });
+}
+</script>

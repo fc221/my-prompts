@@ -10,14 +10,13 @@
   --space-6: 24px;
   --space-8: 32px;
   --space-10: 40px;
-  --radius-sm: 6px;
-  --radius-control: 8px;
-  --radius-card: 14px;
-  --radius-panel: 18px;
-  --control-h: 36px;
+  --radius-control: 6px; /* 控件 6 / 容器 12 / 胶囊 999，全站只用这一对 */
+  --radius-card: 12px;
+  --control-h: 40px;
   --sidebar-w: 248px;
   --ease: cubic-bezier(0.2, 0, 0, 1);
-  --dur: 0.18s;
+  --dur-fast: 100ms; /* 颜色与透明度 */
+  --dur: 160ms; /* 位移与变形；减少动态效果时归零 */
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -47,7 +46,7 @@ body {
   margin: 0;
   background: var(--surface-page);
   color: var(--text-primary);
-  font: 15px/1.6 var(--font);
+  font: 14px/22px var(--font);
 }
 button,
 input {
@@ -57,6 +56,12 @@ input {
 button {
   cursor: pointer;
 }
+h1,
+h2,
+h3,
+b {
+  font-weight: 600;
+} /* 标题和强调 600，不用浏览器默认的 700 */
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
@@ -90,13 +95,13 @@ button {
   background: var(--surface-raised);
   color: var(--text-primary);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
   transition:
-    background-color var(--dur) var(--ease),
-    border-color var(--dur) var(--ease),
-    color var(--dur) var(--ease),
-    transform 0.1s;
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
 }
 @media (hover: hover) {
   .btn:hover {
@@ -110,7 +115,7 @@ button {
 .btn.sm {
   height: 32px;
   padding: 0 12px;
-  font-size: 13px;
+  font-size: 14px;
 }
 .btn.primary {
   background: var(--accent);
@@ -150,8 +155,8 @@ button {
   background: transparent;
   color: var(--text-secondary);
   transition:
-    background-color var(--dur) var(--ease),
-    color var(--dur) var(--ease);
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
 }
 @media (hover: hover) {
   .icon-btn:hover {
@@ -166,13 +171,12 @@ kbd {
   min-width: 20px;
   height: 20px;
   padding: 0 4px;
-  line-height: 18px;
   border: 1px solid var(--border-subtle);
   border-bottom-width: 2px;
-  border-radius: 5px;
+  border-radius: var(--radius-control);
   background: var(--surface-raised);
   color: var(--text-secondary);
-  font: 500 12px/18px var(--font);
+  font: 500 12px/20px var(--font);
 }
 
 /* 主题圆形扩散：新旧快照不做默认淡入淡出，由脚本给新快照加 clip-path 动画。
@@ -190,12 +194,41 @@ html.vt-shrink::view-transition-new(root) {
   z-index: 1;
 }
 
+/* 淡入：减少动态效果时各处的进场动画都换成它 */
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+/* 减少动态效果：位移类过渡归零，颜色和透明度（--dur-fast）保留；各组件的进场动画自己换成 fade */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
+  :root {
+    --dur: 0.01ms;
+  }
+  * {
     scroll-behavior: auto !important;
+  }
+  .btn:active {
+    transform: none;
+  }
+}
+
+/* 触屏：控件视觉尺寸不变，热区用伪元素撑到 44px 高；只向上下扩，不吃掉按钮之间的 8px 间距 */
+@media (pointer: coarse) {
+  .btn,
+  .icon-btn {
+    position: relative;
+  }
+  .btn::before,
+  .icon-btn::before {
+    content: '';
+    position: absolute;
+    inset: calc((44px - var(--control-h)) / -2) 0;
+  }
+  .icon-btn::before {
+    inset: -2px;
+  }
+  .btn.sm::before {
+    inset: -6px 0;
   }
 }

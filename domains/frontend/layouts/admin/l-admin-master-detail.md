@@ -28,3 +28,42 @@ order: 60
 ## 提示词
 
 {对象}连续处理用「主从分栏」：左侧列表 340px（可拖动，最小 280px，顶部筛选与排序吸顶），右侧详情 1fr 可编辑；两栏各自滚动；当前项高亮并写进 URL，上下方向键切换；保存后原位更新列表状态并自动切到下一条；有未保存修改时切换前提示；没选中时右侧显示一句说明；窄于 768px 改为列表页 → 详情页，返回保留滚动位置。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '34% 1fr',
+  rows: '12% 1fr',
+  areas: ['flt dh', 'list db'],
+  boxes: {
+    flt: { label: '筛选 排序', kind: 'fbar' },
+    dh: '标题 · 操作',
+    list: {
+      inner: {
+        cols: '1fr',
+        rows: 'auto auto auto auto 1fr',
+        areas: ['r1', 'r2', 'r3', 'r4', '.'],
+        boxes: { r1: '记录', r2: { label: '选中', acc: true }, r3: '记录', r4: '记录' },
+      },
+    },
+    db: { label: '详情（可编辑）', acc: true, kind: 'form' },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto 1fr',
+  areas: ['top', 'list'],
+  boxes: {
+    top: { label: '列表页 ☰', kind: 'mtop', text: '订单' },
+    list: {
+      inner: {
+        cols: '1fr',
+        rows: 'auto auto auto auto auto 1fr',
+        areas: ['r1', 'r2', 'r3', 'r4', 'r5', '.'],
+        boxes: { r1: '记录', r2: { label: '点进详情', acc: true }, r3: '记录', r4: '记录', r5: '记录' },
+      },
+    },
+  },
+};
+```

@@ -41,3 +41,17 @@ order: 10
 4. 同一用户对同一对象每秒最多 1 次，客户端 300ms 防抖。
 5. 每天按关系表重算热门和抽样对象的计数并校准。
 最后给出压测和对账方法：500 个用户对同一对象并发点赞、取消共 1 万次，断言关系表行数与最终计数一致；每天随机抽 1000 个对象比对计数与 COUNT(*)，偏差超过 1% 告警。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '点赞', note: '用户 7321 → 帖子 9001' }, { t: 'INSERT post_like', note: '(post_id, user_id) 主键', acc: true }, { t: 'HINCRBY +1', note: '影响 1 行才加', via: '成功' }, { t: '合并写库', note: '每 5–10 秒刷增量' }],
+    [{ t: '唯一冲突', note: '已赞，计数不变', bad: true, via: '重复点' }, { t: '列表已赞状态', note: 'user_id + IN 一次查' }, { t: '每日校准', note: 'COUNT 重算覆盖计数' }],
+  ]), { title: '关系是事实，计数是派生' });
+}
+</script>

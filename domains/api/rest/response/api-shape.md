@@ -41,3 +41,37 @@ order: 40
 5. 成功一律用 2xx 状态码，body 里不再放 code=0 这类成功标记；旧接口保持原样，在新版本里迁移。
 6. 更新前端类型和请求层的解包逻辑，跑一遍现有接口测试。
 最后列出改动文件和对调用方有破坏的变更清单。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: '单个资源 · GET /orders/ord_8F3k2', text: `
+200 OK
+
+"id": "ord_8F3k2",
+"status": "PAID",
+"storeId": "s_1024",
+"store": {
+  "id": "s_1024", "name": "滨江路店"
+},
+"remark": null,
+"hasInvoice": false
+` },
+    { t: '列表 · GET /orders', text: `
+200 OK
+
+"items": [
+  { "id": "ord_8F3k2", "status": "PAID" },
+  { "id": "ord_7Lm9q", "status": "SHIPPED" }
+],
+"nextCursor": "eyJjIjoi…",
+"hasMore": true
+` },
+  ]), { title: '成功走 2xx · body 里不放 code=0' });
+}
+</script>

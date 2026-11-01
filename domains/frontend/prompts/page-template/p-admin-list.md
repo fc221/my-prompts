@@ -1,6 +1,7 @@
 ---
 zh: 后台列表页
 en: Admin list page
+preview: l-admin-list
 order: 10
 ---
 

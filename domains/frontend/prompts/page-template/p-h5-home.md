@@ -1,6 +1,7 @@
 ---
 zh: H5 首页
 en: Mobile web home
+preview: l-m-tabbar
 order: 90
 ---
 

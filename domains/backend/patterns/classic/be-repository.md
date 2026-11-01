@@ -39,3 +39,26 @@ order: 30
 4. save 在一个事务里保存整个聚合并校验版本号，冲突时抛并发冲突错误。
 5. 给业务层准备一个内存实现用于单测；真实实现用测试数据库跑集成测试。
 如果你判断项目里的 ORM 已经够用、包一层只是转调，先说明理由，问我要不要继续。最后列出改动文件和测试命令。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, stack, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    stack([
+      { t: '业务层', items: ['service'], note: '只说取订单、存订单' },
+      { t: '仓储接口', items: ['findPendingByMember', 'save(order)'], note: '按聚合建，订单行跟着订单存', acc: true },
+      { t: '实现', items: ['order_repository_mysql', '内存实现'], note: '真库跑集成测试，单测用 map' },
+    ], { arrow: '只传领域对象和业务条件' }),
+    tree(`
+domain/order/
+* order_repository        接口
+infra/persistence/
+  order_repository_mysql  实现
+`),
+  ], { title: '仓储模式 · 一个聚合一个仓储' });
+}
+</script>

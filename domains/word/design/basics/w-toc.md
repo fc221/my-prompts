@@ -40,3 +40,49 @@ order: 30
 3. 修改目录 1–3 样式：目录 1 小四黑体，目录 2 小四宋体、左缩进 2 字符，目录 3 左缩进 4 字符，行距 1.5 倍；页码制表位放在版心右边缘。
 4. 生成前先检查：所有标题都套了标题样式，没有套着标题样式的空段落；手改格式、没套样式的“假标题”列出来让我确认。
 5. 目录页和正文分节，目录页页码用罗马数字，正文从 1 开始；最后更新整个目录，确认没有“错误！未定义书签”。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-wrap{display:flex;gap:14px;align-items:flex-start}
+.m-pg{width:380px;padding:26px 40px 18px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25);color:#111;font-family:"Songti SC","SimSun",serif}
+.m-desk .m-tt{margin:0 0 12px;text-align:center;font:700 16px/1.4 "PingFang SC","SimHei",sans-serif;letter-spacing:1em;text-indent:1em}
+.m-e{display:flex;align-items:baseline;margin:0;font-size:11.5px;line-height:2;white-space:nowrap}
+.m-e i{flex:1;min-width:16px;margin:0 4px;border-bottom:2px dotted #667085;transform:translateY(-3px)}
+.m-e b{font-weight:400;font-variant-numeric:tabular-nums}
+.m-e.l1{font-family:"PingFang SC","SimHei",sans-serif;font-weight:600}
+.m-e.l2{padding-left:2em}
+.m-e.l3{padding-left:4em}
+.m-e.on{background:#eaf1fb;box-shadow:-8px 0 0 #eaf1fb,8px 0 0 #eaf1fb,-11px 0 0 #2b579a}
+.m-desk .m-pn{margin:10px 0 0;text-align:center;font-size:10.5px}
+.m-side{display:grid;gap:10px;width:160px}
+.m-up{border:1px solid #c9ced6;border-radius:6px;background:#fff;font:11px/1.4 system-ui,"PingFang SC",sans-serif;color:#344054;box-shadow:0 6px 18px -8px rgba(16,24,40,.3);overflow:hidden}
+.m-up p{margin:0;padding:5px 10px;border-bottom:1px solid #e4e7ec;background:#f6f7f9;color:#101828;font-weight:650}
+.m-up span{display:flex;align-items:center;gap:6px;padding:4px 10px}
+.m-up span::before{content:"";width:9px;height:9px;border:1.5px solid #98a2b3;border-radius:50%}
+.m-up span.on::before{border:3px solid #2b579a}
+.m-ann{display:grid;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-ann p{margin:0;padding:5px 0 5px 10px;border-left:2px solid #2b579a}
+.m-ann b{display:block;color:#101828;font-size:11.5px}
+.m-ann span{color:#667085}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const list = [
+    [1, '摘　要', 'I'], [1, 'Abstract', 'II'], [1, '第1章　绪论', '1'], [2, '1.1　研究背景', '1'], [2, '1.2　国内外研究现状', '3', 'on'], [3, '1.2.1　仓储自动化', '3'], [3, '1.2.2　库位优化算法', '5'],
+    [1, '第2章　需求分析', '8'], [2, '2.1　业务流程', '8'], [2, '2.2　功能需求', '11'], [1, '第3章　系统设计', '15'],
+  ];
+  const toc = list.map(([lv, t, p, on]) => '<p class="m-e l' + lv + (on ? ' on' : '') + '"><span>' + t + '</span><i></i><b>' + p + '</b></p>').join('');
+  const ann = [['目录 1', '小四黑体，顶格'], ['目录 2 / 目录 3', '左缩进 2 / 4 字符'], ['前导符与页码', '点线，右对齐制表位 = 版心宽'], ['前置部分', '罗马数字页码，单独一节']];
+  draw(root, '<div class="m-wrap"><div class="m-pg"><p class="m-tt">目录</p>' + toc + '<p class="m-pn">II</p></div><div class="m-side"><div class="m-up"><p>更新目录</p><span>只更新页码</span><span class="on">更新整个目录</span></div><div class="m-ann">'
+    + ann.map(([b, s]) => '<p><b>' + b + '</b><span>' + s + '</span></p>').join('') + '</div></div></div>', { center: true, min: 0.35 });
+}
+</script>

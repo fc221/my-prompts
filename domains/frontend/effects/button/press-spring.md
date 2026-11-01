@@ -2,7 +2,8 @@
 zh: 按压回弹
 en: Press spring
 aka: 点击反馈 按下缩放 按钮回弹
-order: 30
+order: 60
+tab: 回弹
 ---
 
 ## 是什么
@@ -24,3 +25,15 @@ order: 30
 ## 提示词
 
 给{按钮组件}加「按压回弹」：按下时缩放到 0.96 并加深底色，松开时用回弹曲线 cubic-bezier(.34,1.56,.64,1) 在 300ms 内回到原样；只动 transform；键盘激活同样有反馈；减少动态效果时只变颜色。
+
+## 示例
+
+<style>
+.zone{height:100%;display:grid;place-items:center;background:#fff}
+.btn{font:600 15px system-ui;color:#fff;background:#2f6bff;border:0;border-radius:10px;padding:12px 26px;transition:transform .3s cubic-bezier(.34,1.56,.64,1),background-color .1s;cursor:pointer}
+.btn:active{transform:scale(.96);background:#1f54d6;transition-duration:.08s}
+@media (prefers-reduced-motion:reduce){.btn:active{transform:none}
+}
+</style>
+
+<div class="zone"><button class="btn">按住试试</button></div>

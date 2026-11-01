@@ -35,7 +35,7 @@ textarea {
   gap: 6px;
   height: 32px;
   padding: 0 16px;
-  border: 1px solid #c9ced6;
+  border: 1px solid #868c98;
   border-radius: 6px;
   background: #fff;
   cursor: pointer;
@@ -43,7 +43,7 @@ textarea {
 }
 .btn:hover {
   background: #f5f6f8;
-  border-color: #8a909c;
+  border-color: #5b616e;
 }
 .pri {
   background: #3b5bdb;
@@ -58,7 +58,7 @@ textarea {
   background: none;
   border-color: transparent;
   color: #3b5bdb;
-  padding: 0 8px;
+  padding: 0 12px;
 }
 .txt:hover {
   background: #edf1ff;
@@ -67,16 +67,16 @@ textarea {
 .inp {
   height: 32px;
   padding: 0 12px;
-  border: 1px solid #c9ced6;
+  border: 1px solid #868c98;
   border-radius: 6px;
   background: #fff;
   min-width: 0;
 }
 .inp::placeholder {
-  color: #8a909c;
+  color: #6f7581;
 }
 .inp:hover {
-  border-color: #8a909c;
+  border-color: #5b616e;
 }
 .inp:focus-visible {
   outline: none;
@@ -103,7 +103,7 @@ textarea {
   color: #5b616e;
 }
 .bad {
-  color: #d92d20;
+  color: #b42318;
 }
 .warn {
   color: #b54708;
@@ -128,13 +128,13 @@ textarea {
   appearance: none;
   height: 32px;
   padding: 0 32px 0 12px;
-  border: 1px solid #c9ced6;
+  border: 1px solid #868c98;
   border-radius: 6px;
   background: #fff;
   cursor: pointer;
 }
 .sel > select:hover {
-  border-color: #8a909c;
+  border-color: #5b616e;
 }
 .sel::after {
   content: '';

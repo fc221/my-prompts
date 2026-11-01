@@ -1,6 +1,8 @@
 ---
-zh: 个人中心
+zh: 个人中心页
 en: Profile page
+aka: 个人中心
+preview: l-m-profile
 order: 110
 ---
 

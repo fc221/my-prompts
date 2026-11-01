@@ -43,3 +43,17 @@ Typst 是一门较新的排版语言和编译器：用简洁的标记写正文�
 6. 并发按 CPU 核数起进程，单份超时 20 秒；某份数据缺字段时记录单号、继续跑其他的，结束后输出成功数、失败数和失败原因。
 7. 离线环境：用到的第三方包提前下载到项目里的包缓存目录。
 最后说明脚本用法，并用一份 300 行明细的数据验证分页。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: 'data.json', note: '订单系统导出' }, { t: 'main.typ', note: 'json() 读成字典', acc: true, via: '读入' }, { t: 'typst compile', note: '--font-path fonts', acc: true }, { t: 'out.pdf', note: '几页几十毫秒' }],
+    [{ t: '找不到中文字体', note: '只给警告，照样编译', bad: true }, { t: '收集编译警告', note: '字体警告判这份失败' }, { t: '记录单号', note: '继续跑其他的' }],
+  ]), { title: 'Typst · 模板 + 数据批量编译' });
+}
+</script>

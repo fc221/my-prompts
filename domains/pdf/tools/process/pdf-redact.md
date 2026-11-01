@@ -42,3 +42,17 @@ order: 40
 6. 边界情况：加密文件要求密码；损坏文件拒绝；超过 {页数上限} 页或 {大小上限} MB 的拒绝；在无网络的隔离容器里处理，单个文件超时 {超时秒数} 秒。
 7. 验收：对输出跑 pdftotext 搜索每个原值，命中必须为 0；涂黑区域做 OCR 认不出原文；任一项失败就不返回文件并报告原因。
 最后说明改了哪些文件，并用一份带 OCR 文字层的扫描件测一次。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '画黑色矩形', note: '或方块批注', bad: true }, { t: 'pdftotext', note: '选中复制也一样' }, { t: '原文照样提出', note: '110105…1234 还在', bad: true }],
+    [{ t: '删掉原文', note: '文字、图片、矢量', acc: true }, { t: '清页面外', note: '元数据、批注、书签' }, { t: '完整重写', note: '不留增量旧版本' }, { t: '命中 0 才交付', note: '逐个搜原值', acc: true }],
+  ], { lanes: ['只盖黑框', '真正删除'] }), { title: '脱敏 · 盖黑框不等于删除' });
+}
+</script>

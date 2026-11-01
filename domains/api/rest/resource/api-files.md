@@ -40,3 +40,22 @@ order: 70
 4. 下载：GET /files/:id/content，带 Content-Disposition（filename* 用 UTF-8 编码中文名，另给 ASCII 兜底名），支持 Range；私有文件返回 15 分钟有效的签名链接，签发前检查权限。
 5. 测试：超大文件、伪造扩展名、中文文件名下载、越权下载。
 最后列出改动文件和需要配置的存储参数。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['客户端', 'API', '对象存储'], [
+    [0, 1, 'POST /uploads'],
+    [1, 0, 'uploadId + 预签名地址', 'r'],
+    [0, 2, 'PUT 直传文件（15 分钟内）'],
+    [0, 1, 'POST …/complete'],
+    [1, 1, '核对大小和哈希'],
+    [1, 0, 'fileId: f_3Kd9', 'r'],
+    [0, 1, '建报销单带 fileIds'],
+  ]), { title: '大文件直传 · 先拿 fileId，再建报销单引用' });
+}
+</script>

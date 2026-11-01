@@ -46,3 +46,29 @@ React 19 起 ref 可以像普通 prop 一样传给函数组件，新代码不再
 8. 提供 dev、build、test、test:e2e、lint、typecheck 命令。
 按领域分批改，每批跑类型检查和测试；需要升级依赖时先告诉我。
 完成后汇报改了哪些文件、清理掉的旧写法数量，以及构建和测试结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+  app/
+    main.tsx          入口
+    providers.tsx     QueryClient、主题
+*   router.tsx        路由集中，页面 lazy 懒加载
+  pages/              页面只组装
+* features/           按领域分
+*   orders/           components、hooks、schemas
+      api.ts          本领域请求函数
+      queries.ts      查询键 [资源, 参数]
+  components/ui/      基础组件
+  api/                请求客户端
+  stores/             Zustand：主题、当前门店
+  test/               测试初始化、MSW handlers
+`), { title: 'Vite + React 19 单页应用' });
+}
+</script>

@@ -2,6 +2,7 @@
 zh: 首屏居中大标题
 en: Centered hero
 order: 20
+of: l-hero
 ---
 
 ## 是什么
@@ -28,3 +29,39 @@ order: 20
 ## 提示词
 
 {产品}首屏用「居中大标题」：顶部导航下方留白，居中放超大标题“{价值主张}”（不超过 2 行）、一句副标题（最大宽度 560px）和主次两个按钮（“{主行动}”“{次行动}”）；下方放{产品画面}，首屏只露出上半部分；上下内边距 clamp(64px, 10vw, 128px)；窄屏按钮上下堆叠、标题不超过 3 行；后面的区块改为左对齐。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '16% 1fr 16%',
+  rows: '13% 4% 24% 10% 13% 1fr',
+  areas: ['nav nav nav', '. . .', '. t .', '. s .', '. b .', 'img img img'],
+  boxes: {
+    nav: {
+      inner: {
+        cols: '18% 1fr 20%',
+        rows: '1fr',
+        areas: ['logo links cta'],
+        boxes: { logo: 'Logo', links: '导航', cta: '按钮' },
+      },
+    },
+    t: { label: '超大标题', acc: true, center: true },
+    s: { label: '副标题', center: true },
+    b: { label: '主次按钮', center: true },
+    img: '产品画面（露出上半）',
+  },
+};
+export const wireMobile = {
+  cols: '6% 1fr 6%',
+  rows: '10% 5% 25% 11% 11% 1fr',
+  areas: ['nav nav nav', '. . .', '. t .', '. s .', '. b .', 'img img img'],
+  boxes: {
+    nav: 'Logo ☰',
+    t: { label: '大标题', acc: true, center: true },
+    s: { label: '副标题', center: true },
+    b: { label: '按钮', center: true },
+    img: '产品画面',
+  },
+};
+```

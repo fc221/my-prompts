@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // 全局搜索：⌘K / Ctrl+K 或 / 打开；跨领域、跨板块搜索，方向键选择，回车打开详情
 import { computed, nextTick, ref, watch } from 'vue';
-import { domainOf, domains, entries, matches, sectionOf } from '../kb';
+import { domainOf, domains, entries, headOf, matches, sectionOf } from '../kb';
 import { openDetail, state } from '../state';
 import AppIcon from './AppIcon.vue';
 
@@ -11,7 +11,8 @@ const q = ref('');
 const active = ref(0);
 const results = computed(() => {
   const s = q.value.trim();
-  const list = entries.filter((e) => matches(e, s));
+  // 只有示例、文字都跟主条目走的案例不单独列，免得一次命中出现好几行一样的
+  const list = entries.filter((e) => matches(e, s) && !(e.of && e.look === headOf(e).look));
   // 当前领域排前面，再按名称命中优先
   return list.sort(
     (a, b) =>
@@ -92,7 +93,7 @@ window.addEventListener('keydown', (ev) => {
   >
     <div class="box">
       <label class="field">
-        <AppIcon name="search" :size="18" />
+        <AppIcon name="search" :size="20" />
         <span class="sr-only">搜索全部条目</span>
         <input
           ref="input"
@@ -119,9 +120,9 @@ window.addEventListener('keydown', (ev) => {
           @mousemove="active = i"
           @click="pick(i)"
         >
-          <span class="tile"><AppIcon :name="sectionOf(e).icon ?? 'box'" :size="15" /></span>
+          <span class="tile"><AppIcon :name="sectionOf(e).icon ?? 'box'" :size="16" /></span>
           <span class="t"
-            ><b>{{ e.zh }}</b
+            ><b>{{ e.of ? `${headOf(e).zh} · ${e.tab ?? e.zh}` : e.zh }}</b
             ><small>{{ e.look }}</small></span
           >
           <span class="where"
@@ -149,7 +150,7 @@ window.addEventListener('keydown', (ev) => {
   margin: 12vh auto auto;
   padding: 0;
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-card);
   background: var(--surface-overlay);
   color: var(--text-primary);
   box-shadow: var(--shadow-3);
@@ -198,7 +199,7 @@ li {
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-3);
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   cursor: pointer;
 }
 li[aria-selected='true'] {
@@ -207,10 +208,10 @@ li[aria-selected='true'] {
 .tile {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   flex: none;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: color-mix(in srgb, var(--sec) 14%, var(--surface-raised));
   color: var(--sec);
 }
@@ -218,15 +219,16 @@ li[aria-selected='true'] {
   display: grid;
   flex: 1;
   min-width: 0;
-  line-height: 1.4;
 }
 .t b {
   font-size: 14px;
+  line-height: 22px;
   font-weight: 600;
 }
 .t small {
   color: var(--text-secondary);
   font-size: 12px;
+  line-height: 20px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

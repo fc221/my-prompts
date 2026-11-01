@@ -43,3 +43,35 @@ order: 50
 5. 校验失败一次返回全部错误，errors 数组每项含 field 路径、code、message；JSON 解析失败返回 400。
 6. 金额以服务端计算为准。
 最后说明改了哪些文件，并给 {示例接口，如 POST /orders} 写测试：一次提交三个错误字段能全部返回、多传 status 字段被拒绝、超长备注被拒绝。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+POST /orders
+Content-Type: application/json
+
+"storeId": "s_1024",
+"deliveryType": "DELIVERY",
+"remak": "少放辣",
+"items": [ …, …,
+  { "skuId": "sku_77", "quantity": 0 } ]
+`, `
+422 Unprocessable Content
+
+"errors": [
+  { "field": "items[2].quantity",
+    "code": "OUT_OF_RANGE",
+    "message": "数量 1–999" },
+  { "field": "address",
+    "code": "REQUIRED", … },
+  { "field": "remak",
+    "code": "UNKNOWN_FIELD", … }
+]
+`), { title: '入参校验 · 一次返回全部字段错误' });
+}
+</script>

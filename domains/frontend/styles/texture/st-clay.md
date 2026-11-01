@@ -35,3 +35,73 @@ order: 40
 ## 提示词
 
 把{产品}的{页面}做成黏土拟态风：浅丁香底 #f1ecff，卡片近白，正文深紫 #2b2452、次要 #5e5685；黏土色用紫 #6a4cf0（配白字）、橙 #ffc773、薄荷 #8ee3c8 三种（浅色上配深紫字），每个元素自带一种颜色；所有黏土元素叠三层阴影：外投影 0 16px 28px -8px 同色 45%、inset -6px -8px 14px rgba(0,0,0,.12)、inset 6px 8px 14px rgba(255,255,255,.6)，光源左上，不用描边；卡片圆角 32px，按钮胶囊形；字体 Nunito 配思源黑体（后备 ui-rounded、PingFang SC），标题 800；卡片四周放 2–4 个漂浮的黏土球和圆环（aria-hidden）；按钮按下压扁到 .94 再回弹，360ms、cubic-bezier(.34,1.56,.64,1)，装饰 4s 慢速浮动，减少动态效果时只保留颜色变化；进度条做内凹轨道加黏土色填充；窄屏装饰减到 1–2 个、卡片圆角 24px、按钮高 44px 以上。
+
+## 示例
+
+<style>
+:host{container-type:size}
+.s{--in:inset -6px -8px 14px rgba(0,0,0,.12),inset 6px 8px 14px rgba(255,255,255,.6);position:relative;height:100%;display:grid;place-items:center;padding:14px;overflow:hidden;background:#f1ecff;color:#2b2452;font:12px/1.5 ui-rounded,"Nunito","PingFang SC",sans-serif}
+.bl{position:absolute;animation:fl 4s cubic-bezier(.45,0,.55,1) infinite alternate}
+.b1{left:7%;top:12%;width:34px;height:34px;border-radius:50%;background:#ffc773;box-shadow:0 12px 20px -8px rgba(230,150,40,.55),var(--in)}
+.b2{right:6%;bottom:10%;width:46px;height:46px;border-radius:50%;background:radial-gradient(circle,transparent 0 34%,#8ee3c8 35%);box-shadow:0 12px 20px -8px rgba(40,170,130,.5),inset -4px -6px 10px rgba(0,0,0,.12),inset 4px 6px 10px rgba(255,255,255,.6);animation-delay:-2s}
+.b3{right:10%;top:9%;width:44px;height:20px;border-radius:999px;background:#ffb3c7;box-shadow:0 10px 18px -8px rgba(230,90,130,.5),var(--in);transform:rotate(-24deg);animation-name:fr}
+.cd{position:relative;width:min(272px,86%);display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px 14px;align-items:center;padding:16px;border-radius:32px;background:#fff;box-shadow:0 18px 32px -12px rgba(106,76,240,.35),var(--in)}
+.ic{width:52px;height:52px;display:grid;place-items:center;border-radius:20px;background:#6a4cf0;box-shadow:0 10px 18px -6px rgba(106,76,240,.55),inset -5px -6px 10px rgba(0,0,0,.18),inset 5px 6px 10px rgba(255,255,255,.35)}
+.ic svg{width:28px;fill:#fff}
+small{color:#5e5685;font-weight:700}
+.in b{display:block;font-size:clamp(16px,9cqh,26px);line-height:1.25;font-weight:800}
+.ft{grid-column:1/-1;display:flex;align-items:center;gap:12px}
+.pg{flex:1;height:14px;padding:3px;border-radius:999px;background:#f1ecff;box-shadow:inset 2px 3px 6px rgba(43,36,82,.15),inset -2px -2px 5px rgba(255,255,255,.9)}
+.pg i{display:block;height:100%;border-radius:999px;background:#8ee3c8;box-shadow:inset 2px 2px 3px rgba(255,255,255,.6),inset -2px -2px 3px rgba(0,0,0,.1);transition:width .36s cubic-bezier(.34,1.56,.64,1)}
+.ct{min-width:48px;color:#5e5685;font-weight:700;white-space:nowrap}
+button{height:36px;padding:0 16px;border:0;border-radius:999px;background:#6a4cf0;color:#fff;font:inherit;font-size:13px;font-weight:800;white-space:nowrap;cursor:pointer;box-shadow:0 10px 18px -6px rgba(106,76,240,.6),inset -4px -5px 10px rgba(0,0,0,.18),inset 4px 5px 10px rgba(255,255,255,.35)}
+button:hover{background:#7658f5}
+button:focus-visible{outline:3px solid #6a4cf0;outline-offset:3px}
+button.sq{animation:sq .36s cubic-bezier(.34,1.56,.64,1)}
+button:disabled{background:#8ee3c8;color:#2b2452;cursor:default}
+@keyframes sq{30%{transform:scale(.94,.9)}
+70%{transform:scale(1.04)}
+}
+@keyframes fl{to{transform:translateY(-6px)}
+}
+@keyframes fr{from{transform:rotate(-24deg)}
+to{transform:rotate(-24deg) translateY(-6px)}
+}
+@container (max-width:300px){.b3{display:none}
+.cd{padding:14px;border-radius:24px}
+}
+@container (min-height:260px){.cd{width:340px;padding:22px;gap:18px}
+.ic{width:68px;height:68px;border-radius:24px}
+.ic svg{width:36px}
+small{font-size:13px}
+button{height:44px;padding:0 22px;font-size:15px}
+.b1{width:48px;height:48px;left:14%}
+.b2{width:64px;height:64px;right:14%}
+.b3{right:18%}
+}
+@media (prefers-reduced-motion:reduce){.bl,button.sq{animation:none}
+.pg i{transition:none}
+}
+</style>
+
+<div class="s">
+  <i class="bl b1" aria-hidden="true"></i><i class="bl b2" aria-hidden="true"></i><i class="bl b3" aria-hidden="true"></i>
+  <div class="cd">
+    <div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.5 2 5 13.5h5.5L9 22l9-12h-5.6z"/></svg></div>
+    <div class="in"><small>今日打卡 · 第 12 天</small><b>晨跑 5 公里</b></div>
+    <div class="ft"><div class="pg" aria-hidden="true"><i style="width:60%"></i></div><span class="ct" role="status">本周 3/5</span><button type="button">打卡 +1</button></div>
+  </div>
+</div>
+
+<script type="module">
+export default function demo(root) {
+  const b = root.querySelector('button'), bar = root.querySelector('.pg i'), ct = root.querySelector('.ct');
+  let n = 3;
+  b.onclick = () => {
+    n = Math.min(5, n + 1);
+    bar.style.width = n * 20 + '%'; ct.textContent = `本周 ${n}/5`;
+    b.classList.remove('sq'); void b.offsetWidth; b.classList.add('sq');
+    if (n === 5) { b.textContent = '已完成'; b.disabled = true; }
+  };
+}
+</script>

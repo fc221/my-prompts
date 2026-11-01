@@ -41,3 +41,102 @@ order: 20
 4. 第 2 页作品附页：同一位置的字标换成 {附页字标，如 Works}，年份方块不变；一张通栏大图块加两张半栏小图块，左上角荧光绿编号胶囊，图下写项目名和“成绩 · 分工”；页底放作品集链接。
 5. 荧光绿只用在胶囊、圆点、照片描边和年份四处；每页都不溢出，超出时先合并早期经历、减少作品，不缩字号。
 交付屏幕版和换成实色绿的打印版 PDF，确认姓名、电话、邮箱可复制，并把两页并排截图。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.mock{background:radial-gradient(120% 90% at 30% 20%,#3a3a3c,#1d1d1f 70%)}
+.mock .dg-row{justify-content:center}
+.mock .dg-col{flex:none}
+.m-pg{position:relative;width:210px;height:297px;overflow:hidden;background:#f6f6f2;color:#151515;font-family:system-ui,"PingFang SC",sans-serif;box-shadow:0 18px 40px -12px rgba(0,0,0,.7)}
+.m-pg p{margin:0}
+.m-mark{position:absolute;left:11px;top:6px;margin:0;font:200 45px/1 "Avenir Next","Futura",system-ui,sans-serif;letter-spacing:-.03em}
+.m-yr{position:absolute;left:176px;top:12px;width:20px;height:20px;display:grid;place-items:center;background:#151515;color:#c6ff3d;font:800 5px/1.05 system-ui,sans-serif;text-align:center}
+.m-who{position:absolute;left:14px;top:56px;width:122px}
+.m-who b{display:block;font:900 15px/1.1 system-ui,"PingFang SC",sans-serif}
+.m-who b small{margin-left:4px;font:500 6px/1 system-ui,sans-serif;letter-spacing:.14em;color:#6b6b66}
+.m-who em{display:block;margin-top:4px;font:700 7px/1.3 system-ui,"PingFang SC",sans-serif;font-style:normal}
+.m-who span{display:block;margin-top:5px;color:#55554f;font:500 4.8px/1.7 system-ui,"PingFang SC",sans-serif}
+.m-ph{position:absolute;left:148px;top:46px;width:46px;height:54px;overflow:hidden;transform:rotate(5deg);border:2px solid #c6ff3d;outline:.8px solid #151515;background:radial-gradient(80% 70% at 50% 35%,#ecebe6,#cfcdc6)}
+.m-ph::before{content:"";position:absolute;left:4%;right:12%;bottom:-6px;height:40%;border-radius:48% 48% 0 0/64% 64% 0 0;background:#1f1f1f}
+.m-ph::after{content:"";position:absolute;left:calc(50% - 4px);top:46%;width:8px;height:12px;background:#d9a888}
+.m-ph i{position:absolute;z-index:1;left:calc(50% - 10px);top:15%;width:21px;height:24px;border-radius:50%;background:radial-gradient(circle 9.5px at 60% 66%,#e8bd9d 97%,transparent 100%),#2a1f1a}
+.m-rule{position:absolute;left:14px;right:14px;top:106px;border-top:.6px solid #151515}
+.m-pill{display:inline-block;padding:2px 6px;border-radius:99px;background:#c6ff3d;font:800 5.6px/1.2 system-ui,"PingFang SC",sans-serif;letter-spacing:.04em}
+.m-pill small{margin-left:3px;font:600 4.2px/1 system-ui,sans-serif;letter-spacing:.14em}
+.m-l{position:absolute;left:14px;top:113px;width:124px}
+.m-r{position:absolute;left:148px;top:113px;width:48px}
+.m-tl{position:relative;margin:6px 0 7px;padding-left:10px;display:grid;gap:5px}
+.m-tl::before{content:"";position:absolute;left:2.5px;top:3px;bottom:3px;border-left:.6px solid #151515}
+.m-tl div{position:relative}
+.m-tl div::before{content:"";position:absolute;left:-10px;top:1px;width:4px;height:4px;border-radius:50%;background:#c6ff3d;box-shadow:0 0 0 .6px #151515}
+.m-tl time{display:block;color:#6b6b66;font:600 4.4px/1.2 system-ui,sans-serif;letter-spacing:.06em}
+.m-tl b{display:block;margin-top:1px;font:800 6.2px/1.35 system-ui,"PingFang SC",sans-serif}
+.m-tl span{display:block;color:#55554f;font:500 4.6px/1.6 system-ui,"PingFang SC",sans-serif}
+.m-r p{margin:6px 0 10px;color:#55554f;font:500 4.6px/1.65 system-ui,"PingFang SC",sans-serif}
+.m-r ol{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:5px;font:500 4.6px/1.5 system-ui,"PingFang SC",sans-serif;color:#55554f}
+.m-r ol b{display:block;color:#151515;font:800 5.4px/1.3 system-ui,"PingFang SC",sans-serif}
+.m-sk{position:absolute;left:14px;right:14px;bottom:13px;display:flex;align-items:center;gap:3px}
+.m-sk span{flex:none;white-space:nowrap;padding:1.5px 4px;border:.6px solid #151515;border-radius:99px;font:600 4.5px/1.2 system-ui,"PingFang SC",sans-serif}
+.m-set{display:flex;gap:18px}
+.m-wk{position:absolute;left:14px;right:14px;top:64px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.m-w{position:relative;margin:0}
+.m-w.m-wide{grid-column:1/-1}
+.m-art{position:relative;height:58px;overflow:hidden;outline:.6px solid #151515;outline-offset:-.6px}
+.m-wide .m-art{height:92px;background:#ece6dc}
+.m-w>.m-pill{position:absolute;z-index:1;left:5px;top:5px}
+.m-w b{display:block;margin-top:5px;font:800 6.2px/1.3 system-ui,"PingFang SC",sans-serif}
+.m-w figcaption span{display:block;margin-top:1px;color:#55554f;font:500 4.6px/1.6 system-ui,"PingFang SC",sans-serif}
+.m-post{position:absolute;bottom:10px;width:44px;height:66px;display:grid;place-items:center;box-shadow:0 6px 10px -6px rgba(0,0,0,.5);color:#fff;font:900 20px/1 system-ui,"PingFang SC",sans-serif}
+.m-post::after{content:"";position:absolute;left:8px;right:8px;bottom:7px;height:2px;background:currentColor;opacity:.7}
+.m-box{position:absolute;left:28%;right:28%;top:22px;bottom:10px;background:linear-gradient(90deg,#2f6b4f 62%,#24573f 0);box-shadow:0 8px 10px -6px rgba(0,0,0,.45)}
+.m-box::before{content:"";position:absolute;left:-3px;right:-3px;top:-6px;height:9px;background:#3a7d5d}
+.m-box::after{content:"拾光";position:absolute;left:6px;top:14px;padding:1px 3px;background:#c6ff3d;color:#151515;font:800 4.6px/1.2 system-ui,"PingFang SC",sans-serif}
+.m-card{position:absolute;top:12px;width:24px;height:36px;background:linear-gradient(#ff9a7a 0 55%,#fff 0);box-shadow:0 4px 8px -4px rgba(0,0,0,.4)}
+.m-card::after{content:"";position:absolute;left:3px;right:6px;bottom:5px;height:2px;background:#151515;box-shadow:0 -4px 0 #9a958c}
+.m-more{position:absolute;left:14px;right:14px;bottom:13px;display:flex;align-items:center;gap:6px;color:#55554f;font:500 4.8px/1 system-ui,"PingFang SC",sans-serif}
+.m-pno{position:absolute;right:14px;top:47px;margin:0;color:#6b6b66;font:600 4.6px/1 system-ui,sans-serif;letter-spacing:.14em}
+</style>
+
+<div class="dg mock"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const p1 = `<div class="m-pg">
+    <p class="m-mark">Resume</p><p class="m-yr">20<br>26</p>
+    <div class="m-who"><b>MyPrompts<small>BRAND DESIGNER</small></b><em>品牌视觉设计师 · 新媒体运营</em>
+      <span>138 2706 4415 · hi@sunian.cn<br>杭州 · 作品集 sunian.cn/works</span></div>
+    <div class="m-ph"><i></i></div><i class="m-rule"></i>
+    <div class="m-l"><span class="m-pill">工作经历<small>EXPERIENCE</small></span>
+      <div class="m-tl">
+        <div><time>2023.04 – 至今</time><b>拾光茶饮 · 品牌视觉设计师</b><span>负责 120 家门店的季度上新物料和社交平台视觉，<br>夏季联名海报带来 3.2 万次收藏。</span></div>
+        <div><time>2021.07 – 2023.03</time><b>野果文创 · 新媒体设计</b><span>搭建图文与短视频封面模板，单人支撑每周<br>15 条内容出图；早期在广告公司做商场开业主视觉。</span></div>
+      </div>
+      <span class="m-pill">教育背景<small>EDUCATION</small></span>
+      <div class="m-tl"><div><time>2016.09 – 2020.06</time><b>东湖艺术学院 · 视觉传达 本科</b><span>毕业设计获校级一等奖。</span></div></div>
+    </div>
+    <div class="m-r"><span class="m-pill">关于我</span>
+      <p>喜欢把品牌的性格做进每一张图里。熟悉门店物料从提案到落地的全流程，也能自己拍、自己剪。</p>
+      <span class="m-pill">获奖</span>
+      <ol><li><b>2025 包装设计奖</b>银奖 · 茶饮礼盒</li><li><b>2024 海报双年展</b>入围</li></ol></div>
+    <div class="m-sk"><span class="m-pill">技能</span><span>Figma</span><span>Photoshop</span><span>AE 动效</span><span>C4D</span><span>品牌视觉</span></div>
+  </div>`;
+  const p2 = `<div class="m-pg">
+    <p class="m-mark">Works</p><p class="m-yr">20<br>26</p><p class="m-pno">MyPrompts · 作品附页 · 2 / 2</p><i class="m-rule" style="top:56px"></i>
+    <div class="m-wk">
+      <figure class="m-w m-wide"><span class="m-pill">01</span><div class="m-art">
+          <i class="m-post" style="left:19px;background:#ff6b4a;transform:rotate(-4deg)">冰</i><i class="m-post" style="left:69px;bottom:14px;background:#f2b705">柠</i><i class="m-post" style="left:119px;background:#2f6b4f;transform:rotate(3deg)">夏</i></div>
+        <figcaption><b>拾光茶饮 · 夏季联名海报</b><span>门店海报与种草笔记同步上线，3.2 万次收藏 · 主视觉 / 排版</span></figcaption></figure>
+      <figure class="m-w"><span class="m-pill">02</span><div class="m-art" style="background:#dfe8dc"><i class="m-box"></i></div>
+        <figcaption><b>茶饮礼盒包装</b><span>2025 包装设计奖银奖 · 结构与插画</span></figcaption></figure>
+      <figure class="m-w"><span class="m-pill">03</span><div class="m-art" style="background:#f3e3d3">
+          <i class="m-card" style="left:12px;transform:rotate(-6deg)"></i><i class="m-card" style="left:31px;top:9px;background:linear-gradient(#8fb8ff 0 55%,#fff 0)"></i><i class="m-card" style="left:50px;transform:rotate(6deg);background:linear-gradient(#c6ff3d 0 55%,#fff 0)"></i></div>
+        <figcaption><b>种草笔记封面模板</b><span>一套 12 种版式，每周 15 条内容复用</span></figcaption></figure>
+    </div>
+    <p class="m-more"><span class="m-pill">更多作品</span>sunian.cn/works · 共 24 个项目，含动效与短片</p>
+  </div>`;
+  draw(root, `<div class="m-set">${p1}${p2}</div>`, { center: true, min: 0.25 });
+}
+</script>

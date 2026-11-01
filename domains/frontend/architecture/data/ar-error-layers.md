@@ -39,3 +39,19 @@ order: 30
 3. 按范围改：全局拦截器只处理 401、断网和 5xx 维护；查询错误在区块内显示并可重试；写操作错误在调用处提示并保留输入；422 回填到表单字段；AbortError 忽略。
 4. 未捕获异常接入错误边界和现有监控，上报带路由和 requestId。
 5. 逐类模拟（断网、401、403、422、500、请求被取消），确认每类只提示一次、位置正确。汇报改动文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '请求层', items: ['ApiError'], note: '各种失败归一，带 status、code、requestId' },
+    { t: '缓存层', items: ['网络错误', '5xx', '429'], note: '只这几类自动重试，其他 4xx 不重试' },
+    { t: '界面', items: ['422 → 字段', '查询 → 区块', '403/404 → 页面', '401 → 全局'], note: '一个错误只在一处展示', acc: true },
+    { t: '兜底', items: ['Error Boundary', 'errorHandler'], note: '没预料到的异常，上报监控' },
+  ]), { title: '前端错误分层 · 按来源和范围' });
+}
+</script>

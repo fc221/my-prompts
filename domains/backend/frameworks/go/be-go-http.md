@@ -41,3 +41,25 @@ order: 20
 新增时：为 {模块} 写创建、详情、列表三个 API，含请求结构体、校验规则、错误映射，以及覆盖 201、400、404 的 handler 测试。
 检查时：逐条列出偏离的地方（文件、问题、改法），先修没设超时、没有优雅停机、请求体不限大小、错误泄露内部信息这几类，再统一写法；状态码或响应体会变的先告诉我。
 最后列出改动的文件，以及用 curl 验证的命令。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+* cmd/api/
+    main.go           自建 http.Server 设超时，SIGTERM 后 Shutdown
+* internal/           每个业务包注册自己的路由
+    order/
+      routes.go       Routes(mux) 注册 GET /api/v1/orders/{id}
+      handler.go      MaxBytesReader + DisallowUnknownFields
+      handler_test.go  httptest 覆盖 2xx、400、404、500
+    platform/
+      middleware/     panic 恢复 → 请求 ID → 日志 → 超时 → 鉴权
+  go.mod              go 1.22 起用标准库 ServeMux
+`), { title: 'Go HTTP · 标准库路由与中间件' });
+}
+</script>

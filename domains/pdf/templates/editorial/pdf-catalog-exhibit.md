@@ -42,3 +42,88 @@ order: 30
 5. 单元内容来自{单元清单}，每个单元重复这一结构，编号和图号全书连续；原始扫描件单独保存，只用调色后的副本排版。
 6. 整套页面包括封面、目录、前言、单元开篇对页、展品图版页、展品清单页、版权页和封底，每种页各给一个示例页；封面沿用纸色、砖红细线和思源宋体标题。
 交付时列出整套页面清单，给出一个单元的开篇对页截图，并列出每张图的图号、年代和收藏单位，确认和图注一致。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.mock{background:radial-gradient(110% 90% at 25% 15%,#4a3f36,#1c1714 72%)}
+.mock .dg-row{justify-content:center}
+.mock .dg-col{flex:none}
+.m-sp{display:flex;width:420px;height:297px;box-shadow:0 18px 40px -12px rgba(0,0,0,.75);color:#2e2219;font-family:"Songti SC","STSong",serif}
+.m-pg{position:relative;width:210px;height:297px;overflow:hidden}
+.m-l{display:flex;flex-direction:column;padding:20px 20px 16px 18px;background:#efe7d8}
+.m-l::after{content:"";position:absolute;inset:0 0 0 auto;width:16px;background:linear-gradient(90deg,transparent,rgba(60,35,15,.16))}
+.m-lab{display:flex;justify-content:space-between;padding-bottom:5px;border-bottom:.5px solid #9b4a26;color:#9b4a26;font:600 4.8px/1 system-ui,"PingFang SC",sans-serif;letter-spacing:.2em}
+.m-l h1{margin:13px 0 0 -2px;font:900 50px/.96 "Songti SC","STSong",serif;letter-spacing:.02em}
+.m-l h1 em{color:#9b4a26}
+.m-sub{margin-top:8px!important;color:#6d5643;font:500 5.4px/1 system-ui,"PingFang SC",sans-serif;letter-spacing:.18em}
+.m-q{margin:14px 0 0;padding-left:7px;border-left:1.5px solid #9b4a26;font:700 8.6px/1.5 "Songti SC","STSong",serif}
+.m-q cite{display:block;margin-top:4px;color:#6d5643;font:400 4.8px/1.4 system-ui,"PingFang SC",sans-serif;font-style:normal}
+.m-body{margin-top:auto;padding-top:12px;column-count:2;column-gap:9px;color:#3d2f24;font:400 4.6px/1.72 "Songti SC","STSong",serif;text-align:justify}
+.m-body p{text-indent:2em}
+.m-folio{display:flex;justify-content:space-between;margin-top:9px!important;color:#8b735e;font:500 4.4px/1 system-ui,"PingFang SC",sans-serif;letter-spacing:.12em}
+.m-r{background:#2f2116}
+.m-arch{position:absolute;inset:0;background:linear-gradient(#d2b187,#b58e63 42%,#80603f 60%,#3e2b1d 60.5%,#2b1e14)}
+.m-arch::before{content:"";position:absolute;inset:0;z-index:3;background:repeating-linear-gradient(90deg,transparent 0 67px,rgba(255,236,205,.07) 67px 67.5px),repeating-linear-gradient(0deg,rgba(255,236,205,.035) 0 1px,transparent 1px 2px),radial-gradient(95% 80% at 50% 42%,transparent 50%,rgba(28,16,8,.62))}
+.m-hull{position:absolute;left:-6px;bottom:102px;width:170px;height:76px;background:linear-gradient(#4b3524,#2a1c12);clip-path:polygon(0 38%,100% 0,90% 100%,6% 100%)}
+.m-hull::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 9px,rgba(210,175,130,.18) 9px 9.6px)}
+.m-cabin{position:absolute;left:96px;bottom:168px;width:30px;height:20px;background:#3a291b;clip-path:polygon(0 30%,100% 0,100% 100%,0 100%)}
+.m-crane{position:absolute;right:26px;top:46px;width:64px;height:132px;border:solid #2a1c12;border-width:6px 4px 0}
+.m-crane::before{content:"";position:absolute;inset:0;background:linear-gradient(56deg,transparent 49%,#2a1c12 49% 51%,transparent 51%),linear-gradient(-56deg,transparent 49%,#2a1c12 49% 51%,transparent 51%)}
+.m-crane::after{content:"";position:absolute;left:-46px;top:-6px;width:46px;height:5px;background:#2a1c12}
+.m-hook{position:absolute;right:104px;top:51px;width:1px;height:58px;background:#2a1c12}
+.m-man{position:absolute;bottom:98px;width:4px;height:9px;border-radius:2px 2px 0 0;background:#24180f}
+.m-man::before{content:"";position:absolute;left:.5px;top:-3.5px;width:3px;height:3px;border-radius:50%;background:#24180f}
+.m-rail{position:absolute;left:0;right:0;bottom:0;height:117px;background:repeating-linear-gradient(-8deg,transparent 0 10px,rgba(214,178,132,.12) 10px 11px),linear-gradient(rgba(0,0,0,0),rgba(20,12,6,.45))}
+.m-stack{position:absolute;left:112px;bottom:38px;width:88px;height:18px;background:repeating-linear-gradient(#20160e 0 3px,#4a3423 3px 4px);clip-path:polygon(6% 0,100% 0,100% 100%,0 100%)}
+.m-man.m-big{transform:scale(2.4);transform-origin:50% 100%}
+.m-cap{position:absolute;left:16px;right:16px;bottom:15px;z-index:4;display:flex;justify-content:space-between;color:#eadcc4;font:500 4.6px/1.4 system-ui,"PingFang SC",sans-serif;letter-spacing:.06em}
+.m-inset{position:absolute;right:16px;top:18px;z-index:5;width:72px;height:54px;border:3.5px solid #f6f0e4;background:radial-gradient(80% 70% at 50% 40%,#c7a47a,#8c6845);box-shadow:3px 5px 10px rgba(0,0,0,.5);transform:rotate(3deg);overflow:hidden}
+.m-bust{position:absolute;bottom:-6px;width:20px;height:18px;border-radius:50% 50% 0 0;background:#3b2a1b}
+.m-bust::before{content:"";position:absolute;left:5.5px;top:-11px;width:9px;height:10px;border-radius:50%;background:#4a3625}
+.m-cv{display:flex;flex-direction:column;padding:20px 20px 18px;background:#efe7d8;color:#2e2219;box-shadow:0 18px 40px -12px rgba(0,0,0,.75)}
+.m-cv::before{content:"";position:absolute;inset:0 auto 0 0;width:8px;background:linear-gradient(90deg,rgba(60,35,15,.18),transparent)}
+.m-plate{position:relative;height:152px;margin-top:14px;overflow:hidden;background:radial-gradient(80% 70% at 50% 35%,#d4b48a,#9a7550 72%,#5e4430)}
+.m-plate::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,236,205,.04) 0 1px,transparent 1px 2px),radial-gradient(90% 80% at 50% 40%,transparent 50%,rgba(28,16,8,.55))}
+.m-gb{position:absolute;bottom:-8px;width:34px;height:34px;border-radius:50% 50% 0 0;background:#3b2a1b}
+.m-gb::before{content:"";position:absolute;left:9.5px;top:-18px;width:15px;height:17px;border-radius:50%;background:#4a3625}
+.m-gb.m-back{bottom:18px;background:#4f3926;transform:scale(.86)}
+.m-gb.m-back::before{background:#5c4430}
+.m-plate p{position:absolute;left:8px;bottom:6px;z-index:2;color:#eadcc4;font:500 4.6px/1 system-ui,"PingFang SC",sans-serif;letter-spacing:.06em}
+.m-cv h2{margin:16px 0 0 -1px;font:900 40px/1 "Songti SC","STSong",serif;letter-spacing:.04em}
+.m-cv h2 em{color:#9b4a26}
+.m-pub{display:flex;justify-content:space-between;margin-top:auto!important;padding-top:6px;border-top:.5px solid #9b4a26;color:#6d5643;font:500 5px/1 system-ui,"PingFang SC",sans-serif;letter-spacing:.14em}
+</style>
+
+<div class="dg mock"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [`<div class="m-pg m-cv"><p class="m-lab"><span>江城市档案馆 · 2026 年度特展</span><span>CATALOGUE</span></p>
+      <div class="m-plate"><i class="m-gb m-back" style="left:25px"></i><i class="m-gb m-back" style="left:57px"></i><i class="m-gb m-back" style="left:89px"></i><i class="m-gb m-back" style="left:121px"></i>
+        <i class="m-gb" style="left:7px"></i><i class="m-gb" style="left:40px"></i><i class="m-gb" style="left:73px"></i><i class="m-gb" style="left:106px"></i><i class="m-gb" style="left:139px"></i><p>1958 年，二号船台铆工班合影</p></div>
+      <h2>船坞<em>百年</em></h2><p class="m-sub">江城造船厂档案展 1926—2026</p>
+      <p class="m-pub"><span>展览图录</span><span>江城市档案馆 编</span></p></div>`, `<div class="m-sp">
+    <div class="m-pg m-l">
+      <p class="m-lab"><span>第三单元 · 船台与码头</span><span>EX-03</span></p>
+      <h1>船坞<br><em>百年</em></h1>
+      <p class="m-sub">江城造船厂档案展 1926—2026</p>
+      <blockquote class="m-q">“铆钉一颗颗打进去，<br>船就一寸寸长出来。”<cite>—— 周广林，1958 年进厂的铆工</cite></blockquote>
+      <div class="m-body">
+        <p>江城造船厂的第一座木质船台建于 1926 年，就在今天展厅北侧的江滩上。最初只能修理往来的小火轮，工人不足百人，钢板和图纸都靠木船从下游运来。</p>
+        <p>1950 年代，船台改成钢筋混凝土结构，二号船台可以承造三千吨级货轮。本单元的 64 件档案来自厂档案室、退休职工家中和市档案馆，有施工日志、下水典礼的请柬、铆工的工作证，还有一批从未公开的玻璃底片。</p>
+        <p>底片按原尺寸扫描，没有修补划痕，也没有重新调色，尽量保留它们在档案柜里放了六十年的样子。</p>
+      </div>
+      <p class="m-folio"><span>046</span><span>船坞百年 · 展览图录</span></p>
+    </div>
+    <div class="m-pg m-r">
+      <div class="m-arch"><i class="m-crane"></i><i class="m-hook"></i><i class="m-cabin"></i><i class="m-hull"></i>
+        <i class="m-man" style="left:58px"></i><i class="m-man" style="left:70px"></i><i class="m-man" style="left:128px"></i><i class="m-rail"></i><i class="m-stack"></i><i class="m-man m-big" style="left:44px;bottom:34px"></i></div>
+      <div class="m-inset"><i class="m-bust" style="left:8px"></i><i class="m-bust" style="left:26px;bottom:-4px"></i><i class="m-bust" style="left:44px"></i></div>
+      <p class="m-cap"><span>图 12　1958 年，二号船台下水前夜</span><span>江城船厂档案室藏</span></p>
+    </div>
+  </div>`], { center: true, min: 0.25 });
+}
+</script>

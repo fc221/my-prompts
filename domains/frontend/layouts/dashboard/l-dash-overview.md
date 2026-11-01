@@ -2,6 +2,7 @@
 zh: 后台首页概览
 en: Admin overview
 order: 80
+of: l-dash-arrange
 ---
 
 ## 是什么
@@ -30,3 +31,52 @@ SaaS 控制台、运营后台的首页：一屏看清核心数字、趋势、公
 ## 提示词
 
 把{控制台首页}做成「后台首页概览」：左侧悬浮卡片式侧栏（240px，四周留 12px），顶栏放页面名、刷新、通知和账号。内容区自上而下：① 统计周期分段按钮（今天 / 昨天 / 近 7 天 / 近 30 天 + 自定义日期；近 7 / 30 天截至昨天，旁边显示实际日期范围），切换后主指标、趋势、排行和明细一起变，指标名跟着周期改（今日 / 昨日 / 近 7 天）；待发货、库存预警、健康状态这类实时状态不跟周期变，标“实时”；② 4 张主指标卡（{销售额、订单数、新增客户、转化率}，等宽数字、写单位和较上期：今天对比昨天同一时段，其他周期对比前一个等长周期，比率类用百分点）；③ 次级指标条（{待发货、售后中、库存预警、今日退款}，竖线分隔）；④ 一行健康状态（{支付通道、物流接口、短信服务}）；⑤ 趋势图占 2/3 + 公告占 1/3；⑥ 两等分的{排行}与{明细}，带维度切换。每块都有加载、空、错误状态。手机上主指标排成 2×2，次级指标横滑，其余单列。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '19% 1fr',
+  rows: '10% 1fr',
+  areas: ['side top', 'side main'],
+  boxes: {
+    side: { label: '悬浮侧栏', kind: 'nav' },
+    top: '顶栏',
+    main: {
+      acc: true,
+      inner: {
+        cols: '1fr 1fr 1fr 1fr',
+        rows: '10% 19% 12% 1fr 1fr',
+        areas: ['per per per per', 'k1 k2 k3 k4', 'st st st st', 'nt tr tr tr', 'p1 p1 p2 p2'],
+        boxes: {
+          per: { label: '统计周期', kind: 'segment' },
+          k1: '指标',
+          k2: '指标',
+          k3: '指标',
+          k4: '指标',
+          st: '次级指标条',
+          nt: '公告',
+          tr: { label: '订单趋势', text: '订单趋势' },
+          p1: { label: '热门排行', kind: 'table' },
+          p2: { label: '明细', kind: 'list' },
+        },
+      },
+    },
+  },
+};
+export const wireMobile = {
+  cols: '1fr 1fr',
+  rows: 'auto auto 16% 16% auto 1fr',
+  areas: ['top top', 'per per', 'k1 k2', 'k3 k4', 'st st', 'tr tr'],
+  boxes: {
+    top: { label: '顶栏 ☰', text: '概览' },
+    per: { label: '周期', kind: 'segment' },
+    k1: '指标',
+    k2: '指标',
+    k3: '指标',
+    k4: '指标',
+    st: '次级指标条',
+    tr: { label: '订单趋势', text: '订单趋势' },
+  },
+};
+```

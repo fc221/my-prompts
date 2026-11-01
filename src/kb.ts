@@ -2,15 +2,17 @@ import type { Demo, Domain, KbEntry, Section, Wire } from './types';
 import { buildDomains } from './adapter';
 
 // 按目录自动发现内容（约定见 src/adapter/content.ts）：文件放进去就会出现，不用在任何地方登记。
-// import.meta.glob 的参数必须写成字面量，Vite 在构建时静态分析
+// import.meta.glob 的参数必须写成字面量，Vite 在构建时静态分析；条目文件由 vite.config.ts 的 kb-content 插件按 ?entry / ?demo / ?wire 拆开
 // 键统一成相对 domains/ 的路径、去掉后缀，如 'frontend/interactions/tap-target/i-tap-vs-swipe'
 const rel = <T>(files: Record<string, T>) =>
   Object.fromEntries(
     Object.entries(files).map(([p, v]) => [
-      p.replace(/^\.\.\/domains\//, '').replace(/\/_(domain|section|category)\.md$|\.(md|html|wire\.ts)$/, ''),
+      p.replace(/^\.\.\/domains\//, '').replace(/\/_(domain|section|category)\.md$|\.md$/, ''),
       v,
     ]),
   );
+const defined = <T>(o: Record<string, T | undefined>) =>
+  Object.fromEntries(Object.entries(o).filter(([, v]) => v)) as Record<string, T>;
 const { domains: built } = buildDomains({
   domains: rel(import.meta.glob<string>('../domains/*/_domain.md', { query: '?raw', import: 'default', eager: true })),
   sections: rel(
@@ -21,15 +23,29 @@ const { domains: built } = buildDomains({
   ),
   entries: rel(
     import.meta.glob<string>(['../domains/*/*/*/*.md', '!../domains/*/*/*/_*.md'], {
-      query: '?raw',
+      query: '?entry',
       import: 'default',
       eager: true,
     }),
   ),
-  // 示例 HTML 由 vite.config.ts 里的 kb-demo 插件拆成 { html, css, js }
-  demos: rel(import.meta.glob<Demo>('../domains/*/*/*/*.html', { query: '?demo', import: 'default', eager: true })),
-  wires: rel(import.meta.glob<{ wire?: Wire; wireMobile?: Wire }>('../domains/*/*/*/*.wire.ts', { eager: true })),
+  demos: defined(
+    rel(
+      import.meta.glob<Demo | undefined>(['../domains/*/*/*/*.md', '!../domains/*/*/*/_*.md'], {
+        query: '?demo',
+        import: 'default',
+        eager: true,
+      }),
+    ),
+  ),
+  wires: rel(
+    import.meta.glob<{ wire?: Wire; wireMobile?: Wire }>(['../domains/*/*/*/*.md', '!../domains/*/*/*/_*.md'], {
+      query: '?wire',
+      eager: true,
+    }),
+  ),
 });
+
+export const REPO_URL = 'https://github.com/fc221/my-prompts';
 
 export const domains: Domain[] = built.sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
 
@@ -38,6 +54,19 @@ export const entries: KbEntry[] = domains.flatMap((d) =>
 );
 
 export const byId = new Map(entries.map((e) => [e.id, e]));
+
+/** 列表里的条目：写了 of 的是主条目下的案例，不单独出现 */
+export const listed = entries.filter((e) => !e.of);
+const kids = new Map<string, KbEntry[]>();
+for (const e of entries) if (e.of) kids.set(e.of, [...(kids.get(e.of) ?? []), e]);
+export const headOf = (e: KbEntry): KbEntry => (e.of && byId.get(e.of)) || e;
+/** 一条的全部案例：主条目永远排第一个（没有示例时已借了第一个案例的）；没有案例返回空数组 */
+export const casesOf = (e: KbEntry): KbEntry[] => {
+  const head = headOf(e),
+    list = kids.get(head.id) ?? [];
+  return list.length ? [head, ...list] : list;
+};
+
 /** 按中文名查条目：正文里的「名称」靠它变成链接；同名的几条都留着，调用方先挑同领域、同板块的 */
 export const byZh = new Map<string, KbEntry[]>();
 for (const e of entries) byZh.set(e.zh, [...(byZh.get(e.zh) ?? []), e]);
@@ -56,6 +85,10 @@ export const matches = (e: KbEntry, q: string): boolean => {
     .filter(Boolean)
     .every((w) => hay.includes(w));
 };
+
+/** 列表筛选：案例命中也算主条目命中 */
+export const matchesAny = (e: KbEntry, q: string): boolean =>
+  matches(e, q) || (kids.get(e.id) ?? []).some((c) => matches(c, q));
 
 /** 组合提示词：按领域、板块顺序排列，末尾附上涉及领域的通用要求 */
 // 单条复制：提示词 + 领域的通用要求（对比度、溢出这类底线单条里不会写，测试里不带它的生成结果容易出低级错误）

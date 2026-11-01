@@ -42,3 +42,26 @@ URL 上线后就是对外承诺：改路径要给旧路径配重定向（服务�
 5. 补齐 404、403 和错误页，动态参数格式不对直接 404。
 6. 页面组件全部懒加载，路由文件里只留映射和元信息。
 完成后给出新旧路径对照表和改动的文件清单；手动验证：直接打开深层链接、刷新、前进后退、未登录访问受限页、访问不存在的 :id、访问旧路径能跳到新路径。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+/                   全局守卫：登录和权限只查这一处
+  login             未登录跳 /login?redirect=原路径
+* orders/           父布局：侧栏、顶栏、页签
+    new
+*   :id/            先校验格式，不合法直接 404
+      edit          /orders/:id/edit
+  stores/
+    :storeId/
+      staff         层级控制在 4 段以内
+  403               已登录但无权限
+  404               兜底：未匹配，或 :id 查不到
+`), { title: '资源名复数 + kebab-case · 改路径配 301' });
+}
+</script>

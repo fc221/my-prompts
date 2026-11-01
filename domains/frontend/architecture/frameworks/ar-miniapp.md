@@ -43,3 +43,28 @@ order: 90
 4. 页面间共享状态用全局 store，敏感信息不存本地缓存。
 5. 目录和配置文件按所选框架的约定放。
 完成后汇报改了哪些文件、改前改后主包和分包体积；在开发者工具和真机上验证登录、首页和{关键流程}。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+* app.json              pages、subPackages、tabBar、preloadRule
+  app.ts                app.wxss 同级
+  pages/                主包：只放 tabBar 页面
+    index/
+      index.ts          .wxml .wxss .json 同名四个一组
+* order/                订单分包
+    pages/list/
+* member/               会员分包，preloadRule 预下载
+  components/
+  api/                  统一 wx.request，401 只重登一次
+  stores/
+  utils/
+  project.config.json
+`), { title: '原生小程序 · 主包和单个分包 ≤ 2MB' });
+}
+</script>

@@ -41,3 +41,23 @@ order: 70
 5. 渲染进程限制内存，单个任务超时 30 秒，在隔离环境里跑；镜像里装中文字体，用一份没有嵌入字体的中文 PDF 测试不出方框。
 6. 前端：缩略图还没生成好时显示骨架占位，生成失败显示文件类型图标。
 最后说明改了哪些文件，以及处理一份 200 页文件的耗时和内存峰值。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: 'pdftoppm', text: `
+# 列表缩略图：只出第 1 页，长边 640px
+pdftoppm -png -f 1 -l 1 -scale-to 640 in.pdf thumb
+# 移动端逐页预览：150dpi JPEG
+pdftoppm -jpeg -jpegopt quality=80 -r 150 in.pdf page
+# OCR 用：300dpi 灰度
+pdftoppm -gray -r 300 in.pdf ocr
+# 输出像素 = 页面宽高（pt）÷ 72 × dpi，先算再渲染
+# A0 按 300dpi ≈ 9933 × 14043，单张 RGBA 约 560MB
+` }]), { title: '转图片 · 一定要设像素上限' });
+}
+</script>

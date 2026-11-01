@@ -39,3 +39,25 @@ order: 10
 3. adapters 放 HTTP、消息消费者、仓储实现和外部客户端。
 4. 在 CI 里加依赖方向检查（用项目语言常用的工具），domain 引用框架或 ORM 时构建失败。
 domain 和 application 的测试用内存实现，不连数据库。分步提交，每一步都能编译、测试通过。最后给出目录树和依赖检查的运行方式。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, rings, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    rings([{ t: '框架与驱动', note: 'Web、数据库、消息' }, { t: '接口适配', note: 'Controller、Repository 实现' }, { t: '用例', note: 'PlaceOrder' }, { t: '实体', note: 'Order、Money' }], '依赖只指向内层'),
+    tree(`
+order/
+* domain/         实体和规则，不引框架
+* application/    用例、端口接口
+  adapters/
+    http/         Controller
+    persistence/  Repository 实现
+  bootstrap/      装配依赖
+`),
+  ]);
+}
+</script>

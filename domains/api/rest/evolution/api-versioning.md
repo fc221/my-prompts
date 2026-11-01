@@ -42,3 +42,17 @@ API 给 App、小程序、第三方商户调用，客户端升级慢、新旧要
 5. v1 维护 {维护时长}，到期前按「弃用与下线」发通知、加响应头。
 6. 测试：v1 原有用例全部通过，v2 新用例覆盖每个变更点。
 最后列出改动文件和调用方需要做的事。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '直接发布', note: '加字段、加可选参数' }, { t: '不升版本', note: '仍是 /api/v1/orders' }],
+    [{ t: '/api/v2', note: '发新主版本', acc: true }, { t: 'v1、v2 并存', note: '最多两个主版本' }, { t: '下线 v1', note: '维护 6–12 个月后' }],
+  ], { lanes: ['能兼容', '不能兼容'] }), { title: '版本管理 · 删字段、改类型才升主版本' });
+}
+</script>

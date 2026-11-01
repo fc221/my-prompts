@@ -40,3 +40,17 @@ order: 20
 3. 每个资源建 queries 文件：查询键工厂、useXxxList / useXxx 查询、写操作的 mutation；staleTime 按字典 30 分钟、列表 30 秒、余额库存 0 设置；4xx 不重试。
 4. 替换调用处，删除 store 里对应的数据字段和手写的 loading / error；写操作成功后让相关键失效。
 5. 验证：列表进详情再返回，列表立即显示；编辑后列表和详情都更新；断网恢复后自动刷新。汇报改动文件和删掉的代码。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: 'useOrderList', note: "键 ['orders', 'list', …]" }, { t: '命中缓存', note: '先显示，不等请求', acc: true }, { t: '后台刷新', note: 'staleTime 30 秒', via: '已过期' }],
+    [{ t: '取消订单', note: 'mutation' }, { t: "失效 ['orders']", note: '按前缀匹配', via: '成功后', acc: true }, { t: '详情和列表一起刷新' }],
+  ]), { title: '服务端状态缓存 · 读走缓存，写完失效' });
+}
+</script>

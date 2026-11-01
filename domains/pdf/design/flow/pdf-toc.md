@@ -40,3 +40,25 @@ order: 30
 4. 元数据：标题 {文档标题}，语言 zh-CN，作者 {编制部门}。
 5. 检查：在阅读器里点每个目录项都能跳到对应标题，书签层级和标题一致，外链能打开。
 最后说明目录页码是怎么得到的、改了哪些文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    page({ pages: [{ label: '目录页：target-counter 取页码', blocks: ['title:目录', 'toc:6', 'gap', 'p:2'] }] }),
+    tree(`
+阅读器书签/
+  一、核心结论
+* 二、销售分析/    h1 章
+    2.1 门店排名    h2 · #sec-2-1
+    2.2 品类结构
+  三、门店分析/
+    3.1 新开门店    h3 以下不进书签
+`),
+  ], { title: '目录、书签都从 h1–h3 生成', center: true, min: 0.3 });
+}
+</script>

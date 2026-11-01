@@ -40,3 +40,36 @@ order: 20
 3. 按表修改组件和全部调用处；props 过多的组件把可选区域改成插槽 / children；互斥参数改为可辨识联合类型。
 4. 旧参数名保留一个版本，开发环境给出警告。
 5. 跑类型检查和现有测试，汇报每个组件改了什么、调用处改了几处、哪些旧名待下个版本删除。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: '改前：同义不同名，布尔越加越多', text: `
+<RefundDialog
+  visible={show}
+  showFooter
+  hideIcon
+  isCompact
+  footerText="确认退款"
+/>
+` },
+    { t: '改后：统一命名，可选区域用 children', text: `
+<RefundDialog
+  open={open}
+  onOpenChange={setOpen}
+  size="sm">
+  <RefundDialog.Footer>
+    <Button variant="danger">
+      确认退款
+    </Button>
+  </RefundDialog.Footer>
+</RefundDialog>
+` },
+  ]), { title: '组件接口 · open / size / variant' });
+}
+</script>
