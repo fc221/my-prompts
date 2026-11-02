@@ -38,7 +38,7 @@ TypeScript 团队做中大型 API，需要清楚的模块边界和依赖注入�
 先读 package.json（Nest 版本、ORM、测试框架、ESM 还是 CommonJS）、main.ts、app.module.ts 和一个现有模块，确认全局管道、过滤器和错误格式，沿用已有选择。按这些约定做：
 {{要点}}
 
-新建时：用 nest g resource 生成骨架，再按约定补齐 DTO 校验、Service 业务、实体和迁移，在 AppModule 里 imports 新模块，写 Service 单测和覆盖 201、400、404 的 e2e 测试。
+新建时：用 nest g resource 生成骨架，再按约定补齐 DTO 校验、Service 业务、实体和迁移，在 AppModule 里 imports 新模块，写 Service 单测和覆盖 201、422、404 的 e2e 测试（ValidationPipe 默认抛 400，用 errorHttpStatusCode: 422 对齐「状态码怎么选」）。
 检查时：先画出模块依赖关系，标出循环依赖、跨模块直接用别人的 Repository、DTO 没有校验、直接读 process.env、Controller 里 try-catch 的位置；逐条给出改法，会改变对外响应的先问我。
 最后列出改动的文件和验证命令。
 

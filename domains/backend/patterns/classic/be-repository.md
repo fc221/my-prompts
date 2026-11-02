@@ -25,7 +25,7 @@ order: 30
 
 - 方法用业务语言命名：findPendingByMember(memberId)、existsByOutTradeNo(no)、save(order)；通用的“传一个条件 map 进去查”会把查询逻辑漏到 service。
 - 接口定义在业务层或领域层，实现放基础设施层：domain/order/order_repository 是接口，infra/persistence/order_repository_mysql 是实现。
-- 查单条没找到返回空值（null 或 Optional），由业务层决定返回 404 还是走别的分支；列表查询一律带分页或上限，默认上限如 200 条。
+- 查单条没找到返回空值（null 或 Optional），由业务层决定返回 404 还是走别的分支；列表查询一律带分页或上限，默认上限 100 条。
 - save 负责整个聚合：订单行的增删改在同一个事务里落库，乐观锁版本号在这里校验，冲突时抛明确的并发冲突错误，见「乐观锁与悲观锁」。
 - 测试：业务层单测用内存实现（一个 map 就够），仓储实现用真实数据库跑集成测试（容器起 MySQL 或 PostgreSQL），SQL 不做 mock。
 - 过度设计的信号：泛型 BaseRepository 带十几个通用方法、每张表一个仓储、仓储里出现业务 if、仓储和 ORM model 一一对应且方法全是转调。

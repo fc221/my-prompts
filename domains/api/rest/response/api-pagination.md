@@ -34,7 +34,7 @@ offset 越往后越慢（OFFSET 100000 要先扫过前面所有行），翻页�
 
 ## 提示词
 
-给{资源名}列表加分页。先读现有列表 API、查询语句、索引和前端调用方式。
+给{资源名}列表加分页。先读现有列表 API、查询语句、索引和前端调用方式；框架或 ORM 自带分页的（Spring Data 的 Pageable、Laravel 的 paginate 和 cursorPaginate、Django REST framework 的 CursorPagination）先用它，只按下面的约定统一参数名和返回字段。
 1. 方式：{offset / 游标}。后台表格要跳页、看总数用 offset；持续增长的流水和日志用游标。
 2. offset：page 从 1 开始，pageSize 默认 20、上限 100；返回 items、page、pageSize、total；最多翻到前 10000 条。
 3. 游标：cursor、limit；按 {排序字段} 倒序，id 作第二排序键；游标是 base64url 编码的不透明字符串，带上排序和过滤条件，条件变了返回 400；返回 items、nextCursor、hasMore，查询多取一条判断 hasMore。
@@ -48,18 +48,24 @@ offset 越往后越慢（OFFSET 100000 要先扫过前面所有行），翻页�
 <link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
 
 <script type="module">
-import { draw, http } from '../../../frontend/_shared/diagram.ts';
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
 export default function demo(root) {
-  draw(root, http(`
-GET /orders?limit=20&cursor=eyJjIjoiMjAyNi0xMC0yOFQxMDoxNVoiLCJpZCI6Im9yZF84RjMifQ
-Authorization: Bearer <token>
-`, `
-200 OK
-Content-Type: application/json
+  draw(root, code([
+    { t: 'offset · 后台表格，能跳页、给总数', text: `
+GET /orders?page=3&pageSize=20
+
+"items": [ … 20 条 … ],
+"page": 3,
+"pageSize": 20,
+"total": 1286
+` },
+    { t: '游标 · 流水、日志，不漏不重', text: `
+GET /orders?limit=20&cursor=eyJjIjoiMjAyNi0xMC0y…
 
 "items": [ … 20 条 … ],
 "nextCursor": "eyJjIjoiMjAyNi0xMC0yN1Qw…",
 "hasMore": true
-`), { title: '游标分页' });
+` },
+  ]), { title: '列表分页 · offset 与游标' });
 }
 </script>

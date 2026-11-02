@@ -58,6 +58,6 @@ order/
     persistence/  Repository 实现
   bootstrap/      装配依赖
 `),
-  ]);
+  ], { title: '整洁架构 · 端口与适配器' });
 }
 </script>

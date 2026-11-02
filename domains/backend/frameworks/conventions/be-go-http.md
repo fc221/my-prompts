@@ -29,7 +29,7 @@ tab: HTTP 服务
 - Gin：用 gin.New() 加自己挑的中间件（gin.Default() 自带 Logger 和 Recovery）；按 r.Group("/api/v1") 分组，路径参数写 :id，用 c.Param、c.Query 取值，c.JSON 输出；*gin.Context 不传进 service，只传 c.Request.Context() 和普通参数。同一个服务只用一套路由。
 - 中间件：标准库写成 func(http.Handler) http.Handler 层层包裹，从外到内依次是恢复 panic、请求 ID、访问日志、超时、鉴权、业务 handler；Gin 用 r.Use 按同样顺序注册。
 - 解码：请求体先用 http.MaxBytesReader 限制大小（如 1MB），再用 json.NewDecoder(r.Body) 并开 DisallowUnknownFields；Gin 用 ShouldBindJSON、ShouldBindQuery、ShouldBindUri。响应统一走一个 writeJSON(w, status, v) 辅助函数，设好 Content-Type。
-- 校验：请求结构体用 go-playground/validator 的 validate 标签（Gin 的 binding 标签底层就是它）写 required、min、max、oneof 等规则，或者给请求结构体写 Validate() error 方法；失败统一返回 400 和字段错误列表，字段名用 JSON 字段名（给 validator 注册 RegisterTagNameFunc）。
+- 校验：请求结构体用 go-playground/validator 的 validate 标签（Gin 的 binding 标签底层就是它）写 required、min、max、oneof 等规则，或者给请求结构体写 Validate() error 方法；失败统一返回 422 和字段错误列表（请求体解析不了才是 400），字段名用 JSON 字段名（给 validator 注册 RegisterTagNameFunc）。
 - 错误：handler 写成返回 error 的函数类型，由一个适配器统一把 error 写成响应；Gin 里调用 c.Error(err) 后交给错误中间件；用 errors.As 把业务错误映射成状态码和错误码，其他错误一律 500，记日志，不把内部信息返回给客户端。
 - 服务器：http.Server 设 ReadHeaderTimeout（如 5s）、ReadTimeout、WriteTimeout 和 IdleTimeout；用 signal.NotifyContext 监听 SIGINT、SIGTERM，收到后调用 srv.Shutdown，给 10–30 秒宽限，再关数据库连接池；r.Context() 一路传到数据库调用，客户端断开后查询能被取消。
 - 测试：用 httptest.NewRequest 加 httptest.NewRecorder 直接调用 mux.ServeHTTP（Gin 的 engine 同样实现了 ServeHTTP），覆盖 2xx、400、404、500；端到端测试用 httptest.NewServer；service 依赖的 Store 用手写的假实现替换。
@@ -40,7 +40,7 @@ tab: HTTP 服务
 先读 main.go 里 http.Server 的创建和中间件注册、一个现有 handler 和错误响应的写法，确认错误体结构和已有的辅助函数，沿用它们。按这些约定做：
 {{要点}}
 
-新增时：为 {模块} 写创建、详情、列表三个 API，含请求结构体、校验规则、错误映射，以及覆盖 201、400、404 的 handler 测试。
+新增时：为 {模块} 写创建、详情、列表三个 API，含请求结构体、校验规则、错误映射，以及覆盖 201、422、404 的 handler 测试。
 检查时：逐条列出偏离的地方（文件、问题、改法），先修没设超时、没有优雅停机、请求体不限大小、错误泄露内部信息这几类，再统一写法；状态码或响应体会变的先告诉我。
 最后列出改动的文件，以及用 curl 验证的命令。
 
@@ -49,19 +49,12 @@ tab: HTTP 服务
 <link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
 
 <script type="module">
-import { draw, tree } from '../../../frontend/_shared/diagram.ts';
+import { draw, stack } from '../../../frontend/_shared/diagram.ts';
 export default function demo(root) {
-  draw(root, tree(`
-* cmd/api/
-    main.go           自建 http.Server 设超时，SIGTERM 后 Shutdown
-* internal/           每个业务包注册自己的路由
-    order/
-      routes.go       Routes(mux) 注册 GET /api/v1/orders/{id}
-      handler.go      MaxBytesReader + DisallowUnknownFields
-      handler_test.go  httptest 覆盖 2xx、400、404、500
-    platform/
-      middleware/     panic 恢复 → 请求 ID → 日志 → 超时 → 鉴权
-  go.mod              go 1.22 起用标准库 ServeMux
-`), { title: 'Go HTTP · 标准库路由与中间件' });
+  draw(root, stack([
+    { t: 'http.Server', items: ['ReadHeaderTimeout 5s', 'ReadTimeout', 'WriteTimeout', 'IdleTimeout'], note: 'signal.NotifyContext 收到 SIGTERM → srv.Shutdown，宽限 10–30 秒等处理中的请求，再关连接池' },
+    { t: '中间件', items: ['恢复 panic', '请求 ID', '访问日志', '超时', '鉴权'], note: 'func(http.Handler) http.Handler 从外到内层层包裹', acc: true },
+    { t: 'handler', items: ['MaxBytesReader 1MB', 'DisallowUnknownFields', 'writeJSON'], note: 'r.Context() 一路传到数据库，客户端断开就取消查询' },
+  ], { arrow: '请求从外到内' }), { title: 'Go HTTP · 超时、中间件链与优雅停机' });
 }
 </script>
