@@ -3,6 +3,7 @@ zh: 生成 CRUD 模块
 en: Generate a CRUD module
 aka: 增删改查 CRUD 脚手架 代码生成 新增资源
 order: 20
+preview: be-layered
 ---
 
 ## 是什么

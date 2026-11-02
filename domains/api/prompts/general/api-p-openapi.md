@@ -3,6 +3,7 @@ zh: 生成 OpenAPI 契约
 en: Generate an OpenAPI contract
 aka: OpenAPI 3.1 Swagger 接口契约 接口文档生成 schema
 order: 30
+preview: api-openapi
 ---
 
 ## 是什么
