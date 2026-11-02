@@ -2,7 +2,7 @@
 zh: ASP.NET Core 项目约定
 en: ASP.NET Core conventions
 aka: .NET Web API Minimal API Controller C# EF Core
-order: 30
+order: 60
 ---
 
 ## 是什么

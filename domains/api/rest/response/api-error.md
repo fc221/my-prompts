@@ -2,7 +2,7 @@
 zh: 错误响应格式
 en: Error response format
 aka: problem+json RFC 9457 RFC 7807 Problem Details 错误体 错误码
-order: 10
+order: 50
 ---
 
 ## 是什么

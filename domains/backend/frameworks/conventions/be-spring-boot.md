@@ -1,8 +1,9 @@
 ---
-zh: Spring Boot 项目结构
+zh: Spring Boot 项目约定
 en: Spring Boot project layout
-aka: SpringBoot 分包 包结构 目录结构 profile Flyway
+aka: SpringBoot 分包 包结构 目录结构 profile Flyway Spring Boot 项目结构
 order: 10
+tab: 项目结构
 ---
 
 ## 是什么

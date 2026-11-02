@@ -2,7 +2,7 @@
 zh: 批量操作
 en: Bulk operations
 aka: 批量创建 批量删除 批量更新 batch 部分成功
-order: 50
+order: 10
 ---
 
 ## 是什么

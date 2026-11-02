@@ -2,7 +2,7 @@
 zh: 文件上传与下载
 en: File upload & download
 aka: 文件上传 直传 预签名 分片上传 断点续传 下载 Content-Disposition
-order: 70
+order: 30
 ---
 
 ## 是什么

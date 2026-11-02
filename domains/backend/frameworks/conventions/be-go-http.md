@@ -2,7 +2,9 @@
 zh: Go HTTP 服务约定
 en: Go HTTP service conventions
 aka: net/http ServeMux Gin 路由 中间件 优雅停机
-order: 20
+order: 41
+of: be-go-layout
+tab: HTTP 服务
 ---
 
 ## 是什么
@@ -15,7 +17,7 @@ order: 20
 
 ## 不适合
 
-目录、分包和依赖组装看「Go 服务项目布局」；服务之间用 gRPC 调用时看「gRPC 与 Protobuf」。
+目录、分包和依赖组装看「Go 项目约定」；服务之间用 gRPC 调用时看「gRPC 与 Protobuf」。
 
 ## 注意
 

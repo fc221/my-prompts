@@ -1,7 +1,7 @@
 ---
-zh: 认证方式
+zh: 接口认证方式
 en: API authentication
-aka: API Key OAuth2 OAuth 2.0 PKCE JWT 访问令牌 刷新令牌 客户端凭证 JWKS
+aka: API Key OAuth2 OAuth 2.0 PKCE JWT 访问令牌 刷新令牌 客户端凭证 JWKS 认证方式
 order: 10
 ---
 

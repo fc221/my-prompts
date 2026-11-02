@@ -2,7 +2,7 @@
 zh: 入参校验
 en: Input validation
 aka: 参数校验 请求校验 schema 校验 DTO 校验 字段错误 未知字段
-order: 50
+order: 20
 ---
 
 ## 是什么

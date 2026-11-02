@@ -2,7 +2,7 @@
 zh: Rust Axum 项目约定
 en: Rust Axum conventions
 aka: Rust 后端 axum tokio sqlx tower
-order: 40
+order: 65
 ---
 
 ## 是什么

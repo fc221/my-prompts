@@ -2,7 +2,7 @@
 zh: 分布式锁
 en: Distributed locks
 aka: Redis 分布式锁 SET NX PX 锁续期 看门狗 Redisson Redlock 可重入锁 防护令牌 fencing token etcd 租约 ZooKeeper
-order: 20
+order: 30
 ---
 
 ## 是什么

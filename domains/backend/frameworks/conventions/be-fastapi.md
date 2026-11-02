@@ -2,7 +2,7 @@
 zh: FastAPI 项目约定
 en: FastAPI project conventions
 aka: FastAPI 项目结构 Pydantic v2 Depends SQLAlchemy Alembic
-order: 10
+order: 30
 ---
 
 ## 是什么

@@ -2,7 +2,7 @@
 zh: 软删除与审计字段
 en: Soft delete and audit columns
 aka: 逻辑删除 deleted_at created_by updated_at 操作日志 审计日志 留痕
-order: 50
+order: 15
 ---
 
 ## 是什么

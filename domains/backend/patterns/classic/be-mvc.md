@@ -1,7 +1,7 @@
 ---
-zh: MVC
+zh: MVC（模型、视图、控制器）
 en: Model-View-Controller
-aka: 模型视图控制器 Controller MTV
+aka: 模型视图控制器 Controller MTV MVC
 order: 10
 ---
 

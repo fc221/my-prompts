@@ -2,7 +2,7 @@
 zh: Rails 项目约定
 en: Rails project conventions
 aka: Ruby on Rails 项目结构 ActiveRecord 约定优于配置 strong params
-order: 20
+order: 55
 ---
 
 ## 是什么

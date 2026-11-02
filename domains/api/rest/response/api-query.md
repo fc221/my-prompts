@@ -2,7 +2,7 @@
 zh: 过滤、排序与字段选择
 en: Filtering, sorting & field selection
 aka: 查询参数 筛选 sort fields expand 条件查询 搜索
-order: 30
+order: 40
 ---
 
 ## 是什么
@@ -15,7 +15,7 @@ order: 30
 
 ## 不适合
 
-全文检索和相关度排序交给专门的搜索服务；结构多变的聚合查询看「GraphQL Schema 设计」；分页参数看「分页」；前端怎么把筛选同步到地址栏看「筛选联动与 URL 同步」。
+全文检索和相关度排序交给专门的搜索服务；结构多变的聚合查询看「GraphQL Schema 设计」；分页参数看「列表分页」；前端怎么把筛选同步到地址栏看「筛选联动与 URL 同步」。
 
 ## 注意
 

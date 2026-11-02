@@ -2,7 +2,7 @@
 zh: NestJS 项目约定
 en: NestJS project conventions
 aka: Nest 项目结构 Module Provider ValidationPipe 装饰器
-order: 10
+order: 20
 ---
 
 ## 是什么

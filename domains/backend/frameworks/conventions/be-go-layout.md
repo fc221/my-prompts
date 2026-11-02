@@ -1,8 +1,9 @@
 ---
-zh: Go 服务项目布局
+zh: Go 项目约定
 en: Go service layout
-aka: golang 项目结构 目录结构 cmd internal 分包
-order: 10
+aka: golang 项目结构 目录结构 cmd internal 分包 Go 服务项目布局
+order: 40
+tab: 项目布局
 ---
 
 ## 是什么

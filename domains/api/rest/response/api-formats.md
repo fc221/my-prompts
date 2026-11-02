@@ -2,7 +2,7 @@
 zh: 时间、金额与 ID 格式
 en: Time, money & ID formats
 aka: 时间格式 时区 RFC 3339 ISO 8601 金额精度 分 雪花 ID 精度丢失 大整数
-order: 50
+order: 20
 ---
 
 ## 是什么

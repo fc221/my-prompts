@@ -1,5 +1,5 @@
 ---
-name: 其他协议
+name: 协议与推送
 icon: layers
 color: "#7c3aed"
 order: 20

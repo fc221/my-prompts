@@ -2,12 +2,14 @@
 zh: Spring 常见约定
 en: Spring coding conventions
 aka: Spring 规范 构造器注入 事务 全局异常 RestControllerAdvice
-order: 20
+order: 11
+of: be-spring-boot
+tab: 编码约定
 ---
 
 ## 是什么
 
-Spring Boot 代码里反复出现的写法约定：构造器注入、事务只放在 Service、请求 DTO 用 Bean Validation、一个 @RestControllerAdvice 统一出错误响应，以及日志、外部调用和 JPA 实体的写法。以 Spring Boot 4（Spring Framework 7）为准，和「Spring Boot 项目结构」配合使用。
+Spring Boot 代码里反复出现的写法约定：构造器注入、事务只放在 Service、请求 DTO 用 Bean Validation、一个 @RestControllerAdvice 统一出错误响应，以及日志、外部调用和 JPA 实体的写法。以 Spring Boot 4（Spring Framework 7）为准，和「Spring Boot 项目约定」配合使用。
 
 ## 适合
 
@@ -15,7 +17,7 @@ Spring Boot 代码里反复出现的写法约定：构造器注入、事务只�
 
 ## 不适合
 
-分包、配置文件、迁移和测试骨架看「Spring Boot 项目结构」；错误码怎么编排看「错误处理与错误码」；隔离级别和长事务看「事务边界与隔离级别」。
+分包、配置文件、迁移和测试骨架看「Spring Boot 项目约定」；错误码怎么编排看「错误处理与错误码」；隔离级别和长事务看「事务边界与隔离级别」。
 
 ## 注意
 

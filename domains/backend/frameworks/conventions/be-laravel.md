@@ -2,7 +2,7 @@
 zh: Laravel 项目约定
 en: Laravel project conventions
 aka: Laravel 项目结构 Eloquent Artisan Form Request API Resource PHP
-order: 10
+order: 50
 ---
 
 ## 是什么

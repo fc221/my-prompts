@@ -2,7 +2,7 @@
 zh: 幂等键
 en: Idempotency keys
 aka: Idempotency-Key 防重复提交 重复下单 幂等 请求去重
-order: 20
+order: 25
 ---
 
 ## 是什么

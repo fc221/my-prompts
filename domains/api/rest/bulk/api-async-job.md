@@ -2,7 +2,7 @@
 zh: 长任务异步化
 en: Async long-running jobs
 aka: 202 Accepted 异步任务 任务轮询 异步导出 job
-order: 60
+order: 20
 ---
 
 ## 是什么

@@ -1,8 +1,8 @@
 ---
-zh: 分页
+zh: 列表分页
 en: Pagination
-aka: 游标分页 offset 分页 cursor 翻页 nextCursor 加载更多 keyset
-order: 20
+aka: 游标分页 offset 分页 cursor 翻页 nextCursor 加载更多 keyset 分页
+order: 30
 ---
 
 ## 是什么

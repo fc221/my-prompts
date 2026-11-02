@@ -2,7 +2,7 @@
 zh: 文件上传与存储
 en: File upload and storage
 aka: 对象存储 S3 预签名 URL 直传 文件校验 魔数 附件 图片上传 签名下载
-order: 50
+order: 25
 ---
 
 ## 是什么

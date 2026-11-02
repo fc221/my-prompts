@@ -2,7 +2,7 @@
 zh: 发件箱模式
 en: Transactional outbox
 aka: Outbox 本地消息表 事务消息 可靠消息 CDC
-order: 60
+order: 50
 ---
 
 ## 是什么

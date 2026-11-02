@@ -1,7 +1,7 @@
 ---
-zh: 读写分离模型（CQRS）
+zh: 命令与查询分开（CQRS）
 en: CQRS
-aka: CQRS 命令查询分离 读模型 写模型 Command Query 投影
+aka: CQRS 命令查询分离 读模型 写模型 Command Query 投影 读写分离模型（CQRS）
 order: 30
 ---
 

@@ -1,7 +1,7 @@
 ---
-zh: 缓存与并发控制
+zh: ETag 与条件请求
 en: Caching & concurrency control
-aka: ETag If-Match If-None-Match 304 412 乐观并发 丢失更新 Cache-Control
+aka: ETag If-Match If-None-Match 304 412 乐观并发 丢失更新 Cache-Control 缓存与并发控制
 order: 80
 ---
 

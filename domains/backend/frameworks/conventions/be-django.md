@@ -2,7 +2,7 @@
 zh: Django 项目约定
 en: Django project conventions
 aka: Django 项目结构 DRF Django REST framework app 拆分 manage.py
-order: 20
+order: 35
 ---
 
 ## 是什么
