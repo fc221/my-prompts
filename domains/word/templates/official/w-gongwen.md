@@ -48,22 +48,39 @@ order: 10
 .dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
 .m-desk .dg-row{justify-content:center}
 .m-desk .dg-col{flex:none}
-.m-wrap{display:flex;gap:14px;align-items:flex-start}
-.m-pg{position:relative;width:420px;padding:30px 44px 26px 52px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25);color:#111;font-family:"STFangsong","FangSong","Songti SC",serif}
-.m-org{margin:0;text-align:center;color:#d4000f;font:700 27px/1.2 "STSong","Songti SC","SimSun",serif;letter-spacing:.06em}
-.m-no{margin:16px 0 0;text-align:center;font-size:12.5px}
-.m-line{height:0;margin:5px 0 0;border-top:2px solid #d4000f}
-.m-title{margin:22px 0 14px;text-align:center;font:700 17px/1.45 "STSong","Songti SC","SimSun",serif}
-.m-to{margin:0 0 4px;font-size:12.5px}
-.m-p{margin:0;font-size:12.5px;line-height:1.75;text-indent:2em}
-.m-h1{margin:2px 0 0;font:700 12.5px/1.75 "PingFang SC","STHeiti","SimHei",sans-serif;text-indent:2em}
-.m-h2{margin:0;font:12.5px/1.75 "STKaiti","KaiTi",serif;text-indent:2em}
-.m-sign{margin:12px 0 0;text-align:right;font-size:12.5px;line-height:1.7;padding-right:4em}
-.m-pn{margin:12px 0 0;text-align:right;font:12px "STSong","Songti SC",serif}
-.m-ann{display:grid;gap:0;width:150px;padding-top:24px;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
-.m-ann p{position:relative;margin:0;padding:6px 0 6px 12px;border-left:2px solid #d4000f}
-.m-ann p b{display:block;color:#101828;font-size:11.5px}
-.m-ann p span{color:#667085}
+.m-wrap{display:flex;gap:18px;align-items:center}
+.m-sp{display:grid;gap:6px;justify-items:center}
+.m-pg{position:relative;width:189px;height:267px;background:#fff;box-shadow:0 2px 3px rgba(16,24,40,.12),0 10px 14px rgba(16,24,40,.12);font:9px/1 system-ui,"PingFang SC",sans-serif;color:#2b579a}
+.m-ba{position:absolute;top:33.3px;right:23.4px;bottom:31.5px;left:25.2px;display:grid;align-content:start;gap:5px;padding:0 6px;border:1px dashed #2b579a;background:repeating-linear-gradient(to bottom,transparent 0 8.2px,rgba(43,87,154,.14) 8.2px 9.2px),rgba(43,87,154,.03);color:#111;font-family:"STFangsong","FangSong","Songti SC",serif}
+.m-org{margin:0;text-align:center;color:#d4000f;font:700 10.5px/1.2 "STSong","Songti SC","SimSun",serif;letter-spacing:.04em}
+.m-no{margin:3px 0 0;text-align:center;font-size:6px;line-height:1.2}
+.m-line{height:0;border-top:1.2px solid #d4000f}
+.m-title{margin:4px 0 1px;text-align:center;font:700 7.5px/1.3 "STSong","Songti SC","SimSun",serif}
+.m-to{margin:0;font-size:6px;line-height:1.3}
+.m-l{display:block;height:3.5px;border-radius:2px;background:#d5dae2}
+.m-l.i{width:92%;margin-left:8%}
+.m-l.s{width:60%}
+.m-l.sg{width:34%;margin-left:auto;margin-right:12%}
+.m-grid{justify-self:center;margin-top:4px;padding:1px 5px;border:1px solid #2b579a;border-radius:3px;background:#fff;color:#2b579a;font:9px/1.3 system-ui,"PingFang SC",sans-serif;font-weight:600}
+.m-w{position:absolute;left:-1px;right:-1px;bottom:7px;margin:0;border-top:1px solid #2b579a;text-align:center;font-family:system-ui,"PingFang SC",sans-serif}
+.m-w::before,.m-w::after{content:"";position:absolute;top:-4px;height:7px;border-left:1px solid #2b579a}
+.m-w::before{left:0}
+.m-w::after{right:0}
+.m-w b{position:relative;top:-6px;padding:0 4px;background:#f3f6fb;color:#2b579a;font-weight:650}
+.m-m{position:absolute;font-weight:600;white-space:nowrap}
+.m-m.t{top:11px;left:50%;transform:translateX(-50%)}
+.m-m.b{bottom:4px;left:50%;transform:translateX(-50%)}
+.m-m.v{top:50%;writing-mode:vertical-rl;transform:translateY(-50%)}
+.m-m.l{left:7px}
+.m-m.r{right:6px}
+.m-pn{position:absolute;top:242px;right:28px;margin:0;color:#111;font:7px/1 "STSong","Songti SC","SimSun",serif}
+.m-tag{position:absolute;top:240px;left:25px;color:#b54708;font:7.5px/1.3 system-ui,"PingFang SC",sans-serif;font-weight:600}
+.m-cap{margin:0;color:#475467;font:11px/1.3 system-ui,"PingFang SC",sans-serif}
+.m-ann{display:grid;width:178px;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-ann p{margin:0;padding:6px 0 6px 10px;border-left:2px solid #d4000f}
+.m-ann b{display:block;color:#101828;font-size:11.5px}
+.m-ann span{color:#667085}
+.dg.narrow .m-ann{display:none}
 </style>
 
 <div class="dg m-desk"></div>
@@ -71,29 +88,30 @@ order: 10
 <script type="module">
 import { draw } from '../../../frontend/_shared/diagram.ts';
 export default function demo(root) {
-  draw(root, `<div class="m-wrap"><div class="m-pg">
-    <p class="m-org">××市文化和旅游局文件</p>
-    <p class="m-no">×文旅〔2026〕12号</p>
-    <div class="m-line"></div>
-    <p class="m-title">关于开展 2026 年秋季文旅消费月<br>活动的通知</p>
-    <p class="m-to">各区县文化和旅游局，局属各单位：</p>
-    <p class="m-p">为进一步激发文旅消费活力，现就开展秋季文旅消费月活动有关事项通知如下。</p>
-    <p class="m-h1">一、活动时间</p>
-    <p class="m-p">2026 年 10 月 15 日至 11 月 15 日。</p>
-    <p class="m-h1">二、工作安排</p>
-    <p class="m-h2">（一）组织惠民消费活动。</p>
-    <p class="m-p">各区县结合本地资源，至少举办 2 场主题活动……</p>
-    <p class="m-sign">××市文化和旅游局<br>2026 年 10 月 9 日</p>
+  const page = `<div class="m-pg">
+    <span class="m-m t">上 37</span><span class="m-m b">下 35</span>
+    <span class="m-m v l">左（订口）28</span><span class="m-m v r">右 26</span>
+    <div class="m-ba">
+      <p class="m-org">××市文化和旅游局文件</p>
+      <p class="m-no">×文旅〔2026〕12号</p>
+      <div class="m-line"></div>
+      <p class="m-title">关于开展 2026 年秋季文旅消费月<br>活动的通知</p>
+      <p class="m-to">各区县文化和旅游局：</p>
+      <span class="m-l i"></span><span class="m-l"></span><span class="m-l s"></span>
+      <span class="m-l sg"></span><span class="m-l sg"></span>
+      <span class="m-grid">22 行 × 28 字</span>
+      <p class="m-w"><b>版心 156×225</b></p>
+    </div>
+    <span class="m-tag">页码：版心下 7mm</span>
     <p class="m-pn">— 1 —</p>
-  </div><div class="m-ann">
-    <p><b>发文机关标志</b><span>小标宋，红色，居中</span></p>
-    <p><b>发文字号</b><span>3 号仿宋，年份用〔〕</span></p>
-    <p><b>红色分隔线</b><span>与版心等宽</span></p>
-    <p><b>标题</b><span>2 号小标宋，居中，分行不拆词</span></p>
-    <p><b>正文</b><span>3 号仿宋，首行空两字</span></p>
-    <p><b>层次标题</b><span>一、黑体 （一）楷体 1. 仿宋</span></p>
-    <p><b>落款与日期</b><span>右空四字，年月日写全</span></p>
-    <p><b>页码</b><span>4 号宋体，“— 1 —”</span></p>
-  </div></div>`, { center: true, min: 0.35 });
+  </div>`;
+  const ann = [
+    ['页边距（mm）', '上 37、下 35、左（订口）28、右 26'],
+    ['版心 156×225mm', '红色分隔线、表格都和它等宽'],
+    ['每页 22 行、每行 28 字', '3 号仿宋，行距固定值约 28 磅'],
+    ['页码 “— 1 —”', '4 号宋体，版心下 7mm；单页右空一字，双页左空一字'],
+    ['版头和正文', '字体字号见要点，全部用样式定位，不用空格和回车'],
+  ].map(([b, s]) => '<p><b>' + b + '</b><span>' + s + '</span></p>').join('');
+  draw(root, '<div class="m-wrap"><div class="m-sp">' + page + '<p class="m-cap">A4 · 单位 mm</p></div><div class="m-ann">' + ann + '</div></div>', { center: true, min: 0.35 });
 }
 </script>
