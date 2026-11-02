@@ -2,7 +2,7 @@
 zh: 应收应付台账
 en: Receivables and payables ledger
 aka: 往来账 应收账款 应付账款 账龄分析 客户对账单 欠款表 回款跟踪 付款计划 做账表格
-order: 40
+order: 10
 ---
 
 ## 是什么

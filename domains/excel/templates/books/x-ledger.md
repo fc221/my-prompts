@@ -2,7 +2,8 @@
 zh: 收支记账表
 en: Income and expense ledger
 aka: 记账表 家庭记账 个人记账 收支表 收支明细 老板看板 做账表格 月度结余
-order: 30
+tab: 收支记账表
+order: 10
 ---
 
 ## 是什么

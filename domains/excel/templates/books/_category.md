@@ -1,4 +1,4 @@
 ---
 name: 记账
-order: 10
+order: 20
 ---

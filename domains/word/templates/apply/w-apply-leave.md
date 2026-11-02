@@ -2,7 +2,9 @@
 zh: 请假与调休申请
 en: Leave and time-off request
 aka: 请假条 请假单 请假申请 调休申请 事假 病假 年假 销假 请假条怎么写
-order: 20
+of: w-apply-general
+tab: 请假与调休
+order: 11
 ---
 
 ## 是什么

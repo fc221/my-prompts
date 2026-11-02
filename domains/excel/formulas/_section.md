@@ -1,5 +1,5 @@
 ---
-name: 函数公式
+name: 公式与分析
 icon: code
 color: "#2563eb"
 order: 20

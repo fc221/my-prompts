@@ -2,7 +2,9 @@
 zh: 色带页眉简历
 en: Banner-header resume
 aka: 应届生简历 实习简历 留学申请简历 中英双语简历 二维码简历 黄色简历
-order: 40
+of: pdf-resume
+tab: 应届·海外
+order: 13
 ---
 
 ## 是什么

@@ -1,8 +1,10 @@
 ---
-zh: 补助与困难补助申请
+zh: 困难补助申请
 en: Hardship subsidy application
-aka: 困难补助申请书 临时救助申请 困难职工补助 工会帮扶申请 残疾人补贴申请 生活补助申请
-order: 110
+aka: 困难补助申请书 临时救助申请 困难职工补助 工会帮扶申请 残疾人补贴申请 生活补助申请 补助与困难补助申请
+of: w-apply-general
+tab: 困难补助
+order: 16
 ---
 
 ## 是什么

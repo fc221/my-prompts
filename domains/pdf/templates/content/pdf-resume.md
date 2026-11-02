@@ -2,6 +2,7 @@
 zh: 简历
 en: Resume
 aka: 个人简历 求职简历 履历 导出简历 CV
+tab: 单栏（系统导出）
 order: 10
 ---
 

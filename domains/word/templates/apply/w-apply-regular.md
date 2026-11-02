@@ -2,7 +2,9 @@
 zh: 转正与调岗申请
 en: Probation completion and transfer request
 aka: 转正申请书 转正申请 试用期总结 调岗申请 内部调动 岗位调整申请
-order: 30
+of: w-apply-general
+tab: 转正与调岗
+order: 13
 ---
 
 ## 是什么

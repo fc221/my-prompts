@@ -2,7 +2,7 @@
 zh: 周报与月报
 en: Weekly and monthly report
 aka: 周报 月报 工作周报 周总结 周报模板 进度汇报 月度报告
-order: 40
+order: 20
 ---
 
 ## 是什么

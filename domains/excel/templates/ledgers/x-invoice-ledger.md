@@ -2,7 +2,7 @@
 zh: 发票台账
 en: Invoice register
 aka: 发票登记表 销项发票 进项发票 开票台账 收票台账 发票管理 勾选抵扣 发票查重 做账表格
-order: 50
+order: 20
 ---
 
 ## 是什么

@@ -3,6 +3,7 @@ zh: 设计表格结构
 en: Ask AI to design a spreadsheet
 aka: 让AI设计一张表 表格设计 做个表 设计台账 Excel 模板设计 表结构 列设计
 order: 10
+preview: x-workbook-plan
 ---
 
 ## 是什么

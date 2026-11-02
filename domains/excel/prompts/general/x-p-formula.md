@@ -3,6 +3,7 @@ zh: 按需求写公式
 en: Ask AI to write a formula
 aka: 让AI写公式 写公式 Excel 函数 公式怎么写 查找公式 条件求和 公式报错 解释公式
 order: 20
+preview: x-sumifs
 ---
 
 ## 是什么

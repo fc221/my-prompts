@@ -2,7 +2,7 @@
 zh: 员工花名册
 en: Employee roster
 aka: 花名册 员工信息表 人事台账 员工档案 在职名单 合同到期提醒 入离职统计 人员台账
-order: 30
+order: 10
 ---
 
 ## 是什么

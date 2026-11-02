@@ -2,7 +2,9 @@
 zh: 代码直接绘制
 en: Programmatic PDF drawing (pdf-lib, PDFKit, ReportLab)
 aka: pdf-lib PDFKit ReportLab PDFBox 坐标绘制 套打 叠加文字
-order: 80
+of: pdf-pick-tool
+tab: 直接绘制
+order: 16
 ---
 
 ## 是什么

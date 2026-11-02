@@ -2,7 +2,9 @@
 zh: 无头浏览器打印
 en: Headless browser PDF (Puppeteer / Playwright)
 aka: Puppeteer Playwright page.pdf HTML转PDF 网页转PDF Chrome打印 Chromium
-order: 30
+of: pdf-pick-tool
+tab: 无头浏览器
+order: 11
 ---
 
 ## 是什么

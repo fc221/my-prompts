@@ -2,7 +2,9 @@
 zh: 组件式生成
 en: Component-based PDF (react-pdf, pdfmake)
 aka: react-pdf @react-pdf/renderer pdfmake QuestPDF jsPDF 前端生成PDF 浏览器生成PDF
-order: 50
+of: pdf-pick-tool
+tab: 组件式
+order: 13
 ---
 
 ## 是什么

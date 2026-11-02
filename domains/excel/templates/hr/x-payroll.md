@@ -2,7 +2,7 @@
 zh: 工资表与个税
 en: Payroll and individual income tax
 aka: 工资表 工资计算 个税计算 累计预扣法 社保公积金 五险一金 实发工资 工资条 批量生成工资条 做账表格
-order: 10
+order: 40
 ---
 
 ## 是什么

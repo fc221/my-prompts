@@ -2,7 +2,9 @@
 zh: 大字标题简历
 en: Wordmark resume
 aka: 设计师简历 创意简历 设计感简历 荧光绿简历 时间线简历 作品附页 Resume
-order: 20
+of: pdf-resume
+tab: 设计岗
+order: 11
 ---
 
 ## 是什么

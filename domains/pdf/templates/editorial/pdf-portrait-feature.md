@@ -2,7 +2,7 @@
 zh: 人物专访跨页
 en: Portrait interview spread
 aka: 人物专访 访谈 员工故事 校友专访 创始人访谈 问答 Q&A 人物稿
-order: 70
+order: 50
 ---
 
 ## 是什么

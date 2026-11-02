@@ -2,7 +2,9 @@
 zh: 深浅分栏简历
 en: Split-column resume
 aka: 双栏简历 侧栏简历 深色简历 蓝色简历 两页简历 数字亮点简历
-order: 30
+of: pdf-resume
+tab: 资深·数字亮点
+order: 12
 ---
 
 ## 是什么

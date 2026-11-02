@@ -2,6 +2,7 @@
 zh: 生成方案怎么选
 en: Choosing a PDF generation approach
 aka: HTML转PDF 导出PDF 生成PDF 选型 PDF库
+tab: 怎么选
 order: 10
 ---
 

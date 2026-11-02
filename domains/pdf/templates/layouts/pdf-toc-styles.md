@@ -2,6 +2,7 @@
 zh: 目录页的几种做法
 en: Contents page styles
 aka: 目录页设计 目录排版 contents 画册目录 报告目录 作品集目录 目录模板
+tab: 六种做法
 order: 20
 ---
 

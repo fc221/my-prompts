@@ -2,7 +2,7 @@
 zh: 小企业内账工作簿
 en: Small business bookkeeping workbook
 aka: 内账 财务工作簿 Excel 财务系统 记账系统 导航首页 目录页 超链接跳转 返回首页 做账表格
-order: 70
+order: 30
 ---
 
 ## 是什么

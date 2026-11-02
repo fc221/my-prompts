@@ -2,7 +2,9 @@
 zh: 收支日历看板
 en: Income and expense calendar board
 aka: 日历看板 收支日历 记账日历 月历看板 每日收支 日历记账
-order: 30
+order: 41
+of: x-dashboard
+tab: 日历视图
 ---
 
 ## 是什么

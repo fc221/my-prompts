@@ -2,7 +2,7 @@
 zh: 指标汇总页
 en: KPI summary sheet
 aka: 指标汇总 KPI 表 经营月报 目标达成 月度经营指标 管理报表 一页纸报表
-order: 20
+order: 30
 ---
 
 ## 是什么

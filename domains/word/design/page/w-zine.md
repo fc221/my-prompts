@@ -2,7 +2,7 @@
 zh: 杂志感排版
 en: Magazine-style layout in Word
 aka: 杂志风 Zine 内刊排版 分栏 首字下沉 引文 图文混排 图片压字 页面背景 柔化边缘 文字发光
-order: 50
+order: 40
 ---
 
 ## 是什么

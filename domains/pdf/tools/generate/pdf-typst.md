@@ -2,7 +2,9 @@
 zh: Typst 排版
 en: Typst typesetting
 aka: typst 排版语言 typst-compile LaTeX替代 模板编译
-order: 60
+of: pdf-pick-tool
+tab: Typst
+order: 14
 ---
 
 ## 是什么

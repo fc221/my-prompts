@@ -2,7 +2,9 @@
 zh: LaTeX 排版
 en: LaTeX (XeLaTeX + ctex)
 aka: LaTeX XeLaTeX ctex latexmk TeX-Live 论文排版 公式 试卷
-order: 70
+of: pdf-pick-tool
+tab: LaTeX
+order: 15
 ---
 
 ## 是什么

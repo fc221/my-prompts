@@ -2,7 +2,7 @@
 zh: 毕业论文排版
 en: Thesis formatting
 aka: 论文格式 毕业论文格式 论文排版 学位论文 参考文献格式 论文页码 论文目录
-order: 10
+order: 20
 ---
 
 ## 是什么

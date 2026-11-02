@@ -2,7 +2,7 @@
 zh: 人物介绍页
 en: People grid page
 aka: 团队介绍 讲师介绍 教师介绍 年度人物 新员工介绍 成员墙
-order: 100
+order: 70
 ---
 
 ## 是什么

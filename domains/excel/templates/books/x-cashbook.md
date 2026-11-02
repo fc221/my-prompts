@@ -2,7 +2,9 @@
 zh: 现金日记账
 en: Cash journal
 aka: 日记账 流水账 出纳账 现金账 银行日记账 做账表格
-order: 10
+of: x-ledger
+tab: 出纳日记账
+order: 11
 ---
 
 ## 是什么

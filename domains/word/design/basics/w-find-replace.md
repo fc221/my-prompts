@@ -2,7 +2,7 @@
 zh: 通配符查找替换
 en: Wildcard find and replace
 aka: 通配符 查找替换 批量替换 删除空行 删除多余空格 ^p ^13 \1 批量套样式 手动换行 清理格式
-order: 40
+order: 15
 ---
 
 ## 是什么

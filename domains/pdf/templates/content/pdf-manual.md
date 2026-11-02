@@ -2,7 +2,7 @@
 zh: 产品手册
 en: Product manual
 aka: 说明书 使用手册 用户手册 安装指南 操作手册 产品说明书
-order: 60
+order: 30
 ---
 
 ## 是什么

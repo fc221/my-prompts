@@ -2,7 +2,7 @@
 zh: 考勤表
 en: Attendance sheet
 aka: 考勤表 动态考勤表 月度考勤 打卡统计 请假统计 加班统计 迟到早退 出勤天数 考勤模板
-order: 10
+order: 30
 ---
 
 ## 是什么

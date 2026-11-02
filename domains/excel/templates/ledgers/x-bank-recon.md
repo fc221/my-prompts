@@ -2,7 +2,7 @@
 zh: 银行存款余额调节表
 en: Bank reconciliation
 aka: 银行对账 余额调节表 未达账项 对账单核对 银行流水核对 月底对账 勾对 做账表格
-order: 20
+order: 40
 ---
 
 ## 是什么

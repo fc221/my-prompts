@@ -1,8 +1,10 @@
 ---
-zh: 实习与走读申请
+zh: 学籍类申请
 en: Internship, off-campus living and readmission requests
-aka: 自主实习申请 校外实习申请 走读申请 校外住宿申请 复学申请 更换培养方案申请
-order: 90
+aka: 自主实习申请 校外实习申请 走读申请 校外住宿申请 复学申请 更换培养方案申请 实习与走读申请
+of: w-apply-general
+tab: 学籍类申请
+order: 17
 ---
 
 ## 是什么

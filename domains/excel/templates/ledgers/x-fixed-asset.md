@@ -2,7 +2,7 @@
 zh: 固定资产台账与折旧
 en: Fixed asset register and depreciation
 aka: 固定资产卡片 资产台账 设备台账 折旧计算表 直线法折旧 累计折旧 资产盘点 做账表格
-order: 80
+order: 30
 ---
 
 ## 是什么

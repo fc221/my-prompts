@@ -2,7 +2,8 @@
 zh: 动态看板
 en: Interactive dashboard
 aka: 数据看板 仪表盘 驾驶舱 切片器 透视图 收支看板 老板看板 dashboard
-order: 10
+order: 40
+tab: 切片器看板
 ---
 
 ## 是什么

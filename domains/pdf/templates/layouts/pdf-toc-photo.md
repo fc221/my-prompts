@@ -2,7 +2,9 @@
 zh: 摄影集目录页
 en: Photo book contents spread
 aka: 目录页 作品集目录 画册目录 年度画册 摄影画册 contents
-order: 40
+of: pdf-toc-styles
+tab: 散放照片
+order: 21
 ---
 
 ## 是什么

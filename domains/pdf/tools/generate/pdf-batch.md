@@ -2,7 +2,7 @@
 zh: 服务端批量生成
 en: Server-side PDF generation at scale
 aka: 批量导出 PDF队列 并发生成 PDF服务 冷启动 Chromium内存
-order: 20
+order: 30
 ---
 
 ## 是什么
