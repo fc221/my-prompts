@@ -108,7 +108,7 @@ import { draw } from '../../../frontend/_shared/diagram.ts';
 export default function demo(root) {
   const p1 = `<div class="m-pg">
     <p class="m-mark">Resume</p><p class="m-yr">20<br>26</p>
-    <div class="m-who"><b>MyPrompts<small>BRAND DESIGNER</small></b><em>品牌视觉设计师 · 新媒体运营</em>
+    <div class="m-who"><b>苏念<small>SU NIAN</small></b><em>品牌视觉设计师 · 新媒体运营</em>
       <span>138 2706 4415 · hi@sunian.cn<br>杭州 · 作品集 sunian.cn/works</span></div>
     <div class="m-ph"><i></i></div><i class="m-rule"></i>
     <div class="m-l"><span class="m-pill">工作经历<small>EXPERIENCE</small></span>
@@ -126,7 +126,7 @@ export default function demo(root) {
     <div class="m-sk"><span class="m-pill">技能</span><span>Figma</span><span>Photoshop</span><span>AE 动效</span><span>C4D</span><span>品牌视觉</span></div>
   </div>`;
   const p2 = `<div class="m-pg">
-    <p class="m-mark">Works</p><p class="m-yr">20<br>26</p><p class="m-pno">MyPrompts · 作品附页 · 2 / 2</p><i class="m-rule" style="top:56px"></i>
+    <p class="m-mark">Works</p><p class="m-yr">20<br>26</p><p class="m-pno">苏念 · 作品附页 · 2 / 2</p><i class="m-rule" style="top:56px"></i>
     <div class="m-wk">
       <figure class="m-w m-wide"><span class="m-pill">01</span><div class="m-art">
           <i class="m-post" style="left:19px;background:#ff6b4a;transform:rotate(-4deg)">冰</i><i class="m-post" style="left:69px;bottom:14px;background:#f2b705">柠</i><i class="m-post" style="left:119px;background:#2f6b4f;transform:rotate(3deg)">夏</i></div>

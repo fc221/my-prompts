@@ -171,7 +171,7 @@ order: 40
 <script type="module">
 import { draw } from '../../../frontend/_shared/diagram.ts';
 const fig = (cap, body) => `<figure>${body}<figcaption>${cap}</figcaption></figure>`;
-const hd = (r) => `<p class="m-hd"><span><b>MyPrompts</b> / PORTFOLIO 2026</span><span>${r}</span></p>`;
+const hd = (r) => `<p class="m-hd"><span><b>周知夏</b> / PORTFOLIO 2026</span><span>${r}</span></p>`;
 const pn = (n) => `<span class="m-pn">${n} / 24</span>`;
 // 撕纸边：上、右、下三边按固定种子抖动
 function tear() {
@@ -201,7 +201,7 @@ export default function demo(root) {
 ${fig('封面', `<div class="m-pg m-cv"><div class="m-bw"></div><span class="m-tag">PORTFOLIO</span>
   <div class="m-tw"><div class="m-tear" style="clip-path:${tear()}"></div><div class="m-in">
     <h1>个人作品集</h1><p class="m-en m-it"><span class="m-hl">PORTFOLIO</span> OF CONTENT &amp; VISUAL</p>
-    <p class="m-line"><span><b>MyPrompts</b>　新媒体运营 · 视觉设计</span><span>186 2026 0918　微信 zhixia-design</span></p></div></div>
+    <p class="m-line"><span><b>周知夏</b>　新媒体运营 · 视觉设计</span><span>186 2026 0918　微信 zhixia-design</span></p></div></div>
   <b class="m-yr m-it">2026</b>
 </div>`)}
 ${fig('目录', `<div class="m-pg m-toc">${hd('CONTENTS')}
@@ -210,7 +210,7 @@ ${fig('目录', `<div class="m-pg m-toc">${hd('CONTENTS')}
   ${pn('02')}
 </div>`)}
 ${fig('关于我', `<div class="m-pg m-ab">${hd('ABOUT ME')}<i class="m-por"></i>
-  <p class="m-name">MyPrompts<small>VISUAL DESIGNER</small></p><p class="m-role">新媒体运营 · 视觉设计　4 年经验</p>
+  <p class="m-name">周知夏<small>VISUAL DESIGNER</small></p><p class="m-role">新媒体运营 · 视觉设计　4 年经验</p>
   <p class="m-bio">做过咖啡、书店和文旅三个行业的账号，从选题、拍摄、排版到投放复盘都自己上手。习惯先看数据再动笔，也能把一条内容做成一整套视觉。</p>
   <div class="m-st"><div><b class="m-hl">4<small>年</small></b><span>新媒体运营</span></div><div><b class="m-hl">120<small>万</small></b><span>累计粉丝增长</span></div><div><b class="m-hl">36<small>个</small></b><span>品牌项目</span></div></div>
   <div class="m-tags"><span>内容策划</span><span>Figma</span><span>Photoshop</span><span>After Effects</span><span>剪映</span><span>数据分析</span></div>

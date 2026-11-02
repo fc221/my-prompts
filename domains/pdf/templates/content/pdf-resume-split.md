@@ -25,7 +25,7 @@ A4 简历，每页左侧约 38% 是一条深色竖栏，右侧白底。第 1 页
 
 ## 要点
 
-- 页面：A4 竖版，左栏 80mm（约 38%）满高出血，内边距上 16mm、左 12mm、右 10mm；右栏内边距左 12mm、右 14mm，分节之间 9mm。
+- 页面：A4 竖版，左栏 80mm（约 38%）从页顶铺到页底、贴着纸边，内边距上 16mm、左 12mm、右 10mm；办公打印时纸边留白边、不加出血（见「打印颜色与出血」）；右栏内边距左 12mm、右 14mm，分节之间 9mm。
 - 左栏：职位名思源黑体 ExtraLight 60–68pt 两行、品牌蓝，下面英文职位 6pt 字距 0.2em；姓名 22pt Heavy 加拼音小字，联系方式 8.5pt；照片 56×48mm、圆角 3pt；三个数字亮点贴着栏底排，数字 36–42pt Light、单位 11pt、说明 8pt，之间用 0.5pt 半透明细线隔开。
 - 右栏分节：圆形线性图标直径 11mm、线宽 0.7pt、品牌蓝，后面是 13pt 粗体标题，再接一条 0.5pt 浅灰线拉到右边距；常用分节是关于我、工作经历、教育背景、项目经历、获奖。
 - 经历：单位和职位 10.5pt 粗体靠左，时间 8pt 灰色右对齐、和标题同一条基线；下面 2–3 条 9pt 成果，行距 1.65，每条一行写完。
@@ -37,7 +37,7 @@ A4 简历，每页左侧约 38% 是一条深色竖栏，右侧白底。第 1 页
 ## 提示词
 
 为{个人姓名}做一套深浅分栏版式的两页简历 PDF，求职方向 {岗位}，实现方式按{实现方式，如 HTML + 打印 CSS}，数据来自{数据来源，如 我提供的经历清单}：
-1. A4 竖版两页，每页左侧 80mm 深色栏 #131a24 满高出血，右侧白底；用网格分栏，HTML 里左栏在前。
+1. A4 竖版两页，每页左侧 80mm 深色栏 #131a24 从页顶铺到页底（办公打印留白边，不加出血），右侧白底；用网格分栏，HTML 里左栏在前。
 2. 第 1 页左栏：品牌蓝 {品牌色，如 #3a78ff} 思源黑体 ExtraLight 60–68pt 两行职位名，姓名 22pt Heavy、联系方式 8.5pt、56×48mm 照片，栏底三个数字亮点（数字 36–42pt Light，单位和说明小字），数字从经历里提炼并能找到出处。
 3. 第 1 页右栏：关于我、工作经历、教育背景；第 2 页右栏：项目经历、获奖、{其他分节，如 写作与分享}。每个分节标题前一个 11mm 圆形线性图标（0.7pt 品牌蓝），标题后接一条浅灰细线；经历的单位和职位靠左、时间右对齐同一基线，成果 9pt 每条一行。
 4. 第 2 页左栏只留姓名和联系方式，放技能进度条、证书、语言，栏底大号细体页码“02 / 02”；两页右下角页脚“姓名 · 岗位 · 页码”。
@@ -109,7 +109,7 @@ const h = (k, t) => `<h3><span class="m-ic"><svg viewBox="0 0 12 12">${ic[k]}</s
 const job = (b, t, ...li) => `<div class="m-job"><header><b>${b}</b><time>${t}</time></header><ul>${li.map((x) => `<li>${x}</li>`).join('')}</ul></div>`;
 const p1 = `<div class="m-pg">
   <aside class="m-side"><h1>产品<br>经理<small>PRODUCT MANAGER</small></h1>
-    <p class="m-name">MyPrompts<small>PRODUCT MANAGER</small></p>
+    <p class="m-name">何嘉诚<small>HE JIACHENG</small></p>
     <p class="m-ct">139 1027 5583<br>hejc@yunqi.cn<br>上海 · 可到岗 2 周内</p>
     <div class="m-ph"><i></i></div>
     <div class="m-num"><div><b>5<small>年</small></b><span>出行与本地生活产品</span></div><div><b>12<small>个</small></b><span>从 0 到 1 上线的功能</span></div><div><b>300<small>万</small></b><span>负责模块的月活用户</span></div></div>
@@ -121,9 +121,9 @@ const p1 = `<div class="m-pg">
       ${job('橙果外卖 · 产品经理', '2019.07 – 2022.02', '搭建商家后台的满减配置，覆盖 4 万家门店', '推动骑手端异常上报，客诉下降 23%')}
       ${job('启明教育 · 产品助理', '2018.07 – 2019.06', '整理课程排期需求，维护 PRD 与原型', '协助完成家长端小程序首版上线')}</section>
     <section class="m-sec">${h('edu', '教育背景')}${job('江城大学 · 工业设计', '2014.09 – 2018.06', '本科，辅修统计学，毕业设计为社区团购小程序')}</section>
-  </main><span class="m-foot">MyPrompts · 产品经理 · 1 / 2</span></div>`;
+  </main><span class="m-foot">何嘉诚 · 产品经理 · 1 / 2</span></div>`;
 const p2 = `<div class="m-pg">
-  <aside class="m-side"><p class="m-name" style="margin-top:0!important">MyPrompts<small>PRODUCT MANAGER</small></p>
+  <aside class="m-side"><p class="m-name" style="margin-top:0!important">何嘉诚<small>HE JIACHENG</small></p>
     <p class="m-ct">139 1027 5583<br>hejc@yunqi.cn</p>
     <div class="m-blk"><h4>技能</h4><div class="m-sk"><span style="--v:90%">需求分析</span><span style="--v:85%">数据分析 · SQL</span><span style="--v:80%">Axure / Figma</span><span style="--v:70%">项目管理</span></div></div>
     <div class="m-blk"><h4>证书</h4><p>PMP 项目管理认证<br>数据分析师（中级）</p></div>
@@ -141,7 +141,7 @@ const p2 = `<div class="m-pg">
     <section class="m-sec">${h('pen', '写作与分享')}
       ${job('“产品手记”专栏', '2020 – 至今', '累计 60 篇需求拆解文章，2.1 万人关注')}
       ${job('本地产品沙龙 · 分享嘉宾', '2024.09', '主题：拼车定价的灰度与回滚')}</section>
-  </main><span class="m-foot">MyPrompts · 产品经理 · 2 / 2</span></div>`;
+  </main><span class="m-foot">何嘉诚 · 产品经理 · 2 / 2</span></div>`;
 export default function demo(root) {
   draw(root, `<div class="m-set">${p1}${p2}</div>`, { center: true, min: 0.25 });
 }

@@ -44,17 +44,34 @@ order: 60
 ## 示例
 
 <link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+/* 证书页：沿用 diagram.css 的 .pg / .pa 页面壳，内容居中、姓名放大、双线装饰边框、印章压在落款日期上（1px = 1mm） */
+.cert{padding:26px 30px 20px;align-items:center;text-align:center}
+.cert .c-frame{position:absolute;inset:10px;border:1.5px solid #b8975a;pointer-events:none}
+.cert .c-frame::after{content:"";position:absolute;inset:2px;border:.5px solid #b8975a}
+.cert .c-org{color:#5c5338;font-size:7px;letter-spacing:.3em}
+.cert .c-title{margin-top:6px;color:#101828;font:700 18px/1.2 "Songti SC","Noto Serif CJK SC","Source Han Serif SC",serif;letter-spacing:.3em}
+.cert .c-body{margin-top:12px;max-width:200px;color:#344054;font-size:7px;line-height:1.9}
+.cert .c-name{display:block;margin:3px 0;color:#101828;font:700 14px/1.3 "Songti SC","Noto Serif CJK SC","Source Han Serif SC",serif;letter-spacing:.1em}
+.cert .c-sign{position:relative;align-self:flex-end;margin:auto 60px 6px 0;color:#344054;font-size:7px;line-height:1.8}
+.cert .c-seal{position:absolute;right:-14px;bottom:-10px;width:40px;height:40px;display:grid;place-items:center;border:1.6px solid #d92d20;border-radius:50%;color:#d92d20;font-size:11px;opacity:.8;mix-blend-mode:multiply;transform:rotate(-8deg)}
+.cert .c-seal::before{content:"";position:absolute;inset:2px;border:.5px solid #d92d20;border-radius:50%}
+.cert .c-no{position:absolute;left:30px;bottom:20px;color:#667085;font-size:6px}
+.cert .c-qr{position:absolute;right:24px;bottom:16px;display:grid;justify-items:center;gap:2px;color:#667085;font-size:5px}
+.cert .c-qr i{display:block;width:20px;height:20px;border:1.5px solid #101828;background:conic-gradient(#101828 25%,#fff 0 50%,#101828 0 75%,#fff 0) 0 0/5px 5px}
+</style>
 
 <script type="module">
-import { draw, page } from '../../../frontend/_shared/diagram.ts';
+import { draw } from '../../../frontend/_shared/diagram.ts';
 export default function demo(root) {
-  draw(root, page({
-    land: true,
-    margin: true,
-    pages: [
-      { label: 'A4 横版 297×210mm，严格一页', blocks: ['text:MyPrompts', 'title:会员证书', 'text:兹授予 王雨桐 女士 2026 年度黑金会员资格，特发此证。', 'text:有效期 2026-10-29 至 2027-10-28', 'text:MyPrompts · 二〇二六年十月二十九日', 'sign', 'text:编号 HY-2026-000321', 'qr'] },
-    ],
-    notes: ['姓名最宽 120mm，32pt 逐级缩到 22pt', '落款用中文数字，印章压在日期上', '编号加核验二维码，内容溢出就报错'],
-  }), { center: true, min: 0.3 });
+  draw(root, `<div class="pgs"><figure class="pg land"><div class="pa cert"><i class="c-frame"></i>
+    <p class="c-org">MyPrompts 会员中心</p>
+    <p class="c-title">会员证书</p>
+    <p class="c-body">兹授予<b class="c-name">王雨桐 女士</b>2026 年度黑金会员资格，特发此证。<br>有效期 2026-10-29 至 2027-10-28</p>
+    <p class="c-sign">MyPrompts 会员中心<br>二〇二六年十月二十九日<i class="c-seal">★</i></p>
+    <span class="c-no">编号 HY-2026-000321</span>
+    <span class="c-qr"><i></i>扫码核验</span>
+  </div><figcaption>A4 横版 297×210mm，严格一页</figcaption></figure>
+  <ul class="pnt"><li>区块自上而下居中，姓名单独放大到 28–32pt</li><li>装饰边框距纸边 10–12mm，文字区再内缩 15mm</li><li>落款用中文数字，印章压在日期上偏右下</li><li>左下编号，右下核验二维码；溢出就报错</li></ul></div>`, { center: true, min: 0.3 });
 }
 </script>

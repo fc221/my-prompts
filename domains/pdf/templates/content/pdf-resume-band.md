@@ -25,7 +25,7 @@ A4 简历，第 1 页顶部是一条浅黄渐变色带，里面横排照片、�
 
 ## 要点
 
-- 页面：A4 竖版，左右边距 16mm；第 1 页色带满宽出血、高 88mm（约页高 30%），第 2 页色带高 26mm；正文从色带下方 11mm 开始，分节之间 9mm。
+- 页面：A4 竖版，左右边距 16mm；第 1 页色带铺到左右纸边、高 88mm（约页高 30%），第 2 页色带高 26mm；办公打印时纸边留白边、不加出血（见「打印颜色与出血」）；正文从色带下方 11mm 开始，分节之间 9mm。
 - 色带：100° 线性渐变 #fff4cf → #ffe594 → #fff1c2，不加图案；里面从左到右是照片、求职方向和个人信息、二维码，顶端都对齐色带内 13mm 处。
 - 照片和二维码：照片 40×50mm、1.5pt 白边、圆角 2pt；二维码 22–26mm 白底，下面 7pt 小字“扫码看作品集”。
 - 字体：求职方向思源宋体 Heavy 48–54pt 两行，姓名 20pt 粗体加 8pt 届别，联系方式 8.5pt 两行；分节中文标题思源宋体 Bold 14pt，英文 7pt、字距 0.2em、#bfae7a 靠右，下面一条 0.6pt #e2d4a6 细线。
@@ -37,7 +37,7 @@ A4 简历，第 1 页顶部是一条浅黄渐变色带，里面横排照片、�
 ## 提示词
 
 为{个人姓名}做一套色带页眉版式的两页简历 PDF，求职方向 {岗位}，实现方式按{实现方式，如 HTML + 打印 CSS}，数据来自{数据来源，如 我提供的经历清单}：
-1. A4 竖版，左右边距 16mm；第 1 页顶部 88mm 高的满宽浅黄渐变色带（100°，#fff4cf → #ffe594 → #fff1c2），里面依次是 40×50mm 白边照片、思源宋体 Heavy 48–54pt 两行求职方向、姓名 20pt 和两行联系方式，右上角 22–26mm 二维码链接到 {作品集地址}，下面写“扫码看作品集”。
+1. A4 竖版，左右边距 16mm；第 1 页顶部 88mm 高、铺到左右纸边的浅黄渐变色带（100°，#fff4cf → #ffe594 → #fff1c2；办公打印留白边，不加出血），里面依次是 40×50mm 白边照片、思源宋体 Heavy 48–54pt 两行求职方向、姓名 20pt 和两行联系方式，右上角 22–26mm 二维码链接到 {作品集地址}，下面写“扫码看作品集”。
 2. 分节标题中英双语：中文思源宋体 Bold 14pt 靠左，英文 7pt 淡色靠右，下面 0.6pt 细线。
 3. 每段经历两列：左列 50mm 写时间和单位，右列写职位和一到两行内容，两列间距 8mm。
 4. 第 1 页：教育背景、实习经历、校园经历；第 2 页顶部换成 26mm 窄色带，重复姓名和“RESUME · 2 / 2”，下面是项目经历、获奖与证书、技能与语言、自我评价；两页页脚“姓名 · 求职方向 · 页码”。
@@ -99,7 +99,7 @@ const qr = (() => {
 const sec = (zh, en, rows) => `<section class="m-sec"><h3>${zh}<small>${en}</small></h3>${rows.map(([t, u, b, d]) => `<dl class="m-row"><dt>${t}<small>${u}</small></dt><dd><b>${b}</b>${d}</dd></dl>`).join('')}</section>`;
 const p1 = `<div class="m-pg">
   <header class="m-band"><div class="m-ph"><s></s><i></i></div>
-    <div class="m-id"><h1>市场营销<br>管培生</h1><p>MyPrompts<small>2026 届硕士</small></p>
+    <div class="m-id"><h1>市场营销<br>管培生</h1><p>林晓曼<small>2026 届硕士</small></p>
       <span>136 5208 7731 · 上海<br>linxm@hdbs.edu.cn</span></div>
     <div class="m-qr">${qr}扫码看作品集</div></header>
   <div class="m-body">
@@ -114,9 +114,9 @@ const p1 = `<div class="m-pg">
     ${sec('校园经历', 'CAMPUS', [
       ['2024.10 – 2025.09', '研究生会', '外联部 部长', '对接 12 家企业赞助，带 8 人团队办校园招聘月'],
     ])}
-  </div><p class="m-foot"><span>MyPrompts · 市场营销管理培训生</span><span>1 / 2</span></p></div>`;
+  </div><p class="m-foot"><span>林晓曼 · 市场营销管理培训生</span><span>1 / 2</span></p></div>`;
 const p2 = `<div class="m-pg">
-  <header class="m-band m-sm">MyPrompts · 个人简历<span>RESUME · 2 / 2</span></header>
+  <header class="m-band m-sm">林晓曼 · 个人简历<span>RESUME · 2 / 2</span></header>
   <div class="m-body">
     ${sec('项目经历', 'PROJECTS', [
       ['2025.03 – 2025.06', '课程项目', '本地茶饮品牌焕新方案', '访谈 30 位常客，提出“城市限定杯”方案<br>方案被品牌方采用，首月限定杯售出 2.4 万杯'],
@@ -133,7 +133,7 @@ const p2 = `<div class="m-pg">
     ${sec('自我评价', 'PROFILE', [
       ['关键词', '', '数据驱动 · 有执行力', '喜欢在门店和用户中间找答案，做过的每个活动都会回看数据复盘。'],
     ])}
-  </div><p class="m-foot"><span>MyPrompts · 市场营销管理培训生</span><span>2 / 2</span></p></div>`;
+  </div><p class="m-foot"><span>林晓曼 · 市场营销管理培训生</span><span>2 / 2</span></p></div>`;
 export default function demo(root) {
   draw(root, `<div class="m-set">${p1}${p2}</div>`, { center: true, min: 0.25 });
 }
