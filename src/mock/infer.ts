@@ -55,7 +55,7 @@ const RULES: [RegExp, MockKind][] = [
   [/主次按钮/, 'btnpair'],
   [/首屏|标语|价值主张|主张/, 'hero'],
   [/锚点|目录/, 'toc'],
-  [/标签页|Tabs|分段|分类横|分类标签/i, 'tabs'],
+  [/标签页|页签|Tabs|分段|分类横|分类标签/i, 'tabs'],
   [/操作栏|吸底|底栏|操作区/, 'actions'],
   [/第三方|其他登录/, 'btnrow'],
   [/验证/, 'captcha'],

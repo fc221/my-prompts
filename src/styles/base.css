@@ -144,6 +144,50 @@ b {
   background: var(--accent-soft);
   color: var(--accent-text);
 }
+/* 分段控件：槽 32 高（内边距 2 + 按钮 28），和小号按钮等高；同心圆角 外 8 = 内 6 + 槽内边距 2 */
+.seg {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--surface-muted);
+}
+.seg button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  white-space: nowrap;
+}
+.seg button[aria-pressed='true'] {
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  font-weight: 600;
+  box-shadow: var(--shadow-1);
+}
+@media (hover: hover) {
+  .seg button:not([aria-pressed='true']):hover {
+    color: var(--text-primary);
+  }
+}
+/* 触屏：热区上下各撑 8px 到 44，视觉不变 */
+@media (pointer: coarse) {
+  .seg button {
+    position: relative;
+  }
+  .seg button::before {
+    content: '';
+    position: absolute;
+    inset: -8px 0;
+  }
+}
 .icon-btn {
   display: inline-grid;
   place-items: center;

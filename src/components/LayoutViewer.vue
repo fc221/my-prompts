@@ -5,6 +5,7 @@ import type { KbEntry } from '../types';
 import { casesOf, headOf } from '../kb';
 import { openDetail } from '../state';
 import WireMock from '../mock/WireMock.vue';
+import { isFrame } from '../mock/infer';
 import AppIcon from './AppIcon.vue';
 import CaseTabs from './CaseTabs.vue';
 
@@ -13,6 +14,9 @@ const cases = computed(() => casesOf(props.entry));
 const head = computed(() => headOf(props.entry));
 const open = defineModel<boolean>('open', { default: false });
 const annotate = defineModel<boolean>('annotate', { default: true });
+// 外观：贴边（默认）或卡片式，只对带侧栏、顶栏这类框架的示意图有意义
+const floating = defineModel<boolean>('floating', { default: false });
+const frameWire = computed(() => isFrame(props.entry.wire));
 const device = ref<'desk' | 'phone'>('desk');
 const dlg = ref<HTMLDialogElement>();
 watch(open, async (o) => {
@@ -38,6 +42,10 @@ watch(open, async (o) => {
           <AppIcon name="stack" :size="16" />手机
         </button>
       </div>
+      <div v-if="frameWire && device === 'desk'" class="seg" role="group" aria-label="外观">
+        <button type="button" :aria-pressed="!floating" @click="floating = false">贴边</button>
+        <button type="button" :aria-pressed="floating" @click="floating = true">卡片式</button>
+      </div>
       <button type="button" class="btn sm" :aria-pressed="annotate" @click="annotate = !annotate">
         <AppIcon :name="annotate ? 'check' : 'layout'" :size="16" />区域标注
       </button>
@@ -54,6 +62,7 @@ watch(open, async (o) => {
         mode="full"
         :device="device"
         :annotate="annotate"
+        :floating="floating"
       />
     </div>
   </dialog>
@@ -81,6 +90,7 @@ watch(open, async (o) => {
 }
 .vh {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4) var(--space-3) var(--space-6);
@@ -95,38 +105,12 @@ watch(open, async (o) => {
 .sp {
   flex: 1;
 }
-.seg {
-  display: flex;
-  gap: 2px;
-  padding: 4px;
-  border-radius: 10px; /* 同心圆角：内 6 + 槽内边距 4 */
-  background: var(--surface-muted);
-}
-.seg button {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 28px;
-  padding: 0 12px;
-  border: 0;
-  border-radius: var(--radius-control);
-  background: none;
-  color: var(--text-secondary);
-  font-size: 13px;
-}
-.seg button[aria-pressed='true'] {
-  background: var(--surface-raised);
-  color: var(--text-primary);
-  font-weight: 600;
-  box-shadow: var(--shadow-1);
-}
 .vb {
   flex: 1;
   min-height: 0;
 }
 @media (max-width: 639px) {
   .vh {
-    flex-wrap: wrap;
     padding-left: var(--space-4);
   }
 }

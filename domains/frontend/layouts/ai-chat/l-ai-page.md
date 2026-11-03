@@ -3,7 +3,7 @@ zh: AI 对话页
 en: AI chat page
 aka: 对话页布局 聊天页 AI 页面
 order: 5
-tab: 怎么选
+tab: 选型
 ---
 
 ## 是什么

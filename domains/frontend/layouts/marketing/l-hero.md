@@ -3,7 +3,7 @@ zh: 官网首屏
 en: Website hero
 aka: 首屏 hero 官网头图 首屏布局
 order: 5
-tab: 怎么选
+tab: 选型
 ---
 
 ## 是什么

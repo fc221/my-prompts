@@ -201,6 +201,7 @@ const barRow = computed(() => BAR.has(props.kind));
         inline,
         ctr: center,
         hz: /横条/.test(lb),
+        pages: kind === 'tabs' && /页签|已打开/.test(lb),
         picked: /选中|点击|点进|当前|拖动/.test(lb),
       },
     ]"
@@ -3274,6 +3275,20 @@ i {
   color: var(--acc);
   font-weight: 600;
   box-shadow: inset 0 -2px var(--acc);
+}
+/* 页签栏（已打开的页面）：40 高一行小卡片页签，当前页浅底 + 主色，可关的带 ✕；页内标签页是细线样式，两种一眼分开 */
+.k-tabs.pages {
+  align-items: center;
+  gap: 4px;
+  min-height: 40px;
+}
+.k-tabs.pages .tab {
+  padding: 4px 12px;
+  border-radius: 6px;
+}
+.k-tabs.pages .tab.on {
+  background: var(--acc-soft);
+  box-shadow: none;
 }
 @container (max-width: 420px) {
   .k-tabs {

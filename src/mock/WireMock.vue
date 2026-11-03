@@ -15,6 +15,8 @@ const props = withDefaults(
     mode?: 'card' | 'detail' | 'full';
     annotate?: boolean;
     device?: 'desk' | 'phone';
+    /** 框架页画成卡片式（侧栏、顶栏是离页面边 16px 的圆角卡片），默认贴边；只影响桌面端 */
+    floating?: boolean;
   }>(),
   { mode: 'card', device: 'desk' },
 );
@@ -99,10 +101,10 @@ onBeforeUnmount(() => {
         <div class="vp" :style="{ height: `${DH * layout.kd}px` }">
           <div
             class="canvas desk-c"
-            :class="{ ann: annotate, frame: isFrame(wire) }"
+            :class="{ ann: annotate, frame: isFrame(wire) && !floating, float: isFrame(wire) && floating }"
             :style="{ width: `${DW}px`, height: `${DH}px`, transform: `scale(${layout.kd})`, '--k': layout.kd }"
           >
-            <WireGrid :w="wire" :annotate="annotate" root />
+            <WireGrid :w="wire" :annotate="annotate" root :floating="floating" />
           </div>
         </div>
       </div>
@@ -231,6 +233,16 @@ onBeforeUnmount(() => {
 .canvas.frame.ann {
   --pt: max(24px, calc(22px / var(--k, 1)));
   --px: max(24px, calc(16px / var(--k, 1)));
+}
+/* 卡片式：侧栏、顶栏是离页面边 16px 的圆角卡片，卡片之间也是 16 */
+.desk-c.float {
+  --pt: 16px;
+  --px: 16px;
+  --grid-gap: 16px;
+}
+.desk-c.float.ann {
+  --pt: max(16px, calc(22px / var(--k, 1)));
+  --px: max(16px, calc(16px / var(--k, 1)));
 }
 .phone-c.frame,
 .phone-c.frame.ann {

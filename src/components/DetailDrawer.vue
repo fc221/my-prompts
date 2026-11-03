@@ -7,10 +7,12 @@ import AppIcon from './AppIcon.vue';
 import CaseTabs from './CaseTabs.vue';
 import EntryPreview from './EntryPreview.vue';
 import LayoutViewer from './LayoutViewer.vue';
+import { isFrame } from '../mock/infer';
 
 const dlg = ref<HTMLDialogElement>();
 const annotate = ref(true); // 布局默认显示区域标注
 const viewerOpen = ref(false);
+const floating = ref(false); // 框架示意图的外观：false 贴边，true 卡片式
 const promptEl = ref<HTMLElement>();
 // 复制结果在抽屉里播报，按钮文字也短暂变成“已复制”（页面级轻提示在模态外，看不到也读不出）
 const note = ref('');
@@ -28,6 +30,7 @@ const e = computed(() => (state.detail ? byId.get(state.detail) : undefined));
 const head = computed(() => (e.value ? headOf(e.value) : undefined));
 const cases = computed(() => (e.value ? casesOf(e.value) : []));
 const sec = computed(() => (e.value ? sectionOf(e.value) : undefined));
+const frameWire = computed(() => isFrame(e.value?.wire));
 const sourceUrl = computed(() => `${REPO_URL}/blob/main/domains/${e.value?.path}.md`);
 // 问题反馈表单的“出现在哪”按字段 id 预填
 const issueUrl = computed(
@@ -135,6 +138,10 @@ function onBackdrop(ev: MouseEvent) {
           <button type="button" class="btn sm" :aria-pressed="annotate" @click="annotate = !annotate">
             <AppIcon :name="annotate ? 'check' : 'layout'" :size="16" />区域标注
           </button>
+          <div v-if="frameWire" class="seg" role="group" aria-label="外观">
+            <button type="button" :aria-pressed="!floating" @click="floating = false">贴边</button>
+            <button type="button" :aria-pressed="floating" @click="floating = true">卡片式</button>
+          </div>
           <span class="hint">{{ annotate ? '虚线框是各个区域，蓝色实线是这种布局的主体' : '关掉标注看页面原样' }}</span>
           <button type="button" class="btn sm" @click="viewerOpen = true">
             <AppIcon name="expand" :size="16" />放大查看
@@ -148,7 +155,7 @@ function onBackdrop(ev: MouseEvent) {
           role="group"
           aria-label="示例"
         >
-          <EntryPreview :entry="e" big :annotate="annotate" />
+          <EntryPreview :entry="e" big :annotate="annotate" :floating="floating" />
         </div>
         <dl class="info">
           <template v-for="[k, v] in rows" :key="k"
@@ -208,7 +215,13 @@ function onBackdrop(ev: MouseEvent) {
         <p class="sr-only" role="status">{{ note }}</p>
       </footer>
     </div>
-    <LayoutViewer v-if="e?.wire" v-model:open="viewerOpen" v-model:annotate="annotate" :entry="e" />
+    <LayoutViewer
+      v-if="e?.wire"
+      v-model:open="viewerOpen"
+      v-model:annotate="annotate"
+      v-model:floating="floating"
+      :entry="e"
+    />
   </dialog>
 </template>
 

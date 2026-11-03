@@ -3,7 +3,7 @@ zh: 设置页
 en: Settings page
 aka: 设置页布局 偏好设置 系统设置 设置怎么排
 order: 5
-tab: 怎么选
+tab: 选型
 ---
 
 ## 是什么

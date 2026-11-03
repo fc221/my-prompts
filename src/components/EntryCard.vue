@@ -144,10 +144,15 @@ h2 {
   font: 12px/20px var(--mono);
 }
 .look {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
   margin: 0;
   color: var(--text-secondary);
   font-size: 14px;
-}
+} /* 描述最多两行，同一排卡片高度接近；全文在详情里 */
 .actions {
   display: flex;
   align-items: center;

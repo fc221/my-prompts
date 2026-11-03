@@ -3,7 +3,7 @@ zh: 登录页
 en: Login page
 aka: 登录布局 登录注册页 登录页怎么排
 order: 5
-tab: 怎么选
+tab: 选型
 ---
 
 ## 是什么

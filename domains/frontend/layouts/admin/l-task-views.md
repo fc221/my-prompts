@@ -3,7 +3,7 @@ zh: 事项视图
 en: Task views
 aka: 任务视图 看板还是日历 排期视图 工单视图
 order: 95
-tab: 怎么选
+tab: 选型
 ---
 
 ## 是什么

@@ -25,7 +25,6 @@ of: l-admin-nav
 - 顶栏内容与正文共用同一最大宽度（如 1280px）和 24px 左右内边距，Logo 与页面标题左对齐
 - 顶栏吸顶，页面滚动后补一条分割线或 1 级阴影
 - 首屏是大图或深色渐变的页面，顶栏可以透明：去掉底色和分割线，文字用浅色，当前项用半透明白色圆角底（白色 16–24% 不透明度）；滚过约 64px 后换成实色底加分割线、文字恢复深色，切换 200ms；透明期间首屏图片上部压暗一档，文字对比度保持 ≥ 4.5:1
-- 两种外观选一种并全站统一：浮动卡片（页面四周留 16px，侧栏、顶栏都是圆角卡片）或贴边（铺满屏幕，靠 1px 分割线分区）
 - 窄于 1024px 时导航收进左侧抽屉：顶栏左边放 ☰ 和当前页名，点 ☰ 滑出约 256px 宽的抽屉（后面加遮罩），里面是 Logo、全部一级入口（有二级页面的展开成树）、底部的主题与“关闭导航”；点遮罩、Esc 或选中菜单后关闭
 
 ## 提示词
@@ -37,8 +36,8 @@ of: l-admin-nav
 ```js
 export const wire = {
   cols: '1fr',
-  rows: '14% 11% 1fr',
-  areas: ['top', 'tabs', 'main'],
+  rows: '14% 1fr',
+  areas: ['top', 'main'],
   boxes: {
     top: {
       inner: {
@@ -48,8 +47,20 @@ export const wire = {
         boxes: { logo: 'Logo', nav: '一级导航', acct: '账号' },
       },
     },
-    tabs: '页内 Tabs',
-    main: { label: '内容区（整宽）', acc: true },
+    main: {
+      label: '内容区（整宽）',
+      acc: true,
+      inner: {
+        cols: '1fr',
+        rows: 'auto auto 1fr',
+        areas: ['head', 'sub', 'tbl'],
+        boxes: {
+          head: { kind: 'pagehead' },
+          sub: '页内标签页',
+          tbl: { kind: 'table', text: '订单表格' },
+        },
+      },
+    },
   },
 };
 export const wireMobile = {

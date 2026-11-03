@@ -42,7 +42,7 @@ defineEmits<{ pick: [id: string] }>();
 }
 .cases.big {
   gap: 6px;
-  margin-bottom: var(--space-4);
+  margin-bottom: calc(-1 * var(--space-3)); /* 详情里和下面的工具行、预览是一组：抽屉正文 24 的间距收到 12 */
 }
 .cases.big button {
   height: 32px;

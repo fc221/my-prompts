@@ -23,6 +23,7 @@ const props = withDefaults(
     dark?: boolean;
     root?: boolean;
     open?: boolean;
+    floating?: boolean;
   }>(),
   { open: undefined },
 );
@@ -36,7 +37,7 @@ const isStrip = (w?: Wire) =>
   (w.rows ?? '1fr').trim().split(/\s+/).length === 1 &&
   leaves(w).every((b) => !b.inner && (BAR.has(kindOf(b)) || kindOf(b) === 'nav'));
 const cells = computed(() => props.w.areas.map((r) => r.trim().split(/\s+/)));
-const frame = computed(() => !!props.root && isFrame(props.w));
+const frame = computed(() => !!props.root && !props.floating && isFrame(props.w));
 type Bleed = 'edge' | 'gap' | '';
 const NEG: Record<Bleed, string | undefined> = {
   edge: 'calc(-1 * var(--px, 0px))',
@@ -241,6 +242,9 @@ const dr = computed(() => {
 }
 .cell.flush > :deep(.k-tabs) {
   padding: 0 20px;
+}
+.cell.flush > :deep(.k-tabs.pages) {
+  padding: 0 8px; /* 小卡片页签自带 12 内边距，文字和顶栏的面包屑对齐在 20 */
 }
 .cell.flush > :deep(.k-tabbar) {
   border-color: var(--line, #e5e7eb);
@@ -458,6 +462,9 @@ const dr = computed(() => {
 /* 根网格的区域：标签放在区域上方（上边框上面 2px），不盖住区域里顶部的文字；嵌套区域空间小，仍骑在边框上 */
 .wg.root > .cell > .tag {
   top: calc(-22px / var(--k, 1));
+  max-width: calc(
+    100% - 16px / var(--k, 1) + var(--grid-gap, 24px)
+  ); /* 窄栏（模块栏、图标栏）的标签可以伸进右边的间距，不被截成“模…” */
 }
 /* 贴边的横栏（顶栏、页签栏）：标签骑在它的下边框右侧，不和下一个区域的标签撞；贴到底边的标签栏骑在上边框上 */
 .cell.flush:not(.col) > .tag {

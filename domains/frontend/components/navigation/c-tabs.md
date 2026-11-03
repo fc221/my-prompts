@@ -21,6 +21,7 @@ tab: 标签页
 
 - 用组件库的标签页：Element Plus el-tabs（type、tab-position、stretch、closable、before-leave）+ el-tab-pane（name、label、lazy）、Naive UI n-tabs（type、placement、animated、closable、justify-content）+ n-tab-pane（name、tab、display-directive）、Ant Design Vue a-tabs（type、tabPosition、centered、destroyInactiveTabPane）+ a-tab-pane（key、tab、forceRender）
 - 样式只定一种：后台详情页默认细线（el-tabs 不设 type、n-tabs type="line"、a-tabs type="line"），要和面板连成一体才用卡片式；几种样子怎么挑见「标签页的六种样式」
+- 放在内容卡片顶部、页面标题下面，切的是同一页面的几块内容；顶栏下面一行、每个打开过的页面一个页签的是「后台页签栏」
 - 标签名 2–6 个字；当前项用 v-model 绑定（model-value / value / activeKey），不要靠点击事件自己记下标
 - 当前标签写进 URL 的 ?tab=，刷新和分享回到同一视图；切走再回来保持原选中，见「状态放进 URL」
 - 面板懒加载：Element Plus el-tab-pane lazy、Naive UI display-directive="show:lazy"、Ant Design Vue 默认只渲染当前面板（forceRender 才预渲染）；表格和图表别一进页面全请求，切走后的面板保留状态不销毁（不开 destroyInactiveTabPane）

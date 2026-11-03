@@ -5,7 +5,7 @@ import type { KbEntry } from '../types';
 import DemoHost from './DemoHost.vue';
 import WireMock from '../mock/WireMock.vue';
 
-const props = defineProps<{ entry: KbEntry; lazy?: boolean; big?: boolean; annotate?: boolean }>();
+const props = defineProps<{ entry: KbEntry; lazy?: boolean; big?: boolean; annotate?: boolean; floating?: boolean }>();
 const isChecklist = computed(() => props.entry.sec === 'checklists');
 const isNotes = computed(() => props.entry.sec !== 'prompts' && !!props.entry.rules?.length);
 const lines = computed(() => (props.entry.rules ?? []).slice(0, props.big ? 8 : 4));
@@ -21,6 +21,7 @@ const snippet = computed(() => props.entry.prompt.replace(/\s+/g, ' ').slice(0, 
     :name="entry.zh"
     :mode="big ? 'detail' : 'card'"
     :annotate="annotate"
+    :floating="floating"
   />
   <div v-else class="doc" :class="{ big }">
     <div class="paper">

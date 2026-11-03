@@ -3,7 +3,7 @@ zh: App 首页构图
 en: App home compositions
 aka: App 首页 首页构图 首页排法 手机首页
 order: 5
-tab: 怎么选
+tab: 选型
 ---
 
 ## 是什么

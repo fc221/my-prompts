@@ -137,6 +137,8 @@ for (const dom of domains) {
     if (ids.has(e.id)) errors.push(`${where}：id 与 ${ids.get(e.id)} 重复`);
     else ids.set(e.id, where);
     if (e.sec && !secs.includes(e.sec)) errors.push(`${where}：领域 ${dom.key} 没有声明板块 ${e.sec}`);
+    if (e.tab && /怎么|如何|什么|哪|吗|呢|[?？]/.test(e.tab))
+      errors.push(`${where}：案例名“${e.tab}”是问句，写成名词或短语（如“选型”）`);
     if (e.rules && (!Array.isArray(e.rules) || e.rules.some((r) => typeof r !== 'string')))
       errors.push(`${where}：rules 必须是字符串数组`);
     if (e.prompt) {
