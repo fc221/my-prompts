@@ -1,4 +1,4 @@
-import type { MockKind } from '../types';
+import type { MockKind, Wire, WireBox } from '../types';
 
 // 由区域标签推断画哪种迷你界面。顺序有讲究：具体的写在前面（“标题 · 新建”先于“标题”，“指标条”先于“指标”）。
 // 同一个词在不同布局里意思不同时（如“账号”在顶栏是账号菜单、在登录页是输入框，“卡片”在看板是任务、在列表页是记录），在数据里直接写 kind，不靠推断。
@@ -29,6 +29,7 @@ const RULES: [RegExp, MockKind][] = [
   [/已选条件/, 'chips'],
   [/筛选 ?\(\d+\)/, 'fbar'],
   [/主模块|核心问题/, 'line'],
+  [/模块栏|图标栏/, 'rail'],
   [/侧栏|菜单|导航|设置分类|分类栏|模块$/, 'nav'],
   [/单元格/, 'cell'],
   [/指标条|状态条|健康|次级指标|关键数据/, 'strip'],
@@ -141,3 +142,23 @@ export const BAR = new Set<MockKind>([
 // 没写标签的区域（瀑布流、时间轴里的格子）默认画成内容卡片
 export const inferKind = (label = ''): MockKind =>
   label.trim() ? (RULES.find(([re]) => re.test(label))?.[1] ?? 'block') : 'card';
+
+// 页面框架区域：侧栏、模块栏、顶栏、页签栏、手机顶栏和底部标签栏。根网格里有它们时整页按“贴边”画：这些区域伸到画布边缘、彼此相接，
+// 内容区和它们之间留画布边距（桌面 24、手机 16），不再把框架也画成四周留白的卡片
+export const FRAME = new Set<MockKind>(['nav', 'rail', 'topbar', 'tabbar', 'mtop', 'aitop']);
+const boxKind = (b: string | WireBox) => (typeof b === 'string' ? inferKind(b) : (b.kind ?? inferKind(b.label)));
+// 单行嵌套、全是条类区域、带 Logo 或导航：整条顶栏
+export const isTopStrip = (b: string | WireBox) =>
+  typeof b === 'object' &&
+  !!b.inner &&
+  (b.inner.rows ?? '1fr').trim().split(/\s+/).length === 1 &&
+  Object.values(b.inner.boxes).every(
+    (c) => (typeof c === 'string' || !c.inner) && (BAR.has(boxKind(c)) || boxKind(c) === 'nav'),
+  ) &&
+  Object.values(b.inner.boxes).some((c) => ['brand', 'nav', 'topbar'].includes(boxKind(c)));
+// 页签栏（已打开页面的标签）算框架，页内 Tabs 不算
+export const isFrameBox = (b: string | WireBox) =>
+  FRAME.has(boxKind(b)) ||
+  (boxKind(b) === 'tabs' && /页签|已打开/.test(typeof b === 'string' ? b : (b.label ?? ''))) ||
+  isTopStrip(b);
+export const isFrame = (w?: Wire) => !!w && Object.values(w.boxes).some(isFrameBox);

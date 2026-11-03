@@ -87,13 +87,13 @@ const lb = computed(() => props.label ?? '');
 const rec = computed(() => TABLE_ROWS[props.seed % TABLE_ROWS.length]);
 // 导航：一级模块 / 设置分类 / 官网导航 / 默认的后台侧栏分组；二级菜单和设置分类不重复画品牌
 const navGroups = computed(() => {
-  if (/一级|模块|展开菜单/.test(lb.value)) return [{ group: '', items: MODS }];
-  if (/设置/.test(lb.value)) return [{ group: '设置', items: SETTINGS }];
   if (/二级|页面列表/.test(lb.value))
     return [
       { group: '订单中心', items: ['全部订单', '待发货', '退款售后', '发票管理'] },
       { group: '设置', items: ['订单设置', '物流模板'] },
     ];
+  if (/一级|模块|展开菜单/.test(lb.value)) return [{ group: '', items: MODS }];
+  if (/设置/.test(lb.value)) return [{ group: '设置', items: SETTINGS }];
   if (props.inline) return [{ group: '', items: SITE_NAV }];
   return NAV;
 });
@@ -102,7 +102,7 @@ const navBrand = computed(() => !props.inline && !/二级|页面|设置|展开/.
 const navTree = computed(() => /导航树|一级导航（/.test(lb.value));
 // 侧栏底部的“主题 / 折叠导航”，抽屉里是“主题 / 关闭导航”
 const navFoot = computed(() =>
-  props.inline || /设置|一级模块|^一级导航$/.test(lb.value) ? '' : /抽屉/.test(lb.value) ? '关闭导航' : '折叠导航',
+  props.inline || /设置|一级模块|^一级导航$|弹出/.test(lb.value) ? '' : /抽屉/.test(lb.value) ? '关闭导航' : '折叠导航',
 );
 // 看板列头“待办 3”：名称 + 数量
 const segs = computed(() =>
@@ -239,6 +239,14 @@ const barRow = computed(() => BAR.has(props.kind));
       <div v-if="navFoot" class="nav-foot">
         <i class="nf-i">◐</i><span class="sp" /><span>{{ navFoot === '关闭导航' ? '✕' : '‹' }} {{ navFoot }}</span>
       </div>
+    </template>
+
+    <!-- 模块栏 / 图标栏：Logo 在上，一级模块图标在上短名在下，当前模块实心强调底 -->
+    <template v-else-if="kind === 'rail'">
+      <i class="logo">{{ BRAND.slice(0, 1) }}</i>
+      <span v-for="(m, i) in MODS" :key="m" class="rail-i" :class="{ on: i === 1 }"
+        ><i class="ico" />{{ m.length > 3 ? m.slice(0, 2) : m }}</span
+      >
     </template>
 
     <template v-else-if="kind === 'topbar'">
@@ -564,10 +572,12 @@ const barRow = computed(() => BAR.has(props.kind));
               ? ['全部订单', '待发货', '已发货', '售后']
               : /分类/.test(lb)
                 ? ['全部', '订单', '客户', '系统', '公告']
-                : TABS"
+                : /页签|已打开/.test(lb)
+                  ? ['工作台', '订单管理 ✕', '客户列表 ✕', '数据报表 ✕']
+                  : TABS"
         :key="t"
         class="tab"
-        :class="{ on: i === 0 }"
+        :class="{ on: i === (/页签|已打开/.test(lb) ? 1 : 0) }"
         >{{ t }}</span
       ></template
     >
@@ -1346,6 +1356,9 @@ const barRow = computed(() => BAR.has(props.kind));
 .blk.bare {
   border-color: transparent;
   background: transparent;
+}
+/* 条类区域默认没有内边距；写了自己内边距的种类（顶栏 0 20、筛选区 16 20、页脚 32 40…）以自己的为准，所以这条用 :where 降低优先级 */
+.blk:where(.bare) {
   padding: 0;
 }
 .blk.barrow {
@@ -1601,6 +1614,41 @@ i {
   white-space: nowrap;
   flex: none;
 }
+/* 模块栏：72px 宽，图标 20 在上、短名 12px 在下，每项 56 宽；当前项实心强调底 + 白字 */
+.k-rail {
+  align-items: center;
+  gap: 4px;
+  padding: 20px 8px;
+}
+.k-rail > .logo {
+  margin-bottom: 12px;
+}
+.rail-i {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  width: 56px;
+  padding: 8px 0;
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.rail-i .ico {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 1.5px solid currentColor;
+  opacity: 0.55;
+}
+.rail-i.on {
+  background: var(--acc);
+  color: #fff;
+  font-weight: 600;
+}
+.rail-i.on .ico {
+  opacity: 1;
+}
 .nf-i {
   display: grid;
   place-items: center;
@@ -1663,7 +1711,7 @@ i {
   background: var(--surf);
   border: 1px solid var(--line);
   border-radius: 12px;
-  min-height: 60px;
+  min-height: 56px;
 }
 .crumb {
   display: flex;

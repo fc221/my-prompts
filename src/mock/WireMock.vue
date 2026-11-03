@@ -5,6 +5,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import type { Wire } from '../types';
 import WireGrid from './WireGrid.vue';
+import { isFrame } from './infer';
 
 const props = withDefaults(
   defineProps<{
@@ -98,7 +99,7 @@ onBeforeUnmount(() => {
         <div class="vp" :style="{ height: `${DH * layout.kd}px` }">
           <div
             class="canvas desk-c"
-            :class="{ ann: annotate }"
+            :class="{ ann: annotate, frame: isFrame(wire) }"
             :style="{ width: `${DW}px`, height: `${DH}px`, transform: `scale(${layout.kd})`, '--k': layout.kd }"
           >
             <WireGrid :w="wire" :annotate="annotate" root />
@@ -110,7 +111,7 @@ onBeforeUnmount(() => {
           <div class="frame phone" :style="{ width: `${PW * layout.kp}px`, height: `${PH * layout.kp}px` }">
             <div
               class="canvas phone-c"
-              :class="{ ann: annotate }"
+              :class="{ ann: annotate, frame: isFrame(mobile) }"
               :style="{ width: `${PW}px`, height: `${PH}px`, transform: `scale(${layout.kp})`, '--k': layout.kp }"
             >
               <WireGrid :w="mobile!" :seed="3" :annotate="annotate" root :open="o" />
@@ -214,13 +215,27 @@ onBeforeUnmount(() => {
   --gap-form: 20px;
   --grid-gap: 16px;
 }
-/* 标注时标签骑在区域边框上：给画布留出边距（换算成屏幕上约 14px），最上面一排的标签不被裁掉 */
+/* 标注时根网格的标签放在区域上方（屏幕上约 22px 高）：画布顶部留出这段，最上面一排的标签不被裁掉 */
 .canvas.ann {
-  --pt: max(20px, calc(16px / var(--k, 1)));
+  --pt: max(24px, calc(22px / var(--k, 1)));
   --px: max(20px, calc(16px / var(--k, 1)));
 }
 .phone-c.ann {
-  --pt: max(44px, calc(16px / var(--k, 1)));
+  --pt: max(44px, calc(22px / var(--k, 1)));
+}
+/* 框架页：画布边距就是内容区的内边距，桌面 24、手机 16；框架区域会伸出这段边距贴到屏幕边缘 */
+.canvas.frame {
+  --pt: 24px;
+  --px: 24px;
+}
+.canvas.frame.ann {
+  --pt: max(24px, calc(22px / var(--k, 1)));
+  --px: max(24px, calc(16px / var(--k, 1)));
+}
+.phone-c.frame,
+.phone-c.frame.ann {
+  --pt: max(44px, calc(22px / var(--k, 1)));
+  --px: 16px;
 }
 .pfig {
   margin: 0;

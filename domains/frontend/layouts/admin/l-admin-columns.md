@@ -36,12 +36,12 @@ order: 32
 
 ```js
 export const wire = {
-  cols: '7% 17% 1fr',
+  cols: '72px 208px 1fr',
   rows: '14% 1fr',
   areas: ['rail sub top', 'rail sub main'],
   boxes: {
-    rail: { label: '一级模块', dark: true, acc: true },
-    sub: { label: '当前模块的页面', kind: 'nav', acc: true },
+    rail: { label: '模块栏', dark: true, acc: true },
+    sub: { label: '当前模块的页面列表', kind: 'nav', acc: true },
     top: '顶栏',
     main: '订单表格',
   },

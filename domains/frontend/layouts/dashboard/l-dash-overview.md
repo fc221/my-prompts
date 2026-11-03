@@ -7,7 +7,7 @@ of: l-dash-arrange
 
 ## 是什么
 
-悬浮侧栏 + 顶栏；周期筛选、4 张指标卡、次级指标条、健康状态、趋势与公告、两块明细自上而下。
+侧栏 + 顶栏；周期筛选、4 张指标卡、次级指标条、健康状态、趋势与公告、两块明细自上而下。
 
 ## 适合
 
@@ -36,11 +36,11 @@ SaaS 控制台、运营后台的首页：一屏看清核心数字、趋势、公
 
 ```js
 export const wire = {
-  cols: '19% 1fr',
+  cols: '232px 1fr',
   rows: '10% 1fr',
   areas: ['side top', 'side main'],
   boxes: {
-    side: { label: '悬浮侧栏', kind: 'nav' },
+    side: { label: '侧栏导航', kind: 'nav' },
     top: '顶栏',
     main: {
       acc: true,

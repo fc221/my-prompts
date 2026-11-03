@@ -13,6 +13,8 @@ export interface WireBox {
   /** 文字和按钮居中（居中首屏、居中卡片） */
   center?: boolean;
   inner?: Wire;
+  /** 从这个区域右侧弹出的浮层（悬停菜单、下拉面板）：size 宽、y 离区域顶部的距离，不加遮罩 */
+  pop?: { box: string | WireBox; size: string; y?: string; height?: string };
 }
 
 /** 示意图：CSS grid 的列、行和区域名；boxes 的键对应 areas 里的区域名 */
@@ -102,6 +104,7 @@ export interface KbEntry extends Entry {
 
 export type MockKind =
   | 'nav'
+  | 'rail'
   | 'topbar'
   | 'tabbar'
   | 'kpi'

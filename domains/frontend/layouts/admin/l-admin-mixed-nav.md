@@ -35,7 +35,7 @@ of: l-admin-nav
 
 ```js
 export const wire = {
-  cols: '22% 1fr',
+  cols: '232px 1fr',
   rows: '14% 1fr',
   areas: ['top top', 'side main'],
   boxes: {

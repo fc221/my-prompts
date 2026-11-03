@@ -40,7 +40,7 @@ order: 15
 
 ```js
 export const wire = {
-  cols: '22% 1fr',
+  cols: '232px 1fr',
   rows: '12% auto 1fr',
   areas: ['side top', 'side tabs', 'side main'],
   boxes: {

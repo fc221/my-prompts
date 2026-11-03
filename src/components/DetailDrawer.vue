@@ -72,9 +72,12 @@ const link = (s = '') =>
 
 watch(
   () => state.detail,
-  async (id) => {
+  async (id, old) => {
     note.value = '';
-    viewerOpen.value = false; // 换条目（如浏览器后退）时放大查看还开着，会随旧条目卸载，状态要复位，否则下次点不开
+    // 换条目（如浏览器后退）时放大查看还开着，会随旧条目卸载，状态要复位，否则下次点不开；在同一条的案例之间切换时放大查看保持打开
+    const a = id && byId.get(id),
+      b = old && byId.get(old);
+    if (!a || !b || headOf(a).id !== headOf(b).id) viewerOpen.value = false;
     await nextTick();
     if (id && !dlg.value?.open) dlg.value?.showModal();
     if (!id && dlg.value?.open) dlg.value.close();

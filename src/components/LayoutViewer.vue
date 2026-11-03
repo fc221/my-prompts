@@ -1,11 +1,16 @@
 <script setup lang="ts">
-// 布局放大查看：全屏显示示意页面，可切换桌面 / 手机、开关区域标注。Esc 或关闭按钮退出
-import { nextTick, ref, watch } from 'vue';
+// 布局放大查看：全屏显示示意页面，可切换案例、桌面 / 手机、开关区域标注。Esc 或关闭按钮退出
+import { computed, nextTick, ref, watch } from 'vue';
 import type { KbEntry } from '../types';
+import { casesOf, headOf } from '../kb';
+import { openDetail } from '../state';
 import WireMock from '../mock/WireMock.vue';
 import AppIcon from './AppIcon.vue';
+import CaseTabs from './CaseTabs.vue';
 
 const props = defineProps<{ entry: KbEntry }>();
+const cases = computed(() => casesOf(props.entry));
+const head = computed(() => headOf(props.entry));
 const open = defineModel<boolean>('open', { default: false });
 const annotate = defineModel<boolean>('annotate', { default: true });
 const device = ref<'desk' | 'phone'>('desk');
@@ -23,7 +28,8 @@ watch(open, async (o) => {
 <template>
   <dialog ref="dlg" class="viewer" :aria-label="`${props.entry.zh}放大查看`" @close="open = false">
     <header class="vh">
-      <b>{{ entry.zh }}</b>
+      <b>{{ head.zh }}</b>
+      <CaseTabs v-if="cases.length" :items="cases" :active="entry.id" @pick="openDetail" />
       <div v-if="entry.wireMobile" class="seg" role="group" aria-label="设备">
         <button type="button" :aria-pressed="device === 'desk'" @click="device = 'desk'">
           <AppIcon name="monitor" :size="16" />桌面
