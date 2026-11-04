@@ -1,0 +1,256 @@
+---
+zh: 玻璃小组件组
+en: Glass widget set
+aka: 小组件 桌面组件 天气组件 专注计时 氛围场景 widgets
+order: 70
+of: st-glass
+tab: 小组件
+---
+
+## 是什么
+
+一组摆在工作台首页的玻璃小组件：天气、通知、播放器、浮动导航、专注计时、氛围切换，靠渐变、亮边和光晕做出光线层次，共用同一个场景。
+
+## 适合
+
+个人工作台、智能家居首页、车机和平板的常驻屏、效率工具的今日页。
+
+## 不适合
+
+要录入和比对数据的后台页面，每块小组件只能回答一个问题。磨砂的基础参数见「玻璃拟态」，单独做天气表情可以看「情绪天气卡」。
+
+## 注意
+
+光线要有统一来源：亮边都在上沿，光晕取当前场景的主色。连续变化由一个数驱动：天气读小时、计时读剩余秒数，所有表现都从这个数算出来，数字和圆环才不会错位。小组件超过 4 块时，模糊开销会叠加，多出来的改成不透明深色渐变。
+
+## 要点
+
+- 底座：深色场景底（如 #2a1b3f 叠紫、橙两团径向光），卡片 rgba(255,255,255,.13)，blur(16px) saturate(150%)，顶边 1px 亮线、1px 微弱内描边、一层大投影；压在亮色区的卡片改用 rgba(38,28,56,.66) 深底；文字白色
+- 尺寸：圆角 14–24px，一屏最多 6 块，大小分两档，大的放连续变化的内容
+- 天气：拖动时间，温度保留一位小数连续变化，背景在 6 个色标间线性插值，日光沿弧线移动；每个色标和白字都核对到 4.5:1 以上；用原生 range，aria-valuetext 写时间和温度
+- 通知叠放：收起时后两张各下移 5px、缩小 6%，只露出边；点击后弹性展开成列表，Esc 收起；收起时被压住的卡片移出 Tab 顺序
+- 播放器：封面主色做光晕底，播放时光晕在 0.97–1.03 倍间慢慢呼吸；上一首、播放、下一首三个按钮，热区 44px
+- 浮动导航：底部胶囊悬浮，选中项用「会拉伸的选中块」，向下滚动缩成图标，向上滚动恢复
+- 专注计时：数字、圆环 stroke-dashoffset、光晕的透明度和缩放都读同一个剩余比例，一起减弱；开始和暂停是同一个按钮，结束时播报
+- 氛围切换：3 个场景用叠放的渐变层交叉淡入 700ms，同时换光晕颜色
+- 减少动态效果：场景直接切换，通知无弹性；天气和计时的数字照常更新
+- 减少透明度：卡片改实底 #3a2c4f
+
+## 提示词
+
+给{产品}做一组玻璃小组件，放在{所在页面}，共用一个氛围场景。
+
+风格底座：深色场景底（如 #2a1b3f 叠紫、橙两团径向光），卡片 rgba(255,255,255,.13)，blur(16px) saturate(150%)，顶边 1px 亮线加一层大投影，压在亮色区的卡片改 rgba(38,28,56,.66) 深底；白字，圆角 14–24px，一屏最多 6 块，光晕取场景主色；开启减少透明度时卡片改实底 #3a2c4f；窄屏单列。
+
+从下面挑要用的组件，没挑的不做：
+1. 专注计时：{专注时长}倒计时，数字、圆环和光晕都读同一个剩余比例，一起减弱，开始和暂停是同一个按钮，结束时播报。
+2. 氛围切换：{场景数}个场景用叠放的渐变层交叉淡入 700ms，同时换光晕颜色。
+3. 天气：拖动时间滑块，温度保留一位小数连续变化，背景在 6 个色标间线性插值，日光沿弧线移动，每个色标和白字对比度 ≥ 4.5:1。
+4. 通知叠放：收起时后两张各下移 5px、缩小 6%，点击后弹性展开成列表，Esc 收起。
+5. 浮动导航：底部胶囊悬浮，选中块切换时拉伸回弹，向下滚动缩成图标，向上滚动恢复。
+6. 播放器：封面主色做光晕底，播放时光晕在 0.97–1.03 倍间呼吸，上一首、播放、下一首三个按钮，热区 44px。
+
+减少动态效果时，场景直接切换，通知不做弹性，天气和计时的数字照常更新。
+
+## 示例
+
+<style>
+:host{container-type:size}
+.w{--sky:#2c6fb0;--stack-dir:-1;position:relative;height:100%;overflow:hidden;display:flex;flex-direction:column;gap:8px;padding:9px 11px 11px;background:#20182f;color:#fff;font:11px/1.35 system-ui,"PingFang SC",sans-serif}
+.bg{position:absolute;inset:0;opacity:0;transition:opacity .7s}
+.s0{background:radial-gradient(70% 90% at 14% 0%,#7c3f8f,transparent 70%),radial-gradient(70% 100% at 92% 100%,#d9733f,transparent 70%),#2a1b3f}
+.s1{background:radial-gradient(70% 90% at 14% 0%,#16657a,transparent 70%),radial-gradient(70% 100% at 92% 100%,#2f8f88,transparent 70%),#0e2b38}
+.s2{background:radial-gradient(70% 90% at 14% 0%,#2f6e4c,transparent 70%),radial-gradient(70% 100% at 92% 100%,#a58a35,transparent 70%),#15301f}
+.w[data-scene="0"] .s0,.w[data-scene="1"] .s1,.w[data-scene="2"] .s2{opacity:1}
+.top{position:relative;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.top b{font-size:13px;font-weight:700}
+.scenes{display:flex;gap:2px;padding:2px;border-radius:999px;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.scenes button{height:20px;padding:0 8px;border:0;border-radius:999px;background:none;color:#fff;font:500 11px/1 system-ui,"PingFang SC",sans-serif;cursor:pointer;transition:background-color .2s}
+.scenes [aria-pressed=true]{background:rgba(255,255,255,.3)}
+.grid{position:relative;flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) 62px;gap:8px}
+.glass{background:rgba(255,255,255,.13);-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 0 0 1px rgba(255,255,255,.1),0 8px 20px rgba(0,0,0,.28)}
+.weather{position:relative;grid-row:1/3;min-width:0;display:flex;flex-direction:column;padding:9px 11px 7px;border-radius:18px;overflow:hidden;background:linear-gradient(165deg,color-mix(in srgb,var(--sky) 90%,#fff),var(--sky))}
+.weather::after{content:"";position:absolute;left:calc(var(--sx)*1%);top:calc(var(--sy)*1%);width:96px;height:96px;margin:-48px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,190,.75),rgba(255,226,170,.2) 34%,transparent 68%);pointer-events:none}
+.weather>*{position:relative;z-index:1}
+.weather small{font-size:11px}
+.temp{font-size:32px;line-height:1.1;font-weight:300;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.cond{font-size:11px}
+.scrub{margin:auto 0 0;width:100%;height:20px;appearance:none;-webkit-appearance:none;background:none;cursor:pointer}
+.scrub::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:rgba(255,255,255,.42)}
+.scrub::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;margin-top:-5px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.scrub::-moz-range-track{height:4px;border-radius:2px;background:rgba(255,255,255,.42)}
+.scrub::-moz-range-thumb{width:14px;height:14px;border:0;border-radius:50%;background:#fff}
+.timer{--p:1;position:relative;min-width:0;display:flex;align-items:center;gap:8px;padding:0 10px;border-radius:18px}
+.halo{position:absolute;left:0;top:50%;width:92px;height:92px;margin:-46px 0 0 -8px;border-radius:50%;background:radial-gradient(circle,#ffc48a,transparent 66%);opacity:calc(.12 + var(--p)*.6);transform:scale(calc(.62 + var(--p)*.5));pointer-events:none}
+.dial{position:relative;flex:none;display:grid;place-items:center;width:62px;height:62px}
+.dial svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.dial circle{fill:none;stroke-width:6}
+.track{stroke:rgba(255,255,255,.18)}
+.arc{stroke:#ffd6a3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--p))}
+.clock{position:relative;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.ctrl{position:relative;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.go{height:22px;padding:0 9px;border:0;border-radius:999px;background:rgba(255,255,255,.22);color:#fff;font:600 11px/1 system-ui,"PingFang SC",sans-serif;cursor:pointer;white-space:nowrap}
+.notes{position:relative;min-width:0;z-index:2}
+.note{--i:0;position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;height:50px;padding:0 11px;border:0;border-radius:14px;background:rgba(38,28,56,.66);color:#fff;font:inherit;text-align:left;cursor:pointer;z-index:calc(3 - var(--i));transform:translateY(calc(var(--i)*5px)) scale(calc(1 - var(--i)*.06));transform-origin:50% 100%;transition:transform .42s cubic-bezier(.3,1.3,.5,1),opacity .3s,background-color .3s}
+.note.tuck{opacity:.72}
+.note b{font-size:12px;font-weight:600;white-space:nowrap}
+.note span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.notes.open .note{transform:translateY(calc(var(--i)*56px*var(--stack-dir)));background:rgba(46,34,66,.86)}
+.notes.open .note.tuck{opacity:1}
+.notes:not(.open) .note.tuck b,.notes:not(.open) .note.tuck span{visibility:hidden}
+.w :focus-visible{outline:2px solid #fff;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;margin:0;overflow:hidden;clip-path:inset(50%)}
+@container (min-width:520px){
+.w{--stack-dir:1;gap:12px;padding:12px 16px 16px;font-size:12px}
+.top b{font-size:15px}
+.scenes button{height:24px;padding:0 12px;font-size:12px}
+.grid{grid-template-columns:minmax(0,1.08fr) minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:12px}
+.weather{grid-row:auto;padding:14px 16px 10px;border-radius:24px}
+.weather small,.cond{font-size:13px}
+.temp{font-size:50px}
+.timer{flex-direction:column;justify-content:center;gap:12px;border-radius:24px}
+.dial{width:140px;height:140px}
+.clock{font-size:28px}
+.halo{left:50%;top:calc(50% - 22px);width:220px;height:220px;margin:-110px 0 0 -110px}
+.ctrl{align-items:center}
+.go{height:28px;padding:0 16px;font-size:13px}
+.note{top:0;bottom:auto;height:74px;padding:0 14px}
+.note b{font-size:13px}
+.notes.open .note{transform:translateY(calc(var(--i)*88px))}
+}
+@media (prefers-reduced-motion:reduce){
+.bg,.note,.scenes button{transition:none}
+}
+@media (prefers-reduced-transparency:reduce){
+.glass{background:#3a2c4f}
+}
+</style>
+
+<div class="w" data-scene="0">
+  <i class="bg s0"></i><i class="bg s1"></i><i class="bg s2"></i>
+  <header class="top">
+    <b>MyPrompts</b>
+    <div class="scenes" role="group" aria-label="氛围场景"></div>
+  </header>
+  <div class="grid">
+    <section class="weather" aria-label="天气">
+      <small>临江 · <span class="clk"></span></small>
+      <strong class="temp"></strong>
+      <span class="cond"></span>
+      <input class="scrub" type="range" min="0" max="24" step="0.1" aria-label="拖动查看一天里的天气">
+    </section>
+    <section class="timer glass" aria-label="专注计时">
+      <i class="halo"></i>
+      <div class="dial">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><circle class="track" cx="50" cy="50" r="44"/><circle class="arc" cx="50" cy="50" r="44" pathLength="1"/></svg>
+        <strong class="clock"></strong>
+      </div>
+      <div class="ctrl"><span class="lab">专注</span><button type="button" class="go">继续</button></div>
+    </section>
+    <section class="notes" aria-label="通知"></section>
+  </div>
+  <p class="sr" role="status"></p>
+</div>
+
+<script type="module">
+export default function demo(root) {
+  // 白字在每个色标上都有 5:1 左右的对比度，中间值由线性插值得到
+  const SKY = [[0, [20, 26, 60]], [6, [168, 85, 58]], [12, [44, 111, 176]], [15, [58, 104, 158]], [18, [176, 74, 79]], [21, [43, 35, 96]], [24, [20, 26, 60]]];
+  const SCENES = ['暮色', '海雾', '林间'];
+  const NOTES = [['账单已出', '十月共 ¥2,180'], ['会议改期', '周五 15:00 开始'], ['备份完成', '共 148 GB']];
+  const TOTAL = 25 * 60, DEMO_LEFT = 18 * 60 + 24;
+  const w = root.querySelector('.w'), weather = root.querySelector('.weather'), scrub = root.querySelector('.scrub');
+  const temp = root.querySelector('.temp'), cond = root.querySelector('.cond'), clk = root.querySelector('.clk');
+  const timer = root.querySelector('.timer'), clock = root.querySelector('.clock'), go = root.querySelector('.go'), lab = root.querySelector('.lab');
+  const notes = root.querySelector('.notes'), scenes = root.querySelector('.scenes'), say = root.querySelector('.sr');
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 天气：数字、天色、日光都由同一个小时值连续算出
+  function sky(h) {
+    const i = SKY.findIndex((s, j) => h <= SKY[j + 1]?.[0]);
+    const [a, ca] = SKY[i], [b, cb] = SKY[i + 1], t = (h - a) / (b - a);
+    return `rgb(${ca.map((c, k) => Math.round(c + (cb[k] - c) * t)).join()})`;
+  }
+  const part = (h) => (h < 5 ? '凌晨 · 少云' : h < 9 ? '清晨 · 薄雾' : h < 13 ? '上午 · 晴' : h < 17 ? '午后 · 多云转晴' : h < 20 ? '傍晚 · 晚霞' : '夜间 · 微风');
+  function hour(h) {
+    h = Math.max(0, Math.min(24, h));
+    const hh = Math.floor(h) % 24, mm = Math.floor((h % 1) * 60), day = Math.max(0, Math.min(1, (h - 5) / 14));
+    weather.style.setProperty('--sky', sky(h));
+    weather.style.setProperty('--sx', 12 + day * 76);
+    weather.style.setProperty('--sy', 66 - Math.sin(day * Math.PI) * 58);
+    temp.textContent = (17 + 7.5 * Math.sin(((h - 9) / 24) * Math.PI * 2)).toFixed(1) + '°';
+    cond.textContent = part(h);
+    clk.textContent = `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+    scrub.value = h;
+    scrub.setAttribute('aria-valuetext', `${clk.textContent}，${temp.textContent}，${cond.textContent}`);
+  }
+  scrub.addEventListener('input', () => hour(+scrub.value));
+
+  // 计时：数字、圆环、光晕只读同一个剩余秒数
+  let left = TOTAL, running = false, last = 0;
+  function tickTo(s) {
+    left = Math.max(0, s);
+    timer.style.setProperty('--p', left / TOTAL);
+    const sec = Math.ceil(left);
+    clock.textContent = `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`;
+  }
+  function loop(now) {
+    if (!running || !root.host.isConnected) return;
+    tickTo(left - (now - last) / 1000);
+    last = now;
+    if (left > 0) return void requestAnimationFrame(loop);
+    run(false);
+    left = TOTAL;
+    tickTo(TOTAL);
+    say.textContent = '本轮专注结束';
+  }
+  function run(on) {
+    running = on;
+    go.textContent = on ? '暂停' : '继续';
+    lab.textContent = on ? '专注中' : '专注';
+    say.textContent = on ? '专注开始' : '专注已暂停';
+    if (on) {
+      last = performance.now();
+      requestAnimationFrame(loop);
+    }
+  }
+  go.addEventListener('click', () => run(!running));
+
+  notes.innerHTML = NOTES.map((n, i) => `<button type="button" class="note glass${i ? ' tuck' : ''}" style="--i:${i}" aria-expanded="false"><b>${n[0]}</b><span>${n[1]}</span></button>`).join('');
+  const setStack = (open) => {
+    notes.classList.toggle('open', open);
+    notes.querySelectorAll('.note').forEach((b, i) => {
+      b.setAttribute('aria-expanded', open);
+      b.tabIndex = open || !i ? 0 : -1;
+    });
+  };
+  notes.addEventListener('click', () => setStack(!notes.classList.contains('open')));
+  root.querySelector('.w').addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setStack(false);
+  });
+
+  scenes.innerHTML = SCENES.map((s, i) => `<button type="button" data-s="${i}" aria-pressed="${i === 0}">${s}</button>`).join('');
+  scenes.addEventListener('click', (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    w.dataset.scene = b.dataset.s;
+    scenes.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b));
+    say.textContent = '已切换到' + SCENES[b.dataset.s];
+  });
+
+  // 开场演示：时间从清晨推到午后，计时走到 18:24
+  hour(14.4);
+  tickTo(DEMO_LEFT);
+  setStack(w.clientWidth >= 520);
+  if (calm) return;
+  const start = performance.now();
+  const intro = (now) => {
+    if (!root.host.isConnected) return;
+    const t = Math.min(1, Math.max(0, (now - start) / 760)), e = 1 - (1 - t) ** 3;
+    hour(6 + (14.4 - 6) * e);
+    tickTo(TOTAL + (DEMO_LEFT - TOTAL) * e);
+    if (t < 1) requestAnimationFrame(intro);
+  };
+  requestAnimationFrame(intro);
+}
+</script>

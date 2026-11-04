@@ -42,3 +42,17 @@ order: 80
 5. 边界情况：加密文件弹出密码框，输错提示重试；损坏文件显示“文件无法打开”和下载按钮；加载中显示进度；网络中断可重试。
 6. 文件地址用 {时效} 分钟有效的签名链接；需要水印时在每页 canvas 上叠加“{水印文字}”。
 最后说明改了哪些文件，并在桌面 Chrome、iOS Safari、安卓 Chrome 各打开一份 50 页的中文 PDF 截图验证。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '浏览器自带查看器', note: 'Content-Disposition: inline' }, { t: '安卓 / App 内', note: '不能内嵌，只会触发下载', bad: true, via: '移动端' }],
+    [{ t: 'worker + cMap', note: '同版本，中文不乱码', acc: true }, { t: 'Range 分段加载', note: '206 · 首页先出' }, { t: '只渲染视口 ±1 页', note: 'canvas 离开就释放', acc: true }, { t: '文字层', note: '选中、复制、搜索' }],
+  ], { lanes: ['iframe', 'PDF.js'] }), { title: '网页预览 · 移动端要稳定就用 PDF.js' });
+}
+</script>

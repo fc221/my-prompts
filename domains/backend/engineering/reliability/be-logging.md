@@ -24,8 +24,8 @@ QPS、耗时分布这类统计数字用指标，看「指标与链路追踪」�
 ## 要点
 
 - 格式：生产环境一行一条 JSON，写到 stdout 由采集器收走；本地开发可以用彩色文本；时间用 ISO 8601 UTC 带毫秒，如 2026-10-29T02:15:30.123Z。
-- 固定字段：ts、level、service、env、version、trace_id、span_id、msg；有就带 tenant_id、user_id、request_id 和 order_no 这类业务 ID；字段名全项目 snake_case，同一个含义只用一个名字。
-- trace_id：入口中间件从 traceparent 头读取或新生成，放进上下文后自动附到每条日志（Java MDC、Go 的 context 配 slog、Python contextvars、Node AsyncLocalStorage）；切换线程池、投递消息、执行定时任务时显式传过去；响应头带回 trace_id，错误提示里给用户看。
+- 固定字段：ts、level、service、env、version、trace_id、span_id、msg；有就带 tenant_id、user_id 和 order_no 这类业务 ID；字段名全项目 snake_case，同一个含义只用一个名字。
+- trace_id：接了 OpenTelemetry 或 Micrometer Tracing 的直接用它生成和传播的 trace_id；没有的由入口中间件从 traceparent 头读取或新生成，放进上下文后自动附到每条日志（Java MDC、Go 的 context 配 slog、Python contextvars、Node AsyncLocalStorage）；切换线程池、投递消息、执行定时任务时显式传过去；老客户端传的 X-Request-Id 只在入口兼容、记成一个字段，不另起一套 ID；响应头带回 trace_id，错误响应体里的字段叫 traceId（见「错误响应格式」）。
 - 级别：ERROR 需要人处理，会触发告警；WARN 出现异常但已自动恢复（重试成功、走了降级）；INFO 记关键业务节点（订单创建、支付回调、审批通过），单个请求一般 3–5 条以内；DEBUG 只在排查时按服务临时打开。库存不足这类业务失败记 INFO 或 WARN。
 - 写法：msg 是固定短句，变量放进字段，如 msg 为“订单已创建”，order_no、amount_cent 作为字段，便于按 msg 聚合统计。
 - 脱敏：密码、令牌、Cookie、验证码、银行卡号不进日志；手机号、身份证号、地址掩码后输出（138****5678）；在日志框架层按字段名统一过滤，不靠每个人手写。
@@ -36,6 +36,28 @@ QPS、耗时分布这类统计数字用指标，看「指标与链路追踪」�
 
 统一{项目}的日志，语言和框架是{语言和框架}，日志平台是{日志平台}。
 1. 盘点：列出当前的日志库、配置、输出格式和字段名；抽查 20 处日志调用，标出纯文本拼接、缺 trace_id、级别乱用（业务失败记 ERROR、循环里打 INFO）、打印了密码令牌手机号或整个请求体的地方。
-2. 按规则改：生产环境输出单行 JSON 到 stdout，固定字段 ts、level、service、env、version、trace_id、span_id、msg；入口中间件读取 traceparent 或生成 trace_id 放进上下文，异步任务和消息消费时传递；按级别规则调整；日志框架层统一脱敏；访问日志记路由模板、状态码和耗时。
+2. 按规则改：生产环境输出单行 JSON 到 stdout，固定字段 ts、level、service、env、version、trace_id、span_id、msg；有 OpenTelemetry 或 Micrometer Tracing 就用它的 trace_id，否则入口中间件读取 traceparent 或生成 trace_id 放进上下文，异步任务和消息消费时传递；按级别规则调整；日志框架层统一脱敏；访问日志记路由模板、状态码和耗时。
 3. 验证：发起一次{典型请求，如下单}，贴出它产生的全部日志行，确认 trace_id 一致、没有敏感信息。
 4. 汇报：改动的配置和文件、字段规范、脱敏字段清单、验证用的日志样例。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: 'stdout · 一行 JSON（这里折行显示）', text: `
+"ts": "2026-10-29T02:15:30.123Z",
+"level": "INFO", "service": "order-api",
+"trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+"span_id": "00f067aa0ba902b7",
+"tenant_id": 1024, "user_id": 10086,
+// msg 是固定短句，变量放进字段
+"msg": "订单已创建", "order_no": "SO2026102900017",
+"amount_cent": 12800,
+// 手机号掩码，密码和令牌不进日志
+"phone": "138****5678"
+` }]), { title: '结构化日志 · 下单成功' });
+}
+</script>

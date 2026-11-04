@@ -1,0 +1,651 @@
+---
+zh: 页面布局的七种骨架
+en: Seven page skeletons
+aka: 七种页面骨架 页面布局选型 布局怎么选 页面结构 版式选型 页面框架 分栏 全屏页
+order: 10
+---
+
+## 是什么
+
+一张页面开工前先定骨架：单栏、落地页、瀑布流、全屏沉浸、分隔面板、仪表盘、自定义模块。骨架决定用户的视线怎么走，示例里每一种都能操作。
+
+## 适合
+
+新页面动手前，或者一张页面改来改去还是别扭、怀疑从结构上就错了的时候。
+
+## 不适合
+
+骨架已定，只是在调间距和字号时看「布局与间距」；要整页模板时去布局板块找对应分类。
+
+## 注意
+
+先选骨架再说参数。栏宽、间距、卡片圆角都是骨架定完才有意义的数字，反过来做，常见结果是一张仪表盘样式的页面里塞满了要逐字读的长文。
+
+## 要点
+
+- 单栏：以读和填为主时用（文章、动态、表单），内容宽约 640–760px，视线从上到下不用拐弯；示例可以切窄和宽，比较行长
+- 落地页：只讲一件事、要把人带到一个按钮上时用，分段往下讲，主按钮在首屏和结尾各出现一次；模板见「产品落地页」
+- 瀑布流：图片多、高矮不一、用户是来逛的时候用，按最短列补位，没有明确的阅读顺序；细节见「瀑布流」
+- 全屏沉浸：内容本身就是主角时用（影集、视频、地图），界面贴边且能隐藏，留一条明确的退出路径
+- 分隔面板：两块内容要同时看时用（编辑和预览、列表和详情），分隔条可拖可用键盘，每侧有最小宽度；细节见「拖动分隔条改宽度」
+- 仪表盘：要一屏看全局时用，指标在上，趋势居中，明细在下，时间范围一处控制全部；细节见「后台首页概览」
+- 自定义模块：不同角色常看的内容差别大时用，模块可拖可用方向键换位，布局按账号保存，能恢复默认；排序细节见「拖拽排序」
+- 跟 AI 说清楚三件事：用户来这页主要做什么、内容是读的还是看的还是操作的、窄屏时每一栏往哪退
+
+## 提示词
+
+给{产品}做{页面}。用户来这里主要是{读内容 / 被说服后点按钮 / 逛图片 / 看一件作品 / 同时对照两块内容 / 看全局数字 / 每天按自己的习惯用}，内容是{内容清单}。按主要任务选骨架：读和填用单栏；说服用落地页；逛图片用瀑布流；看作品用全屏沉浸；对照用分隔面板；看全局用仪表盘；不同角色常看的内容差别大用自定义模块。告诉我选了哪一种和理由，先出骨架，每个区域写清放什么、占多宽、主次顺序，再填细节。
+
+写清窄屏怎么退化：多栏变单栏时的上下顺序，分隔面板改成切换视图，全屏页的控件留在拇指够得到的位置。可拖动的部分同时支持方向键，拖动后的结果按账号保存。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/pick.css">
+<style>
+  .x {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  @container (min-height: 260px) {
+    .x {
+      zoom: 1.5;
+    }
+  }
+  :where(.x) button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+  .x :focus-visible {
+    outline: 2px solid #3b5bdb;
+    outline-offset: -2px;
+  }
+  .x-fr {
+    position: relative;
+    height: 114px;
+    overflow: hidden;
+    border: 1px solid #dfe2e8;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .x-scroll {
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .x-size {
+    position: absolute;
+    top: 5px;
+    right: 6px;
+    display: flex;
+    gap: 2px;
+    padding: 2px;
+    border-radius: 6px;
+    background: #eef0f4;
+  }
+  .x-size button {
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 4px;
+    color: #4a505b;
+    font-size: 11px;
+    line-height: 18px;
+  }
+  .x-size [aria-pressed='true'] {
+    background: #fff;
+    color: #1f2329;
+  }
+  .x-col {
+    width: 150px;
+    margin: 0 auto;
+    padding: 8px 0;
+    transition: width 0.2s;
+  }
+  .x-col.wide {
+    width: 268px;
+  }
+  .x-col h5 {
+    margin: 0 0 2px;
+    font-size: 13px;
+  }
+  .x-col p {
+    margin: 0;
+    color: #4a505b;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .x-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 112px;
+    padding: 0 12px;
+    background: linear-gradient(140deg, #2f3fa8, #6a45c4 60%, #c0569f);
+    color: #fff;
+    text-align: center;
+  }
+  .x-hero b {
+    font-size: 15px;
+    line-height: 20px;
+  }
+  .x-hero span {
+    font-size: 11px;
+  }
+  .x .x-cta {
+    height: 24px;
+    padding: 0 12px;
+    border-radius: 12px;
+    background: #fff;
+    color: #2b45b0;
+    font-weight: 600;
+  }
+  .x-feat {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 10px;
+  }
+  .x-feat div {
+    padding: 6px;
+    border-radius: 6px;
+    background: #f1f3f8;
+    text-align: center;
+  }
+  .x-end {
+    padding: 14px 10px;
+    background: #f7f4fd;
+    text-align: center;
+  }
+
+  .x-fall {
+    columns: 3;
+    column-gap: 5px;
+    padding: 5px;
+  }
+  .x-fall button {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+    border-radius: 6px;
+    background: var(--g);
+    break-inside: avoid;
+  }
+  .x-fall button::after {
+    content: '♡';
+    position: absolute;
+    right: 5px;
+    bottom: 2px;
+    color: #fff;
+    font-size: 13px;
+  }
+  .x-fall [aria-pressed='true']::after {
+    content: '♥';
+  }
+
+  .x-full {
+    border: 0;
+    background: var(--g);
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .x-full .x-ui {
+    transition: opacity 0.2s;
+  }
+  .x-full.bare .x-ui {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .x-tb {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 8px;
+    background: linear-gradient(rgb(0 0 0 / 45%), transparent);
+    color: #fff;
+  }
+  .x-cap {
+    position: absolute;
+    right: 8px;
+    bottom: 6px;
+    left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    text-shadow: 0 1px 3px rgb(0 0 0 / 55%);
+  }
+  .x-cap div {
+    display: flex;
+    gap: 4px;
+  }
+  .x-cap button {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 40%);
+    color: #fff;
+  }
+  .x-hide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 64px;
+    height: 34px;
+    border-radius: 8px;
+    color: transparent;
+    transform: translate(-50%, -50%);
+  }
+  .x-hide:focus-visible {
+    color: #fff;
+    background: rgb(0 0 0 / 40%);
+    outline-color: #fff;
+  }
+
+  .x-panes {
+    display: grid;
+    grid-template-columns: var(--l, 42%) 10px minmax(0, 1fr);
+    height: 100%;
+  }
+  .x-pane {
+    min-width: 0;
+    padding: 6px 8px;
+    overflow: hidden;
+  }
+  .x-pane b {
+    display: block;
+    white-space: nowrap;
+  }
+  .x-pane.a {
+    background: #1f2433;
+    color: #dfe3f0;
+    font: 11px/17px ui-monospace, Menlo, monospace;
+  }
+  .x-pane.a b {
+    font-family: system-ui, 'PingFang SC', sans-serif;
+  }
+  .x-pane span {
+    display: block;
+    white-space: nowrap;
+  }
+  .x-pane .x-sk {
+    display: block;
+    height: 7px;
+    margin-top: 6px;
+    border-radius: 4px;
+    background: #e8ebf0;
+  }
+  .x-sep {
+    position: relative;
+    background: #eef0f4;
+    cursor: col-resize;
+    touch-action: none;
+  }
+  .x-sep::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 3px;
+    height: 24px;
+    border-radius: 2px;
+    background: #8d95a5;
+    transform: translate(-50%, -50%);
+  }
+  .x-sep:focus-visible {
+    outline-offset: 0;
+  }
+
+  .x-dash {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 5px;
+    height: 100%;
+    padding: 5px;
+    background: #f5f6f8;
+  }
+  .x-kpis {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+  }
+  .x-kpis div {
+    padding: 2px 6px;
+    border-radius: 5px;
+    background: #fff;
+    color: #5b616e;
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .x-kpis b {
+    display: block;
+    color: #1f2329;
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .x-low {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 68px;
+    gap: 5px;
+    min-height: 0;
+  }
+  .x-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    padding: 5px 6px 0;
+    border-radius: 5px;
+    background: #fff;
+  }
+  .x-bars i {
+    flex: 1;
+    height: var(--h);
+    border-radius: 2px 2px 0 0;
+    background: #3b5bdb;
+    transition: height 0.24s;
+  }
+  .x-range {
+    display: grid;
+    align-content: center;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 5px;
+    background: #fff;
+  }
+  .x-range button {
+    height: 20px;
+    border-radius: 4px;
+    color: #4a505b;
+    font-size: 11px;
+  }
+  .x-range [aria-pressed='true'] {
+    background: #eef1fd;
+    color: #2b45b0;
+    font-weight: 600;
+  }
+
+  .x-mods {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(0, 1fr);
+    gap: 5px;
+    height: 100%;
+    padding: 5px;
+    background: #f5f6f8;
+  }
+  .x-mod {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 8px;
+    border: 1px solid #e1e4ea;
+    border-radius: 6px;
+    background: #fff;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+  .x-mod span {
+    color: #5b616e;
+    font-size: 11px;
+    line-height: 14px;
+  }
+  .x-mod b {
+    line-height: 16px;
+  }
+  .x-mod.drag {
+    border-color: #3b5bdb;
+    box-shadow: 0 3px 10px rgb(59 91 219 / 28%);
+    cursor: grabbing;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .x-col,
+    .x-full,
+    .x-full .x-ui,
+    .x-bars i {
+      transition: none;
+    }
+  }
+</style>
+
+<script type="module">
+import { pick } from '../../_shared/pick.ts';
+
+const behavior = () => (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+
+function column(el) {
+  const col = el.querySelector('.x-col');
+  const btns = [...el.querySelectorAll('.x-size button')];
+  btns.forEach((b, i) =>
+    b.addEventListener('click', () => {
+      col.classList.toggle('wide', i === 1);
+      btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    }),
+  );
+}
+
+function landing(el) {
+  const box = el.querySelector('.x-scroll');
+  el.querySelector('.x-cta').addEventListener('click', () =>
+    box.scrollTo({ top: box.scrollHeight, behavior: behavior() }),
+  );
+}
+
+const TILES = [
+  ['#f6c6a8,#d9784f', 46],
+  ['#b7d9c7,#5a9b82', 70],
+  ['#c6cbf0,#6e74c2', 38],
+  ['#f3d98e,#d3a63b', 62],
+  ['#e6bfd9,#b3679a', 44],
+  ['#bcd6ee,#5688bd', 58],
+  ['#d7cfc2,#8f8069', 74],
+  ['#f2b8a2,#c9644b', 40],
+  ['#c1e0dd,#4c9a95', 54],
+];
+
+function fall(el) {
+  el.querySelectorAll('.x-fall button').forEach((b) =>
+    b.addEventListener('click', () =>
+      b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')),
+    ),
+  );
+}
+
+const SCENES = [
+  ['linear-gradient(170deg,#f5b67a 0%,#e0735c 45%,#3a2a5e 100%)', '海边黄昏'],
+  ['linear-gradient(170deg,#9fd6e8 0%,#4f9fb8 50%,#1f4a5e 100%)', '雪后湖面'],
+  ['linear-gradient(170deg,#c9e29b 0%,#5a9a5f 50%,#1f4a33 100%)', '雨林清晨'],
+];
+
+function immerse(el) {
+  const fr = el.querySelector('.x-full');
+  const name = el.querySelector('[data-name]');
+  const hide = el.querySelector('.x-hide');
+  let i = 0;
+  const show = () => {
+    fr.style.setProperty('--g', SCENES[i][0]);
+    name.textContent = `${SCENES[i][1]} · ${i + 1} / ${SCENES.length}`;
+  };
+  const toggle = () => {
+    const bare = fr.classList.toggle('bare');
+    fr.querySelectorAll('.x-ui').forEach((u) => (u.inert = bare));
+    hide.setAttribute('aria-pressed', String(bare));
+  };
+  hide.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggle();
+  });
+  fr.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-d]')) toggle();
+  });
+  el.querySelectorAll('[data-d]').forEach((b) =>
+    b.addEventListener('click', () => {
+      i = (i + +b.dataset.d + SCENES.length) % SCENES.length;
+      show();
+    }),
+  );
+  show();
+}
+
+function panes(el) {
+  const box = el.querySelector('.x-panes');
+  const sep = el.querySelector('.x-sep');
+  const label = el.querySelector('[data-pct]');
+  const set = (v) => {
+    const pct = Math.round(Math.max(20, Math.min(80, v)));
+    box.style.setProperty('--l', `${pct}%`);
+    sep.setAttribute('aria-valuenow', pct);
+    label.textContent = `${pct}%`;
+  };
+  sep.addEventListener('pointerdown', (e) => {
+    sep.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  sep.addEventListener('pointermove', (e) => {
+    if (!sep.hasPointerCapture(e.pointerId)) return;
+    const r = box.getBoundingClientRect();
+    set(((e.clientX - r.left) / r.width) * 100);
+  });
+  sep.addEventListener('keydown', (e) => {
+    const d = { ArrowLeft: -5, ArrowRight: 5 }[e.key];
+    if (!d) return;
+    e.preventDefault();
+    set(+sep.getAttribute('aria-valuenow') + d);
+  });
+  set(42);
+}
+
+const RANGES = {
+  近7天: { k: ['1,284', '¥36.2k', '3.1%'], h: [38, 52, 44, 70, 62, 84, 74] },
+  近30天: { k: ['5,902', '¥148k', '2.8%'], h: [64, 48, 72, 58, 88, 66, 92] },
+};
+
+function dash(el) {
+  const kpis = [...el.querySelectorAll('.x-kpis b')];
+  const bars = [...el.querySelectorAll('.x-bars i')];
+  const btns = [...el.querySelectorAll('.x-range button')];
+  const show = (name) => {
+    const d = RANGES[name];
+    kpis.forEach((k, i) => (k.textContent = d.k[i]));
+    bars.forEach((b, i) => b.style.setProperty('--h', `${d.h[i]}%`));
+    btns.forEach((b) => b.setAttribute('aria-pressed', String(b.textContent === name)));
+  };
+  btns.forEach((b) => b.addEventListener('click', () => show(b.textContent)));
+  show('近7天');
+}
+
+function mods(el) {
+  const grid = el.querySelector('.x-mods');
+  const live = el.querySelector('[role=status]');
+  const tiles = () => [...grid.children].sort((a, b) => a.style.order - b.style.order);
+  tiles().forEach((t, i) => (t.style.order = i));
+  const swap = (a, b) => {
+    [a.style.order, b.style.order] = [b.style.order, a.style.order];
+    live.textContent = `${a.dataset.n}移到第 ${+a.style.order + 1} 格`;
+  };
+  grid.querySelectorAll('.x-mod').forEach((t) => {
+    t.addEventListener('pointerdown', (e) => {
+      t.setPointerCapture(e.pointerId);
+      t.classList.add('drag');
+    });
+    t.addEventListener('pointermove', (e) => {
+      if (!t.hasPointerCapture(e.pointerId)) return;
+      const over = t.getRootNode().elementFromPoint(e.clientX, e.clientY)?.closest('.x-mod');
+      if (over && over !== t) swap(t, over);
+    });
+    const end = () => t.classList.remove('drag');
+    t.addEventListener('pointerup', end);
+    t.addEventListener('pointercancel', end);
+    t.addEventListener('keydown', (e) => {
+      const d = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -2, ArrowDown: 2 }[e.key];
+      if (!d) return;
+      e.preventDefault();
+      const other = tiles()[+t.style.order + d];
+      if (other) swap(t, other);
+    });
+  });
+}
+
+export default function demo(root) {
+  pick(
+    root,
+    [
+      {
+        name: '单栏',
+        fit: '读为主，内容一路往下，行长受控',
+        html: `<div class="x"><div class="x-fr"><div class="x-size" role="group" aria-label="内容宽度"><button type="button" aria-pressed="true">窄</button><button type="button" aria-pressed="false">宽</button></div>
+          <article class="x-col"><h5>搬进新家的第一周</h5><p>箱子拆了一半，书还堆在地上。窗外的树比看房那天绿了很多，早上的光一直照到厨房。</p></article></div></div>`,
+        init: column,
+      },
+      {
+        name: '落地页',
+        fit: '讲清一件事，把人带到一个按钮上',
+        html: `<div class="x"><div class="x-fr"><div class="x-scroll" tabindex="0" role="region" aria-label="落地页">
+          <section class="x-hero"><b>三分钟做出一页报价单</b><span>MyPrompts 帮你把表格变成文档</span><button type="button" class="x-cta">免费试用</button></section>
+          <section class="x-feat"><div>导入</div><div>排版</div><div>分享</div></section>
+          <section class="x-end">已经滑到底部的注册入口</section></div></div></div>`,
+        init: landing,
+      },
+      {
+        name: '瀑布流',
+        fit: '图多、高矮不一，边看边逛',
+        html: `<div class="x"><div class="x-fr"><div class="x-scroll" tabindex="0" role="region" aria-label="图片墙"><div class="x-fall">${TILES.map(
+          ([g, h], i) =>
+            `<button type="button" aria-pressed="false" aria-label="收藏第 ${i + 1} 张" style="height:${h}px;--g:linear-gradient(150deg,${g})"></button>`,
+        ).join('')}</div></div></div></div>`,
+        init: fall,
+      },
+      {
+        name: '全屏沉浸',
+        fit: '内容做主角，界面退到后面',
+        html: `<div class="x"><div class="x-fr x-full">
+          <div class="x-ui x-tb"><span>MyPrompts 影集</span><span>点画面隐藏界面</span></div>
+          <button type="button" class="x-hide" aria-pressed="false" aria-label="显示或隐藏界面">界面</button>
+          <div class="x-ui x-cap"><span data-name></span><div><button type="button" data-d="-1" aria-label="上一张">‹</button><button type="button" data-d="1" aria-label="下一张">›</button></div></div></div></div>`,
+        init: immerse,
+      },
+      {
+        name: '分隔面板',
+        fit: '两块内容同时看，宽度自己拖',
+        html: `<div class="x"><div class="x-fr"><div class="x-panes" data-clip><div class="x-pane a"><b>编辑</b><span>## 标题</span><span>正文第一段</span></div>
+          <div class="x-sep" role="separator" tabindex="0" aria-orientation="vertical" aria-valuemin="20" aria-valuemax="80" aria-label="拖动调整宽度"></div>
+          <div class="x-pane"><b>预览 <span data-pct style="display:inline;font-weight:400;color:#5b616e"></span></b><i class="x-sk" style="width:70%"></i><i class="x-sk"></i><i class="x-sk" style="width:85%"></i></div></div></div></div>`,
+        init: panes,
+      },
+      {
+        name: '仪表盘',
+        fit: '一屏看全局，再点进细节',
+        html: `<div class="x"><div class="x-fr"><div class="x-dash"><div class="x-kpis"><div>访客<b></b></div><div>成交额<b></b></div><div>转化率<b></b></div></div>
+          <div class="x-low"><div class="x-bars" role="img" aria-label="趋势柱状图">${'<i></i>'.repeat(7)}</div>
+          <div class="x-range" role="group" aria-label="时间范围"><button type="button">近7天</button><button type="button">近30天</button></div></div></div></div></div>`,
+        init: dash,
+      },
+      {
+        name: '自定义模块',
+        fit: '每个人常看的不同，模块自己摆',
+        html: `<div class="x"><div class="x-fr"><div class="x-mods" role="group" aria-label="拖动或用方向键调整模块位置">
+          <div class="x-mod" tabindex="0" data-n="日程"><b>日程</b><span>今天 3 场会</span></div>
+          <div class="x-mod" tabindex="0" data-n="待办"><b>待办</b><span>还剩 6 项</span></div>
+          <div class="x-mod" tabindex="0" data-n="数据"><b>数据</b><span>访客 +12%</span></div>
+          <div class="x-mod" tabindex="0" data-n="消息"><b>消息</b><span>2 条未读</span></div>
+          </div></div><span role="status" style="position:absolute;top:0;opacity:0"></span></div>`,
+        init: mods,
+      },
+    ],
+    '页面骨架',
+  );
+}
+</script>

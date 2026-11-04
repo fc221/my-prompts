@@ -39,3 +39,23 @@ order: 40
 3. 品牌色用设计给的 CMYK 值 {品牌色 CMYK}；正文黑字用 K100 单色黑，大面积黑底用四色黑，总墨量不超过 300%；细线不细于 0.25pt。
 4. 另外保留一份 sRGB 屏幕版，不带出血，背景色正常打印。
 最后说明两份文件的尺寸和颜色空间是怎么核实的，以及改了哪些文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const blocks = ['img', 'title:秋季会员日', 'text:2026-11-15 至 11-17 · 全部门店', 'p:4', 'qr'];
+  draw(root, [
+    page({ pages: [{ label: '屏幕版：sRGB，不加出血', blocks }] }),
+    page({
+      bleed: true,
+      margin: true,
+      pages: [{ label: '印刷版：CMYK，虚线内是安全区', blocks }],
+      notes: ['文档 = 成品 + 6mm，A4 为 216×303mm', '文字、二维码离裁切线 ≥ 5mm', '黑字 K100，总墨量 ≤ 300%'],
+    }),
+  ], { title: '交印刷厂：CMYK + 每边出血 3mm', center: true, min: 0.3 });
+}
+</script>

@@ -3,6 +3,7 @@ zh: 从需求设计一组接口
 en: Design APIs from requirements
 aka: 接口设计 API 设计 接口清单 接口定义 前后端对接口
 order: 10
+preview: api-naming
 ---
 
 ## 是什么

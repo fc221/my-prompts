@@ -1,6 +1,7 @@
 ---
 zh: AI 对话页
 en: AI chat page
+preview: l-ai-sessions
 order: 120
 ---
 

@@ -39,3 +39,22 @@ order: 30
 2. 按规则改：受控用 value + onChange（Vue 用 v-model / defineModel），非受控用 defaultValue；两种都要支持的，React 统一用一个 useControllableState，Vue 统一用 defineModel。
 3. 弹窗、抽屉只通过 onOpenChange / update:open 通知关闭；运行中切换受控模式时开发环境警告；文本输入在组字期间不触发校验和请求。
 4. 验证：父组件修改值，子组件立即跟着变；只传 defaultValue 时组件能独立工作；用中文输入法输入时，拼音阶段不触发请求。汇报改动的文件和每个组件最终采用的模式。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['用户', '退款弹窗', '父组件'], [
+    [0, 1, '按 Esc'],
+    [1, 2, 'onOpenChange(false)'],
+    [2, 2, '有未保存内容，先拦下'],
+    [2, 1, 'open 仍为 true', 'r'],
+    [0, 1, '点“放弃修改”'],
+    [1, 2, 'onOpenChange(false)'],
+    [2, 1, 'open=false，关闭', 'r'],
+  ]), { title: '受控 · 值在父组件，子组件只上报' });
+}
+</script>

@@ -44,3 +44,22 @@ Webhook 是至少一次投递：网络超时后发送方会重发，接收方一
 2. 5 秒内返回 2xx，业务处理放后台任务。
 3. 事件 id 建唯一索引去重；处理前按资源 id 查最新状态，忽略过期事件。
 最后说明改了哪些文件，并写测试覆盖：签名错误、时间戳过期、同一事件投递两次、先收到新状态再收到旧状态。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['我方（发送方）', '商户（接收方）'], [
+    [0, 1, 'POST order.paid · evt_9Kd2 + 签名'],
+    [1, 1, '验签、落库，应答太慢'],
+    [1, 0, '超过 5 秒没回 2xx', 'rx'],
+    [0, 0, '1 分钟后重试，id 不变'],
+    [0, 1, 'POST order.paid · evt_9Kd2（重发）'],
+    [1, 1, 'id 已存在 → 不再处理'],
+    [1, 0, '200 OK', 'r'],
+  ]), { title: 'Webhook 至少一次投递 · 接收方按事件 id 去重' });
+}
+</script>

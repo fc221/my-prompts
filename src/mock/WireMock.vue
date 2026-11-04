@@ -5,6 +5,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import type { Wire } from '../types';
 import WireGrid from './WireGrid.vue';
+import { isFrame } from './infer';
 
 const props = withDefaults(
   defineProps<{
@@ -14,6 +15,8 @@ const props = withDefaults(
     mode?: 'card' | 'detail' | 'full';
     annotate?: boolean;
     device?: 'desk' | 'phone';
+    /** 框架页画成卡片式（侧栏、顶栏是离页面边 16px 的圆角卡片），默认贴边；只影响桌面端 */
+    floating?: boolean;
   }>(),
   { mode: 'card', device: 'desk' },
 );
@@ -98,10 +101,10 @@ onBeforeUnmount(() => {
         <div class="vp" :style="{ height: `${DH * layout.kd}px` }">
           <div
             class="canvas desk-c"
-            :class="{ ann: annotate }"
+            :class="{ ann: annotate, frame: isFrame(wire) && !floating, float: isFrame(wire) && floating }"
             :style="{ width: `${DW}px`, height: `${DH}px`, transform: `scale(${layout.kd})`, '--k': layout.kd }"
           >
-            <WireGrid :w="wire" :annotate="annotate" root />
+            <WireGrid :w="wire" :annotate="annotate" root :floating="floating" />
           </div>
         </div>
       </div>
@@ -110,7 +113,7 @@ onBeforeUnmount(() => {
           <div class="frame phone" :style="{ width: `${PW * layout.kp}px`, height: `${PH * layout.kp}px` }">
             <div
               class="canvas phone-c"
-              :class="{ ann: annotate }"
+              :class="{ ann: annotate, frame: isFrame(mobile) }"
               :style="{ width: `${PW}px`, height: `${PH}px`, transform: `scale(${layout.kp})`, '--k': layout.kp }"
             >
               <WireGrid :w="mobile!" :seed="3" :annotate="annotate" root :open="o" />
@@ -161,7 +164,7 @@ onBeforeUnmount(() => {
   background: #f5f7fa;
 }
 .desk {
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow:
     0 0 0 1px #d8dde6,
     0 12px 28px -14px rgba(15, 23, 42, 0.35);
@@ -169,8 +172,8 @@ onBeforeUnmount(() => {
 .chrome {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 0 10px;
+  gap: 4px;
+  padding: 0 12px;
   background: #fff;
   border-bottom: 1px solid #e8ebf0;
 }
@@ -181,7 +184,7 @@ onBeforeUnmount(() => {
   background: #d4d8df;
 }
 .chrome span {
-  margin-left: 10px;
+  margin-left: 8px;
   width: 30%;
   height: 40%;
   max-height: 10px;
@@ -204,23 +207,53 @@ onBeforeUnmount(() => {
   padding: var(--pt) var(--px) var(--px);
   background: #f5f7fa;
 }
+/* 手机画布：页面边距 16；控件 40、触控目标 44、输入框字号 16、表单项间距 20（桌面默认 32 / 32 / 14 / 16，在 MockBlock 里取用） */
 .phone-c {
   --pt: 44px;
-  --px: 14px;
+  --px: 16px;
+  --ctl: 40px;
+  --tap: 44px;
+  --fs-input: 16px;
+  --gap-form: 20px;
+  --grid-gap: 16px;
 }
-/* 标注时标签骑在区域边框上：给画布留出边距（换算成屏幕上约 14px），最上面一排的标签不被裁掉 */
+/* 标注时根网格的标签放在区域上方（屏幕上约 22px 高）：画布顶部留出这段，最上面一排的标签不被裁掉 */
 .canvas.ann {
-  --pt: max(20px, calc(16px / var(--k, 1)));
+  --pt: max(24px, calc(22px / var(--k, 1)));
   --px: max(20px, calc(16px / var(--k, 1)));
 }
 .phone-c.ann {
-  --pt: max(44px, calc(16px / var(--k, 1)));
+  --pt: max(44px, calc(22px / var(--k, 1)));
+}
+/* 框架页：画布边距就是内容区的内边距，桌面 24、手机 16；框架区域会伸出这段边距贴到屏幕边缘 */
+.canvas.frame {
+  --pt: 24px;
+  --px: 24px;
+}
+.canvas.frame.ann {
+  --pt: max(24px, calc(22px / var(--k, 1)));
+  --px: max(24px, calc(16px / var(--k, 1)));
+}
+/* 卡片式：侧栏、顶栏是离页面边 16px 的圆角卡片，卡片之间也是 16 */
+.desk-c.float {
+  --pt: 16px;
+  --px: 16px;
+  --grid-gap: 16px;
+}
+.desk-c.float.ann {
+  --pt: max(16px, calc(22px / var(--k, 1)));
+  --px: max(16px, calc(16px / var(--k, 1)));
+}
+.phone-c.frame,
+.phone-c.frame.ann {
+  --pt: max(44px, calc(22px / var(--k, 1)));
+  --px: 16px;
 }
 .pfig {
   margin: 0;
   display: grid;
   justify-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 .pfig figcaption {
   color: var(--text-secondary, #6b7280);
@@ -255,8 +288,8 @@ onBeforeUnmount(() => {
 }
 .m-card .phone {
   position: absolute;
-  right: 14px;
-  bottom: 10px;
+  right: 16px;
+  bottom: 12px;
   border-radius: 14px;
   box-shadow:
     0 0 0 2px #1f2937,

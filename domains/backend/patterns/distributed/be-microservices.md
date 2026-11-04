@@ -40,3 +40,21 @@ order: 20
 3. 列出现在跨候选服务的事务和 join 查询，给出拆分后的做法（Saga、事件、快照字段、BFF 聚合）。
 4. 选第一个拆出去的服务，写出迁移步骤：先在单体里隔离边界，再做数据同步，灰度切流量，最后下线旧代码；每一步都写清怎么回退。
 这一步只输出方案，不改代码；拿不准的地方单独列出。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '订单服务', items: ['订单库', '发 OrderPlaced'], acc: true },
+    { t: '库存服务', items: ['库存库', '锁定 / 释放'] },
+    { t: '会员服务', items: ['会员库', '积分账户'] },
+    { t: '支付服务', items: ['支付库', '回调验签'] },
+    { t: '通知服务', items: ['无库', '订阅事件发短信'] },
+    { t: '共享数据库', items: ['各服务不直接读别人的表'], dash: true },
+  ], { cols: 3, note: '按业务能力拆，每个服务独占自己的库，跨服务走接口或事件' }), { title: '微服务拆分' });
+}
+</script>

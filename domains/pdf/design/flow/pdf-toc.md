@@ -35,8 +35,30 @@ order: 30
 
 给{项目}的{文档类型} PDF 加目录、书签和链接，按项目现有的生成方式实现：
 1. 梳理标题：h1 章、h2 节、h3 小节，不跳级，每个标题生成稳定 id。
-2. 目录页放在封面后，列到 {目录层级，默认 h2}，目录项可点击跳转；工具支持 target-counter 就显示右对齐页码和点线，Chromium 路线用两遍生成填页码，填完确认页数没变。
+2. 目录页放在封面后，列到 {目录层级，默认 h2}，目录项可点击跳转；页码用工具的目录计数功能：WeasyPrint / Prince / Paged.js 的 target-counter 显示右对齐页码和点线，Typst 用 outline()，LaTeX 用 tableofcontents；纯 Chromium 没有这项功能，引入 Paged.js 补齐，不自己算页码回填。
 3. 书签到 h3，按工具开启：Puppeteer / Playwright 的 outline、WeasyPrint 的 bookmark-level、Typst 默认生成、LaTeX 的 hyperref。
 4. 元数据：标题 {文档标题}，语言 zh-CN，作者 {编制部门}。
 5. 检查：在阅读器里点每个目录项都能跳到对应标题，书签层级和标题一致，外链能打开。
 最后说明目录页码是怎么得到的、改了哪些文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    page({ pages: [{ label: '目录页：target-counter 取页码', blocks: ['title:目录', 'toc:6', 'gap', 'p:2'] }] }),
+    tree(`
+阅读器书签/
+  一、核心结论
+* 二、销售分析/    h1 章
+    2.1 门店排名    h2 · #sec-2-1
+    2.2 品类结构
+  三、门店分析/
+    3.1 新开门店    h3 以下不进书签
+`),
+  ], { title: '目录、书签都从 h1–h3 生成', center: true, min: 0.3 });
+}
+</script>

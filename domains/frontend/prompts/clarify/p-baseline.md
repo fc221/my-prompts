@@ -1,6 +1,7 @@
 ---
-zh: 通用底线
+zh: 前端质量底线
 en: Quality baseline
+aka: 通用底线
 order: 40
 ---
 
@@ -29,3 +30,32 @@ order: 40
 5. 动效：只动 transform 和 opacity（按钮等控件自身形变除外）；时长 150–300ms；支持 prefers-reduced-motion。
 6. 内容：示例数据真实可信，包含 0、超长文本、缺字段等边界值，不用“张三、测试 1”；不虚构后端能力和客户背书；不用 emoji 当图标，不用蓝紫渐变、发光描边、渐变文字。
 7. 复用：先查项目里已有的组件、样式变量和工具函数，能复用就不新写。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/fix.css">
+<style>
+.c{padding:6px 8px}
+/* 左：只画了有数据的样子 */
+.pg{border:1px solid #e3e6eb;border-radius:6px;overflow:hidden;font-size:9.5px;line-height:13px}
+.hd{padding:3px 6px;background:#f7f8fa;font-size:10px;font-weight:600}
+.rw{display:flex;justify-content:space-between;gap:4px;padding:3px 6px;border-top:1px solid #eef0f3;white-space:nowrap}
+.rw b{font-weight:500;color:#1f7a4d}
+.q{margin:6px 0 0;color:#5b616e;font-size:10px;line-height:14px}
+/* 右：补上的非成功态和底线 */
+.g{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.k{padding:4px;border:1px solid #e3e6eb;border-radius:5px;font-size:9.5px;line-height:13px;text-align:center}
+.k small{display:block;margin-bottom:3px;color:#5b616e;font-size:9px;line-height:11px;text-align:left}
+.sk{height:6px;border-radius:3px;background:#e9ebef}
+.sk+.sk{width:60%;margin-top:3px}
+.bt{display:inline-block;margin-top:2px;padding:0 6px;border-radius:3px;background:#3b5bdb;color:#fff;font-size:9px;line-height:13px}
+.bt.dis{background:#e3e6eb;color:#9aa0ab}
+.er{color:#b42318}
+.ln{color:#3b5bdb}
+.mo{margin-top:5px;color:#5b616e;font-size:9.5px;line-height:13px}
+</style>
+
+<div class="fx">
+  <section class="fx-p"><h4>只有成功态</h4><div class="fx-b"><div class="fx-z c"><div class="pg"><div class="hd">订单列表</div><div class="rw"><span>#2041</span><b>已发货</b><span>¥268</span></div><div class="rw"><span>#2040</span><b>已发货</b><span>¥1,280</span></div><div class="rw"><span>#2039</span><b>已完成</b><span>¥96</span></div></div><p class="q">没数据、出错、加载中长什么样？没人说，AI 就不画。</p></div></div></section>
+  <section class="fx-p ok"><h4>补上底线状态</h4><div class="fx-b"><div class="fx-z c"><div class="g"><div class="k"><small>加载</small><div class="sk"></div><div class="sk"></div></div><div class="k"><small>空</small>暂无订单<br><span class="bt">新建</span></div><div class="k"><small>错误</small><span class="er">加载失败</span><br><span class="ln">重试</span></div><div class="k"><small>禁用</small><span class="bt">提交</span> <span class="bt dis">提交</span></div></div><p class="mo">另补：390 宽、对比度、键盘</p></div></div></section>
+</div>

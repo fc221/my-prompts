@@ -29,3 +29,21 @@ order: 60
 ## 提示词
 
 {列表}移动端筛选用「底部面板」：顶部搜索框旁放“筛选”按钮并显示已选数量；点开从底部升起面板（约 70% 高，可拖到 90%，有把手和关闭按钮），内容为{筛选条件}，内部单独滚动；底部固定“重置”和“查看 N 条结果”（数量实时更新）；系统返回先关闭面板；确认后列表顶部显示可单独删除的条件标签；宽屏改为左侧 260px 筛选栏。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '26% 1fr',
+  rows: '12% 1fr',
+  areas: ['side top', 'side list'],
+  boxes: { side: { label: '筛选侧栏', acc: true }, top: '已选条件 · 排序', list: '结果列表' },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto 1fr',
+  areas: ['top', 'fb', 'list'],
+  boxes: { top: '搜索', fb: '筛选 (2)', list: '列表' },
+  drawer: { side: 'bottom', size: '62%', box: { label: '底部筛选面板', acc: true }, open: true },
+};
+```

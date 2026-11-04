@@ -40,3 +40,20 @@ PDF 的纸张尺寸、方向和四边留白，决定版心（正文可用区域�
 3. 样式里的尺寸改用 mm / pt，整页元素高度不超过版心高度，查一遍有没有多出来的空白页。
 4. 封面或横版附表需要不同版式时用命名页单独设置，工具不支持就分开生成再合并。
 最后列出改了哪些文件，写明版心尺寸（宽×高 mm），并对比改前改后的页数。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, page({
+    margin: true,
+    pages: [
+      { head: '门店月度经营报告 · 2026-10', foot: '第 {p} / {n} 页', label: '虚线内是版心 174×255mm', blocks: ['title:一、经营概况', 'p:5', 'img', 'p:5', 'table:4'] },
+    ],
+    notes: ['A4 竖版 210×297mm', '上 22 · 下 20 · 左右 18mm', '页眉页脚在边距区，上下 ≥ 15mm', '装订侧再加 5mm', '只在 @page 写一处，开 preferCSSPageSize'],
+  }), { center: true, min: 0.3 });
+}
+</script>

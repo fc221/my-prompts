@@ -39,3 +39,24 @@ order: 20
 2. 按规则改：为每条查询设计索引，等值列在前、范围列在后、排序列跟在等值列后，能覆盖就覆盖；改掉索引列上套函数、隐式类型转换、左模糊这类失效写法；删掉被最左前缀覆盖的重复索引，单表控制在 6 个以内。
 3. 索引变更写成迁移，大表用 CREATE INDEX CONCURRENTLY 或 ALGORITHM=INPLACE, LOCK=NONE；删除前确认 idx_scan 为 0 或已设 INVISIBLE 观察过。
 4. 汇报：一张清单，每行是 SQL、原索引、新索引、改前改后的 EXPLAIN 关键行和耗时；附新增和删除的索引及迁移文件路径。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: '会员按下单时间倒序翻订单', text: `
+CREATE INDEX idx_member_created
+  ON sales_order (member_id, created_at);
+-- 用得上：最左列等值，排序列紧跟
+WHERE member_id = ? ORDER BY created_at DESC
+-- 用不上：跳过了最左列 member_id
+WHERE created_at >= '2026-10-01'
+-- 失效：列上套函数，改成半开区间
+WHERE DATE(created_at) = '2026-10-29'
+-- 验证：EXPLAIN 的 type 不是 ALL
+` }]), { title: '联合索引 · 最左前缀' });
+}
+</script>

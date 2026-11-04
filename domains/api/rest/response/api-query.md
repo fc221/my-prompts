@@ -2,7 +2,7 @@
 zh: 过滤、排序与字段选择
 en: Filtering, sorting & field selection
 aka: 查询参数 筛选 sort fields expand 条件查询 搜索
-order: 30
+order: 40
 ---
 
 ## 是什么
@@ -15,7 +15,7 @@ order: 30
 
 ## 不适合
 
-全文检索和相关度排序交给专门的搜索服务；结构多变的聚合查询看「GraphQL Schema 设计」；分页参数看「分页」；前端怎么把筛选同步到地址栏看「筛选联动与 URL 同步」。
+全文检索和相关度排序交给专门的搜索服务；结构多变的聚合查询看「GraphQL Schema 设计」；分页参数看「列表分页」；前端怎么把筛选同步到地址栏看「筛选联动与 URL 同步」。
 
 ## 注意
 
@@ -43,3 +43,33 @@ order: 30
 6. 每个可过滤、可排序字段确认有索引，没有的列出来并说明要不要加。
 7. 测试：组合过滤、多字段排序、非法字段、传入无权访问的过滤值（如别的门店 ID）。
 最后列出改动文件和前端需要跟着改的参数名。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+GET /orders
+  ?status=paid,shipped
+  &storeId=s_1024
+  &createdAtFrom=2026-10-01T00:00:00+08:00
+  &q=ord_8F3
+  &sort=-createdAt,id
+  &fields=id,status,totalAmount
+  &expand=store
+`, `
+200 OK
+
+"items": [
+  { "id": "ord_8F3k2", "status": "paid",
+    "totalAmount": 12990,
+    "store": { "id": "s_1024",
+               "name": "滨江路店" } }
+],
+"nextCursor": "eyJjIjoi…"
+`), { title: '过滤 · 排序 · 字段选择 · 展开' });
+}
+</script>

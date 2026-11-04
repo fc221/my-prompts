@@ -43,3 +43,22 @@ AI 回答逐字输出；订单、工单状态变化提醒；长任务进度（�
 5. 需要 POST 或自定义头时，前端用 fetch 读 ReadableStream 解析事件，以 done 或 error 判断结束。
 6. 可续传的流（{可续传的流，如 工单状态通知}）每条带 id，开头发 retry: 3000，按 Last-Event-ID 补发。
 最后说明改了哪些文件，用 curl -N 演示事件逐条到达而不是最后一次性出现，再演示点击停止后服务端日志里上游调用被取消。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['浏览器 EventSource', '服务端'], [
+    [0, 1, 'GET /order-events'],
+    [1, 0, '200 text/event-stream', 'r'],
+    [1, 0, 'id: 41 · event: status', 'r'],
+    [0, 0, '断线 → 按 retry 3 秒后重连'],
+    [0, 1, 'GET · Last-Event-ID: 41'],
+    [1, 0, '补发 id 42 之后的事件', 'r'],
+    [1, 0, ': ping（每 15 秒保活）', 'r'],
+  ]), { title: 'SSE 断线续传 · 带 Last-Event-ID 补发' });
+}
+</script>

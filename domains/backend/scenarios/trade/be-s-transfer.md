@@ -42,3 +42,24 @@ order: 50
 5. 热点入账账户改为流水先行，每{汇总间隔}秒批量更新余额。
 6. 错账只记反向流水。
 最后给出压测和对账方法：100 个线程在 10 个账户之间随机互转 10 万次，断言总额不变、没有负余额、没有死锁；写日终任务核对每个账户余额与流水净额一致、全平台借贷相等，差异告警。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: '会员 1001 转 50.00 元给 2002 · 同一事务', text: `
+BEGIN;
+-- 按 account_id 升序加锁，避免互转死锁
+UPDATE account SET balance = balance - 5000
+  WHERE account_id = 1001 AND balance >= 5000;
+-- 影响 0 行 → 余额不足，ROLLBACK
+UPDATE account SET balance = balance + 5000
+  WHERE account_id = 2002;
+INSERT INTO account_ledger … 1001 借 · 2002 贷;
+COMMIT;
+` }]), { title: '转账 = 一借一贷两条流水' });
+}
+</script>

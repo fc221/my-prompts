@@ -41,3 +41,22 @@ order: 30
 4. 支付成功按 hold_order_id 改为已售，影响行数不足时自动退款并通知。
 5. 热门场次把座位状态预热到 Redis Hash，用 Lua 原子检查并锁定。
 最后给出压测和对账方法：1000 个并发抢同一排座位，断言每个座位只属于一个订单；每场结束核对已售座位数 = 已支付订单的座位数，锁定中的座位都还在有效期内。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['用户', '票务服务', '座位表', '支付'], [
+    [0, 1, '选 3 排 12、13 座'],
+    [1, 2, '锁座 0 → 1'],
+    [2, 1, '2 行 · 锁到 20:10', 'r'],
+    [1, 1, '投 10 分钟延迟释放'],
+    [3, 1, '支付成功通知'],
+    [1, 2, '锁定 → 已售'],
+    [2, 1, '0 行 → 退款', 'rx'],
+  ]), { title: '锁座 · 支付确认 · 超时' });
+}
+</script>

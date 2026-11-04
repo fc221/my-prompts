@@ -40,3 +40,55 @@ order: 10
 3. 按新的版心宽度调整：表格设为根据窗口调整，超出版心的图片等比缩到版心宽，目录和页眉里的右对齐制表位挪到版心右边缘。
 4. 页面设置应用于整篇文档；需要横排的页面先问我是哪几页，再用分节单独设置。
 5. 最后告诉我版心尺寸（宽×高 mm）、每页大约多少行，以及调整前后的总页数。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-wrap{display:flex;gap:18px;align-items:center}
+.m-sp{display:grid;gap:6px;justify-items:center}
+.m-pair{display:flex;gap:3px;filter:drop-shadow(0 2px 3px rgba(16,24,40,.12)) drop-shadow(0 10px 14px rgba(16,24,40,.12))}
+.m-pg{position:relative;width:189px;height:267px;background:#fff;font:9.5px/1 system-ui,"PingFang SC",sans-serif;color:#2b579a}
+.m-ba{position:absolute;top:22.5px;bottom:22.5px;display:grid;align-content:start;gap:5px;padding:8px 8px 0;border:1px dashed #2b579a;background:rgba(43,87,154,.05)}
+.m-pg.l .m-ba{left:22.5px;right:27px}
+.m-pg.r .m-ba{left:27px;right:22.5px}
+.m-ba span{display:block;height:4px;border-radius:2px;background:#d5dae2}
+.m-ba span.h{width:46%;height:6px;background:#8a94a6}
+.m-ba span.i{text-indent:0;margin-left:9px}
+.m-ba .m-tb{height:34px;border-radius:1px;background:repeating-linear-gradient(#fff 0 7px,#d5dae2 7px 8px),#fff;border:1px solid #b9c2cf}
+.m-ba .m-im{height:44px;border-radius:2px;background:linear-gradient(135deg,#c9d7ee,#e7edf6 55%,#d6dfeb)}
+.m-w{position:absolute;left:-1px;right:-1px;bottom:7px;border-top:1px solid #2b579a;text-align:center}
+.m-w::before,.m-w::after{content:"";position:absolute;top:-4px;height:7px;border-left:1px solid #2b579a}
+.m-w::before{left:0}
+.m-w::after{right:0}
+.m-w b{position:relative;top:-6px;padding:0 4px;background:#f3f6fb;font-weight:650}
+.m-m{position:absolute;font-weight:600;white-space:nowrap}
+.m-m.t{top:7px;left:50%;transform:translateX(-50%)}
+.m-m.b{bottom:7px;left:50%;transform:translateX(-50%)}
+.m-m.v{top:50%;writing-mode:vertical-rl;transform:translateY(-50%)}
+.m-pg.l .m-m.o,.m-pg.r .m-m.n{left:6px}
+.m-pg.l .m-m.n,.m-pg.r .m-m.o{right:6px}
+.m-m.n{color:#b54708}
+.m-cap{margin:0;color:#475467;font:11px/1.3 system-ui,"PingFang SC",sans-serif}
+.m-ann{display:grid;width:168px;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-ann p{margin:0;padding:6px 0 6px 10px;border-left:2px solid #2b579a}
+.m-ann b{display:block;color:#101828;font-size:11.5px}
+.m-ann span{color:#667085}
+.m-ann p.w{border-left-color:#d92d20}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const body = '<span class="h"></span><span class="i"></span><span></span><span></span><div class="m-tb"></div><span class="i"></span><span></span><div class="m-im"></div><span></span><span></span>';
+  const pg = (side, no) => '<div class="m-pg ' + side + '"><span class="m-m t">上 25</span><span class="m-m b">下 25 · ' + no + '</span><span class="m-m v o">外侧 25</span><span class="m-m v n">内侧 30</span><div class="m-ba">' + body + '<p class="m-w"><b>版心 155</b></p></div></div>';
+  const ann = [['A4 · 210×297mm', '常规默认：上下 2.54、左右 3.18cm'], ['版心宽 = 纸宽 − 左 − 右', '表格、图片最宽就到这里'], ['双面打印', '对称页边距，内侧多约 5mm'], ['页眉 / 页脚距边界', '15mm / 17.5mm'], ['对齐到网格', '不用网格就取消，行距才准', 'w']];
+  draw(root, '<div class="m-wrap"><div class="m-sp"><div class="m-pair">' + pg('l', '第 2 页') + pg('r', '第 3 页') + '</div><p class="m-cap">双面打印 · 对称页边距（单位 mm）</p></div><div class="m-ann">'
+    + ann.map(([b, s, c]) => '<p' + (c ? ' class="' + c + '"' : '') + '><b>' + b + '</b><span>' + s + '</span></p>').join('') + '</div></div>', { center: true, min: 0.35 });
+}
+</script>

@@ -43,3 +43,29 @@ order: 60
 5. 测试文件放在被测文件旁边；package.json 提供 test、test:run、test:e2e 三个命令；CI 先跑类型检查和单元测试，再跑端到端。
 6. 现有不稳定用例逐个修复，修不了的标记出来并写明原因。
 完成后汇报新增和改动的用例、改了哪些文件、各层运行时长；验证：故意改坏一个核心函数，确认对应测试失败，恢复后全部通过。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    stack([
+      { t: '端到端', items: ['Playwright'], note: '登录、下单、报销提交，5–15 条' },
+      { t: '组件', items: ['Testing Library', 'user-event'], note: 'getByRole 找元素，覆盖加载中、空、错误、成功', acc: true },
+      { t: '单元', items: ['Vitest'], note: '纯函数、金额日期格式化、store' },
+    ], { arrow: '越往下越多、越快' }),
+    tree(`
+src/features/orders/
+  order-list.tsx
+* order-list.test.tsx  放在被测文件旁
+src/test/
+  handlers.ts          MSW 拦截，和接口共用类型
+e2e/
+  place-order.spec.ts  从干净数据开始
+`),
+  ], { title: '按成本分层 · 不追覆盖率数字' });
+}
+</script>

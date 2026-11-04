@@ -37,3 +37,19 @@ SSR 不等于更快：每次请求都要等数据，接口慢时首字节反而�
 然后按规则给每个路由定模式：公开且以天为单位更新用 SSG；公开但几分钟一变用 ISR 或缓存加按需重新验证；因人而异且要收录或首屏快用 SSR，慢数据放进流式边界；登录后的后台和工具页用 CSR 加骨架屏。个人化内容不进共享缓存。
 用{框架}的方式把每个路由的模式显式写进配置或页面导出。部署环境是{部署环境}，支持不了 SSR 时给出替代方案。
 完成后汇报：每个路由改前改后的模式、改了哪些文件；用 curl 取公开页面源码确认正文和 meta 在 HTML 里，看构建输出确认哪些页面被预生成。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '构建时', note: '生成整页 HTML', acc: true }, { t: '请求时', note: 'CDN 直接返回' }, { t: '浏览器里', note: '水合' }],
+    [{ t: '构建时', note: '只生成热门页' }, { t: '请求时', note: '过期后重新生成', acc: true }, { t: '浏览器里', note: '水合' }],
+    [{ t: '构建时', note: '只打包代码' }, { t: '请求时', note: '取数，流式输出', acc: true }, { t: '浏览器里', note: '水合' }],
+    [{ t: '构建时', note: '打包空壳' }, { t: '请求时', note: '返回同一份 HTML' }, { t: '浏览器里', note: '拉数据再渲染', acc: true }],
+  ], { lanes: ['SSG 以天更新', 'ISR 几分钟一变', 'SSR 因人而异', 'CSR 登录后台'] }), { title: 'HTML 在哪一步生成（高亮那步）' });
+}
+</script>

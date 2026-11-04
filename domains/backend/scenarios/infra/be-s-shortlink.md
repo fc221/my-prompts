@@ -41,3 +41,18 @@ order: 10
 4. 点击事件异步写队列再聚合，跳转路径不写库。
 5. 目标地址只允许 http 和 https，做恶意网址检测，单 IP 限制生成频率。
 最后给出压测和对账方法：用 1000 万个随机地址生成短码，断言无冲突；按 80% 热点码、20% 不存在码的比例压跳转，测 P99 和数据库 QPS；每天核对点击事件条数与报表合计一致。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '号段取 ID', note: '10000123' }, { t: '乘大奇数取模', note: '可逆，不冲突' }, { t: 'Base62', note: 'APnamX（直接转是 FXuj）', acc: true }],
+    [{ t: 'GET /s/APnamX' }, { t: '进程内 → Redis → 库', note: '不存在的码缓存 60 秒' }, { t: '302 + Location', note: '可统计、可修改', acc: true }],
+    [{ t: '301 永久', note: '浏览器缓存', bad: true }, { t: '之后不再回源', note: '统计漏、改不了' }],
+  ], { lanes: ['生成', '跳转', '301 代价'] }), { title: '短码生成与跳转' });
+}
+</script>

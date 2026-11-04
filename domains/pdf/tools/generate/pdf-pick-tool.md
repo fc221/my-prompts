@@ -2,12 +2,13 @@
 zh: 生成方案怎么选
 en: Choosing a PDF generation approach
 aka: HTML转PDF 导出PDF 生成PDF 选型 PDF库
+tab: 选型
 order: 10
 ---
 
 ## 是什么
 
-生成 PDF 有四条路：用无头浏览器把 HTML 打印出来；用分页排版引擎按打印 CSS 排版；用 Typst、LaTeX 这类排版语言编译；用代码库直接画到页面上。按文档长相、谁来维护模板、运行环境和量级挑一条，而不是一上来就默认“HTML 转 PDF”。
+生成 PDF 有六条路：用无头浏览器把 HTML 打印出来；用分页排版引擎按打印 CSS 排版；用 React 组件这类声明式结构交给库算布局；用 Typst 编译；用 LaTeX 编译；用代码库直接画到页面上。按文档长相、谁来维护模板、运行环境和量级挑一条，而不是一上来就默认“HTML 转 PDF”。
 
 ## 适合
 
@@ -40,3 +41,21 @@ order: 10
 3. 列出依赖的许可证；用到 iText、PyMuPDF、Ghostscript 这类 AGPL 组件时单独标出，并给出 Apache / MIT / BSD 许可的替代。
 4. 用一份真实样本验证：300 行以上的明细表、生僻字、超长英文单词、几张图片；报告单份耗时、内存峰值、文件大小，以及服务器缺字体、数据为空、单个字段超长时的表现。
 5. 最后给出接入步骤和要改的文件，这一步先不大改现有代码。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '无头浏览器打印', items: ['Puppeteer · Playwright', '要和网页长得一样'] },
+    { t: '分页排版引擎', items: ['WeasyPrint · Paged.js', '页眉随章节、目录页码'] },
+    { t: 'Typst 排版', items: ['单个二进制，编译快', '报告、合同、证书'] },
+    { t: 'LaTeX 排版', items: ['XeLaTeX + ctex', '公式多、已有模板'] },
+    { t: '代码直接绘制', items: ['ReportLab · pdf-lib', '量大、套打、无浏览器'] },
+    { t: '组件式生成', items: ['@react-pdf/renderer', 'React 团队、前端下载'] },
+  ], { cols: 3, note: '先查许可证：iText、PyMuPDF、Ghostscript 是 AGPL' }), { title: '生成方案怎么选' });
+}
+</script>

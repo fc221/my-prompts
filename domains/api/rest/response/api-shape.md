@@ -2,7 +2,7 @@
 zh: 响应结构
 en: Response shape
 aka: 响应包装 返回结构 统一返回 envelope data 包装
-order: 40
+order: 10
 ---
 
 ## 是什么
@@ -24,7 +24,7 @@ order: 40
 ## 要点
 
 - 单个资源：直接返回资源对象，顶层就是 id、status、createdAt 这些字段；创建和更新返回完整资源，和 GET 的结构相同。
-- 列表：顶层是对象，含 items 数组和分页字段（见「分页」），以后加汇总字段也不破坏结构。
+- 列表：顶层是对象，含 items 数组和分页字段（见「列表分页」），以后加汇总字段也不破坏结构。
 - 团队要统一包一层时，所有成功响应都包成 data 加可选的 meta（分页、traceId），body 里不重复 HTTP 状态码；失败仍走错误结构。
 - 同一资源在所有 API 里字段名一致：订单详情、订单列表项、工单里嵌的订单引用用同一套名字，列表项可以少字段，不能改名。
 - 关联资源默认只给 ID 和少量展示字段，如 storeId 加一个只含 id、name 的 store 对象；完整内容用 expand 或单独 GET 获取。
@@ -41,3 +41,37 @@ order: 40
 5. 成功一律用 2xx 状态码，body 里不再放 code=0 这类成功标记；旧接口保持原样，在新版本里迁移。
 6. 更新前端类型和请求层的解包逻辑，跑一遍现有接口测试。
 最后列出改动文件和对调用方有破坏的变更清单。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: '单个资源 · GET /orders/ord_8F3k2', text: `
+200 OK
+
+"id": "ord_8F3k2",
+"status": "PAID",
+"storeId": "s_1024",
+"store": {
+  "id": "s_1024", "name": "滨江路店"
+},
+"remark": null,
+"hasInvoice": false
+` },
+    { t: '列表 · GET /orders', text: `
+200 OK
+
+"items": [
+  { "id": "ord_8F3k2", "status": "PAID" },
+  { "id": "ord_7Lm9q", "status": "SHIPPED" }
+],
+"nextCursor": "eyJjIjoi…",
+"hasMore": true
+` },
+  ]), { title: '成功走 2xx · body 里不放 code=0' });
+}
+</script>

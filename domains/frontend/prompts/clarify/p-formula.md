@@ -1,6 +1,7 @@
 ---
-zh: 风格 + 布局 + 组件组合公式
+zh: 提示词填空公式
 en: Prompt formula
+aka: 风格+布局+组件组合公式
 order: 30
 ---
 
@@ -16,7 +17,7 @@ order: 30
 
 - 每行写具体值，用不到的行直接删掉。
 - 一条提示词只选一种骨架、一种风格。
-- 交互只挑最关键的 1–3 条。
+- 交互只挑最关键的 1–3 条，每条写清哪个组件、怎么触发、什么跟着变、动效多长用什么曲线，以及不支持时的退路（减少动态效果、触屏没有悬停）。
 - 知识库里复制的条目可以直接贴进对应的行。
 
 ## 提示词
@@ -28,8 +29,25 @@ order: 30
 【风格】{风格方向}：背景 {色值}，卡片 {色值}，文字 {色值}，强调色 {品牌色} 只用于主按钮、当前项和链接；圆角 {控件 / 容器，如 6px / 12px}；间距基准 4px，区块间距 {如 24px}；字号只用 12/14/16/20/24/32。
 【导航】{侧栏 / 顶栏 / 底部标签栏}，当前项清楚，{其他要求}。
 【组件】{用到的组件和关键规格，如“表格行高 48px，金额右对齐；筛选区默认露出 3 个条件”}。
-【交互】最多 3 条，每条写清“触发 → 什么跟着变 → 变成什么 → 什么不变”：
+【交互】最多 3 条，每条写清“哪个组件 → 怎么触发 → 什么跟着变 → 变成什么 → 什么不变”，再补动效时长和曲线、减少动态效果时怎么退：
 1. {交互一}
 2. {交互二}
 【边界】数据为前端示例，真实可信并包含 0、超长名称、缺数据等边界值；{不能虚构的能力，如“提交只改前端状态并注明”}。
 【底线】加载、空、错误、无权限状态都要有；1440 / 768 / 390 宽不出现横向滚动；键盘可达、焦点可见，文字对比度 ≥ 4.5:1；动效只动 transform 和 opacity，支持减少动态效果；优先复用项目里已有的组件和样式。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/fix.css">
+<style>
+.c{padding:6px 8px}
+.say{margin:0;padding:6px 8px;border-radius:8px 8px 8px 2px;background:#eef0f3;font-size:11px;line-height:16px}
+.q{margin:6px 0 0;color:#5b616e;font-size:10px;line-height:14px}
+.r{display:grid;grid-template-columns:auto minmax(0,1fr);gap:1px 5px;margin:0;font-size:10px;line-height:13px}
+.r dt{color:#3b5bdb;font-weight:600}
+.r dd{margin:0}
+</style>
+
+<div class="fx">
+  <section class="fx-p"><h4>一句话需求</h4><div class="fx-b"><div class="fx-z c"><p class="say">做个订单管理页，专业一点，能筛选能导出。</p><p class="q">骨架、风格、交互、边界全靠 AI 猜，每次出来都不一样。</p></div></div></section>
+  <section class="fx-p ok"><h4>按公式填好</h4><div class="fx-b"><div class="fx-z c"><dl class="r"><dt>场景</dt><dd>仓管查今日待发订单</dd><dt>骨架</dt><dd>侧栏 + 12 列主区</dd><dt>风格</dt><dd>浅灰底，蓝只给主钮</dd><dt>导航</dt><dd>侧栏，当前项高亮</dd><dt>组件</dt><dd>表格行高 48</dd><dt>交互</dt><dd>选筛选 → 表格刷新</dd><dt>边界</dt><dd>含 0 和超长名</dd><dt>底线</dt><dd>加载 / 空 / 错 / 窄屏</dd></dl></div></div></section>
+</div>

@@ -44,3 +44,30 @@ Svelte 5 用 runes 管状态：$state 声明状态、$derived 派生、$effect �
 5. 登录态在 hooks.server.ts 解析进 event.locals，受保护分组在 +layout.server.ts 检查。
 6. 服务端代码放 server 目录；跨组件状态用 .svelte.ts 里的 $state。
 完成后汇报改动的文件；验证：svelte-check 无错误，禁用 JS 时表单能提交，构建通过。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+* routes/                   页面层，目录即路由
+*   (app)/                  括号分组，不进 URL
+      +layout.server.ts     受保护分组在这里检查
+      orders/
+        +page.svelte        页面
+        +page.server.ts     服务端 load 和表单 actions
+        +page.ts            通用 load，两端都跑
+    api/orders/+server.ts   GET、POST 接口
+* lib/                      用 #lib 引用，写扩展名
+    features/orders/
+    server/                 客户端引入直接构建报错
+  hooks.server.ts           handle 把登录态放进 locals
+static/
+vite.config.ts              sveltekit() 插件里写配置
+`), { title: 'SvelteKit 3 + Svelte 5' });
+}
+</script>

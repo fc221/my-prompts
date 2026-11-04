@@ -42,3 +42,46 @@ order: 30
 5. 合计行加粗并加深色上边框；冻结表头。
 6. 去掉原有的多余底色和粗边框，状态颜色只保留条件格式。
 交付时说明改了哪些格式、用到的颜色值，并保证打印预览也清晰。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-tag{margin:0 0 5px!important;font-size:11.5px;font-weight:650}
+.m-no{color:#b42318}
+.m-ok{color:#05603a}
+.m-ugly .xc{font-weight:700;border-color:#1f2329}
+.m-ugly .xc.m-acc{background:#7dd3fc;color:#0c4a6e}
+</style>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const tag = (t, ok) => '<p class="m-tag ' + (ok ? 'm-ok' : 'm-no') + '">' + t + '</p>';
+  draw(root, [
+    tag('✗ 五颜六色、粗框、小数位不一', false) + '<div class="m-ugly">' + sheet({
+      head: ['门店', '销售额', '目标', '达成率'],
+      widths: [58, 74, 74, 58],
+      rows: [
+        ['滨江店', '123456.5', '110000', '1.12233'],
+        ['西湖店', '98,210', '100000.00', '98%'],
+        ['湖滨店', '74,032.80', '80000', '0.9254'],
+        ['合计', '295699.3', '290000', '102%'],
+      ],
+      marks: { A1: 'bad', B1: 'good', C1: 'warn', D1: 'acc', A2: 'warn', B2: 'acc', C3: 'good', D3: 'bad', A4: 'acc', B4: 'warn', D4: 'good', A5: 'bad', B5: 'bad', C5: 'bad', D5: 'bad' },
+    }) + '</div>',
+    tag('✓ 一个强调色，数字右对齐，小数位统一', true) + sheet({
+      head: ['门店', '销售额（元）', '目标（元）', '达成率'],
+      widths: [58, 86, 80, 54],
+      rows: [
+        ['滨江店', '123,456.50', '110,000.00', '112.2%'],
+        ['西湖店', '98,210.00', '100,000.00', '98.2%'],
+        ['湖滨店', '74,032.80', '80,000.00', '92.5%'],
+      ],
+      foot: ['合计', '295,699.30', '290,000.00', '102.0%'],
+      marks: { A2: 'b', A3: 'b', A4: 'b' },
+      freeze: true,
+    }),
+  ], { title: '表格美化 · 颜色只用来表达含义', min: 0.45 });
+}
+</script>

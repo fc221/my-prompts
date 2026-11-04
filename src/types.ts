@@ -13,6 +13,8 @@ export interface WireBox {
   /** 文字和按钮居中（居中首屏、居中卡片） */
   center?: boolean;
   inner?: Wire;
+  /** 从这个区域右侧弹出的浮层（悬停菜单、下拉面板）：size 宽、y 离区域顶部的距离，不加遮罩 */
+  pop?: { box: string | WireBox; size: string; y?: string; height?: string };
 }
 
 /** 示意图：CSS grid 的列、行和区域名；boxes 的键对应 areas 里的区域名 */
@@ -43,12 +45,20 @@ export interface Entry {
   id: string;
   /** 板块 key：由条目所在的板块目录决定，adapter 补上 */
   sec: string;
+  /** 相对 domains/ 的路径，不带后缀，如 frontend/components/pick/c-pick-search */
+  path: string;
   /** 分类名：由条目所在的分类文件决定，adapter 补上 */
   cat: string;
   zh: string;
   en?: string;
   /** 别名：别处常见的叫法，空格分隔，只用于搜索 */
   aka?: string;
+  /** 主条目 id：写了就是那一条的一个案例，列表里不单独出现，没写的文字段落跟主条目走 */
+  of?: string;
+  /** 案例切换按钮上的字，没写用 zh */
+  tab?: string;
+  /** 借用另一条的示例或示意图，写条目 id */
+  preview?: string;
   /** 一句话：是什么 / 长什么样 */
   look: string;
   use?: string;
@@ -94,6 +104,7 @@ export interface KbEntry extends Entry {
 
 export type MockKind =
   | 'nav'
+  | 'rail'
   | 'topbar'
   | 'tabbar'
   | 'kpi'

@@ -43,3 +43,24 @@ order: 50
 5. 子应用样式加前缀或模块化，不写全局标签选择器。
 6. 每个子应用能单独启动；加载失败时只在该区域显示错误。
 完成后汇报拆分方案和改了哪些文件；验证：各子应用单独启动、在基座里来回切换路由、停掉某个子应用的服务时其他区域照常可用。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack, boxes } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    stack([
+      { t: '基座', items: ['登录态', '导航外壳', '注册与路由分发', '公共依赖版本'], note: '不放业务代码', acc: true },
+      { t: '子应用', items: ['订单 /order/*', '会员 /member/*', '报表'], note: '独立部署，可灰度、可回滚' },
+    ], { arrow: '按路由前缀加载' }),
+    boxes([
+      { t: 'iframe / wujie', items: ['第三方、老系统，强隔离'] },
+      { t: 'Module Federation', items: ['同技术栈，共享依赖'] },
+      { t: 'qiankun', items: ['多技术栈，JS 沙箱'] },
+    ], { cols: 1 }),
+  ], { title: '按业务域拆 · 通信只走 URL、只读上下文、事件' });
+}
+</script>

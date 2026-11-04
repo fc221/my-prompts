@@ -39,3 +39,24 @@ SaaS 化的工单、报销审批、进销存系统；集团下多家门店或子
 2. 按规则改：tenant_id 只从认证上下文取，请求里传入的值不一致返回 403；ORM 层加全局租户过滤和插入自动填充；原生 SQL 显式带租户条件；后台任务进入时设置租户上下文；缓存键和文件路径带租户。PostgreSQL 再开启并 FORCE 行级安全，用 SET LOCAL 传租户，应用账号不是表 owner。
 3. 加一组跨租户越权测试：用租户 A 的令牌访问租户 B 的每类资源，断言 404 或 403。
 4. 汇报：缺少隔离的位置清单、改动文件、新增迁移和测试，以及测试结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: 'PostgreSQL · 报销单表', text: `
+-- 每张业务表带 tenant_id，唯一索引以它开头
+ALTER TABLE expense ADD UNIQUE (tenant_id, expense_no);
+-- 数据库兜底：漏写条件也读不到别家数据
+ALTER TABLE expense ENABLE ROW LEVEL SECURITY;
+ALTER TABLE expense FORCE ROW LEVEL SECURITY;
+CREATE POLICY tenant_iso ON expense USING (
+  tenant_id = current_setting('app.tenant_id')::bigint);
+-- 租户取自令牌；SET LOCAL 随事务结束失效
+BEGIN; SET LOCAL app.tenant_id = '1024';
+` }]), { title: '多租户 · 共享表加行级安全' });
+}
+</script>

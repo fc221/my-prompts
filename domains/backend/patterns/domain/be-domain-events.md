@@ -39,3 +39,17 @@ order: 40
 3. 每个后续步骤改成独立的订阅处理器，按 eventId 幂等，失败可重试，不影响主流程的响应。
 4. 判断哪些步骤必须和主操作同成同败，这些保留为直接调用，并说明理由。
 补测试：主事务回滚时事件不发出；同一事件处理两次结果不变。最后列出改动文件和事件字段说明。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: 'order.pay()', note: '聚合登记 OrderPaid' }, { t: '事务提交', note: '订单已落库', acc: true }, { t: '分发事件', note: '提交之后才发' }, { t: '各订阅方', note: '加积分、发短信' }],
+    [{ t: 'on_order_paid', note: '按 eventId 去重' }, { t: '处理失败', note: '重试', bad: true }, { t: '死信', note: '超过重试次数', bad: true }],
+  ]), { title: '领域事件 · 提交后再分发' });
+}
+</script>

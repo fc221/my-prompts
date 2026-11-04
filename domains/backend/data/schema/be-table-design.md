@@ -39,3 +39,25 @@ order: 10
 2. 按规则改：snake_case 并避开保留字；主键 BIGINT 或时间有序 ID，对外单号另设唯一列；金额统一 DECIMAL(18,2) 或 BIGINT 分（沿用项目已有的那种）；时间存 UTC（PostgreSQL timestamptz，MySQL DATETIME(3) 加连接 time_zone '+00:00'）；MySQL 用 utf8mb4；状态用字符串或小整数并在注释写全取值；业务唯一性建唯一索引；每列补注释。
 3. 已上线的表按「数据库迁移」的先加后删分步改，附数据回填和核对 SQL。
 4. 汇报：每张表改了什么、迁移文件路径、哪些改动需要回填或停写窗口，以及核对结果（新旧列抽样一致、金额合计与改前相等）。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: 'MySQL 8 · 订单表', text: `
+CREATE TABLE sales_order (
+  id BIGINT PRIMARY KEY,
+  -- 对外单号另设唯一列，不拿 id 当单号
+  order_no VARCHAR(32) NOT NULL UNIQUE,
+  -- 金额存分，列名带单位；不用 FLOAT
+  pay_amount_cent BIGINT NOT NULL DEFAULT 0,
+  status VARCHAR(32) NOT NULL DEFAULT 'PENDING_PAYMENT',
+  -- 时间一律存 UTC
+  created_at DATETIME(3) NOT NULL
+) DEFAULT CHARSET = utf8mb4;
+` }]), { title: '表设计约定 · 表名避开保留字 order' });
+}
+</script>

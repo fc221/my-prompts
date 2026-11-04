@@ -8,13 +8,13 @@ export const NAV = [
 export const SITE_NAV = ['产品', '解决方案', '价格', '文档', '关于我们'];
 
 export const KPIS = [
-  { label: '今日销售额', value: '¥128,430', delta: '+12.4%' },
+  { label: '今日销售额', value: '¥128,430.00', delta: '+12.4%' },
   { label: '订单数', value: '3,826', delta: '+6.1%' },
   { label: '转化率', value: '4.62%', delta: '-0.3%' },
-  { label: '客单价', value: '¥336', delta: '+2.8%' },
+  { label: '客单价', value: '¥336.00', delta: '+2.8%' },
   { label: '新增客户', value: '284', delta: '+18' },
   { label: '退款率', value: '1.2%', delta: '-0.4%' },
-  { label: '平均响应', value: '1.8s', delta: '-0.2s' },
+  { label: '平均响应', value: '1.8 s', delta: '-0.2 s' },
   { label: '活跃用户', value: '7,315', delta: '+9.6%' },
 ];
 
@@ -258,7 +258,7 @@ export const SET_ROWS = [
   { path: ['库存', '库存预警阈值'], desc: '库存低于这个数量时提醒补货', ctl: 'input', val: '20 件', mod: true },
   { path: ['库存', '允许超卖'], desc: '库存为 0 时是否还允许下单', ctl: 'toggle', val: false, mod: false },
   { path: ['通知', '发货短信'], desc: '发货后给客户发送物流短信', ctl: 'toggle', val: true, mod: true },
-  { path: ['支付', '退款人工审核'], desc: '超过这个金额的退款需要人工审核', ctl: 'input', val: '¥500', mod: false },
+  { path: ['支付', '退款人工审核'], desc: '超过这个金额的退款需要人工审核', ctl: 'input', val: '¥500.00', mod: false },
 ] as const;
 // 内容页与电商：搜索结果、商品、订单汇总、新手任务、日程
 export const RESULTS = [
@@ -294,20 +294,20 @@ export const RESULTS = [
   },
 ];
 export const PRODUCT = {
-  name: '手冲咖啡豆 · 云南保山 1kg',
-  price: '¥128',
-  was: '¥158',
+  name: '手冲咖啡豆 · 云南保山 1 kg',
+  price: '¥128.00',
+  was: '¥158.00',
   sold: '已售 2,384',
   rate: '4.9（612 条评价）',
   specs: [
-    ['重量', ['500g', '1kg', '2kg'], 1],
+    ['重量', ['500 g', '1 kg', '2 kg'], 1],
     ['研磨', ['不研磨', '手冲粗细', '意式细粉'], 0],
   ] as const,
 };
 export const CART = [
-  ['手冲咖啡豆 · 1kg', '¥128 × 2'],
-  ['滤纸 100 张', '¥19 × 1'],
-  ['手冲壶 600ml', '¥169 × 1'],
+  ['手冲咖啡豆 · 1 kg', '¥128.00 × 2'],
+  ['滤纸 100 张', '¥19.00 × 1'],
+  ['手冲壶 600 ml', '¥169.00 × 1'],
 ];
 export const ONBOARD = [
   ['创建工作区', '设置名称和 Logo', true],

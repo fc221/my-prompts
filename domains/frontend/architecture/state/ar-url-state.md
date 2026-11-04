@@ -40,3 +40,17 @@ URL 和组件状态各存一份、再用 watch / useEffect 互相同步，会出
 3. 封装一个读写参数的 hook / 组合式函数（如 useOrderListParams）：从 URL 解析出类型化对象；改筛选用 replace 并把页码重置为 1，切换标签页和打开详情用 push；搜索框防抖 300ms 后再写 URL。
 4. 请求直接用解析后的参数做查询键，删掉旧的筛选状态和同步代码。
 5. 验证：刷新、复制链接到新标签页、前进后退、手动把参数改成非法值，页面都能还原或回退默认。汇报改动文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: 'URL', note: 'status=paid page=2', acc: true }, { t: 'schema 解析', note: '非法值回退默认' }, { t: '查询键', note: '交给缓存层，不另存' }],
+    [{ t: '点“已退款”' }, { t: 'setParams', note: 'page 重置为 1' }, { t: '写回 URL', note: 'router.replace', acc: true }],
+  ]), { title: '状态放进 URL · 读靠解析，改靠导航' });
+}
+</script>

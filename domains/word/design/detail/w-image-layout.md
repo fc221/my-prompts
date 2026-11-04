@@ -40,3 +40,52 @@ Word 插图的规范做法：正文图片用嵌入型、单独成段居中，宽
 3. 需要对比的图（如 {对比内容，如 门店改造前后}）用 1 行 2 列无框线表格并排，子图题写“(a)…”“(b)…”，下方一个总图题。
 4. 每张图下方用插入题注生成“图 2-1　{图题}”，五号居中；正文里提到图片的地方改成交叉引用。
 5. 压缩图片到 {分辨率，如 220ppi} 并删除剪裁区域，给每张图补一句替代文字；最后列出被拉伸变形、分辨率太低（打印会糊）的图。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-wrap{display:flex;gap:16px;align-items:center}
+.m-pg{width:380px;padding:20px 36px 16px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25);color:#111;font-family:"Songti SC","SimSun",serif}
+.m-desk .m-p{margin:0;font-size:11px;line-height:1.8;text-indent:2em;color:#333}
+.m-im{position:relative;border-radius:1px;overflow:hidden}
+.m-shop{height:96px;margin-top:6px;background:linear-gradient(180deg,transparent 58%,#c9b79c 58% 62%,#a88f6e 62%),linear-gradient(90deg,#f3efe6 0 8%,transparent 8% 92%,#f3efe6 92%),repeating-linear-gradient(90deg,#3e6a8a 0 26px,#f6f2ea 26px 30px),linear-gradient(#2f4f66,#4c7896)}
+.m-shop::after{content:"";position:absolute;left:38%;top:18%;width:24%;height:40%;background:linear-gradient(#ffe7a8,#f6c25b);border-radius:2px;box-shadow:0 0 0 3px #f6f2ea}
+.m-desk .m-cap{margin:0;padding:3px 0 6px;text-align:center;font-size:10px;line-height:1.5}
+.m-cap b{font-weight:400;padding:0 1px;background:#e4e7ec}
+.m-two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;outline:1px dashed #c9d6ea;outline-offset:2px}
+.m-two figure{margin:0;display:grid;gap:2px}
+.m-a{height:64px;background:linear-gradient(160deg,#d8d4cc,#b9b2a6 60%,#9c958a)}
+.m-a::after{content:"";position:absolute;left:12%;right:12%;bottom:0;height:46%;background:repeating-linear-gradient(90deg,#8d8579 0 14px,#a49c90 14px 16px)}
+.m-b{height:64px;background:linear-gradient(160deg,#e7f0f6,#bcd3e4 60%,#8fb3cf)}
+.m-b::after{content:"";position:absolute;left:12%;right:12%;bottom:0;height:46%;background:repeating-linear-gradient(90deg,#f7fafc 0 14px,#5b8def 14px 16px);border-top:3px solid #2b579a}
+.m-two figcaption{text-align:center;font-size:9.5px;line-height:1.4}
+.m-lbl{display:block;margin:2px 0 0;text-align:right;color:#2b579a;font:9px/1 system-ui,"PingFang SC",sans-serif}
+.m-side{display:grid;gap:10px;width:168px}
+.m-bad{padding:8px 10px;border:1px solid #f1b5ad;border-radius:6px;background:#fff;font:10.5px/1.35 system-ui,"PingFang SC",sans-serif;color:#b42318}
+.m-bad b{display:block;margin-bottom:5px;font-size:11px}
+.m-cut{position:relative;height:14px;overflow:hidden;margin:0 0 5px;border-top:1px dashed #f1b5ad;border-bottom:1px dashed #f1b5ad}
+.m-cut i{position:absolute;left:10%;right:10%;bottom:0;height:70px;background:linear-gradient(#2f4f66,#4c7896 50%,#c9b79c 50%,#a88f6e)}
+.m-ann{display:grid;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-ann p{margin:0;padding:5px 0 5px 10px;border-left:2px solid #2b579a}
+.m-ann b{display:block;color:#101828;font-size:11.5px}
+.m-ann span{color:#667085}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const page = '<div class="m-pg"><p class="m-p">10 月起，湖滨店按新版陈列标准完成门头和货架改造。</p>'
+    + '<div class="m-im m-shop"></div><p class="m-cap"><b>图 3-1</b>　湖滨店改造后门头（嵌入型，宽 = 版心）</p>'
+    + '<div class="m-two"><figure><div class="m-im m-a"></div><figcaption>(a) 改造前</figcaption></figure><figure><div class="m-im m-b"></div><figcaption>(b) 改造后</figcaption></figure></div>'
+    + '<span class="m-lbl">1 行 2 列无框线表格</span><p class="m-cap"><b>图 3-2</b>　货架陈列改造前后对比</p></div>';
+  const ann = [['嵌入型', '正文插图默认，跟着文字走'], ['四周型 / 紧密型', '小图配说明时才用'], ['图片样式', '居中、单倍行距、与下段同页'], ['压缩图片', '打印 220ppi，屏幕 150ppi']];
+  const side = '<div class="m-side"><div class="m-bad"><b>✕ 段落行距是固定值</b><div class="m-cut"><i></i></div>图片被裁成一窄条</div><div class="m-ann">' + ann.map(([x, y]) => '<p><b>' + x + '</b><span>' + y + '</span></p>').join('') + '</div></div>';
+  draw(root, '<div class="m-wrap">' + page + side + '</div>', { center: true, min: 0.35 });
+}
+</script>

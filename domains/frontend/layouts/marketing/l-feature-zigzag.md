@@ -2,6 +2,7 @@
 zh: 功能区交替左右
 en: Alternating features
 order: 40
+of: l-features
 ---
 
 ## 是什么
@@ -28,3 +29,27 @@ order: 40
 ## 提示词
 
 {产品}功能区用「图文交替」：{功能数} 个功能每个一行，图约 7 栏、文字约 5 栏，第一行图在左，下一行图在右，依次交替；文字含小标题、一句结果和 2–3 个要点；图片用真实界面截图，统一 16:10 和圆角；行间距 clamp(56px, 8vw, 112px)；窄屏统一为图在上、文字在下。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '5fr 2fr 5fr',
+  rows: '1fr 1fr 1fr',
+  areas: ['i1 i1 t1', 't2 i2 i2', 'i3 i3 t3'],
+  boxes: {
+    i1: { label: '功能截图', acc: true },
+    t1: '标题 说明',
+    t2: '标题 说明',
+    i2: { label: '功能截图', acc: true },
+    i3: { label: '功能截图', acc: true },
+    t3: '标题 说明',
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: '1fr 14% 4% 1fr 14%',
+  areas: ['i1', 't1', '.', 'i2', 't2'],
+  boxes: { i1: { label: '截图', acc: true }, t1: '说明', i2: { label: '截图', acc: true }, t2: '说明' },
+};
+```

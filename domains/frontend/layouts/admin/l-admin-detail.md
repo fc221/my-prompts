@@ -29,3 +29,33 @@ order: 50
 ## 提示词
 
 {对象}详情页：页头为面包屑 → {对象名} + 状态标签，右侧主操作“{主操作}”，其余收进“更多”；基本信息用描述列表，宽屏 3 列、中屏 2 列、窄屏 1 列，空值“—”；下方用 Tabs 展示{关联内容}，当前 Tab 写进 URL；右侧 300px 窄栏放负责人和操作时间线，窄屏移到底部；页头滚出后压缩成吸顶单行；加载用骨架屏，不存在或无权限显示对应状态。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 27%',
+  rows: 'auto auto auto 1fr',
+  areas: ['head head', 'desc side', 'tabs side', 'sec side'],
+  boxes: {
+    head: { inner: { cols: '1fr 24%', rows: '1fr', areas: ['t op'], boxes: { t: '名称 · 状态', op: '操作' } } },
+    desc: { label: '字段（3 列）', kind: 'field' },
+    tabs: 'Tabs',
+    sec: { label: '关联记录', acc: true },
+    side: '时间线',
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto auto auto 1fr auto',
+  areas: ['nav', 'head', 'desc', 'tabs', 'sec', 'bar'],
+  boxes: {
+    nav: { label: '‹ 返回', kind: 'mtop', text: '订单详情' },
+    head: '名称 状态',
+    desc: { label: '字段单列', kind: 'field' },
+    tabs: 'Tabs',
+    sec: { label: '关联', acc: true },
+    bar: '主操作',
+  },
+};
+```

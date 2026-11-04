@@ -40,3 +40,18 @@ fetch 和 axios 混用，各处自己拼地址、自己处理 401；要统一加
 3. 按资源建 API 模块（{资源名，如 订单、门店、工单}），函数命名 listXxx / getXxx / createXxx / updateXxx / deleteXxx，返回解包后的业务数据。
 4. 把调用处全部换成这些函数；加 lint 规则，src/api 以外禁止直接使用 fetch 和 axios。
 5. 跑类型检查和测试，汇报新增和改动的文件、替换了多少处、哪些接口的返回格式不统一需要和后端确认。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '调用方', items: ['useOrderList', 'OrderListPanel'], note: '只调 API 函数，不写路径' },
+    { t: 'API 函数', items: ['listOrders', 'getOrder', 'cancelOrder'], note: 'src/api/orders.ts，接受 signal' },
+    { t: 'client.ts', items: ['加头', '解包 data', '归一 ApiError', '401 回调'], note: '唯一出口：超时 10 秒，带 X-Request-Id', acc: true },
+  ], { arrow: 'src/api 以外不出现 fetch' }), { title: '请求层封装 · 只有一个出口' });
+}
+</script>

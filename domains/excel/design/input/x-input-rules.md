@@ -41,3 +41,47 @@ order: 20
 4. 写一张“说明”工作表，用 3 行示例说明正确填法和常见错误。
 5. 给出一个检查公式列，用 ISNUMBER 等函数标出不合规的行。
 交付时说明哪些列由填表人填写、哪些列是公式，以及收回数据后怎么快速检查。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-tag{margin:0 0 5px!important;font-size:11.5px;font-weight:650}
+.m-no{color:#b42318}
+.m-ok{color:#05603a}
+.m-fit .dg-col:first-child{flex:none}
+</style>
+
+<div class="dg m-fit"></div>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const tag = (t, ok) => '<p class="m-tag ' + (ok ? 'm-ok' : 'm-no') + '">' + t + '</p>';
+  draw(root, [
+    tag('✗ 文本日期、带单位、多种写法', false) + sheet({
+      head: ['日期', '门店', '商品', '数量', '金额'],
+      widths: [62, 56, 64, 36, 44],
+      rows: [
+        ['2026.10.5', '滨江门店', '拿铁×2、美式', '3杯', '约74'],
+        ['10月6号', '滨江', '经典拿铁', '2', '52元'],
+        ['2026/10/7', ' 滨江店', '冷萃咖啡', '1', '28'],
+        ['', '同上', '可颂', '无', '-'],
+      ],
+      marks: { A2: 'bad', A3: 'bad', B2: 'warn', B3: 'warn', B4: 'warn', C2: 'bad', D2: 'bad', E2: 'bad', E3: 'bad', B5: 'bad', D5: 'warn', E5: 'warn' },
+    }),
+    tag('✓ 真日期、纯数字、一种写法', true) + sheet({
+      head: ['日期', '门店', '商品', '数量（杯）', '金额（元）'],
+      widths: [74, 60, 60, 70, 72],
+      rows: [
+        ['2026-10-05', '滨江店 ▾', '经典拿铁', '2', '52.00'],
+        ['2026-10-05', '滨江店 ▾', '美式', '1', '22.00'],
+        ['2026-10-06', '滨江店 ▾', '经典拿铁', '2', '52.00'],
+        ['2026-10-07', '滨江店 ▾', '冷萃咖啡', '1', '28.00'],
+      ],
+      freeze: true,
+      tabs: ['销售', '说明'],
+    }),
+  ], { title: '录入规范 · 用 =ISNUMBER() 检查日期和数字是不是真的', min: 0.45 });
+}
+</script>

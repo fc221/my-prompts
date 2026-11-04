@@ -35,8 +35,34 @@ order: 40
 
 把{模块}改成依赖注入。先列出这个模块里在内部 new、读全局变量或通过服务定位器拿到的依赖：数据库、仓储、{外部客户端，如 短信、支付}、当前时间、ID 生成。然后：
 1. 全部改成构造器注入，依赖字段只读。
-2. 组装放到项目现有的组装位置（{容器配置或启动代码}），业务代码里不出现容器 API。
+2. 组装放到项目现有的组装位置（{容器配置或启动代码}），有框架容器（Spring、NestJS、ASP.NET Core、Laravel）的用它自带的注册方式，不自己写容器或服务定位器；业务代码里不出现容器 API。
 3. 当前时间和 ID 生成各抽一个可替换的小接口，测试里用固定值。
 4. 只给外部系统和有多个实现的依赖定义接口，内部 service 直接注入具体类；多实现按配置项在组装处选择。
 5. 构造参数超过 6 个或出现循环依赖时，先停下来给出拆分建议。
 最后列出改动文件，并补一条用固定时间验证{时间相关规则，如 30 分钟未支付自动取消}的测试。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, stack, tree } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    stack([
+      { t: '组装处', items: ['src/bootstrap/'], note: '只在这里组装，按 sms.provider 选实现', acc: true },
+      { t: '依赖', items: ['OrderRepository', 'Clock', 'IdGenerator', 'aliyun_sms'] },
+      { t: '业务类', items: ['OrderService(repo, clock)'], note: '构造器注入，依赖字段只读' },
+    ], { arrow: '从外面传进来' }),
+    tree(`
+src/
+* bootstrap/        唯一组装处
+  order/
+    order_service   无容器 API
+  infra/sms/
+    aliyun_sms
+    tencent_sms     按配置二选一
+`),
+  ], { title: '依赖注入 · 组装只在一处' });
+}
+</script>

@@ -41,3 +41,22 @@ BFF 最容易长成第二个业务层：在里面算价格、判断能不能退�
 4. 每个下游标为必需或可降级：必需的失败就整体报错；可降级的返回空值，并在 degraded 数组里写明区块名。
 5. 登录态改为 HttpOnly 会话 Cookie，令牌只在 BFF 和下游之间流转；透传 X-Request-Id。
 最后列出改了哪些文件、每个页面改前改后的请求次数和耗时，并演示一个可降级的下游超时后页面仍能正常返回。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['App', 'app-bff', '会员服务', '推荐服务'], [
+    [0, 1, 'GET /app/home'],
+    [1, 1, '总预算 800ms，并发调下游'],
+    [1, 2, '会员、积分'],
+    [1, 3, '推荐（可降级）'],
+    [3, 1, '超时', 'rx'],
+    [1, 1, 'degraded: ["recommend"]'],
+    [1, 0, '200 + degraded', 'r'],
+  ]), { title: 'BFF · 一个页面一个聚合接口，可降级的区块超时就降级' });
+}
+</script>

@@ -41,3 +41,22 @@ order: 90
 5. 签完立即验签，不通过就判失败；记录文件 SHA-256、证书序列号和签署时间。
 6. 边界情况：输入文件已有签名时追加签名，前一个签名保持有效；输入是加密文件时按 {加密文件处理策略} 处理；损坏文件直接拒绝。
 最后说明改了哪些文件，并给出用 pdfsig 验证一份样本的输出。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['签名服务', 'TSA', 'HSM', '阅读器'], [
+    [0, 0, '水印、压缩都做完再签'],
+    [0, 2, '签 ByteRange 摘要'],
+    [2, 0, '签名值 · 私钥不出 HSM', 'r'],
+    [0, 1, '取时间戳'],
+    [1, 0, '时间戳令牌', 'r'],
+    [0, 3, '嵌入签名后交付'],
+    [3, 3, '验签：签后未被修改'],
+  ]), { title: '数字签名 · 必须是最后一步，签完不能再改' });
+}
+</script>

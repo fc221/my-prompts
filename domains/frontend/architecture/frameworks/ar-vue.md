@@ -45,3 +45,29 @@ Vue 3.5 起 defineProps 解构出的变量保持响应式，默认值可以直�
 7. 提供 dev、build、test、test:e2e、lint、typecheck 命令，类型检查用 vue-tsc。
 一次只迁一个功能，迁完跑 vue-tsc 和测试，保证行为不变。
 完成后汇报改了哪些文件、迁移的组件和 store 数量、还没迁的部分，以及构建和测试结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+  main.ts             入口
+  App.vue             根组件
+* router/             路由表，beforeEach 统一检查权限
+* views/              页面，动态 import 懒加载
+  features/           按领域分
+    orders/           components、composables、schemas
+      api.ts          本领域请求函数
+      queries.ts      查询键
+  components/ui/      基础组件，OrderCard.vue 式命名
+  stores/             Pinia，setup 写法
+* composables/        useOrderFilter，替代 mixin
+  api/                请求客户端
+  styles/             CSS 变量令牌
+`), { title: 'Vite + Vue 3.5 单页应用' });
+}
+</script>

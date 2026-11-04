@@ -39,3 +39,22 @@ order: 40
 3. 在 src/realtime 下建单一连接和订阅用的 hook / 组合式函数；收到消息后按规则更新缓存或让对应查询失效，丢弃旧版本消息，高频消息合并后再更新。
 4. 实现指数退避重连，重连后补拉订阅过的数据；把连接状态提供给界面。
 5. 验证：开两个窗口操作同一条{资源名}，另一边 3 秒内更新；断网 30 秒再恢复，数据完整；来回切换页面，连接数不增加。汇报改动文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['工单页', '连接', '缓存层', '服务端'], [
+    [0, 1, '订阅 ticket:8812'],
+    [3, 1, '推送 type、id、version'],
+    [1, 2, '并入缓存'],
+    [1, 1, '断线退避重连'],
+    [1, 3, '重连成功'],
+    [1, 2, '订阅过的查询失效'],
+    [2, 3, '补拉断线期间数据'],
+  ]), { title: '实时数据 · 推送并入缓存，重连后补拉' });
+}
+</script>

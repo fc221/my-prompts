@@ -3,6 +3,7 @@ zh: 生成 OpenAPI 契约
 en: Generate an OpenAPI contract
 aka: OpenAPI 3.1 Swagger 接口契约 接口文档生成 schema
 order: 30
+preview: api-openapi
 ---
 
 ## 是什么
@@ -20,12 +21,13 @@ order: 30
 ## 要点
 
 - OpenAPI 3.1 的 schema 就是 JSON Schema 2020-12：可空字段写成 type 数组里加 null，nullable 已经去掉；schema 里的示例用 examples 数组。
+- FastAPI、NestJS 的 @nestjs/swagger、springdoc、ASP.NET 的 AddOpenApi 能导出的先导出，AI 只补 examples、错误响应和描述。
 - 生成后用 OpenAPI 校验工具跑一遍，把报错贴回去让它改。
 - 从代码反推时以运行时为准：拿几个真实响应和 schema 对一遍。
 
 ## 提示词
 
-为{服务名}生成 OpenAPI 3.1 契约，依据：{接口清单 / 现有代码目录}。先读项目里已有的契约文件、路由和 DTO，已有约定就沿用。
+为{服务名}生成 OpenAPI 3.1 契约，依据：{接口清单 / 现有代码目录}。先读项目里已有的契约文件、路由和 DTO，已有约定就沿用；框架能导出契约的（FastAPI、@nestjs/swagger、springdoc、ASP.NET 的 AddOpenApi）先导出，在导出结果上只补 examples、错误响应和描述。
 1. openapi 写 3.1.1；servers 写 {环境地址}；按资源分 tags。
 2. 每个 API：operationId（如 listOrders、cancelOrder）、summary、参数（类型、范围、默认值）、请求体和全部可能的响应。
 3. Schema 放 components/schemas 复用；可空字段写成 type 数组加 null；时刻用 format: date-time；金额和 ID 在 description 里写单位和格式；枚举列全，只读字段标 readOnly。

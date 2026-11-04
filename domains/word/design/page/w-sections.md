@@ -40,3 +40,48 @@ order: 20
 3. 打印方式：{单面或双面}。双面时开启奇偶页不同，页码放外侧，每章用“奇数页”分节符开始。
 4. {需要横排的内容，如 第 3 章的门店对比表} 所在页单独成节、改为横向，其余节保持纵向。
 5. 完成后按节列出：节号、包含哪些内容、页码格式和起始值；再核对目录里的页码和正文一致。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-row{display:flex;align-items:flex-end;gap:0;font:10px/1.3 system-ui,"PingFang SC",sans-serif}
+.m-sec{display:grid;gap:6px}
+.m-lab{display:grid;gap:1px;padding:0 2px 5px;border-bottom:2px solid var(--c,#2b579a);color:#344054}
+.m-lab b{color:var(--c,#2b579a);font-size:11.5px}
+.m-pgs{display:flex;gap:8px}
+.m-pg{position:relative;display:grid;align-content:start;gap:4px;width:98px;height:138px;padding:14px 11px 0;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.12),0 8px 16px -8px rgba(16,24,40,.25)}
+.m-pg span{display:block;height:3px;border-radius:2px;background:#dde1e7}
+.m-pg span.i{margin-left:8px}
+.m-pg .t{margin:0 0 3px;text-align:center;color:#111;font:700 10px/1.3 "PingFang SC","SimHei",sans-serif}
+.m-pg .tl{margin:2px 0 3px;color:#111;font:700 9.5px/1.3 "PingFang SC","SimHei",sans-serif}
+.m-pg .cv{margin:22px 0 4px;text-align:center;color:#111;font:700 11px/1.4 "Songti SC","SimSun",serif}
+.m-pg .im{height:26px;margin:2px 10px;border-radius:2px;background:linear-gradient(135deg,#c9d7ee,#e7edf6)}
+.m-ft{position:absolute;left:0;right:0;bottom:0;height:22px;border-top:1px dashed #d0d5dd;display:flex;align-items:center;justify-content:center;color:#111;font:10px/1 "Times New Roman","Songti SC",serif}
+.m-ft.no{color:#98a2b3;font:9px/1 system-ui,"PingFang SC",sans-serif}
+.m-ft em{position:absolute;left:0;top:-13px;padding:1px 4px;border-radius:2px 2px 0 0;background:var(--c,#2b579a);color:#fff;font:9px/1.2 system-ui,"PingFang SC",sans-serif;font-style:normal;white-space:nowrap}
+.m-brk{display:grid;justify-items:center;align-self:stretch;width:30px;margin-top:38px}
+.m-brk i{width:0;height:100%;border-left:2px dotted #b54708;position:relative}
+.m-brk b{position:absolute;margin-top:24px;padding:3px 1px;background:#fff6ea;color:#b54708;font-size:9.5px;font-weight:600;writing-mode:vertical-rl;letter-spacing:.06em;white-space:nowrap}
+.m-desk .m-note{margin:10px 0 0;text-align:center;color:#475467;font:11px/1.4 system-ui,"PingFang SC",sans-serif}
+.m-note b{color:#b42318}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const lines = (n) => '<span class="i"></span>' + '<span></span>'.repeat(n);
+  const pg = (inner, ft, tab) => '<div class="m-pg">' + inner + '<p class="m-ft' + (ft ? '' : ' no') + '">' + (tab ? '<em>' + tab + '</em>' : '') + (ft || '无页码') + '</p></div>';
+  const sec = (c, title, sub, pages) => '<div class="m-sec" style="--c:' + c + '"><p class="m-lab"><b>' + title + '</b>' + sub + '</p><div class="m-pgs">' + pages + '</div></div>';
+  const brk = '<div class="m-brk"><i><b>分节符（下一页）</b></i></div>';
+  const s1 = sec('#667085', '第 1 节', '封面 · 不编页码', pg('<p class="cv">项目结项报告</p><span style="margin:0 14px"></span><span style="margin:0 22px"></span>', '', '页脚 - 第 1 节 -'));
+  const s2 = sec('#7c3aed', '第 2 节', 'Ⅰ, Ⅱ, Ⅲ… 起始 Ⅰ', pg('<p class="t">摘　要</p>' + lines(6), 'Ⅰ', '页脚 - 第 2 节 -') + pg('<p class="t">目　录</p>' + lines(6), 'Ⅱ'));
+  const s3 = sec('#2b579a', '第 3 节', '1, 2, 3… 起始 1，不续前节', pg('<p class="tl">第1章　项目概述</p>' + lines(5), '1', '页脚 - 第 3 节 -') + pg(lines(2) + '<div class="im"></div>' + lines(2), '2'));
+  draw(root, '<div><div class="m-row">' + s1 + brk + s2 + brk + s3 + '</div><p class="m-note">每节的页眉、页脚都先取消<b>“链接到前一节”</b>，再改页码格式</p></div>', { center: true, min: 0.35 });
+}
+</script>

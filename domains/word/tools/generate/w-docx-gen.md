@@ -41,3 +41,59 @@ order: 10
 4. 需要目录和页码时写入 TOC、PAGE 域，并设置打开时更新域；有横排宽表的单独分节改为横向。
 5. 文件名用 {命名规则，如 巡检报告_门店编号_日期.docx}；接口直接返回文件流时设好 Content-Disposition，中文文件名按 RFC 5987 编码。
 6. 加一个测试：用一份示例数据生成文件，再读回来检查标题数量、表格行数和样式名。最后说明改了哪些文件，以及怎么在本地生成一份看效果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg{--sec:#0891b2}
+.m-wrap{display:flex;gap:14px;align-items:center}
+.m-code{width:430px}
+.m-out{display:grid;gap:6px;justify-items:center}
+.m-pg{width:226px;padding:14px 18px 12px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 10px 22px -10px rgba(16,24,40,.25);color:#111;font-family:"Songti SC","SimSun",serif}
+.dg .m-hd{margin:0 0 8px;padding-bottom:2px;border-bottom:.75px solid #595959;color:#595959;font-size:7px;text-align:right}
+.dg .m-h1{margin:0 0 4px;font:700 11px/1.4 "PingFang SC","SimHei",sans-serif}
+.dg .m-p{margin:0 0 6px;font-size:7.5px;line-height:1.6}
+.m-tb{width:100%;border-collapse:collapse;font-size:7px;line-height:1.5;border-top:1.2px solid #111;border-bottom:1.2px solid #111}
+.m-tb th{border-bottom:.6px solid #111;font:700 7px/1.5 "PingFang SC","SimHei",sans-serif;text-align:left;padding:1px 3px}
+.m-tb td{padding:1px 3px;white-space:nowrap}
+.m-im{height:46px;margin:8px 0 0;border-radius:1px;background:linear-gradient(90deg,#e8f4f8,#c3e2ec 50%,#e8f4f8),#e8f4f8;position:relative}
+.m-im::after{content:"";position:absolute;inset:10px 14px;background:linear-gradient(170deg,transparent 45%,#0891b2 46% 50%,transparent 51%)}
+.dg .m-cap{margin:2px 0 0;text-align:center;font-size:6.8px}
+.m-sty{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;max-width:220px}
+.m-sty span{padding:1px 6px;border-radius:8px;background:#e0f2f7;color:#0e7490;font:10px/1.5 system-ui,"PingFang SC",sans-serif}
+</style>
+
+<div class="dg"></div>
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const py = code([{ t: 'python-docx · 模板管格式，代码只写内容', text: `
+doc = Document('template.docx')  # 格式全在模板里
+body = doc.element.body
+for el in list(body)[:-1]:       # 清空示例，留下 sectPr
+    body.remove(el)
+
+doc.add_heading(f'{r.store} 10 月巡检报告', level=1)
+doc.add_paragraph(f'巡检日期：{r.date}', style='Normal')
+t = doc.add_table(rows=1, cols=3, style='三线表')
+hdr = ['问题', '责任人', '期限']
+for c, h in zip(t.rows[0].cells, hdr):
+    c.text = h
+for it in r.issues:
+    cells = t.add_row().cells
+    cells[0].text = it.title
+    cells[1].text = it.owner
+    cells[2].text = it.due
+doc.add_picture(r.photo, width=Mm(150))
+doc.add_paragraph('图 1　冷柜温度记录', style='Caption')
+doc.save(f'巡检报告_{r.store_id}.docx')
+` }]);
+  const rows = [['冷柜门封条老化', '周敏', '10-20'], ['消防通道堆放纸箱', '陈屿', '10-16'], ['价签与系统不符 3 处', '许乐', '10-18']];
+  const page = '<div class="m-out"><div class="m-pg"><p class="m-hd">门店巡检报告</p><p class="m-h1">杭州湖滨店 10 月巡检报告</p><p class="m-p">巡检日期：2026-10-14　巡检人：沈未</p><table class="m-tb"><tr><th>问题</th><th>责任人</th><th>期限</th></tr>'
+    + rows.map((r) => '<tr><td>' + r.join('</td><td>') + '</td></tr>').join('') + '</table><div class="m-im"></div><p class="m-cap">图 1　冷柜温度记录</p></div>'
+    + '<div class="m-sty"><span>Heading 1</span><span>Normal</span><span>三线表</span><span>Caption</span></div></div>';
+  draw(root, '<div class="m-wrap"><div class="m-code">' + py + '</div>' + page + '</div>', { center: true, min: 0.4 });
+}
+</script>

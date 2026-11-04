@@ -24,7 +24,7 @@ order: 60
 ## 要点
 
 - 目标值：单页单据 300KB 以内，10–20 页图文报告 3MB 以内，带照片的手册 10MB 以内；超出就按下面几项逐个排查。
-- 字体：每款都是子集嵌入（整套思源黑体十几 MB，子集一般几百 KB）；全文件 1 个家族 2 个字重，pdffonts 列表里同一字体不应出现两次。
+- 字体：每款都是子集嵌入（整套思源黑体十几 MB，子集一般几百 KB）；全文件 1 个家族，单据 2 档、画册最多 4 档字重，pdffonts 列表里同一字体不应出现两次。
 - 图片：放进去之前按显示尺寸缩到 300dpi（屏幕版 150dpi），照片 JPEG 质量 80 左右，截图 PNG 做调色板量化，去掉 EXIF 和内嵌缩略图。
 - 去重：同一张 logo、印章、底纹全文件用同一个文件地址引用，生成器能复用同一个图像对象；每页各内联一份 base64 时，部分生成器会嵌入多份。
 - 少用会被栅格化的效果：Chromium 打印时 filter、backdrop-filter、带模糊的 box-shadow 和 text-shadow 会变成整块位图，又大又糊，打印样式里去掉。
@@ -36,8 +36,22 @@ order: 60
 
 {项目}生成的{文档类型} PDF 太大（现在约 {当前大小}），目标在 {目标大小} 以内，按项目现有的生成方式处理：
 1. 先测量：pdffonts 列字体（是否子集、有没有重复），pdfimages -list 列图片（像素、ppi、体积），找出占体积最多的前几项，写下来再动手。
-2. 字体：只留一个家族两个字重，确认是子集嵌入。
+2. 字体：只留一个家族，单据 2 档、画册最多 4 档字重，确认是子集嵌入。
 3. 图片：按显示尺寸缩到 {300 / 150}dpi，照片转 JPEG 质量 80，截图做 PNG 量化，去掉 EXIF；同一张 logo、印章只用一个文件地址引用。
 4. 打印样式里去掉 filter、backdrop-filter 和带模糊的阴影；数据点多的图表先聚合。
 5. 生成后用 qpdf 做无损整理；会丢标签的有损压缩先问我。
 最后给出改前改后的大小、每项改动各省了多少，以及改了哪些文件。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '先测量', note: 'pdffonts · pdfimages -list', acc: true }, { t: '字体子集', note: '单据 2 档，画册最多 4 档' }, { t: '图片降到 300dpi', note: 'JPEG 80 · 去 EXIF' }, { t: 'logo 只存一份', note: '同一文件地址' }],
+    [{ t: '去掉模糊效果', note: 'filter、模糊阴影' }, { t: 'qpdf 无损整理', note: '重写对象流' }, { t: '记录每份字节数', note: '超阈值告警', acc: true }],
+  ]), { title: '单页单据 ≤ 300KB · 图文报告 ≤ 3MB' });
+}
+</script>

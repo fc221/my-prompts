@@ -41,3 +41,24 @@ order: 20
 5. 边界情况：加密文件返回明确提示；已签名的文件提示“加水印会使签名失效”，按 {签名文件处理策略} 处理；损坏文件记录日志并返回 422。
 6. 记录下载审计：用户、文件、时间、水印内容摘要。
 最后说明改了哪些文件，并给出一份 4 页样本（含一页横版、一页旋转 90 度、一页扫描图片）的处理结果截图。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([{ t: '静态用 qpdf，动态用 pdf-lib', text: `
+# 静态：先做一页只有水印的 wm.pdf，叠到每页上层
+qpdf in.pdf --overlay wm.pdf --repeat=1 -- out.pdf
+// 动态：按下载人平铺，坐标按每页 CropBox 算
+const wm = 'wang.xm · 尾号 1234 · 2026-10-29 14:32'
+const { x, y, width, height } = page.getCropBox()
+for (let i = x; i < x + width; i += 180)
+  for (let j = y; j < y + height; j += 180)
+    page.drawText(wm, { x: i, y: j, size: 20, font,
+      opacity: 0.12, rotate: degrees(30) })
+` }]), { title: '加水印 · 威慑和追溯，不是访问控制' });
+}
+</script>

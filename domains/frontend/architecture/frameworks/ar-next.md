@@ -44,3 +44,29 @@ app/ 下的组件默认是服务端组件，只有需要状态、事件或浏览
 6. params、searchParams、cookies、headers 一律 await；middleware 改为 proxy；lint 直接用 eslint。
 按路由逐段改，每段改完跑 build 和端到端测试。
 完成后汇报改了哪些文件、客户端 JS 体积变化，以及 build 输出里每个路由是静态还是动态。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+* app/                  路由目录，默认服务端组件
+    layout.tsx          根布局
+*   (dashboard)/        路由组，不影响 URL
+      orders/
+        page.tsx        直接 await 数据层函数
+        loading.tsx     error.tsx、not-found.tsx 同级
+        [id]/           动态段
+        _components/    下划线开头，不参与路由
+    api/.../route.ts    只给外部调用和 webhook
+  features/orders/      actions.ts 写 'use server'
+  server/               顶部 import 'server-only'
+  proxy.ts              原 middleware，16 起改名
+next.config.ts          和 public/、.env 留在根目录
+`), { title: 'Next.js 16 · App Router' });
+}
+</script>

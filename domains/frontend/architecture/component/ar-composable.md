@@ -40,3 +40,18 @@ hook / 组合式函数每调用一次就是一份独立的状态，不是单例�
 3. 替换全部调用处：初始值、触发时机、清理时机和错误处理与原来一致；弹提示、跳路由留在组件里。
 4. 给每个新 hook 写最小的单元测试：初始值、参数变化后的结果、卸载后已清理。
 5. 汇报新建了哪些 hook、替换了多少处、哪些重复因为只出现 2 次暂不处理。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '组件', items: ['登录页', '绑定手机号弹窗'], note: '只管调用、显示、弹提示和跳路由' },
+    { t: 'Hook', items: ['useCountdown(60)', '→ { left, start }'], note: '状态 + 定时器，卸载时清理', acc: true },
+    { t: '已装的库', items: ['VueUse', 'usehooks-ts'], note: '有现成的先用，不为几行新装库' },
+  ], { arrow: '每调用一次是一份独立状态' }), { title: '逻辑复用 · 第 3 次出现再抽' });
+}
+</script>

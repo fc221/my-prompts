@@ -39,3 +39,21 @@ order: 30
 2. 按规则改：入口和每个下游记请求数、错误数、耗时直方图，snake_case 加单位后缀；标签只用路由模板、方法、状态码；连接池和队列记使用量和积压；加{业务指标，如下单数、支付成功率}；接入 OpenTelemetry 自动埋点并用 traceparent 传播，采样 10%，错误和慢请求全保留；日志附 trace_id 和 span_id。
 3. 告警：为{核心接口}定可用性和延迟目标，按错误预算消耗速度告警，每条附处理步骤。
 4. 汇报：新增指标清单、面板查询语句、告警规则文件，并用一次真实请求展示完整的追踪链路。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['订单服务', '库存服务', '支付服务'], [
+    [0, 0, '入口读取或生成 trace_id'],
+    [0, 1, 'traceparent 头'],
+    [1, 0, '扣库存 35ms', 'r'],
+    [0, 2, 'traceparent 继续传'],
+    [2, 0, '支付 820ms，慢在这', 'rx'],
+    [0, 0, '日志带 trace_id、span_id'],
+  ]), { title: '链路追踪 · 一次下单，每段一个 span' });
+}
+</script>

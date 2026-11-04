@@ -43,3 +43,28 @@ order: 30
 6. packages 不依赖 apps。
 分步迁移，每一步完成后所有应用都能本地启动和构建。
 完成后汇报新的目录树和改了哪些文件；验证：全量构建通过，改一个共享包只触发依赖它的应用重新构建，未改动时第二次构建命中缓存。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+* apps/                 可部署的应用
+    web/                官网
+    admin/              后台
+    h5/
+* packages/             共享包，apps 可依赖，反过来不行
+    ui/                 @mall/ui，写 exports 字段
+    utils/              @mall/utils
+    api-types/          前后端共用的接口类型
+    eslint-config/      共享规则，应用只写差异
+    tsconfig/           base、react、node
+  pnpm-workspace.yaml   内部依赖写 workspace:*
+  package.json          packageManager 锁定版本
+  turbo.json            任务上下游、输出目录、缓存
+`), { title: 'pnpm workspace + Turborepo' });
+}
+</script>

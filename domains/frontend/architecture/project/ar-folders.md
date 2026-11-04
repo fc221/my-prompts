@@ -38,3 +38,30 @@ order: 10
 规则：只被一个领域用的代码移进该领域；带业务词的代码移出通用目录；样式和测试跟着组件走；路径别名统一用 @/。
 分批移动，每批只移一个领域并同步更新 import，跑完类型检查和测试再移下一批；只移动文件和调整 import，业务逻辑保持不变。
 完成后给出新旧目录对照、移动的文件清单，以及类型检查、测试和构建结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+src/
+  app/                入口、全局 provider、路由、错误边界
+  pages/              只组装领域组件，OrderListPage
+* features/           按业务领域分，对外只走 index.ts
+*   orders/
+      components/     OrderCard.tsx、OrderCard.test.tsx
+      api.ts          本领域的请求函数
+      queries.ts      查询键和查询
+      index.ts        对外出口
+    members/
+  components/ui/      无业务的基础组件
+  api/                client.ts、错误分类、生成的类型
+  stores/             跨页面的全局状态
+  lib/                日期、金额等纯函数
+  config/             环境配置
+`));
+}
+</script>

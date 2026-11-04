@@ -1,6 +1,8 @@
 ---
-zh: App 首页（有记忆点）
+zh: App 首页
 en: Memorable app home
+aka: App首页（有记忆点）
+preview: l-app-bento
 order: 100
 ---
 

@@ -40,3 +40,17 @@ Redis 预扣成功不等于下单成功：异步下单失败、用户超时未�
 3. Redis 预扣：活动前预热库存，一条 Lua 脚本原子完成限购判断、库存判断、扣减和记录用户，售罄后打进程内标记。
 4. 队列异步下单：预扣成功发消息并返回生成中，消费者条件扣减数据库库存，(activity_id, user_id) 唯一；下单失败或超时未支付回补 Redis 库存，按订单号只回补一次。
 最后给出压测和对账方法：按 10 倍预估峰值压测，断言订单数不超过库存且没有一人多单；活动结束核对 Redis 剩余 + 已下单 + 已回补 = 初始库存，数据库库存与订单数一致。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '前端', note: '置灰 · 地址开抢才下发' }, { t: '网关限流', note: 'SKU 令牌桶 · 用户 1 次/秒' }, { t: 'Redis 预扣', note: 'Lua：限购 + 库存 + 扣减', acc: true }, { t: '队列异步下单', note: '条件扣库 + 唯一约束' }],
+    [{ t: '超限 · 售罄 · 已抢过', note: '429 或直接返回', bad: true, via: '被挡下' }, { t: '下单失败 · 未支付', note: 'INCR 回补，只一次', bad: true }, { t: '活动后对账', note: '剩余 + 已下单 + 回补 = 初始' }],
+  ]), { title: '秒杀四层削峰' });
+}
+</script>

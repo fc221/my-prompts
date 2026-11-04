@@ -42,3 +42,34 @@ Excel 自带的数据整理工具（数据 → 获取和转换数据）：把一
 5. 与 {参照表，如 商品表} 按 {关联键，如 商品编号} 做左外部合并，带出 {要带出的列}。
 6. 结果加载到新工作表的超级表，命名为 {结果表名}。
 交付时列出查询的每个步骤和作用，说明下个月放入新文件后怎么刷新，并给出行数和金额合计的核对结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-gap{height:10px}
+</style>
+
+<script type="module">
+import { draw, sheet, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    { t: '从文件夹', note: '12 个门店文件' },
+    { t: '提升标题', note: '删标题行和合计行' },
+    { t: '逆透视', note: '咖啡、烘焙列转成行', acc: true },
+    { t: '更改类型', note: '日期、小数' },
+    { t: '上载', note: '超级表 合并结果' },
+  ]) + '<div class="m-gap"></div>' + sheet({
+    head: ['Source.Name', '门店', '月份', '品类', '销售额'],
+    widths: [132, 56, 66, 48, 76],
+    rows: [
+      ['滨江店-2026-10.xlsx', '滨江店', '2026-10', '咖啡', '5,980.00'],
+      ['滨江店-2026-10.xlsx', '滨江店', '2026-10', '烘焙', '2,750.00'],
+      ['西湖店-2026-10.xlsx', '西湖店', '2026-10', '咖啡', '4,410.00'],
+      ['西湖店-2026-10.xlsx', '西湖店', '2026-10', '烘焙', '2,120.00'],
+    ],
+    tabs: ['合并结果', '门店表'],
+    freeze: true,
+  }), { title: 'Power Query · 每一步记在“应用的步骤”里，下月放入新文件后全部刷新', min: 0.45 });
+}
+</script>

@@ -1,0 +1,535 @@
+---
+zh: 侧栏的五种形态
+en: Five forms of a sidebar
+aka: 侧边栏样式 侧栏选型 左侧导航 弧形导航 滚轮导航 收起侧栏
+of: c-sidebar-nav
+tab: 五种形态
+order: 11
+---
+
+## 是什么
+
+侧栏不止贴左边的一条白色长栏。这里排了五种：悬浮卡片、弧形滚轮、多级展开、收起成图标、隐藏式。它们占的空间和存在感差很多，示例都能点。
+
+## 适合
+
+要定导航放在左边之后，选它长什么样。入口的数量、层级和用户多久用一次，决定了选哪种。
+
+## 不适合
+
+入口少于 4 个且都是同级内容时，放顶部更省事，见「顶栏」；手机上用「底部标签栏」。
+
+## 注意
+
+弧形滚轮只有三五个入口时才成立，一旦入口变多，用户就得一个个转过去找。它是品牌表达，放在工具型产品里会拖慢每一次操作。
+
+## 要点
+
+- 悬浮卡片：内容铺满底图、导航不想把页面切成两半时用；把组件库的菜单（el-menu / n-menu / a-menu）放进一张圆角卡片，四周留 8–12px，带柔和阴影，底图从卡片后面透出来
+- 弧形滚轮：品牌站、入口 3–5 个、要记忆点时用；组件库没有现成的，自己做，选项沿弧线排开，转到基准线才高亮，右侧内容同步切换，同时给上下按钮和方向键
+- 多级展开：后台功能多、有两到三层时用；就是组件库的竖向菜单：Element Plus el-menu + el-sub-menu（unique-opened、default-openeds）、Naive UI n-menu 的 options 带 children（accordion、default-expanded-keys）、Ant Design Vue a-menu mode="inline" + a-sub-menu（openKeys）；当前页所在分组默认展开，进页面时高亮到最深一级；细节见「侧栏导航」
+- 收起成图标：常用工具、熟手想把空间让给内容时用；就是菜单的收起态：el-menu collapse、n-menu collapsed（配 n-layout-sider collapse-mode="width"）、a-menu inlineCollapsed（配 a-layout-sider collapsible）；展开约 220px，收起 56–64px，收起状态记住；细节见「图标窄栏导航」
+- 隐藏式：内容为主、导航偶尔才用时用；组件库的抽屉从左侧滑出（el-drawer direction="ltr"、n-drawer placement="left"、a-drawer placement="left"），里面放同一个菜单；点 ☰ 滑入，再点、按 Esc 或点选项都能关；细节见「抽屉」
+- 跟 AI 说清楚四件事：入口几个几层、用户多久用一次、内容区要多宽、品牌表达排第几
+
+## 提示词
+
+给{产品}做左侧导航。一共{入口数}个入口，{层级数}层，用户{每天都用 / 偶尔才用}，内容区是{表格 / 文档 / 图片 / 品牌内容}，品牌表达在这里{重要 / 次要}。按这个规则选形态：品牌站且入口 3–5 个用弧形滚轮；偶尔才用用隐藏式；有两层以上用多级展开；每天都用且内容区要宽用收起成图标；底图或地图铺满时用悬浮卡片。告诉我选了哪一种和理由，然后只实现这一种。
+
+除弧形滚轮外都用项目组件库自带的菜单（Element Plus el-menu；Naive UI n-menu；Ant Design Vue a-menu），当前项由路由驱动；收起成图标用菜单的 collapse / collapsed / inlineCollapsed，收起状态写进本地存储，收起后的图标要有名称提示；隐藏式用组件库的抽屉从左侧滑出（el-drawer direction="ltr" / n-drawer placement="left" / a-drawer placement="left"），关闭后焦点回到开关按钮；弧形滚轮自己做，要同时支持方向键和上下按钮，转到基准线的那一项才算当前项；减少动态效果时直接切到结果状态。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/pick.css">
+<style>
+  .x {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  @container (min-height: 260px) {
+    .x {
+      zoom: 1.5;
+    }
+  }
+  :where(.x) button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+  .x button:focus-visible {
+    outline: 2px solid #3b5bdb;
+    outline-offset: -2px;
+  }
+  .x-app {
+    position: relative;
+    display: flex;
+    height: 112px;
+    overflow: hidden;
+    border: 1px solid #e1e4ea;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .x-main {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 10px;
+  }
+  .x-main h4 {
+    margin: 0 0 6px;
+    font-size: 13px;
+  }
+  .x-sk {
+    display: block;
+    height: 7px;
+    margin-bottom: 6px;
+    border-radius: 4px;
+    background: #e8ebf0;
+  }
+  .x-tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .x-tiles i {
+    height: 30px;
+    border-radius: 6px;
+    background: #eef0f4;
+  }
+  .x-i {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    height: 24px;
+    padding: 0 6px;
+    border-radius: 6px;
+    color: #4a505b;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .x-i svg {
+    flex: none;
+    width: 14px;
+    height: 14px;
+  }
+  .x-i:hover {
+    background: #f1f3f7;
+  }
+  .x-i[aria-current='page'] {
+    background: #eef1fd;
+    color: #2b45b0;
+    font-weight: 600;
+  }
+
+  .x-photo {
+    border: 0;
+    background: linear-gradient(130deg, #dfe7f7, #e9e3f4 55%, #f6e6dc);
+  }
+  .x-float {
+    flex: none;
+    align-self: center;
+    width: 94px;
+    margin-left: 8px;
+    padding: 5px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 6px 16px rgb(44 56 92 / 16%);
+  }
+  .x-photo .x-sk {
+    background: rgb(255 255 255 / 75%);
+  }
+  .x-photo .x-tiles i {
+    background: rgb(255 255 255 / 60%);
+  }
+
+  .x-wheel {
+    border: 0;
+    background: linear-gradient(120deg, #1f2433, #2d2a3f 60%, #41304a);
+    color: #e9e7f2;
+  }
+  .x-ring {
+    position: absolute;
+    top: 50%;
+    left: -124px;
+    width: 184px;
+    height: 184px;
+    border: 1px solid rgb(255 255 255 / 22%);
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+  .x-line {
+    position: absolute;
+    top: 50%;
+    left: 50px;
+    width: 18px;
+    height: 1px;
+    background: #ffd27a;
+  }
+  .x-w {
+    position: absolute;
+    top: 50%;
+    left: -32px;
+    height: 20px;
+    margin-top: -10px;
+    padding: 0 4px;
+    color: #c9c6d6;
+    transform-origin: 0 50%;
+    transform: rotate(var(--a)) translateX(var(--r));
+    transition:
+      transform 0.32s cubic-bezier(0.3, 0.7, 0.2, 1),
+      color 0.2s,
+      opacity 0.2s;
+  }
+  .x-w.on {
+    color: #ffd27a;
+    font-weight: 600;
+  }
+  .x-w.off {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .x-side-txt {
+    position: absolute;
+    top: 50%;
+    left: 136px;
+    right: 44px;
+    transform: translateY(-50%);
+  }
+  .x-side-txt b {
+    display: block;
+    font-size: 18px;
+    line-height: 24px;
+  }
+  .x-side-txt span {
+    color: #c9c6d6;
+    font-size: 11px;
+  }
+  .x-turn {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    display: grid;
+    gap: 4px;
+    transform: translateY(-50%);
+  }
+  .x-turn button {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 12%);
+  }
+
+  .x-tree {
+    flex: none;
+    width: 112px;
+    padding: 2px 4px;
+    border-right: 1px solid #e8ebf0;
+    overflow-y: auto;
+  }
+  .x-tree .x-i svg:last-child {
+    width: 10px;
+    height: 10px;
+    margin-left: auto;
+    transition: transform 0.18s;
+  }
+  .x-tree [aria-expanded='true'] svg:last-child {
+    transform: rotate(90deg);
+  }
+  .x-sub {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .x-tree .x-i {
+    height: 22px;
+  }
+  .x-tree .x-sub .x-i {
+    height: 20px;
+    padding-left: 26px;
+  }
+
+  .x-rail {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    width: 94px;
+    padding: 4px;
+    border-right: 1px solid #e8ebf0;
+    transition: width 0.2s;
+  }
+  .x-rail.mini {
+    width: 36px;
+  }
+  .x-rail .x-i {
+    overflow: hidden;
+  }
+  .x-rail.mini .x-i span {
+    display: none;
+  }
+  .x-tog {
+    margin-top: auto;
+    border-top: 1px solid #eef0f3;
+    border-radius: 0;
+  }
+
+  .x-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 6px;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .x-burger {
+    position: relative;
+    z-index: 2;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: #f1f3f7;
+  }
+  .x-burger svg {
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+  }
+  .x-col {
+    flex-direction: column;
+  }
+  .x-col .x-main {
+    padding-top: 6px;
+  }
+  .x-drawer {
+    position: absolute;
+    top: 30px;
+    bottom: 0;
+    left: 0;
+    width: 112px;
+    padding: 4px;
+    border-right: 1px solid #e1e4ea;
+    background: #fff;
+    box-shadow: 6px 0 14px rgb(31 35 41 / 12%);
+    transform: translateX(-104%);
+    transition: transform 0.2s;
+  }
+  .x-drawer.on {
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .x-w,
+    .x-rail,
+    .x-drawer,
+    .x-tree svg {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script type="module">
+import { pick } from '../../_shared/pick.ts';
+
+const svg = (d) =>
+  `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const I = {
+  home: svg('<path d="M2.5 7.5 8 3l5.5 4.5M4 6.5V13h8V6.5"/>'),
+  chart: svg('<path d="M3 13V8m5 5V3m5 10V6"/>'),
+  box: svg('<path d="M2.5 5 8 2.5 13.5 5v6L8 13.5 2.5 11zM2.5 5 8 7.5 13.5 5M8 7.5v6"/>'),
+  gear: svg('<circle cx="8" cy="8" r="2.2"/><path d="M8 2v2m0 8v2M2 8h2m8 0h2M3.8 3.8l1.4 1.4m5.6 5.6 1.4 1.4m0-8.4-1.4 1.4m-5.6 5.6-1.4 1.4"/>'),
+  chev: svg('<path d="m6 3 5 5-5 5"/>'),
+  menu: svg('<path d="M2.5 4h11M2.5 8h11M2.5 12h11"/>'),
+  fold: svg('<path d="m10 3-5 5 5 5"/>'),
+  open: svg('<path d="m6 3 5 5-5 5"/>'),
+};
+const NAV = [
+  ['首页', I.home],
+  ['报表', I.chart],
+  ['库存', I.box],
+  ['设置', I.gear],
+];
+const items = (list = NAV) =>
+  list
+    .map(
+      ([t, ic], i) =>
+        `<button type="button" class="x-i" data-t="${t}" ${i ? '' : 'aria-current="page"'}>${ic}<span>${t}</span></button>`,
+    )
+    .join('');
+const body = (extra = '') =>
+  `<div class="x-main${extra}"><h4 data-title>首页</h4><i class="x-sk" style="width:78%"></i><div class="x-tiles"><i></i><i></i></div></div>`;
+
+// 点导航项：换当前项和右侧标题
+function nav(el) {
+  const title = el.querySelector('[data-title]');
+  el.addEventListener('click', (e) => {
+    const b = e.target.closest('.x-i[data-t]');
+    if (!b) return;
+    el.querySelectorAll('.x-i[aria-current]').forEach((x) => x.removeAttribute('aria-current'));
+    b.setAttribute('aria-current', 'page');
+    title.textContent = b.dataset.t;
+  });
+}
+
+const STOPS = [
+  ['序章', '从一间小窑开始'],
+  ['作品', '今年的 24 件器物'],
+  ['故事', '匠人和他们的手'],
+  ['门店', '三座城市的展厅'],
+  ['联系', '预约一次到访'],
+];
+const STEP = 12;
+
+function wheel(el) {
+  const btns = [...el.querySelectorAll('.x-w')];
+  const big = el.querySelector('.x-side-txt b');
+  const sub = el.querySelector('.x-side-txt span');
+  let cur = 2;
+  const go = (i, focus) => {
+    cur = Math.max(0, Math.min(STOPS.length - 1, i));
+    btns.forEach((b, k) => {
+      const d = k - cur;
+      b.style.setProperty('--a', `${d * STEP}deg`);
+      b.classList.toggle('on', d === 0);
+      b.classList.toggle('off', Math.abs(d) > 2);
+      b.setAttribute('aria-current', String(d === 0));
+    });
+    big.textContent = STOPS[cur][0];
+    sub.textContent = STOPS[cur][1];
+    if (focus) btns[cur].focus();
+  };
+  btns.forEach((b, i) => {
+    b.addEventListener('click', () => go(i));
+    b.addEventListener('keydown', (e) => {
+      const d = { ArrowDown: 1, ArrowUp: -1 }[e.key];
+      if (!d) return;
+      e.preventDefault();
+      go(cur + d, true);
+    });
+  });
+  const w = el.querySelector('.x-wheel');
+  w.querySelector('[data-up]').addEventListener('click', () => go(cur - 1));
+  w.querySelector('[data-down]').addEventListener('click', () => go(cur + 1));
+  // 卡片里滚轮要留给页面滚动，只在详情尺寸接管；到头后放行
+  w.addEventListener(
+    'wheel',
+    (e) => {
+      if (el.clientHeight < 160) return;
+      const n = cur + Math.sign(e.deltaY);
+      if (n < 0 || n >= STOPS.length) return;
+      e.preventDefault();
+      if (!w.dataset.lock) {
+        w.dataset.lock = '1';
+        go(n);
+        setTimeout(() => delete w.dataset.lock, 260);
+      }
+    },
+    { passive: false },
+  );
+  go(cur);
+}
+
+const TREE = [
+  ['订单', I.box, ['全部订单', '退款售后']],
+  ['商品', I.chart, ['商品列表', '库存预警']],
+  ['设置', I.gear, ['成员权限']],
+];
+
+function tree(el) {
+  nav(el);
+  el.querySelectorAll('.x-tree > button').forEach((b) =>
+    b.addEventListener('click', () => {
+      const open = b.getAttribute('aria-expanded') === 'true';
+      b.setAttribute('aria-expanded', String(!open));
+      b.nextElementSibling.hidden = open;
+    }),
+  );
+}
+
+function rail(el) {
+  nav(el);
+  const box = el.querySelector('.x-rail');
+  const btn = el.querySelector('.x-tog');
+  btn.addEventListener('click', () => {
+    const mini = box.classList.toggle('mini');
+    btn.setAttribute('aria-expanded', String(!mini));
+    btn.setAttribute('aria-label', mini ? '展开侧栏' : '收起侧栏');
+    btn.innerHTML = mini ? I.open : `${I.fold}<span>收起</span>`;
+    box.querySelectorAll('[data-t]').forEach((b) => {
+      b.title = mini ? b.dataset.t : '';
+      b.setAttribute('aria-label', b.dataset.t);
+    });
+  });
+}
+
+function hidden(el) {
+  nav(el);
+  const burger = el.querySelector('.x-burger');
+  const panel = el.querySelector('.x-drawer');
+  const set = (on, focus) => {
+    panel.classList.toggle('on', on);
+    panel.inert = !on;
+    burger.setAttribute('aria-expanded', String(on));
+    burger.setAttribute('aria-label', on ? '关闭导航' : '打开导航');
+    if (focus) (on ? panel.querySelector('button') : burger).focus();
+  };
+  burger.addEventListener('click', () => set(!panel.classList.contains('on'), true));
+  panel.addEventListener('click', (e) => e.target.closest('.x-i') && set(false, true));
+  el.querySelector('.x-app').addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && panel.classList.contains('on')) set(false, true);
+  });
+  set(false);
+}
+
+export default function demo(root) {
+  pick(
+    root,
+    [
+      {
+        name: '悬浮卡片',
+        fit: '内容铺满底图，导航像贴上去的卡片',
+        html: `<div class="x"><div class="x-app x-photo"><nav class="x-float" aria-label="主导航">${items()}</nav>${body()}</div></div>`,
+        init: nav,
+      },
+      {
+        name: '弧形滚轮',
+        fit: '品牌站项目少，要的是记忆点',
+        html: `<div class="x"><div class="x-app x-wheel" data-clip><i class="x-ring"></i><i class="x-line"></i>
+          <nav aria-label="主导航">${STOPS.map(([t]) => `<button type="button" class="x-w" style="--r:102px">${t}</button>`).join('')}</nav>
+          <div class="x-side-txt" role="status"><b></b><span></span></div>
+          <div class="x-turn"><button type="button" data-up aria-label="上一项">↑</button><button type="button" data-down aria-label="下一项">↓</button></div>
+          </div></div>`,
+        init: wheel,
+      },
+      {
+        name: '多级展开',
+        fit: '后台功能多，层级有两到三层',
+        html: `<div class="x"><div class="x-app"><nav class="x-tree" aria-label="主导航">${TREE.map(
+          ([t, ic, subs], i) =>
+            `<button type="button" class="x-i" aria-expanded="${i === 0}">${ic}<span>${t}</span>${I.chev}</button>
+            <ul class="x-sub" ${i ? 'hidden' : ''}>${subs.map((s, k) => `<li><button type="button" class="x-i" data-t="${s}" ${i + k ? '' : 'aria-current="page"'}>${s}</button></li>`).join('')}</ul>`,
+        ).join('')}</nav>${body().replace('首页', '全部订单')}</div></div>`,
+        init: tree,
+      },
+      {
+        name: '收起成图标',
+        fit: '常用工具，熟手想把空间让给内容',
+        html: `<div class="x"><div class="x-app"><nav class="x-rail" aria-label="主导航">${items(NAV.slice(0, 3))}
+          <button type="button" class="x-i x-tog" aria-expanded="true" aria-label="收起侧栏">${I.fold}<span>收起</span></button></nav>${body()}</div></div>`,
+        init: rail,
+      },
+      {
+        name: '隐藏式',
+        fit: '内容为主，导航偶尔才用',
+        html: `<div class="x"><div class="x-app x-col"><div class="x-bar"><button type="button" class="x-burger" aria-expanded="false" aria-label="打开导航">${I.menu}</button><b>MyPrompts</b></div>
+          ${body()}<nav class="x-drawer" aria-label="主导航" data-clip>${items()}</nav></div></div>`,
+        init: hidden,
+      },
+    ],
+    '侧栏形态',
+  );
+}
+</script>

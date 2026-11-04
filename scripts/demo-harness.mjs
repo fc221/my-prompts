@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-// 示例测试台：写示例时用，不用打包。把一条（<id>.md 或 <id>.html）或一个分类目录里的示例挂到三种尺寸的框里——
+// 示例测试台：写示例时用，不用打包。把一条（<id>.md）或一个分类目录里的示例挂到三种尺寸的框里——
 // 列表卡片 330×196、窄卡片 296×196、详情 700×320，报告 JS 错误、文字被框裁切、浏览器默认样式的按钮，并给每个条目截一张图。
 //
-//   node scripts/demo-harness.mjs <条目.md | 条目.html | 分类目录> <输出目录> [--ids a,b] [--tests 测试.mjs] [--reduce] [--wait 1500]
+//   node scripts/demo-harness.mjs <条目.md | 分类目录> <输出目录> [--ids a,b] [--tests 测试.mjs] [--reduce] [--wait 1500]
 //
 //   --ids      只测这几条
 //   --tests    操作测试：export default { 'i-xxx': async (root, sleep) => '状态描述' }，root 是详情尺寸那一份的影子根
 //   --reduce   模拟系统开启“减少动态效果”
 //   --wait     挂载后等多久再检查（毫秒），自动播放的示例要等它停下
 //
-// 示例 HTML 用和网页相同的 parseDemoHtml 拆开；脚本按原位置提供给浏览器，里面 import 的 _shared/*.ts 用 Node 自带的 stripTypeScriptTypes 去掉类型。
+// 示例源码用和网页相同的 parseDemoHtml 拆开；脚本按原位置提供给浏览器，里面 import 的 _shared/*.ts 用 Node 自带的 stripTypeScriptTypes 去掉类型。
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
@@ -30,7 +30,7 @@ const [dataFile, outDir] = args.filter(
 );
 if (!dataFile || !outDir) {
   console.error(
-    '用法：node scripts/demo-harness.mjs <条目.md | 条目.html | 分类目录> <输出目录> [--ids a,b] [--tests t.mjs] [--reduce] [--wait 1500]',
+    '用法：node scripts/demo-harness.mjs <条目.md | 分类目录> <输出目录> [--ids a,b] [--tests t.mjs] [--reduce] [--wait 1500]',
   );
   process.exit(2);
 }
@@ -39,20 +39,26 @@ const ids = opt('--ids', ''),
   reduce = args.includes('--reduce'),
   wait = +opt('--wait', '1500');
 mkdirSync(outDir, { recursive: true });
-const { parseDemoHtml } = await import(join(root, 'src/adapter/index.ts'));
+const { parseDemoHtml, splitExtras } = await import(join(root, 'src/adapter/index.ts'));
 const target = resolve(dataFile);
-const htmlFiles = statSync(target).isDirectory()
+// 示例源码：条目 .md 里“## 示例”之后的内容
+const sourceOf = (md) => {
+  const demo = existsSync(md) ? splitExtras(readFileSync(md, 'utf8')).demo : undefined;
+  return demo ? { file: md, text: demo } : null;
+};
+const mdFiles = statSync(target).isDirectory()
   ? readdirSync(target)
-      .filter((f) => f.endsWith('.html'))
+      .filter((f) => /^[^_].*\.md$/.test(f))
       .map((f) => join(target, f))
-  : [target.replace(/\.(md|html)$/, '.html')].filter(existsSync);
-const demos = htmlFiles.map((f) => {
-  const d = parseDemoHtml(readFileSync(f, 'utf8'), (h) => readFileSync(resolve(dirname(f), h), 'utf8'));
-  return { id: basename(f, '.html'), html: d.html, css: d.css, script: d.script ? `/fs${f}.mjs` : '' };
+  : [target.replace(/\.html$/, '.md')];
+const sources = mdFiles.map((md) => [md, sourceOf(md)]).filter(([, s]) => s);
+const demos = sources.map(([md, s]) => {
+  const d = parseDemoHtml(s.text, (h) => readFileSync(resolve(dirname(s.file), h), 'utf8'));
+  return { id: basename(md, '.md'), html: d.html, css: d.css, script: d.script ? `/fs${s.file}.mjs` : '' };
 });
-const scripts = new Map(htmlFiles.map((f) => [f + '.mjs', parseDemoHtml(readFileSync(f, 'utf8'), () => '').script]));
+const scripts = new Map(sources.map(([, s]) => [s.file + '.mjs', parseDemoHtml(s.text, () => '').script]));
 if (!demos.length) {
-  console.error('没有找到示例 .html');
+  console.error('没有找到示例（条目 .md 里的“## 示例”）');
   process.exit(2);
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

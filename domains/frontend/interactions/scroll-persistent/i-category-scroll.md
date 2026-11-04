@@ -1,7 +1,7 @@
 ---
 zh: 左分类右列表联动
 en: Category rail sync
-order: 30
+order: 50
 ---
 
 ## 是什么
@@ -33,3 +33,81 @@ order: 30
 ## 提示词
 
 给{点单页}做「左分类右列表联动」：左侧 88px 分类栏（每项 48px），右侧按{分类}分区的长列表；用 IntersectionObserver（rootMargin 0 0 -99% 0）把观察区收成右栏顶部的一条线，最后跨进这条线的分区就是当前分区，左侧对应分类高亮，白底加 3px 主色竖条的指示块用 transform 滑过去（240ms）；点左侧分类时高亮立即切换，右栏平滑滚到该分区顶部，程序滚动期间锁住高亮，scrollend（不支持时 150ms 无滚动）后再恢复跟随；右栏分区标题 sticky 吸顶，最后一个分区至少一屏高；分类多到放不下时把当前项滚到左栏中间，只滚左栏不带动整页；分类按钮用 aria-current 标当前项；减少动态效果时直接跳转，指示块直接到位。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/app-scroll-base.css">
+<style>
+.st{display:grid;grid-template-columns:88px minmax(0,1fr);background:#fff}
+.nav{position:relative;overflow-y:auto;overscroll-behavior:contain;background:#f3f4f6;scrollbar-width:none}
+.nav::-webkit-scrollbar,.list::-webkit-scrollbar{display:none}
+.nav button{position:relative;z-index:1;display:block;width:100%;height:48px;padding:0 8px;border:0;background:none;color:#5b616e;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;outline-offset:-2px}
+.nav button[aria-current=true]{color:#1f2329;font-weight:600}
+.ind{position:absolute;left:0;top:0;width:100%;height:48px;background:#fff;transition:transform .24s cubic-bezier(.2,0,0,1)}
+.ind::before{content:"";position:absolute;left:0;top:15px;bottom:15px;width:3px;border-radius:0 3px 3px 0;background:#d9480f}
+.list{position:relative;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;outline-offset:-2px}
+.sec h3{position:sticky;top:0;z-index:1;margin:0;padding:0 12px;height:30px;background:#fff;color:#5b616e;font-size:12px;font-weight:600;line-height:30px;box-shadow:0 1px 0 #f0f1f3}
+.sec:last-child{min-height:100cqh}
+.it{display:flex;align-items:center;gap:10px;padding:7px 12px}
+.th{flex:none;width:48px;height:48px;border-radius:8px;background:radial-gradient(circle at 42% 40%,rgba(255,255,255,.75) 0 7%,transparent 8%),radial-gradient(circle,hsl(var(--h) 75% 82%) 0 18%,hsl(var(--h) 55% 58%) 19% 50%,#fff 51% 62%,rgba(0,0,0,.1) 63% 66%,hsl(var(--h) 35% 93%) 67%)}
+.it span{min-width:0}
+.it b,.it small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.it b{font-weight:500}
+.it small{color:#8a909c;font-size:11px}
+.it em{color:#d9480f;font-size:14px;font-style:normal;font-weight:600;font-variant-numeric:tabular-nums}
+.end{margin:8px 0;color:#9aa0aa;font-size:12px;text-align:center}
+@container (max-width:320px){.st{grid-template-columns:78px minmax(0,1fr)}
+.nav button{font-size:12px}
+}
+@container (min-width:560px){.st{grid-template-columns:112px minmax(0,1fr)}
+.items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+
+<div class="st"><nav class="nav" aria-label="菜单分类"><i class="ind" aria-hidden="true"></i></nav><div class="list" tabindex="0" aria-label="菜单"></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const nav = root.querySelector('.nav'), ind = root.querySelector('.ind'), list = root.querySelector('.list'), still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const D = [
+    ['人气推荐', [['生椰拿铁', '椰浆与浓缩，冰饮更顺滑', 18], ['海盐芝士奶盖', '咸甜奶盖，茶底清香', 16]]],
+    ['当季新品', [['桂花酒酿拿铁', '秋季限定，微醺米香', 22], ['栗子燕麦拿铁', '现烤栗子泥配燕麦奶', 21]]],
+    ['经典咖啡', [['美式', '深烘豆，可换燕麦奶', 12], ['澳白', '双份浓缩，细腻奶沫', 17], ['冷萃', '12 小时低温萃取', 19]]],
+    ['手打柠檬', [['香水柠檬茶', '现打柠檬，单丛茶底', 14], ['柠檬气泡水', '少糖，加冰更爽口', 10]]],
+    ['鲜果茶', [['满杯葡萄', '整颗去皮，茉莉茶底', 19], ['杨枝甘露', '芒果西柚，椰奶打底', 20]]],
+    ['牛乳茶', [['焦糖奶茶', '慢熬焦糖，阿萨姆茶', 15], ['乌龙奶茶', '炭焙乌龙配鲜牛乳', 16]]],
+    ['轻食简餐', [['牛油果鸡胸沙拉', '少油少盐，配胡麻酱', 28], ['火腿芝士可颂', '现烤可颂，双层芝士', 19]]],
+    ['烘焙甜点', [['巴斯克芝士', '焦香表面，绵密内心', 22], ['肉桂卷', '手工揉面，糖霜现淋', 15]]],
+    ['周边好物', [['随行杯', '350ml，可装热饮', 59], ['挂耳咖啡', '10 片装，中深烘', 39]]],
+  ];
+  const H = [28, 44, 22, 52, 290, 32, 96, 36, 205]; // 每类的饮品 / 食物色相
+  nav.insertAdjacentHTML('beforeend', D.map(([n]) => `<button type="button">${n}</button>`).join(''));
+  list.innerHTML = D.map(([n, items], i) => `<section class="sec"><h3>${n}</h3><div class="items">${items.map(([a, d, p]) => `<div class="it"><i class="th" style="--h:${H[i]}"></i><span><b>${a}</b><small>${d}</small><em>¥${p}</em></span></div>`).join('')}</div>${i === D.length - 1 ? '<p class="end">没有更多了</p>' : ''}</section>`).join('');
+  const btns = [...nav.querySelectorAll('button')], secs = [...list.querySelectorAll('.sec')];
+  let cur = -1, seen = 0, lock = false, quiet;
+  const setActive = (i) => {
+    if (i === cur) return;
+    cur = i;
+    btns.forEach((b, k) => (k === i ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current')));
+    const b = btns[i];
+    ind.style.transform = `translateY(${b.offsetTop}px)`;
+    // 只滚左栏，把当前项放到中间
+    nav.scrollTo({ top: b.offsetTop - (nav.clientHeight - b.offsetHeight) / 2, behavior: still ? 'auto' : 'smooth' });
+  };
+  // 观察区收成右栏顶部的一条线：最后跨进这条线的分区就是当前分区
+  const io = new IntersectionObserver((es) => {
+    es.forEach((e) => { if (e.isIntersecting) seen = secs.indexOf(e.target); });
+    if (!lock) setActive(seen);
+  }, { root: list, rootMargin: '0px 0px -99% 0px' });
+  secs.forEach((s) => io.observe(s));
+  // 程序滚动期间锁住高亮；scrollend 或 150ms 没有新的滚动事件后解锁，再对齐一次
+  const unlock = () => { if (!lock) return; lock = false; clearTimeout(quiet); setActive(seen); };
+  const arm = () => { clearTimeout(quiet); quiet = setTimeout(unlock, 150); };
+  list.addEventListener('scroll', () => { if (lock) arm(); }, { passive: true });
+  list.addEventListener('scrollend', unlock);
+  const go = (i) => { setActive(i); lock = true; arm(); list.scrollTo({ top: secs[i].offsetTop, behavior: still ? 'auto' : 'smooth' }); };
+  btns.forEach((b, i) => b.addEventListener('click', () => go(i)));
+  // 缩略图：跳到第 5 个分类，左栏高亮和滚动跟着到位
+  setTimeout(() => go(4), 300);
+}
+</script>

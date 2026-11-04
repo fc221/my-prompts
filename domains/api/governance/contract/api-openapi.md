@@ -41,3 +41,17 @@ order: 10
 4. 加一条启动契约 mock 服务的命令，写进 README。
 5. 集成测试里按契约校验真实响应；服务端和 {客户端语言} 客户端的类型改为从契约生成。
 最后说明改了哪些文件，并故意删掉一个响应字段，证明 CI 会拦住。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '改契约', note: '走 PR 评审', acc: true }, { t: 'lint', note: 'Spectral / Redocly', via: 'CI 1' }, { t: '兼容性检查', note: 'oasdiff 对比主分支', via: 'CI 2' }, { t: '合并', note: '前后端各一人通过' }],
+    [{ t: '起 mock', note: 'Prism 按 example 返回' }, { t: '生成类型', note: '服务端和客户端都生成' }, { t: '实现对齐契约', note: '按 schema 校验真实响应' }],
+  ]), { title: '契约优先 · api/openapi.yaml 先于代码' });
+}
+</script>

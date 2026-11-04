@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue';
-import { entries, matches } from './kb';
+import { listed, matchesAny, REPO_URL } from './kb';
 import type { KbEntry } from './types';
 import { state } from './state';
+import AppIcon from './components/AppIcon.vue';
 import AppSidebar from './components/AppSidebar.vue';
 import AppTopbar from './components/AppTopbar.vue';
 import SectionHeader from './components/SectionHeader.vue';
@@ -13,12 +14,12 @@ import CommandPalette from './components/CommandPalette.vue';
 
 const trayOpen = ref(false);
 const shown = computed(() =>
-  entries.filter(
+  listed.filter(
     (e) =>
       e.domain === state.domain &&
       e.sec === state.section &&
       (state.category === '全部' || e.cat === state.category) &&
-      matches(e, state.filter.trim()),
+      matchesAny(e, state.filter.trim()),
   ),
 );
 // 条目已按分类排好：连续同分类的归一组，「全部」时每组上面写分类名
@@ -46,7 +47,10 @@ watch(
   () => state.navOpen,
   async (o) => {
     await nextTick();
-    if (o && !navDlg.value?.open) navDlg.value?.showModal();
+    if (o && !navDlg.value?.open) {
+      navDlg.value?.showModal();
+      navDlg.value?.focus(); // showModal 默认聚焦第一个分类，手机上会显示焦点框
+    }
     if (!o && navDlg.value?.open) navDlg.value.close();
   },
 );
@@ -107,10 +111,22 @@ watch(
         </div>
         <p class="sr-only" role="status">{{ conds ? `符合${conds}的有 ${shown.length} 条` : '' }}</p>
       </main>
+      <footer class="site-foot" :class="{ tray: state.picks.length }">
+        <p>
+          MyPrompts · © 2026 fc221 ·
+          <a :href="`${REPO_URL}/blob/main/LICENSE`" target="_blank" rel="noopener">MIT 协议</a>
+        </p>
+        <nav aria-label="项目链接">
+          <a :href="REPO_URL" target="_blank" rel="noopener"><AppIcon name="github" :size="16" />GitHub 仓库</a>
+          <a :href="`${REPO_URL}/issues/new/choose`" target="_blank" rel="noopener">反馈问题</a>
+          <a :href="`${REPO_URL}/blob/main/CONTRIBUTING.md`" target="_blank" rel="noopener">参与贡献</a>
+        </nav>
+      </footer>
     </div>
 
     <dialog
       ref="navDlg"
+      tabindex="-1"
       class="navdrawer"
       aria-label="板块菜单"
       @close="state.navOpen = false"
@@ -148,10 +164,9 @@ watch(
   inset: 0 auto 0 0;
   width: 100%;
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-card);
   background: var(--surface-raised);
-  box-shadow: var(--shadow-1);
-}
+} /* 0 级面板：只用边框，不加投影 */
 .rail-panel.animating {
   overflow: hidden;
 }
@@ -162,6 +177,7 @@ watch(
   flex-direction: column;
 }
 .content {
+  flex: 1;
   width: 100%;
   max-width: 1480px;
   margin: 0 auto;
@@ -176,10 +192,58 @@ watch(
 .content.tray {
   padding-bottom: 120px;
 } /* 右下角的组合托盘约 64px 高、离底 24px，最后一行卡片的按钮不能被它挡住 */
+.site-foot {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+  padding-block: var(--space-4) var(--space-5);
+  padding-left: max(24px, env(safe-area-inset-left, 0px));
+  padding-right: max(24px, env(safe-area-inset-right, 0px));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.site-foot.tray {
+  padding-bottom: 96px;
+} /* 组合托盘浮在右下角，页脚链接不能被它挡住 */
+.site-foot p {
+  margin: 0;
+}
+.site-foot nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+}
+.site-foot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  color: inherit;
+}
+@media (pointer: coarse) {
+  .site-foot nav {
+    gap: var(--space-2) var(--space-4);
+  }
+  .site-foot a {
+    min-height: 44px;
+  }
+}
+@media (hover: hover) {
+  .site-foot a:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+  }
+}
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
-  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: var(--space-6);
 }
 .group {
   display: grid;
@@ -192,7 +256,7 @@ watch(
   gap: var(--space-2);
   margin: var(--space-2) 0 0;
   font-size: 16px;
-  line-height: 1.4;
+  line-height: 24px;
 }
 .gh span {
   color: var(--text-secondary);
@@ -206,7 +270,7 @@ watch(
   gap: var(--space-4);
   padding: var(--space-10) var(--space-4);
   border: 1px dashed var(--border-strong);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-card);
   color: var(--text-secondary);
   text-align: center;
   font-size: 14px;
@@ -219,6 +283,7 @@ watch(
 .empty b {
   color: var(--text-primary);
   font-size: 16px;
+  line-height: 24px;
 }
 .navdrawer {
   position: fixed;
@@ -235,11 +300,14 @@ watch(
   color: var(--text-primary);
   box-shadow: var(--shadow-3);
 }
+.navdrawer:focus {
+  outline: none;
+} /* 打开时焦点落在面板本身，不落到第一个分类上 */
 .navdrawer::backdrop {
   background: var(--scrim);
 }
 .navdrawer[open] {
-  animation: from-left 0.22s var(--ease);
+  animation: from-left 240ms var(--ease);
 }
 @keyframes from-left {
   from {
@@ -257,18 +325,24 @@ watch(
 }
 .toast span {
   display: block;
-  padding: 8px 16px;
+  padding: 12px 16px;
   border-radius: 999px;
   background: var(--surface-inverse);
   color: var(--text-inverse);
   font-size: 14px;
   box-shadow: var(--shadow-2);
-  animation: pop 0.2s var(--ease);
+  animation: pop 240ms var(--ease);
 }
 @keyframes pop {
   from {
     transform: translateY(-6px);
     opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .navdrawer[open],
+  .toast span {
+    animation: fade 160ms var(--ease);
   }
 }
 .rail.mini {

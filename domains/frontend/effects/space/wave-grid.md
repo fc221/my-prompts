@@ -33,3 +33,100 @@ order: 30
 ## 提示词
 
 把{图库首页}的{作品墙}做成「起伏的卡片阵」：保持原来的行列，外层 perspective 800px，平面 rotateX(48°) 后倾；点击、键盘聚焦或指针移到新的一格时，从那一格荡开起伏：每张卡按到起点的格距 d 延迟 d × 60ms，抬升 translateZ = 振幅 × e^(−t/700ms) × sin(2πt/600ms)，振幅取卡宽的 40% 并随格距减弱，同时最多两圈、叠加后不超过振幅，指针触发至少间隔 350ms；全部平息后停止 requestAnimationFrame；选中的卡停在高处并加描边，名称和说明放在平面外的文字区；网格可聚焦，方向键移动当前格，Enter 选中，用 role="status" 播报“名称，第 R 行第 C 列”；减少动态效果时不起伏，只高亮当前格。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/app-card-base.css">
+<style>
+.st{background:radial-gradient(ellipse 90% 80% at 50% 36%,#29324a,#10131b 78%);color:#eef1f8}
+.st :focus-visible{outline-color:#9db4ff}
+.wrap{display:flex;flex-direction:column;height:100%}
+.scene{flex:1;min-height:0;display:grid;place-items:center;perspective:800px}
+.plane{--s:34px;--g:6px;display:grid;grid-template-columns:repeat(6,var(--s));grid-auto-rows:var(--s);gap:var(--g);transform:rotateX(48deg);transform-style:preserve-3d}
+.cl{padding:0;border:0;border-radius:7px;box-shadow:0 2px 6px rgba(0,0,0,.35);filter:brightness(calc(1 + var(--l, 0)));cursor:pointer}
+.cl.on{transform:translateZ(var(--lift, 10px));outline:2px solid #fff;outline-offset:2px;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.foot{flex:none;display:flex;align-items:center;gap:10px;height:46px;padding:0 12px 10px 16px}
+.cap{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3;white-space:nowrap}
+.cap b{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.cap small{color:#a6aec3;font-size:11px;overflow:hidden;text-overflow:ellipsis}
+.re{flex:none;height:30px;padding:0 12px;font-size:12px}
+@container (max-width:310px){.plane{--s:30px}
+}
+@container (min-height:260px){.plane{--s:56px;--g:10px}
+.cl{border-radius:11px}
+.foot{height:60px;padding:0 20px 14px 28px}
+.cap b{font-size:16px}
+.cap small{font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){.cl.on{transform:none}
+}
+</style>
+
+<div class="st"><div class="wrap"><div class="scene"><div class="plane" role="group" aria-label="作品墙，4 行 6 列，方向键移动，Enter 选中"></div></div><div class="foot"><div class="cap"><b>点一张，或用方向键</b><small>指针划过也会荡开</small></div><button type="button" class="ctl re">从中间荡开</button></div></div><p class="sr" role="status"></p></div>
+
+<script type="module">
+export default function demo(root) {
+  const NAMES = '晨光 潮声 雾屿 野径 夏信 岚火 星河 松间 白塔 渡口 晚风 青苔 落日 纸鸢 南山 汽水 灯塔 银杏 雨巷 橘子 海盐 远帆 初雪 回声'.split(' ');
+  const PAL = [['#f4d6c6', '#e2725b'], ['#cfe3e8', '#2f6f8a'], ['#f6e7b4', '#d99a2b'], ['#dfe8d2', '#5b8a4a'], ['#e9dcf2', '#7a5ea8'], ['#fbe9d0', '#2b3a67'], ['#f7d9e3', '#c2456e'], ['#d9e6f7', '#3d63b8']];
+  const COLS = 6, ROWS = 4, DELAY = 60, T = 600, TAU = 700, LIFE = 2600;
+  const plane = root.querySelector('.plane'), cap = root.querySelector('.cap'), live = root.querySelector('[role=status]');
+  const art = (k) => {
+    const [a, b] = PAL[(k * 5) % 8], x = 22 + ((k * 37) % 56), y = 22 + ((k * 53) % 56);
+    return [`radial-gradient(circle at ${x}% ${y}%,${b} 0 26%,transparent 27%),${a}`, `linear-gradient(135deg,${a} 50%,${b} 50%)`, `repeating-linear-gradient(90deg,${a} 0 18%,${b} 18% 34%)`, `radial-gradient(ellipse 46% 58% at 50% 100%,${b} 0 98%,transparent 100%),${a}`][(k * 3 + ((k / COLS) | 0)) % 4];
+  };
+  const rc = (k) => [(k / COLS) | 0, k % COLS];
+  const cells = NAMES.map((n, k) => {
+    const b = document.createElement('button'), [r, c] = rc(k);
+    b.type = 'button'; b.className = 'cl'; b.tabIndex = k ? -1 : 0; b.style.background = art(k);
+    b.setAttribute('aria-label', `${n}，第 ${r + 1} 行第 ${c + 1} 列`); b.setAttribute('aria-pressed', 'false');
+    plane.appendChild(b); return b;
+  });
+  let waves = [], raf = 0, sel = -1, cur = 0, lastHover = -1, lastT = 0;
+  const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const amp = () => cells[0].offsetWidth * 0.4;
+  // 每张卡的起伏 = 振幅 × e^(−t/τ) × sin(2πt/T)，t 从“起点时间 + 格距 × 60ms”算起，振幅随格距减弱
+  const tick = (now) => {
+    raf = 0;
+    if (!root.host.isConnected) return;
+    const A = amp();
+    waves = waves.filter((w) => now - w.t0 < LIFE + 8 * DELAY);
+    cells.forEach((el, k) => {
+      if (k === sel) return;
+      const [r, c] = rc(k); let z = 0;
+      for (const w of waves) { const d = Math.hypot(r - w.r, c - w.c), t = now - w.t0 - d * DELAY; if (t > 0) z += (A * Math.exp(-t / TAU) * Math.sin((2 * Math.PI * t) / T)) / (1 + d * 0.18); }
+      z = Math.max(-A, Math.min(A, z));
+      el.style.transform = waves.length ? `translateZ(${z.toFixed(2)}px)` : '';
+      el.style.setProperty('--l', waves.length ? ((z / A) * 0.28).toFixed(3) : '0');
+    });
+    if (waves.length) raf = requestAnimationFrame(tick);
+  };
+  const ripple = (r, c) => { if (still()) return; waves.push({ r, c, t0: performance.now() }); if (waves.length > 2) waves.shift(); if (!raf) raf = requestAnimationFrame(tick); };
+  const pick = (k) => {
+    if (sel >= 0 && sel !== k) {
+      const o = cells[sel]; o.classList.remove('on'); o.setAttribute('aria-pressed', 'false');
+      if (!still()) o.animate([{ transform: `translateZ(${amp() * 0.8}px)` }, { transform: 'translateZ(0)' }], { duration: 300, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    }
+    sel = k; const el = cells[k], [r, c] = rc(k);
+    el.style.transform = ''; el.style.setProperty('--l', '0'); el.classList.add('on'); el.setAttribute('aria-pressed', 'true');
+    cap.innerHTML = `<b>${NAMES[k]}</b><small>第 ${r + 1} 行第 ${c + 1} 列 · 共 ${NAMES.length} 张</small>`;
+    live.textContent = `已选中：${NAMES[k]}，第 ${r + 1} 行第 ${c + 1} 列`;
+    ripple(r, c);
+  };
+  const move = (k) => { cells[cur].tabIndex = -1; cur = k; cells[k].tabIndex = 0; cells[k].focus(); };
+  plane.addEventListener('keydown', (e) => {
+    const [r, c] = rc(cur);
+    const n = { ArrowLeft: c ? cur - 1 : cur, ArrowRight: c < COLS - 1 ? cur + 1 : cur, ArrowUp: r ? cur - COLS : cur, ArrowDown: r < ROWS - 1 ? cur + COLS : cur, Home: r * COLS, End: r * COLS + COLS - 1 }[e.key];
+    if (n === undefined) return;
+    e.preventDefault(); if (n !== cur) move(n);
+  });
+  cells.forEach((el, k) => {
+    el.addEventListener('click', () => pick(k));
+    el.addEventListener('focus', () => { if (cur !== k) { cells[cur].tabIndex = -1; cur = k; el.tabIndex = 0; } if (el.matches(':focus-visible')) ripple(...rc(k)); });
+    el.addEventListener('pointerenter', () => { const now = performance.now(); if (k !== lastHover && now - lastT > 350) { lastHover = k; lastT = now; ripple(...rc(k)); } });
+  });
+  root.querySelector('.re').addEventListener('click', () => ripple((ROWS - 1) / 2, (COLS - 1) / 2));
+  const fit = () => plane.style.setProperty('--lift', amp() * 0.8 + 'px');
+  new ResizeObserver(fit).observe(plane); fit();
+  setTimeout(() => root.host.isConnected && pick(8), 400);
+}
+</script>

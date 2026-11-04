@@ -2,6 +2,7 @@
 zh: 侧栏 + 顶栏
 en: Sidebar + top bar
 order: 10
+of: l-admin-nav
 ---
 
 ## 是什么
@@ -24,9 +25,30 @@ order: 10
 - 收起时每个分组只留一个图标，悬停或点击弹出该组子项，见「图标窄栏导航」
 - 顶栏高 56px，放 Logo、全局搜索、通知、账号菜单；主题、语言等低频设置收进账号菜单
 - 内容区左右内边距 24px，1280 宽完整可用；表单、详情等阅读区设最大宽度，不随宽屏拉满
-- 两种外观选一种并全站统一：浮动卡片（页面四周留 16px，侧栏、顶栏都是圆角卡片）或贴边（铺满屏幕，靠 1px 分割线分区）
 - 窄于 1024px 时导航收进左侧抽屉：顶栏左边放 ☰ 和当前页名，点 ☰ 滑出约 256px 宽的抽屉（后面加遮罩），里面是 Logo、完整菜单、底部的主题与“关闭导航”；点遮罩、Esc 或选中菜单后关闭
 
 ## 提示词
 
 把{后台}做成「侧栏 + 顶栏」框架：左侧固定侧栏 232px（可收起到 64px：单项菜单只留图标并有 Tooltip，分组收成一个图标、悬停或点击在右侧弹出该组子菜单；收起展开时布局宽度一次到位，侧栏面板和内容区用 transform 做约 240ms 过渡，不要逐帧过渡 width），分组菜单，当前项用浅色底 + 主色文字；顶栏 56px 放全局搜索、通知和账号菜单；内容区独立滚动、左右内边距 24px（手机 16px）；窄于 1024px 时侧栏收进左侧抽屉（约 256px 宽的浮动卡片、带遮罩），顶栏左边放 ☰ 打开它。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '232px 1fr',
+  rows: '14% 1fr',
+  areas: ['side top', 'side main'],
+  boxes: {
+    side: { label: '侧栏导航', dark: true, acc: true },
+    top: { label: '顶栏', acc: true },
+    main: '订单表格',
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto 1fr',
+  areas: ['top', 'main'],
+  boxes: { top: { label: '顶栏 ☰', acc: true }, main: '订单表格' },
+  drawer: { size: '70%', box: { label: '侧栏（左侧抽屉）', dark: true, kind: 'nav', acc: true } },
+};
+```

@@ -1,0 +1,66 @@
+/* 提示词的预览外壳：左右两栏对比，默认“改前 / 改后”。示例内容放在 .fx-z 里，详情尺寸下整体放大 */
+.fx {
+  color-scheme: light;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  padding: 8px;
+  background: #f5f6f8;
+  color: #1f2329;
+  font:
+    11px/16px system-ui,
+    'PingFang SC',
+    sans-serif;
+}
+.fx-p {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fx-p > h4 {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  color: #5b616e;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+.fx-p > h4::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #b6bcc6;
+}
+.fx-p.ok > h4 {
+  color: #1f7a4d;
+}
+.fx-p.ok > h4::before {
+  background: #1f9d61;
+}
+.fx-b {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e3e6eb;
+  border-radius: 12px;
+}
+.fx-z {
+  height: 100%;
+}
+@container (min-width: 560px) {
+  .fx {
+    gap: 12px;
+    padding: 12px 16px 16px;
+  }
+  .fx-z {
+    zoom: 1.55;
+  }
+}

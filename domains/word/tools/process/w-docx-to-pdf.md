@@ -40,3 +40,34 @@ order: 10
 3. 转换前检查：含修订或批注的文件先列出来、不直接转；能用 Word 时先更新全部域。
 4. 转换后用 pdfinfo 读页数，和 docProps/app.xml 里的 Pages 对比；用 pdffonts 检查嵌入字体，出现替换字体的文件单独标出。
 5. 输出到 {输出目录}，文件名与原文件一致；最后生成 report.csv（文件名、页数、耗时、结果、问题）。说明怎么运行，并估算 100 份文件的大致耗时。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg{--sec:#0891b2}
+.m-col{display:grid;gap:10px;width:600px}
+</style>
+
+<div class="dg"></div>
+
+<script type="module">
+import { draw, flow, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const f = flow([
+    [{ t: '整理 docx', note: '更新域、清修订和批注' }, { t: '检查字体', note: 'fc-list :lang=zh' }, { t: 'soffice 转换', note: '每进程独立配置目录', acc: true }, { t: '核对页数', note: 'app.xml 的 Pages = pdfinfo' }],
+    [{ t: '缺字体被替换', note: '行宽变 → 分页、目录页码变', bad: true, via: '页数对不上' }, { t: '装字体后重转', note: 'pdffonts 看嵌入字体', via: '修正' }, { t: '写进 report.csv', note: '文件名、页数、耗时、结果' }],
+  ]);
+  const c = code([{ t: '命令', text: `
+soffice --headless --convert-to pdf --outdir out/ in/*.docx
+
+# 并行时每个进程用自己的配置目录，单个文件 60 秒超时
+soffice -env:UserInstallation=file:///tmp/lo-2 --headless \\
+  --convert-to pdf --outdir out/ in/batch2/*.docx
+
+pdfinfo out/合同_0012.pdf | grep Pages    # 和 docx 里记录的页数对比
+pdffonts out/合同_0012.pdf                 # 嵌入的应是宋体、黑体等原字体
+` }]);
+  draw(root, '<div class="m-col">' + f + c + '</div>', { title: '批量转 PDF · 先装字体，转完核对页数', min: 0.45 });
+}
+</script>

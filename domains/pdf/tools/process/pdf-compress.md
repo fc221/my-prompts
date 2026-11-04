@@ -41,3 +41,17 @@ order: 110
 5. 验收：页数一致；pdftotext 字符数相差不超过 1%；首页按 100dpi 渲染和原文件对比。
 6. 边界情况：加密文件要求密码；损坏文件先用 qpdf 重写，再失败就拒绝；超过 {页数上限} 页或处理超过 {超时秒数} 秒就中止；在隔离容器里处理，Ghostscript 带 -dSAFER。
 最后说明改了哪些文件，并报告三份样本（扫描件、电子版、合并来的文件）压缩前后的大小。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '先找大头', note: '看图片 dpi 和字体' }, { t: '无损', note: 'qpdf，省 5–20%' }, { t: '有损', note: '图片降到 150dpi', acc: true }, { t: '验收', note: '页数、字数对得上' }],
+    [{ t: '压完没变小', note: '或比原文件还大', bad: true }, { t: '保留原文件', note: '直接用原件' }],
+  ]), { title: '压缩 · 带签名的文件只做无损' });
+}
+</script>

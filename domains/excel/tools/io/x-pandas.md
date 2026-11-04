@@ -43,3 +43,35 @@ order: 30
 6. 输出 {输出文件}，工作表为明细、汇总、未匹配、异常值、重复记录；用 xlsxwriter 设列宽、冻结首行、金额两位小数加千分位。
 7. 运行结束打印：读入文件数、各步骤行数、合并前后的金额合计。
 输入目录和输出文件用命令行参数传入；以 pandas 3.x 为准，说明要安装的包和运行命令。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const steps = flow([
+    { t: '读入', note: 'sheet_name=None · 编码列 str' },
+    { t: '统一列名', note: '联系电话 → 手机号' },
+    { t: '清洗', note: '去空格 · 全角转半角 · 去重' },
+    { t: '关联', note: 'validate 防一对多', acc: true },
+    { t: '写出', note: '明细 · 未匹配 · 异常值' },
+  ]);
+  const py = code([{ t: 'pandas 3.x：合并 30 家门店的 10 月上报', text: `
+frames = []
+for f in sorted(Path('门店上报/2026-10').glob('*.xlsx')):
+    for name, df in pd.read_excel(f, sheet_name=None, dtype={'门店编码': str, '联系电话': str}).items():
+        frames.append(df.rename(columns=COLS).assign(来源=f'{f.stem}/{name}'))
+sales = pd.concat(frames, ignore_index=True)
+sales['手机号'] = sales['手机号'].map(lambda s: unicodedata.normalize('NFKC', s).strip())
+sales['金额'] = pd.to_numeric(sales['金额'].astype(str).str.replace(r'[¥,元]', '', regex=True), errors='coerce')
+m = sales.merge(members, on='手机号', how='left', validate='many_to_one', indicator=True)
+with pd.ExcelWriter('10月门店销售汇总.xlsx', engine='xlsxwriter') as w:
+    m.drop(columns='_merge').to_excel(w, sheet_name='明细', index=False)
+    m[m['_merge'] == 'left_only'].to_excel(w, sheet_name='未匹配', index=False)
+    w.sheets['明细'].freeze_panes('A2')
+` }]);
+  draw(root, steps + '<div style="height:10px"></div>' + py, { title: '用 pandas 清洗合并 · 每步核对行数和金额合计', min: 0.45 });
+}
+</script>

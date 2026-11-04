@@ -39,3 +39,29 @@ order: 10
 3. 按清单移动和拆分：基础组件只收 props、事件和插槽；业务组件接收数据、向外抛事件；区块负责取数据和加载、空、出错三种状态；页面只拼区块。导出名不变，更新全部 import。
 4. 加 lint 规则，禁止 src/components/ui 引用 features、stores、api 目录。
 5. 跑类型检查、lint 和现有测试，汇报改动的文件、拆分了哪些组件、暂不处理的例外及原因。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    stack([
+      { t: '页面', items: ['OrderListPage'], note: '只拼区块' },
+      { t: '区块', items: ['OrderListPanel'], note: '取数据，管加载和出错', acc: true },
+      { t: '业务组件', items: ['OrderStatusTag'], note: '收数据，抛 onRefund' },
+      { t: '基础组件', items: ['Button', 'Input'], note: '不读 store、不发请求' },
+    ], { arrow: '只能从上往下引用' }),
+    tree(`
+src/
+  pages/            页面
+  features/orders/
+*   OrderListPanel  区块
+    components/     业务组件
+  components/ui/    基础组件
+`),
+  ]);
+}
+</script>

@@ -1,6 +1,7 @@
 ---
 zh: 登录注册页
 en: Sign-in page
+preview: l-auth-card
 order: 80
 ---
 

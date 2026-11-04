@@ -41,3 +41,47 @@ order: 10
 4. 文件要给 {低版本用户，如 用 Excel 2016 的财务} 用时，同时给出 INDEX + MATCH 的等价写法。
 5. 加一列检查：统计“未建档”的行数，方便补齐参照表。
 交付时说明每个公式的含义、需要的 Excel 版本，以及参照表新增数据后是否需要改公式。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-tag{margin:0 0 5px!important;font-size:11.5px;font-weight:650;color:#5d6675;white-space:nowrap}
+.m-fit .dg-col:first-child{flex:none}
+</style>
+
+<div class="dg m-fit"></div>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const tag = (t) => '<p class="m-tag">' + t + '</p>';
+  draw(root, [
+    tag('订单') + sheet({
+      head: ['订单号', '商品编号', '商品名称', '单价', '数量'],
+      widths: [70, 62, 76, 50, 40],
+      rows: [
+        ['DD260101', 'SP1003', '冷萃咖啡', '28.00', '12'],
+        ['DD260102', 'SP1001', '经典拿铁', '26.00', '5'],
+        ['DD260103', 'SP2008', '未建档', '0.00', '3'],
+        ['DD260104', 'SP1002', '美式', '22.00', '8'],
+      ],
+      fx: ['C3', '=XLOOKUP(B3,商品表[编号],商品表[名称],"未建档")'],
+      marks: { C4: 'warn', D4: 'warn', C2: 'acc', C3: 'acc', C5: 'acc' },
+      tabs: ['订单', '商品表'],
+      freeze: true,
+    }),
+    tag('商品表（超级表）') + sheet({
+      head: ['编号', '名称', '单价'],
+      widths: [56, 70, 50],
+      rows: [
+        ['SP1001', '经典拿铁', '26.00'],
+        ['SP1002', '美式', '22.00'],
+        ['SP1003', '冷萃咖啡', '28.00'],
+        ['SP2001', '可颂', '12.00'],
+      ],
+      marks: { A2: 'good', B2: 'good' },
+    }),
+  ], { title: 'XLOOKUP · 按商品编号带出名称，查不到显示“未建档”', min: 0.45 });
+}
+</script>

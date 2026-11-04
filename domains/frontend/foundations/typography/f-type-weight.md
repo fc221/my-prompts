@@ -28,3 +28,22 @@ order: 30
 ## 提示词
 
 整理{页面}的文字层级：只用 400（正文）、500（轻强调）、600（标题、数值、表头、当前项）三种字重；每个区块只有一个最重的元素；层级靠字号差一档以上、字重、主次文字色至少两项同时变化；次要信息用 12–14px 的 text-secondary；中文不用斜体，强调不用下划线；在只有两档字重的系统上检查 500 是否还能分辨；暗色下大段正文不超过 500。
+
+## 示例
+
+<style>
+.s{height:100%;display:flex;align-items:center;justify-content:center;gap:16px;padding:16px;background:#f5f6f8;color:#1f2329;font:14px/20px system-ui,"PingFang SC",sans-serif}
+.k{flex:1;max-width:200px;display:grid;gap:4px;padding:12px 16px;border-radius:12px;background:#fff;border:1px solid #e3e6eb}
+em{font-style:normal;font-size:12px;font-weight:600}
+.x em{color:#d92d20}
+.o em{color:#12805c}
+p{margin:0}
+.x p{font-weight:500}
+.t{font-size:13px;color:#5b616e}
+.v{font-size:26px;line-height:32px;font-weight:600;font-variant-numeric:tabular-nums}
+.u{font-size:13px;color:#5b616e}
+.u b{color:#12805c;font-weight:600}
+.m{font-size:12px;color:#5b616e}
+</style>
+
+<div class="s"><div class="k x"><em>✗ 一样大一样粗</em><p>本月营收</p><p>¥128,400</p><p>较上月 +12.4%</p><p>统计到 10-25 18:00</p></div><div class="k o"><em>✓ 主次分明</em><p class="t">本月营收</p><p class="v">¥128,400</p><p class="u">较上月 <b>+12.4%</b></p><p class="m">统计到 10-25 18:00</p></div></div>

@@ -2,6 +2,7 @@
 zh: 全幅画布
 en: Full canvas + floating panels
 order: 40
+tab: 浮动面板
 ---
 
 ## 是什么
@@ -28,3 +29,43 @@ order: 40
 ## 提示词
 
 {产品}{页面}用「全幅画布」：{地图或拓扑}铺满工作区；四角放不透明圆角浮动面板，离边缘 16px——左上标题与筛选，右上{关键指标}，左下图例，右下{列表}；面板可单独收起，也有“收起全部”；点画布对象时列表和详情同步高亮，Esc 取消；窄屏面板改为可拖动的底部面板，画布保持全屏。
+
+## 示例
+
+<style>
+.stage{display:flex;gap:12px;height:100%;padding:12px;background:linear-gradient(180deg,#f3f5f9,#eaeef4);font:12px/1.4 system-ui,"PingFang SC",sans-serif;color:#1f2937}
+.desk{flex:1;min-width:0;display:flex;flex-direction:column;border-radius:9px;background:#f6f7fa;box-shadow:0 0 0 1px #dfe3ea,0 6px 16px -8px rgba(15,23,42,.18);overflow:hidden}
+.chrome{display:flex;gap:4px;align-items:center;height:14px;padding:0 7px;background:#fff;border-bottom:1px solid #e8ebf0}
+.chrome i{width:5px;height:5px;border-radius:50%;background:#d4d8df}
+.cv{position:relative;flex:1;margin:6px;border-radius:7px;overflow:hidden;background:#e8f0fb;background-image:linear-gradient(#dbe6f6 1px,transparent 1px),linear-gradient(90deg,#dbe6f6 1px,transparent 1px);background-size:22px 22px;box-shadow:inset 0 0 0 2px #2563eb}
+.cv svg{position:absolute;inset:0;width:100%;height:100%}
+.rt{fill:none;stroke:#2563eb;stroke-width:3;stroke-linecap:round;opacity:.75}
+.rt.b{stroke:#94a3b8;stroke-dasharray:6 6}
+.pt{fill:#fff;stroke:#2563eb;stroke-width:3}
+.pt.o{stroke:#d97706}
+.pt.g{stroke:#16a34a}
+.p{position:absolute;display:flex;flex-direction:column;gap:3px;padding:6px 8px;border-radius:7px;background:#fff;box-shadow:0 4px 12px -4px rgba(15,23,42,.25);font-size:10px;max-width:48%}
+.p b{font-size:11px}
+.tl{left:8px;top:8px;flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px}
+.tr{right:8px;top:8px}
+.bl{left:8px;bottom:8px;flex-direction:row;gap:8px}
+.br{right:8px;bottom:8px;max-width:none}
+.pill{padding:1px 6px;border-radius:9px;background:#f1f5f9;color:#475569}
+.pill.on{background:#e8efff;color:#1d4ed8}
+.num{font-size:16px!important;font-variant-numeric:tabular-nums}
+.up{color:#16a34a}
+small{color:#6b7280}
+.lg,.row{display:flex;align-items:center;gap:4px;white-space:nowrap}
+.row em{margin-left:auto;padding-left:6px;font-style:normal;color:#b45309}
+.d{width:7px;height:7px;border-radius:50%;background:#2563eb;flex:none}
+.d.o{background:#d97706}
+.d.g{background:#16a34a}
+.phone{flex:0 0 25%;min-width:84px;max-width:132px;display:flex;flex-direction:column;position:relative;border-radius:16px;background:#f6f7fa;box-shadow:0 0 0 2px #c9ced8;overflow:hidden;padding:10px 4px 0}
+.cv.sm{margin:0 0 -14px;border-radius:8px 8px 0 0}
+.sheet{position:relative;display:flex;flex-direction:column;gap:3px;padding:6px 8px 10px;border-radius:12px 12px 0 0;background:#fff;box-shadow:0 -4px 12px -6px rgba(15,23,42,.3);font-size:10px}
+.grab{width:22px;height:3px;border-radius:2px;background:#cbd5e1;align-self:center;margin-bottom:2px}
+@container (max-height: 220px){.bl,.br .row:nth-of-type(2){display:none}
+}
+</style>
+
+<div class="stage"><div class="desk"><div class="chrome"><i></i><i></i><i></i></div><div class="cv"><svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M20 190 C90 150 120 200 190 140 S300 90 380 60" class="rt"/><path d="M40 60 C120 90 160 40 240 90 S330 170 390 180" class="rt b"/><circle cx="190" cy="140" r="6" class="pt"/><circle cx="240" cy="90" r="6" class="pt o"/><circle cx="300" cy="105" r="5" class="pt"/><circle cx="110" cy="168" r="5" class="pt g"/></svg><div class="p tl"><b>华东仓配网络</b><span class="pill">今日</span><span class="pill on">全部线路</span></div><div class="p tr"><small>在途订单</small><b class="num">1,284</b><small class="up">+6.2%</small></div><div class="p bl"><span class="lg"><i class="d"></i>正常</span><span class="lg"><i class="d o"></i>延误</span><span class="lg"><i class="d g"></i>已送达</span></div><div class="p br"><b>异常线路</b><span class="row"><i class="d o"></i>沪-杭 03<em>+42 分钟</em></span><span class="row"><i class="d o"></i>苏-锡 11<em>+18 分钟</em></span></div></div></div><div class="phone"><div class="cv sm"><svg viewBox="0 0 120 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M10 160 C40 120 60 150 80 100 S100 60 115 40" class="rt"/><circle cx="80" cy="100" r="5" class="pt o"/></svg></div><div class="sheet"><i class="grab"></i><b>2 条异常</b><span class="row"><i class="d o"></i>沪-杭 03</span></div></div></div>

@@ -29,7 +29,7 @@ Merge Patch 里“没传”表示不动，“传了 null”表示清空，后端
 - 可改字段走白名单；只读字段（id、createdAt、订单金额）和要走流程的字段（status）出现在请求体里返回 422，errors 里点名字段。
 - 合并后按完整资源再校验一遍，组合规则（结束时间晚于开始时间）也要过。
 - 成功返回 200 和更新后的完整资源，客户端用它覆盖本地状态；内容没有变化也返回 200。
-- 多人编辑的资源要求 If-Match 带 ETag，防止覆盖别人的修改，见「缓存与并发控制」。
+- 多人编辑的资源要求 If-Match 带 ETag，防止覆盖别人的修改，见「ETag 与条件请求」。
 - 收到不支持的 Content-Type 返回 415，并用 Accept-Patch 响应头列出支持的格式。
 
 ## 提示词
@@ -42,3 +42,31 @@ Merge Patch 里“没传”表示不动，“传了 null”表示清空，后端
 5. 成功返回 200 和完整资源；只更新改动的列，并写审计记录（操作人、字段、旧值、新值）。
 6. 测试：只改一个字段、传 null 清空、传只读字段、ETag 过期、两人先后修改。
 最后说明改了哪些文件，并给出一条 curl 示例。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+PATCH /members/mbr_93Kd1
+Content-Type: application/merge-patch+json
+If-Match: "v12"
+
+"nickname": "MyPrompts",
+"remark": null
+// 没传的字段不动，null 清空
+`, `
+200 OK
+ETag: "v13"
+
+"id": "mbr_93Kd1",
+"nickname": "MyPrompts",
+"remark": null,
+"phone": "138****5678",
+"level": "GOLD"
+`), { title: 'JSON Merge Patch · 返回完整资源' });
+}
+</script>

@@ -29,3 +29,19 @@ order: 20
 ## 提示词
 
 把{产品}的{页面}做成瑞士网格风：12 列网格，所有文字和图形左边缘落在列线上；白底、墨黑 #111，唯一强调色 {品牌色}（建议纯红）只用于一个几何色块或关键数字；无衬线粗体大标题左对齐、右侧参差，与 15px 正文对比 4 倍以上；0 圆角、无阴影、无渐变，不画满屏网格线；标题跨 8 列，信息栏占 4 列；窄屏改单列、保持左对齐；只做一次 200ms 平移，减少动态效果时直接显示。
+
+## 示例
+
+<style>
+:host{container-type:size}
+.s{height:100%;padding:14px 20px;background:#fff;color:#111;font:12px/1.5 system-ui,"PingFang SC",sans-serif}
+.g{height:100%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:auto minmax(0,1fr);gap:12px;padding-top:8px;border-top:3px solid #111}
+h1{grid-column:1/5;margin:0;font-size:clamp(28px,18cqh,60px);line-height:1;font-weight:900;letter-spacing:-.03em}
+.info{grid-column:5/7;display:grid;gap:2px;align-content:start}
+.info b{font-weight:700}
+.red{grid-column:1/3;background:#d6201f}
+p{grid-column:3/5;margin:0;align-self:end}
+.no{grid-column:5/7;align-self:end;font-size:clamp(20px,12cqh,44px);line-height:.9;font-weight:900;color:#d6201f}
+</style>
+
+<div class="s"><div class="g"><h1>新秩序<br>设计展</h1><div class="info"><b>11 月 8 日 —</b><b>12 月 20 日</b><span>城市美术馆 3F</span><span>周二至周日开放</span></div><div class="red"></div><p>48 位设计师，320 件作品，重新讨论网格与秩序。</p><div class="no">2026</div></div></div>

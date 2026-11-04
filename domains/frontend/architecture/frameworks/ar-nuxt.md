@@ -44,3 +44,29 @@ Nuxt 4 项目的目录、自动导入、路由、数据获取、服务端接口�
 6. 渲染方式写进 routeRules；提供 dev、build、typecheck、test、lint 命令。
 还是 Nuxt 3 目录结构的，先单独提交一次目录迁移。
 完成后汇报改了哪些文件；验证：nuxt typecheck 通过，首屏页面在网络面板里没有重复的数据请求，刷新和站内跳转都能拿到数据。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, tree } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, tree(`
+* app/                  应用代码，srcDir 默认就是它
+*   pages/              文件路由，[id].vue 是动态段
+    components/ui/      自动导入，子目录拼进组件名
+    composables/        自动导入
+    middleware/         auth.ts，全站用 auth.global.ts
+    features/orders/    不在自动导入范围，显式 import
+    api/                浏览器端请求层
+    stores/             Pinia
+    app.vue             error.vue 同级
+* server/               Nitro 处理
+    api/orders.get.ts   方法后缀，zod 校验入参
+* shared/               前后端共用，自动导入
+  public/               原样输出
+  nuxt.config.ts        routeRules 写渲染方式
+`), { title: 'Nuxt 4 · app/ 目录结构' });
+}
+</script>

@@ -3,6 +3,7 @@ zh: 老项目分层重构
 en: Legacy layering refactor
 aka: 重构 分层改造 遗留系统 特征测试 小步重构
 order: 20
+preview: be-modular-monolith
 ---
 
 ## 是什么

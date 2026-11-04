@@ -2,6 +2,7 @@
 zh: 混合导航
 en: Top + side navigation
 order: 30
+of: l-admin-nav
 ---
 
 ## 是什么
@@ -23,9 +24,37 @@ order: 30
 - 模块和页面都写进 URL，刷新、分享后两处高亮都正确
 - 面包屑从一级模块开始，末项不可点
 - 侧栏可收起到 64px 图标轨；模块特别多时可改成“64px 模块图标轨 + 240px 页面栏”的双层侧栏
-- 两种外观选一种并全站统一：浮动卡片（页面四周留 16px，侧栏、顶栏都是圆角卡片）或贴边（铺满屏幕，靠 1px 分割线分区）
 - 窄于 1024px 时导航收进左侧抽屉：顶栏左边放 ☰ 和当前页名，点 ☰ 滑出约 256px 宽的抽屉（后面加遮罩），里面是 Logo、按「模块 → 页面」两级树列出的全部菜单（当前模块默认展开）、底部的主题与“关闭导航”；点遮罩、Esc 或选中菜单后关闭
 
 ## 提示词
 
 把{后台}做成「混合导航」：顶栏 56px 放 Logo、一级模块（{模块列表}，不超过 7 个，当前模块高亮）、全局搜索和账号菜单；左侧栏 216px 只列当前模块的页面并分组，切换模块时侧栏整体替换并回到该模块上次打开的页面；模块和页面都写进 URL；侧栏可收起到 64px 图标轨；内容区内边距 24px；窄于 1024px 时顶栏只留 ☰、页面名和账号，点 ☰ 打开左侧抽屉，抽屉里按「模块 → 页面」两级树列出全部菜单，当前模块默认展开。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '232px 1fr',
+  rows: '14% 1fr',
+  areas: ['top top', 'side main'],
+  boxes: {
+    top: {
+      inner: {
+        cols: '18% 1fr 18%',
+        rows: '1fr',
+        areas: ['logo mods acct'],
+        boxes: { logo: 'Logo', mods: '一级模块', acct: '账号' },
+      },
+    },
+    side: '二级菜单',
+    main: { label: '内容区', acc: true },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto 1fr',
+  areas: ['top', 'main'],
+  boxes: { top: '顶栏 ☰', main: { label: '内容', acc: true } },
+  drawer: { size: '70%', box: { label: '导航树（左侧抽屉）', kind: 'nav' } },
+};
+```

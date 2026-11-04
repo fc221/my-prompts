@@ -2,7 +2,7 @@
 zh: 小企业内账工作簿
 en: Small business bookkeeping workbook
 aka: 内账 财务工作簿 Excel 财务系统 记账系统 导航首页 目录页 超链接跳转 返回首页 做账表格
-order: 70
+order: 30
 ---
 
 ## 是什么
@@ -27,9 +27,9 @@ order: 70
 - 首页：公司名、所属年度（定义名称 年度）、四个分组区块，每张表一个按钮（图标加表名，用形状或单元格做）；下方放本年收入、本年支出、应收余额、应付余额四个数，公式引用汇总表，和一块校验区。
 - 跳转：给每张表的 A1 起定义名称（如 去_收入登记），按钮的超链接选“本文档中的位置”里的这个名称，或在单元格里写 =HYPERLINK("#去_收入登记","收入登记")；各表第 1 行右上角放 =HYPERLINK("#去_首页","返回首页")，冻结前 3 行让它一直看得见，明细超级表从第 3 行表头开始。
 - 基础设置：科目表分收入类和支出类，每个科目带“报表项目”列，决定它落在利润简表的哪一行；账户表记账户和期初余额；客户供应商记名称、类型和账期。录入表的下拉全部引用这三张表。
-- 录入表手填原始单据：收入登记 日期、单号、客户 ▾、收入科目 ▾、摘要、金额、收款账户 ▾、是否开票 ▾；支出登记 日期、单号、供应商 ▾、支出科目 ▾、摘要、金额、付款账户 ▾、是否收票 ▾；月份 =MONTH([@日期]) 是公式。应收、应付明细的已收付 =SUMIFS(收入登记[金额],收入登记[单号],[@单号]) 按单号从收支登记取；发票登记的价税合计用公式，号码设成文本。
-- 汇总：收入统计、支出统计是科目 × 12 个月的矩阵，=SUMIFS(收入登记[金额],收入登记[收入科目],$A3,收入登记[月份],B$2)；应收应付汇总按单位算未收、未付和逾期金额。
-- 报表：月度收支按月列收入、支出、结余和累计结余；利润简表按报表项目 =SUMIFS(支出统计列,支出统计[报表项目],$A5) 取数，列营业收入、营业成本、毛利、各项费用、利润总额、净利润，本月和本年累计两栏；内账口径和报税口径的差异写在使用说明里。
+- 录入表手填原始单据：收入登记 日期、单号、客户 ▾、收入科目 ▾、摘要、金额、收款账户 ▾、是否开票 ▾；支出登记 日期、单号、供应商 ▾、支出科目 ▾、摘要、金额、付款账户 ▾、是否收票 ▾；月份 =TEXT([@日期],"yyyy-mm") 是公式。应收、应付明细的已收付 =SUMIFS(收入登记[金额],收入登记[单号],[@单号]) 按单号从收支登记取，账期、逾期和账龄的完整做法见「应收应付台账」；发票登记的价税合计用公式，号码设成文本，查重和红冲见「发票台账」。
+- 汇总：收入统计、支出统计是科目 × 12 个月的矩阵，第 2 行表头是 2026-01 这样的 yyyy-mm 文本，=SUMIFS(收入登记[金额],收入登记[收入科目],$A3,收入登记[月份],B$2)；应收应付汇总按单位算未收、未付和逾期金额。
+- 报表：月度收支按月列收入、支出、结余和累计结余；利润简表按报表项目 =SUMIFS(支出统计列,支出统计[报表项目],$A5) 取数，列营业收入、营业成本、毛利、各项费用、利润总额、净利润，本月和本年累计两栏，完整的利润表和费用分析见「利润表与费用分析」；内账口径和报税口径的差异写在使用说明里。
 - 月底：各账户余额（期初 + 收入登记 − 支出登记，按账户 SUMIFS）和银行、现金实际余额核对；首页校验区检查 收入统计合计 = SUM(收入登记[金额])、支出同理、发票登记的月合计和开票收票清单一致，不相等显示红色“不平”。
 
 ## 提示词
@@ -41,3 +41,53 @@ order: 70
 4. 汇总表用 SUMIFS 从录入表按科目和月份汇总，报表只引用汇总表，不放手填数字。
 5. 使用说明写清每张表的用途、谁来填、每月结账步骤。
 交付时列出数据流向（哪张录入表进哪张汇总表、哪张报表），标明每张表的手填列和公式列，并各放 3–5 行示例数据验证首页校验区。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-home{border:1px solid #c9ced6;border-radius:6px;background:#fff;overflow:hidden}
+.m-hd{display:flex;align-items:baseline;gap:8px;padding:6px 10px;border-bottom:1px solid #e1e5ea}
+.m-hd b{font-size:13px;color:#101828}
+.m-hd span{color:#5d6675;font-size:10.5px}
+.m-gs{display:grid;gap:6px;padding:8px 10px 10px}
+.m-g{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:start;gap:6px}
+.m-g>p{margin:3px 0 0;color:#5d6675;font-size:10.5px;font-weight:650}
+.m-bs{display:flex;flex-wrap:wrap;gap:4px}
+.m-b{display:inline-flex;align-items:center;gap:4px;padding:2px 7px 2px 3px;border:1px solid #e1e5ea;border-radius:5px;background:#fafbfc;font-size:10.5px;white-space:nowrap}
+.m-b i{display:grid;place-items:center;width:16px;height:16px;border-radius:4px;background:var(--c);color:#fff;font-size:9.5px;font-style:normal;font-weight:700}
+.m-b.sel{outline:2px solid #1d8348;outline-offset:-1px}
+.m-bar{display:flex;justify-content:space-between;align-items:center;padding:4px 8px;border:1px solid #c9ced6;border-bottom:0;border-radius:6px 6px 0 0;background:#fff;font-size:12px;font-weight:700;color:#101828}
+.m-bar span{color:#1d6bb8;font-size:10.5px;font-weight:500;text-decoration:underline}
+.m-bar+.xs{border-radius:0 0 6px 6px}
+</style>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const groups = [
+    ['基础设置', '#667085', ['科目表', '账户表', '客户供应商']],
+    ['数据录入', '#1d8348', ['收入登记', '支出登记', '应收明细', '应付明细', '销项发票登记', '进项发票登记']],
+    ['数据汇总', '#2a6fdb', ['收入统计', '支出统计', '应收应付汇总']],
+    ['报表', '#d9480f', ['月度收支', '利润简表']],
+  ];
+  const btn = (n, c) => '<span class="m-b' + (n === '收入登记' ? ' sel' : '') + '" style="--c:' + c + '"><i>' + n[0] + '</i>' + n + '</span>';
+  const home = '<div class="m-home"><div class="xfx"><b>C6</b><i>fx</i><span>=HYPERLINK("#去_收入登记","收入登记")</span></div>'
+    + '<div class="m-hd"><b>首页 · 2026 年度内账</b><span>点按钮跳到对应工作表</span></div><div class="m-gs">'
+    + groups.map(([t, c, list]) => '<div class="m-g"><p>' + t + '</p><div class="m-bs">' + list.map((n) => btn(n, c)).join('') + '</div></div>').join('')
+    + '</div></div>';
+  const entry = '<div class="m-bar">收入登记<span>返回首页</span></div>' + sheet({
+    head: ['日期', '客户', '收入科目', '金额', '收款账户'],
+    widths: [42, 76, 80, 66, 64],
+    rows: [
+      ['10-09', '青柚茶饮 ▾', '设计费 ▾', '18,000.00', '对公户 ▾'],
+      ['10-15', '禾木书店 ▾', '设计费 ▾', '6,500.00', '对公户 ▾'],
+      ['10-21', '青柚茶饮 ▾', '印刷代办 ▾', '3,200.00', '对公户 ▾'],
+      ['10-27', '散客 ▾', '零星收入 ▾', '460.00', '现金 ▾'],
+    ],
+    tabs: ['收入登记', '首页', '收入统计'],
+    freeze: true,
+  });
+  draw(root, [home, entry], { title: '小企业内账工作簿 · 录入表 → SUMIFS 汇总 → 报表', min: 0.45 });
+}
+</script>

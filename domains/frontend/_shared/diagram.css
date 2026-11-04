@@ -10,7 +10,7 @@
   position: relative;
   height: 100%;
   overflow: hidden;
-  padding: 12px 14px;
+  padding: 12px;
   background: var(--bg);
   color: var(--ink);
   font:
@@ -53,7 +53,7 @@
 .dg-t {
   margin-bottom: 8px !important;
   color: var(--mut);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.06em;
 }
@@ -67,9 +67,9 @@
   min-width: 0;
 }
 .dg-n {
-  margin-top: 6px !important;
+  margin-top: 8px !important;
   color: var(--mut);
-  font-size: 11px;
+  font-size: 12px;
   text-align: center;
 }
 .dg i,
@@ -81,8 +81,8 @@
 .tree {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
-  column-gap: 14px;
-  padding: 8px 10px;
+  column-gap: 12px;
+  padding: 8px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--pane);
@@ -91,15 +91,15 @@
 .tn {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding-left: calc(var(--lv) * 14px);
+  gap: 6px;
+  padding-left: calc(var(--lv) * 16px);
   white-space: nowrap;
 }
 .tn svg {
   flex: none;
   width: 13px;
   height: 13px;
-  color: #98a2b3;
+  color: #868c98;
 }
 .tn.dir svg {
   color: var(--ac);
@@ -114,7 +114,7 @@
   white-space: nowrap;
   color: var(--mut);
   font:
-    11.5px/21px system-ui,
+    12px/21px system-ui,
     -apple-system,
     'PingFang SC',
     'Microsoft YaHei',
@@ -126,18 +126,18 @@
 }
 .tn.acc {
   margin-left: -6px;
-  padding-left: calc(var(--lv) * 14px + 6px);
-  border-radius: 5px 0 0 5px;
+  padding-left: calc(var(--lv) * 16px + 6px);
+  border-radius: 6px 0 0 6px;
 }
 .tc.acc {
   margin-right: -6px;
   padding-right: 6px;
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 6px 6px 0;
   color: color-mix(in srgb, var(--ac) 55%, var(--ink));
 }
 .tn.acc b {
   color: color-mix(in srgb, var(--ac) 70%, var(--ink));
-  font-weight: 650;
+  font-weight: 600;
 }
 
 /* 分层 */
@@ -149,8 +149,8 @@
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr);
   align-items: center;
-  gap: 10px;
-  padding: 7px 10px;
+  gap: 8px;
+  padding: 4px 8px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--pane);
@@ -160,7 +160,7 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ac) 12%, transparent);
 }
 .lb {
-  font-weight: 650;
+  font-weight: 600;
 }
 .its {
   display: flex;
@@ -170,17 +170,17 @@
   min-width: 0;
 }
 .its b {
-  padding: 1px 7px;
-  border-radius: 5px;
+  padding: 2px 6px;
+  border-radius: 6px;
   background: var(--soft);
   color: color-mix(in srgb, var(--ac) 62%, var(--ink));
-  font: 500 11.5px/18px var(--mono);
+  font: 500 12px/16px var(--mono);
   white-space: nowrap;
 }
 .its i {
   flex-basis: 100%;
   color: var(--mut);
-  font-size: 11.5px;
+  font-size: 12px;
   line-height: 1.45;
 }
 .ar {
@@ -189,17 +189,17 @@
   justify-content: center;
   gap: 6px;
   height: 18px;
-  color: #98a2b3;
+  color: #868c98;
   font-size: 12px;
   line-height: 1;
 }
 .ar em {
   color: var(--mut);
-  font-size: 11px;
+  font-size: 12px;
 }
 .ar.br {
   justify-content: flex-start;
-  padding-left: 18px;
+  padding-left: 16px;
   color: #d92d20;
 }
 .ar.br em {
@@ -222,19 +222,19 @@
   display: grid;
   align-content: center;
   gap: 2px;
-  padding: 7px 9px;
+  padding: 8px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--pane);
   text-align: center;
 }
 .fs b {
-  font-weight: 650;
+  font-weight: 600;
   line-height: 1.35;
 }
 .fs i {
   color: var(--mut);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.4;
 }
 .fs.acc {
@@ -249,14 +249,14 @@
   color: #b42318;
 }
 .flw.lanes {
-  gap: 6px;
+  gap: 8px;
 }
 .fl {
   flex: none;
   align-self: center;
   width: 58px;
-  font-weight: 650;
-  font-size: 11.5px;
+  font-weight: 600;
+  font-size: 12px;
   line-height: 1.3;
 }
 .fa {
@@ -265,8 +265,8 @@
   place-items: center;
   align-content: center;
   min-width: 22px;
-  padding: 0 3px;
-  color: #98a2b3;
+  padding: 0 4px;
+  color: #868c98;
   font-size: 13px;
   line-height: 1;
 }
@@ -274,7 +274,7 @@
   max-width: 64px;
   margin-bottom: 2px;
   color: var(--mut);
-  font-size: 10.5px;
+  font-size: 12px;
   line-height: 1.25;
   text-align: center;
 }
@@ -283,7 +283,7 @@
 .sq {
   position: relative;
   display: grid;
-  gap: 3px;
+  gap: 4px;
   padding-bottom: 4px;
 }
 .ll {
@@ -306,7 +306,7 @@
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--pane);
-  font-weight: 650;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -337,13 +337,13 @@
 }
 .sq-m.ret {
   border-bottom-style: dashed;
-  border-bottom-color: #8a94a6;
+  border-bottom-color: #868c98;
 }
 .sq-m.ret::after {
-  border-left-color: #8a94a6;
+  border-left-color: #868c98;
 }
 .sq-m.ret.back::after {
-  border-right-color: #8a94a6;
+  border-right-color: #868c98;
 }
 .sq-m.bad {
   border-bottom-color: #d92d20;
@@ -359,7 +359,7 @@
   margin: 0 -14%;
   overflow: hidden;
   color: var(--ink);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.25;
   text-align: center;
   -webkit-box-orient: vertical;
@@ -372,11 +372,11 @@
   justify-self: center;
   align-self: center;
   max-width: 200%;
-  padding: 1px 7px;
-  border-radius: 5px;
+  padding: 2px 6px;
+  border-radius: 6px;
   background: var(--soft);
   color: color-mix(in srgb, var(--ac) 62%, var(--ink));
-  font-size: 11px;
+  font-size: 12px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -389,14 +389,14 @@
 .rg {
   display: grid;
   gap: 4px;
-  padding: 6px 10px 10px;
+  padding: 8px;
   border: 1px solid color-mix(in srgb, var(--ac) 35%, var(--line));
-  border-radius: 12px;
+  border-radius: 30px; /* 同心：外圆角 = 内圆角 + 8px 内边距，从内往外 6 / 14 / 22 / 30 */
   background: color-mix(in srgb, var(--ac) 5%, #fff);
 }
 .rg > span {
-  font-weight: 650;
-  font-size: 11.5px;
+  font-weight: 600;
+  font-size: 12px;
 }
 .rg > span i {
   margin-left: 8px;
@@ -417,7 +417,14 @@
 }
 .rg:not(:has(.rg)) {
   text-align: center;
-  padding: 8px 10px;
+  padding: 8px;
+  border-radius: 6px;
+}
+.rg:has(> .rg:not(:has(.rg))) {
+  border-radius: 14px;
+}
+.rg:has(> .rg > .rg:not(:has(.rg))) {
+  border-radius: 22px;
 }
 
 /* 模块格 */
@@ -430,18 +437,18 @@
   display: grid;
   overflow-wrap: anywhere;
   align-content: start;
-  gap: 3px;
-  padding: 7px 9px;
+  gap: 4px;
+  padding: 8px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--pane);
 }
 .bx b {
-  font-weight: 650;
+  font-weight: 600;
 }
 .bx span {
   color: var(--mut);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.4;
 }
 .bx.acc {
@@ -456,7 +463,7 @@
 /* 报文与代码 */
 .cds {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: stretch;
 }
 .cd {
@@ -468,17 +475,17 @@
   overflow: hidden;
 }
 .cd > p {
-  padding: 4px 10px;
+  padding: 4px 8px;
   border-bottom: 1px solid var(--line);
   background: #fafbfc;
   color: var(--mut);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
 }
 .cd pre {
-  padding: 8px 10px;
+  padding: 8px;
   overflow: hidden;
-  font: 11.5px/1.6 var(--mono);
+  font: 12px/1.6 var(--mono);
   white-space: pre-wrap;
   word-break: break-all;
   color: #344054;
@@ -492,7 +499,7 @@
   margin-right: 4px;
 }
 .c-cm {
-  color: #8a94a6;
+  color: var(--mut);
 }
 .c-key {
   color: #7a3fc2;
@@ -534,7 +541,7 @@
 .pg {
   flex: none;
   display: grid;
-  gap: 6px;
+  gap: 8px;
   justify-items: center;
 }
 .pa {
@@ -577,7 +584,7 @@
 .pg figcaption {
   max-width: 220px;
   color: var(--mut);
-  font-size: 10.5px;
+  font-size: 12px;
   text-align: center;
   line-height: 1.4;
 }
@@ -787,11 +794,11 @@
 .pnt {
   align-self: center;
   display: grid;
-  gap: 6px;
+  gap: 8px;
   max-width: 220px;
   padding: 0 0 0 16px;
   color: #344054;
-  font-size: 11.5px;
+  font-size: 12px;
   line-height: 1.45;
 }
 .pnt li::marker {
@@ -807,7 +814,7 @@
   background: #fff;
   overflow: hidden;
   font:
-    11.5px/1.3 system-ui,
+    12px/1.3 system-ui,
     -apple-system,
     'PingFang SC',
     'Microsoft YaHei',
@@ -823,11 +830,11 @@
 }
 .xfx b {
   min-width: 34px;
-  padding: 1px 6px;
+  padding: 2px 6px;
   border: 1px solid #d0d5dd;
-  border-radius: 3px;
+  border-radius: 6px;
   background: #fff;
-  font: 600 11px/1.4 var(--mono);
+  font: 600 12px/1.4 var(--mono);
 }
 .xfx i {
   color: #98a2b3;
@@ -835,7 +842,7 @@
   font-weight: 600;
 }
 .xfx span {
-  font: 11px/1.4 var(--mono);
+  font: 12px/1.4 var(--mono);
   color: #1d6b3a;
   white-space: nowrap;
   overflow: hidden;
@@ -852,8 +859,8 @@
   justify-content: center;
   height: 20px;
   background: #f1f3f5;
-  color: #8a94a6;
-  font-size: 10px;
+  color: var(--mut);
+  font-size: 12px;
   border-right: 1px solid #e1e4e8;
   border-bottom: 1px solid #e1e4e8;
 }
@@ -863,7 +870,7 @@
   align-items: center;
   min-width: 0;
   height: 22px;
-  padding: 0 6px;
+  padding: 0 8px;
   border-right: 1px solid #e9ecef;
   border-bottom: 1px solid #e9ecef;
   white-space: nowrap;
@@ -877,7 +884,7 @@
 }
 .xc.h {
   background: color-mix(in srgb, var(--ac) 14%, #fff);
-  font-weight: 650;
+  font-weight: 600;
   color: color-mix(in srgb, var(--ac) 60%, #101828);
 }
 .xc.f {
@@ -914,7 +921,7 @@
 }
 .xb {
   position: absolute;
-  left: 3px;
+  left: 4px;
   top: 4px;
   bottom: 4px;
   border-radius: 2px;
@@ -934,24 +941,24 @@
   content: '▾';
   margin-left: 6px;
   color: #8a94a6;
-  font-size: 10px;
+  font-size: 12px;
 }
 .xt {
   display: flex;
   gap: 2px;
-  padding: 3px 6px 0;
+  padding: 4px 8px 0;
   border-top: 1px solid #d8dce2;
   background: #f1f3f5;
 }
 .xt span {
-  padding: 2px 10px;
-  border-radius: 4px 4px 0 0;
+  padding: 2px 12px;
+  border-radius: 6px 6px 0 0;
   color: #5d6675;
-  font-size: 10.5px;
+  font-size: 12px;
 }
 .xt span.on {
   background: #fff;
   color: #1d6b3a;
-  font-weight: 650;
+  font-weight: 600;
   box-shadow: inset 0 -2px #1d8348;
 }

@@ -39,3 +39,18 @@ order: 10
 2. 对外单号为 {单号前缀} + 日期 + 业务线 + 用户 ID 后 4 位 + 随机步长序列 + 校验码，order_no 唯一索引，格式不对直接 404。
 3. ID 在 JSON 里一律以字符串返回。
 最后给出压测和对账方法：多线程发 1000 万个 ID 断言无重复、趋势递增；模拟时钟回拨和两个实例抢同一机器号；每天抽查订单表 order_no 唯一、校验码全部正确。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '抢占机器号', note: 'SET NX EX 60，20 秒续期' }, { t: '毫秒 + 序列', note: '41 + 10 + 12 位', acc: true }, { t: '时钟回拨', note: '超过 5ms 拒绝发号', bad: true }],
+    [{ t: 'UPDATE max_id', note: 'max_id = max_id + step' }, { t: '内存发放', note: '(max_id − step, max_id]', acc: true }, { t: '用掉 20%', note: '异步预取下一段' }],
+    [{ t: 'SO20261029', note: '前缀 + 日期' }, { t: '01 7321', note: '业务线 + 用户 ID 后 4 位' }, { t: '004518 6', note: '随机步长序列 + 校验码', acc: true }],
+  ], { lanes: ['雪花', '号段', '对外单号'] }), { title: '内部 ID 与对外单号' });
+}
+</script>

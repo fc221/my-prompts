@@ -1,4 +1,4 @@
-/* 从 #2563eb 生成的色板，三块（亮色 / 系统暗色 / data-theme=dark）原样保留，不手调 */
+/* 从 #2563eb 生成的色板，三块（亮色 / 系统暗色 / data-theme=dark）原样保留，只手调过亮色的占位文字色（见行内注释） */
 /* 品牌色 #2563eb，中性彩度 0.004，中性色相 263 */
 :root {
   color-scheme: light;
@@ -14,7 +14,7 @@
   --border-strong: #737477;
   --text-primary: #202226;
   --text-secondary: #616368;
-  --text-placeholder: #74767b;
+  --text-placeholder: #717378; /* 生成值 #74767b 对 surface-page 只有 4.3:1，压到 4.5:1 */
   --text-disabled: #9d9ea1;
   --accent: #2563eb;
   --accent-hover: #1652da;

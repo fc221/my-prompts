@@ -28,3 +28,21 @@ order: 20
 ## 提示词
 
 为{项目}定义阴影层级：0 级不加投影，表格和密集面板用 1px border-subtle，想和背景融合的卡片改用 0 0 0 1px 极淡环形阴影加一层 1–2px 近阴影，同一页只用一种；shadow-1 用于可点击卡片悬停（同时上移 2px）与滚动后的吸顶栏；shadow-2 用于下拉、Popover、Toast；shadow-3 用于弹窗、抽屉；每级两层（贴近较浓 + 扩散较淡），只向下偏移，颜色用带品牌色相的深色；浮层不再加粗边框；暗色下改用更亮的表面色 + 1px 浅边框；阴影过渡用伪元素的 opacity，减少动态效果时不位移。
+
+## 示例
+
+<style>
+.s{height:100%;display:flex;align-items:center;justify-content:center;gap:16px;padding:16px 20px;background:#f5f6f8;color:#1f2329;font:12px/1.4 system-ui,"PingFang SC",sans-serif}
+.c{flex:1;max-width:140px;height:min(120px,72%);display:flex;flex-direction:column;justify-content:space-between;padding:12px;border-radius:12px;background:#fff;transition:transform .16s cubic-bezier(.2,0,0,1),box-shadow .16s cubic-bezier(.2,0,0,1)}
+.c b{font-size:24px;line-height:1;font-weight:600;color:#3b5bdb}
+.c span{color:#5b616e}
+.l0{box-shadow:0 0 0 1px #e3e6eb;cursor:pointer}
+.l1,.l0:hover{box-shadow:0 1px 2px rgba(24,36,80,.06),0 2px 8px rgba(24,36,80,.08)}
+.l0:hover{transform:translateY(-2px)}
+.l2{box-shadow:0 2px 4px rgba(24,36,80,.06),0 8px 20px rgba(24,36,80,.12)}
+.l3{box-shadow:0 4px 8px rgba(24,36,80,.08),0 20px 40px rgba(24,36,80,.18)}
+@media (prefers-reduced-motion:reduce){.l0:hover{transform:none}
+}
+</style>
+
+<div class="s"><div class="c l0"><b>0</b><span>边框<br>悬停试试</span></div><div class="c l1"><b>1</b><span>悬停卡片<br>吸顶栏</span></div><div class="c l2"><b>2</b><span>下拉<br>Toast</span></div><div class="c l3"><b>3</b><span>弹窗<br>抽屉</span></div></div>

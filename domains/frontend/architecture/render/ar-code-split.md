@@ -43,3 +43,17 @@ order: 30
 5. 加体积预算检查，首屏 chunk 超出基线 10% 时构建失败。
 只拆分析结果里体积大的模块，几 KB 的小组件保持原样。
 完成后汇报改前改后的首屏 JS 体积和 chunk 列表、改了哪些文件；在 4G 限速下验证首页和{重点页面}加载正常、懒加载的组件能正常出现。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '打包分析', note: '记下首屏 JS 基线' }, { t: '按路由拆', note: '页面动态 import', acc: true }, { t: '拆重组件', note: '图表、富文本、地图' }, { t: '体积预算', note: '超基线 10% 构建失败' }],
+    [{ t: '悬停或进入视口', note: '预取下一页' }, { t: '加载 chunk', note: '占位保持最终尺寸' }, { t: '失败重试一次', bad: true, via: '失败' }, { t: '提示新版本', note: '刷新页面' }],
+  ]), { title: '先量再拆 · 首屏 JS ≤ 200KB（gzip）' });
+}
+</script>

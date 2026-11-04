@@ -39,3 +39,21 @@ order: 10
 2. 按规则改：事务收到应用服务层，一个用例一个事务；外部调用移到提交之后或写入发件箱；读改写改成条件更新并检查影响行数，或按「乐观锁与悲观锁」加锁；多行加锁按主键固定顺序；用到更高隔离级别的地方捕获 40001 和死锁，整体重试最多 3 次。
 3. 为{关键用例，如下单扣库存}写并发测试：50 个并发请求争抢同一 SKU 的 10 件库存，断言成功 10 单、库存为 0 且不为负。
 4. 汇报：问题清单、改动文件、并发测试结果、配置改动（锁等待超时、空闲事务超时）。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, seq } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, seq(['下单 A', '库存行 qty=4', '下单 B'], [
+    [0, 1, 'UPDATE … qty >= 3'],
+    [1, 0, '影响 1 行，加行锁', 'r'],
+    [2, 1, '同样扣 3，等锁'],
+    [0, 1, 'COMMIT，qty = 1'],
+    [1, 2, 'qty=1，条件不成立', 'rx'],
+    [2, 2, '影响 0 行 → 库存不足'],
+  ]), { title: '条件更新 · qty = qty - 3 WHERE qty >= 3' });
+}
+</script>

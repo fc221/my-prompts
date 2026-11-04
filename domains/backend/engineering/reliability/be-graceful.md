@@ -38,3 +38,18 @@ order: 40
 2. 按规则改：存活检查只看进程本身；就绪检查覆盖数据库连接池和必需依赖，失败返回 503；启动慢的加 startupProbe；收到 SIGTERM 后先置就绪失败、等 5–10 秒摘流量、停止接收新请求、等处理中的请求和已拉取的消息完成、关闭连接池，总时长短于优雅期限。
 3. 验证：持续压测的同时滚动重启服务，5xx 和连接重置次数为 0；手动发送 SIGTERM，日志里停机步骤按顺序出现。
 4. 汇报：端点说明、改动的代码和部署文件、验证结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '收到 SIGTERM' }, { t: '就绪置失败', note: '/readyz 返回 503', acc: true }, { t: '等摘流量', note: '5–10 秒' }, { t: '停收新连接', note: '消费者停止拉取' }],
+    [{ t: '处理完在途', note: '请求和已拉取的消息' }, { t: '关闭连接池', note: '刷出日志和指标' }, { t: '退出', acc: true }],
+    [{ t: '被强制杀掉', note: '整个过程超过 30 秒', bad: true, via: '没走完' }],
+  ]), { title: '优雅停机 · /livez 不查依赖，只看进程' });
+}
+</script>

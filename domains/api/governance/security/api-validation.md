@@ -2,7 +2,7 @@
 zh: 入参校验
 en: Input validation
 aka: 参数校验 请求校验 schema 校验 DTO 校验 字段错误 未知字段
-order: 50
+order: 20
 ---
 
 ## 是什么
@@ -28,7 +28,7 @@ order: 50
 - 未知字段：请求体出现模型里没有的字段时返回错误并写出字段名（如把 remark 拼成 remak），帮调用方尽早发现拼写错误；老接口要收紧时先记日志观察一个发布周期。
 - 规则写全：字符串都有最大长度（备注 500、名称 64），数字有范围（数量 1–999），数组有上限（单次最多 100 个商品），枚举列出全部取值，手机号按 11 位大陆号码校验，金额用整数分且大于 0；请求体总大小在网关限制为 1MB，上传接口除外。
 - 字段之间的约束也在入口校验：结束时间晚于开始时间；配送方式为 DELIVERY 时收货地址必填。
-- 一次返回全部错误：按「错误响应格式」放进 errors 数组，每项含 field（用路径写，如 items[2].quantity）、code（REQUIRED、TOO_LONG、OUT_OF_RANGE、INVALID_FORMAT）和 message；JSON 解析失败返回 400，字段校验失败用哪个状态码按「状态码怎么选」统一。
+- 一次返回全部错误：按「错误响应格式」放进 errors 数组，每项含 field（用路径写，如 items[2].quantity）、code（REQUIRED、TOO_LONG、OUT_OF_RANGE、INVALID_FORMAT）和 message；JSON 解析失败返回 400，字段校验失败返回 422（见「状态码怎么选」）。
 - 校验前统一规范化：去掉首尾空格、全角数字转半角；超长、越界一律报错，不悄悄截断后照存。
 - 金额、价格以服务端计算为准，客户端传来的合计只用来比对，不一致返回错误。
 
@@ -40,6 +40,38 @@ order: 50
 2. 每个写接口用专用入参模型，只含客户端可写字段；服务端决定的字段（id、status、合计金额、商户 id）不从请求体取。
 3. 请求体出现未知字段时返回错误并写出字段名。
 4. 每个字符串有最大长度、数字有范围、数组有上限、枚举列出取值，字段之间的约束一并校验。
-5. 校验失败一次返回全部错误，errors 数组每项含 field 路径、code、message；JSON 解析失败返回 400。
+5. 校验失败返回 422，一次返回全部错误，errors 数组每项含 field 路径、code、message；JSON 解析失败返回 400。
 6. 金额以服务端计算为准。
 最后说明改了哪些文件，并给 {示例接口，如 POST /orders} 写测试：一次提交三个错误字段能全部返回、多传 status 字段被拒绝、超长备注被拒绝。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, http } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, http(`
+POST /orders
+Content-Type: application/json
+
+"storeId": "s_1024",
+"deliveryType": "DELIVERY",
+"remak": "少放辣",
+"items": [ …, …,
+  { "skuId": "sku_77", "quantity": 0 } ]
+`, `
+422 Unprocessable Content
+
+"errors": [
+  { "field": "items[2].quantity",
+    "code": "OUT_OF_RANGE",
+    "message": "数量 1–999" },
+  { "field": "address",
+    "code": "REQUIRED", … },
+  { "field": "remak",
+    "code": "UNKNOWN_FIELD", … }
+]
+`), { title: '入参校验 · 一次返回全部字段错误' });
+}
+</script>

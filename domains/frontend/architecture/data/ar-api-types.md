@@ -39,3 +39,17 @@ order: 20
 3. 生成到 src/api/generated/，加 npm run gen:api 脚本，生成目录加入 lint 和格式化忽略；在 src/api/types.ts 导出常用类型别名。
 4. 把手写的接口类型逐个替换为生成类型，修好类型检查报出的所有调用处；对不上的字段列成清单（可能是前端写错，也可能是契约过时），保留真实类型，不用 any 糊过去。
 5. 在 CI 加“重新生成后没有差异”的检查。汇报替换了哪些类型、发现了哪些不一致。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: 'openapi.json', note: '契约提交进仓库' }, { t: 'generated/', note: '自动生成，勿手改', via: 'gen:api', acc: true }, { t: 'types.ts', note: 'Order、OrderStatus' }, { t: '业务代码', note: '只引 types.ts' }],
+    [{ t: '后端改字段名' }, { t: '重新生成', note: '契约 diff 可见' }, { t: '类型检查报错', note: '指出要改的调用处', bad: true }, { t: 'CI 比对', note: '没生成或手改就失败' }],
+  ]), { title: '接口类型生成 · 契约一变就重新生成' });
+}
+</script>

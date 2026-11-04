@@ -67,7 +67,7 @@ button {
   justify-content: space-between;
   align-items: center;
   height: 44px;
-  padding: 0 30px;
+  padding: 0 32px;
   font-weight: 600;
   font-size: 14px;
 }
@@ -101,17 +101,17 @@ button {
   justify-content: space-around;
   align-items: center;
   height: 64px;
-  padding: 0 8px 6px;
+  padding: 0 8px 8px;
   border-top: 1px solid #eceef2;
   background: #fff;
 }
 .tb button {
   display: grid;
   justify-items: center;
-  gap: 2px;
+  gap: 4px;
   min-width: 56px;
-  color: #9095a0;
-  font-size: 11px;
+  color: #6b7280;
+  font-size: 12px;
 }
 .tb svg {
   width: 24px;
@@ -131,11 +131,13 @@ button {
   width: 48px;
   height: 48px;
   min-width: 0;
-  margin-top: -18px;
+  margin-top: -16px;
   border-radius: 50%;
   background: #15171c;
   color: #fff;
-  box-shadow: 0 8px 18px -6px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    0 2px 4px rgba(15, 23, 42, 0.2),
+    0 8px 18px -6px rgba(15, 23, 42, 0.45);
 }
 .tb .plus svg {
   stroke-width: 2.4;
@@ -148,7 +150,7 @@ button {
 }
 .brand {
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
 }
 .av {
   display: grid;
@@ -164,19 +166,26 @@ button {
 .chips {
   display: flex;
   gap: 8px;
-  margin: 14px 20px 0;
+  margin: 4px 20px 0;
+  padding: 8px 0;
   overflow-x: auto;
   scrollbar-width: none;
 }
 .chips button {
   flex: none;
+  position: relative;
   height: 32px;
-  padding: 0 14px;
+  padding: 0 16px;
   border: 1px solid #e3e5ea;
-  border-radius: 16px;
+  border-radius: 999px;
   background: #fff;
   color: #4b5060;
   font-size: 13px;
+}
+.chips button::before {
+  content: '';
+  position: absolute;
+  inset: -8px 0;
 }
 .chips button[aria-pressed='true'] {
   border-color: #15171c;
@@ -186,13 +195,13 @@ button {
 .lg {
   align-self: center;
   display: grid;
-  gap: 10px;
+  gap: 8px;
   width: 250px;
   margin: 0;
   padding: 0;
   list-style: none;
   color: #3d4250;
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.5;
 }
 .lg li {

@@ -43,3 +43,41 @@ order: 30
 5. 只对幂等方法的 UNAVAILABLE 重试，最多 {重试次数} 次，带退避。
 6. CI 加 buf lint 和对主分支的 buf breaking 检查。
 改编号、改字段类型这类会破坏线上兼容的改动先列出来给我确认。最后说明改了哪些文件，跑一次 buf breaking，再用一个超时用例证明 deadline 能传到下游。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, code([
+    { t: 'proto/order/v1/order.proto', text: `
+package order.v1;
+
+service OrderService {
+  rpc CreateOrder(CreateOrderRequest)
+    returns (CreateOrderResponse);
+}
+message Order {
+  reserved 4, 7;
+  reserved "coupon_code";
+  string id = 1;
+  OrderStatus status = 2;
+  int64 amount_fen = 3;
+}
+` },
+    { t: '枚举与调用', text: `
+enum OrderStatus {
+  ORDER_STATUS_UNSPECIFIED = 0;
+  ORDER_STATUS_PAID = 1;
+}
+// 每次调用都设 deadline
+// 下单入口 800ms，下游用剩余时间
+// FAILED_PRECONDITION → 400
+// UNAVAILABLE → 503，幂等方法才重试
+// DEADLINE_EXCEEDED → 504
+` },
+  ]), { title: 'gRPC 与 Protobuf · 字段编号永不修改、永不复用' });
+}
+</script>

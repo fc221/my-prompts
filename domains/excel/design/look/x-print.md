@@ -41,3 +41,61 @@ order: 40
 4. 页眉左侧写 {页眉文字，如 单位名称 + 表名}，页脚中间写“第 X 页，共 Y 页”，右侧写打印日期。
 5. 在分页预览里调整分页，保证签字栏和合计行不被拆开。
 交付时说明打印区域、缩放比例和总页数，并导出一份 PDF 供检查。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-pages{display:flex;gap:16px;align-items:flex-start;justify-content:center}
+.m-pg{display:grid;gap:6px;justify-items:center}
+.m-page{display:grid;gap:5px;padding:10px 12px 8px;background:#fff;box-shadow:0 1px 2px rgba(16,24,40,.08),0 4px 14px -4px rgba(16,24,40,.14)}
+.m-hd,.m-ft{display:flex;justify-content:space-between;color:#667085;font-size:10.5px;white-space:nowrap}
+.m-hd{padding-bottom:3px;border-bottom:1px solid #e4e7ec}
+.m-ft{padding-top:3px;border-top:1px solid #e4e7ec}
+.m-ft b{font-weight:600;color:#344054}
+.m-page .xs{border-radius:0}
+.m-sign{display:flex;gap:18px;padding:2px 6px 0;color:#344054;font-size:10.5px}
+.m-xu{margin-right:4px;padding:0 3px;border-radius:3px;background:var(--ac);color:#fff;font-size:10px;font-weight:700;line-height:1.5}
+.m-cap{margin:0;max-width:300px;color:#475467;font-size:11px;line-height:1.4;text-align:center}
+.dg.narrow .m-p1{display:none}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw, sheet } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const head = ['日期', '单号', '商品', '数量', '单价', '金额'];
+  const widths = [56, 80, 96, 44, 56, 72];
+  const page = (cls, body, p, cap, sign = '') =>
+    '<div class="m-pg ' + cls + '"><div class="m-page"><p class="m-hd"><span>滨江区门店 · 10 月销售明细</span><span>单位：元</span></p>' + body + sign
+    + '<p class="m-ft"><span></span><b>第 ' + p + ' 页，共 2 页</b><span>2026-11-02</span></p></div><p class="m-cap">' + cap + '</p></div>';
+  const p1 = page('m-p1', sheet({
+    head, widths,
+    rows: [
+      ['10-02', 'XS-1002-01', '拿铁（大）', '24', '28.00', '672.00'],
+      ['10-02', 'XS-1002-02', '美式', '18', '22.00', '396.00'],
+      ['10-03', 'XS-1003-01', '牛角包', '30', '12.00', '360.00'],
+      ['10-05', 'XS-1005-01', '拿铁（大）', '36', '28.00', '1,008.00'],
+      ['10-08', 'XS-1008-01', '挂耳咖啡礼盒', '12', '98.00', '1,176.00'],
+      ['10-12', 'XS-1012-01', '冷萃', '20', '26.00', '520.00'],
+      ['10-15', 'XS-1015-01', '美式', '25', '22.00', '550.00'],
+    ],
+  }), 1, '第 1 页：第 1 行是真实表头');
+  const p2 = page('m-p2', sheet({
+    head, widths,
+    rows: [
+      ['10-20', 'XS-1020-01', '牛角包', '40', '12.00', '480.00'],
+      ['10-23', 'XS-1023-01', '拿铁（大）', '30', '28.00', '840.00'],
+      ['10-27', 'XS-1027-01', '会员储值卡', '5', '500.00', '2,500.00'],
+      ['10-31', 'XS-1031-01', '冷萃', '16', '26.00', '416.00'],
+    ],
+    foot: ['合计', '', '', '256', '', '8,918.00'],
+  }), 2, '第 2 页：顶端标题行 $1:$1 自动重复，合计和签字栏不拆页', '<p class="m-sign"><span>制表：</span><span>审核：</span><span>店长：</span></p>');
+  draw(root, '<div class="m-pages">' + p1 + p2 + '</div>', { title: '打印设置 · 调整为 1 页宽，表头每页重复，页脚 第 &[页码] 页，共 &[总页数] 页', center: true, min: 0.3 });
+  // 第 2 页：重复的表头标“续”，行号接着第 1 页往下数
+  root.querySelector('.m-p2 .xc.h').insertAdjacentHTML('afterbegin', '<i class="m-xu">续</i>');
+  root.querySelectorAll('.m-p2 .xn').forEach((n, i) => { if (i >= 2) n.textContent = String(i + 7); });
+}
+</script>

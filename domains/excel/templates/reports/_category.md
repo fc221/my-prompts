@@ -1,4 +1,4 @@
 ---
-name: 财务报表
-order: 30
+name: 报表与看板
+order: 40
 ---

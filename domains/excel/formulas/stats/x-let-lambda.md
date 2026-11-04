@@ -39,3 +39,39 @@ LAMBDA 自定义函数保存在当前工作簿的名称里，公式复制到别�
 3. 把全表反复用到的口径 {口径，如 毛利率、含税价} 定义成 LAMBDA 自定义函数，写清参数和备注，并在说明表里列出。
 4. 用户版本是 {Excel 版本}：没有 LAMBDA 时只用 LET；连 LET 也没有时改成辅助列。
 交付时列出改写前后的公式对照、新增的名称，以及需要的最低版本。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.m-fit .dg-col:first-child{flex:none}
+</style>
+
+<div class="dg m-fit"></div>
+
+<script type="module">
+import { draw, sheet, code } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, [
+    sheet({
+      head: ['门店', '收入', '成本', '毛利率'],
+      widths: [56, 80, 80, 58],
+      rows: [
+        ['滨江店', '156,780.00', '58,790.00', '62.5%'],
+        ['西湖店', '123,800.00', '52,000.00', '58.0%'],
+        ['湖滨店', '88,230.00', '35,130.00', '60.2%'],
+        ['新开店', '0.00', '1,200.00', ''],
+      ],
+      fx: ['D3', '=毛利率(B3,C3)'],
+      marks: { D2: 'acc', D3: 'acc', D4: 'acc', D5: 'acc' },
+      tabs: ['门店利润', '订单', '说明'],
+      freeze: true,
+    }),
+    code([{ t: '名称管理器 · 毛利率', text: `=LAMBDA(收入,成本,
+  IF(收入=0,"",(收入-成本)/收入))` }]) + '<div style="height:8px"></div>' + code([{ t: 'LET · 两段 SUMIFS 各算一次', text: `=LET(
+  收入,SUMIFS(订单[金额],订单[门店],A2),
+  成本,SUMIFS(订单[成本],订单[门店],A2),
+  IF(收入=0,"",(收入-成本)/收入))` }]),
+  ], { title: 'LAMBDA 定义一次，整表调用 =毛利率(B3,C3)', min: 0.45 });
+}
+</script>

@@ -2,6 +2,7 @@
 zh: 会话列表 + 对话
 en: Sessions + chat
 order: 20
+of: l-ai-page
 ---
 
 ## 是什么
@@ -29,3 +30,37 @@ order: 20
 ## 提示词
 
 {产品}AI 对话用「会话列表 + 对话」：左侧 272px 会话栏，顶部“新建会话”和搜索，下面按今天、昨天、更早分组，等待确认或出错的会话带标记，会话栏可收起；右侧对话区消息列最大 740px 居中、输入框吸底；切换会话时草稿和附件按会话保存；当前会话写进 URL；窄屏会话栏收进抽屉，顶栏显示会话名。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '26% 1fr',
+  rows: '12% 1fr 17%',
+  areas: ['new top', 'list chat', 'list inp'],
+  boxes: {
+    new: { label: '＋ 新建', text: '＋ 新对话' },
+    top: { label: '会话标题', kind: 'aitop', text: '十月对账差异分析' },
+    list: {
+      inner: {
+        cols: '1fr',
+        rows: 'auto auto auto auto 1fr',
+        areas: ['r1', 'r2', 'r3', 'r4', '.'],
+        boxes: { r1: { label: '当前会话', acc: true }, r2: '会话', r3: '待确认 •', r4: '会话' },
+      },
+    },
+    chat: { label: '对话（居中列）', acc: true },
+    inp: '输入框',
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: '11% 1fr 14%',
+  areas: ['top', 'chat', 'inp'],
+  boxes: {
+    top: { label: '☰ 会话名', kind: 'mtop', text: '十月对账差异分析' },
+    chat: { label: '对话', acc: true },
+    inp: '输入框',
+  },
+};
+```

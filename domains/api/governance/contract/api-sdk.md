@@ -26,7 +26,7 @@ order: 30
 - 用 openapi-generator 或各语言的专用生成器，配置和模板进仓库；契约一变，CI 自动重新生成并开 PR；生成目录（generated/）和手写封装分开。
 - 认证内置：初始化时传 Key 或客户端凭证，SDK 负责加头、在过期前刷新令牌，并提供现成的 Webhook 验签方法。
 - 重试内置：只对 429、502、503、504 和网络错误重试，最多 3 次，指数退避加抖动，有 Retry-After 就按它等；POST 自动生成 Idempotency-Key，重试时沿用。
-- 默认超时写明（连接 5 秒、读取 30 秒），可以按单次调用覆盖。
+- 默认超时写明，可以按单次调用覆盖；连接 5 秒、读取 30 秒是对外 SDK 的取值（走公网、调用方环境不可控），内部服务间的取值看「超时、重试与熔断」。
 - 分页给迭代器：调用方写一个循环就能遍历全部订单，翻页由 SDK 完成。
 - 错误类型化：按状态码和错误码抛不同异常（AuthenticationError、RateLimitError、ValidationError），异常里带 HTTP 状态、错误码、字段错误和 traceId。
 - 版本号按 semver，独立于 API 版本；破坏性改动升主版本并附迁移说明；请求带 User-Agent（如 store-sdk-python/2.3.1），服务端据此统计各版本用量，决定何时停止支持旧版。
@@ -42,3 +42,18 @@ order: 30
 4. 版本号用 semver 且独立于 API 版本，User-Agent 带 SDK 名和版本。
 5. README 首屏给安装命令和可运行示例；CI 对 mock 服务跑冒烟测试。
 最后说明改了哪些文件，并用 SDK 演示：列出全部{资源名}（自动翻页），以及模拟一次 429 后自动重试成功。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '调用方', items: ['client.orders.list()'], note: '装一个包，写一个循环遍历全部订单' },
+    { t: '手写封装', items: ['认证', '重试', '分页迭代器', 'RateLimitError'], note: '429/502/503/504 最多重试 3 次，POST 自动带 Idempotency-Key', acc: true },
+    { t: 'generated/', items: ['openapi-generator'], note: '契约一变 CI 重新生成并开 PR，勿手改' },
+  ], { arrow: '封装调生成代码' }), { title: 'SDK · 生成代码外包一层薄封装' });
+}
+</script>

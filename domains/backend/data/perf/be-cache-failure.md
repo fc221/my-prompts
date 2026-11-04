@@ -38,3 +38,18 @@ order: 20
 2. 按规则改：查不到的数据缓存空值 60 秒，入参先校验格式；热点键重建用进程内合并加 Redis 互斥锁（5 秒过期，没拿到锁等待重读最多 3 次，失败返回旧值）；{极热数据，如活动商品}改为逻辑过期加后台刷新，并在活动前预热；所有 TTL 加 0–20% 抖动；查库加每实例并发上限，Redis 连续超时打开熔断走降级。
 3. 写压测脚本：同一个不存在的 ID 连续请求 1000 次；热点键过期瞬间 500 并发；分别记录数据库实际查询次数。
 4. 汇报：改动文件、压测前后数据库查询次数对比、各种降级情况下接口返回什么。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '查不存在的 ID', note: '每次都打到库', bad: true }, { t: '格式校验 + 布隆', note: '不在集合直接 404' }, { t: '缓存空值', note: 'TTL 30–60 秒', acc: true }],
+    [{ t: '热点键过期', note: '上千请求同时到', bad: true }, { t: 'SET NX 互斥', note: '5 秒过期，只放一个', acc: true }, { t: '其余等 50ms', note: '重读，最多 3 次' }],
+    [{ t: '大批键同时过期', note: '或 Redis 不可用', bad: true }, { t: 'TTL 加抖动', note: '基础值 0–20% 随机', acc: true }, { t: '查库并发上限', note: '每实例 50，超出降级' }],
+  ], { lanes: ['穿透', '击穿', '雪崩'] }), { title: '缓存挡不住的三种情况' });
+}
+</script>

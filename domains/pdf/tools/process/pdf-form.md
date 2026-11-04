@@ -41,3 +41,17 @@ PDF 里可以带交互表单域（AcroForm）：文本框、勾选框、单选�
 5. 输出方式 {是否扁平化}：扁平化的用子集字体，保留可编辑的嵌入完整字体。
 6. 某行缺必填字段时跳过并记录，结束后输出成功数和失败清单；随机抽 3 份用 pdftotext 检查中文能正确复制。
 最后说明脚本用法和映射配置的格式。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    [{ t: '表单模板', note: 'AcroForm，XFA 填不了' }, { t: '列出字段', note: 'getFields() 名称和类型' }, { t: '按映射填值', note: 'setText · check · select', acc: true }, { t: '扁平化', note: 'flatten() 填完锁定' }],
+    [{ t: '中文值没嵌字体', note: '空白、方框或 WinAnsi 报错', bad: true }, { t: 'embedFont 再生成外观', note: 'updateFieldAppearances', acc: true }],
+  ]), { title: '填 AcroForm 表单 · 入职登记表' });
+}
+</script>

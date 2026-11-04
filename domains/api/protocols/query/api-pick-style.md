@@ -39,3 +39,21 @@ order: 10
 2. 全系统主协议不超过两种。画出分层：哪一层对外、哪一层对内、网关在哪里做协议转换。
 3. 已有接口里和选型不一致的，列出迁移清单和先后顺序，分批改，不一次全换。
 4. 输出选型说明 docs/api-style.md：结论、每种协议的使用范围、schema 文件位置、兼容性检查方式，以及出现哪些情况时需要重新评估。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: 'REST + OpenAPI', items: ['对外开放给第三方', 'GET 走 HTTP 缓存和 CDN', '文件上传下载'], acc: true },
+    { t: 'gRPC + Protobuf', items: ['服务之间内部调用', '延迟敏感、要流式', '多语言强类型'] },
+    { t: 'GraphQL', items: ['多端读同一张关系图', '字段差别大、迭代快', '必须限深度和复杂度'] },
+    { t: 'BFF', items: ['只有两三个端', '差异在聚合和裁剪'] },
+    { t: '写为主的流程', items: ['下单、支付、退款、审批', '用 REST 或 gRPC'] },
+    { t: '推送单独选', items: ['单向、AI 流式：SSE', '双向高频：WebSocket', '跨系统：Webhook'], dash: true },
+  ], { cols: 3, note: '先按调用方定协议；一个系统的主协议最多两种' }), { title: 'REST、GraphQL、gRPC 怎么选' });
+}
+</script>

@@ -23,7 +23,7 @@ order: 30
 
 ## 要点
 
-- 内容：页眉左侧文档名或单据号，右侧 logo（高不超过 8mm）或密级；页脚中间或外侧放“第 3 页 / 共 12 页”，左侧放生成时间或版本号。字号 8–9pt，颜色不浅于 #666。
+- 内容：页眉左侧文档名或单据号，右侧 logo（高不超过 8mm）或密级；页脚中间或外侧放“第 3 页 / 共 12 页”，左侧放生成时间或版本号。字号 7–9pt：单据和报告 8–9pt，年报、品牌计划书、横版作品集这类画册 7pt；颜色不浅于 #666。
 - CSS 写法：在 @page 里写 @bottom-center 边距区，content 用字面文字拼接 counter(page) 和 counter(pages)；WeasyPrint、Prince、Paged.js、Chromium 131+ 都认。边距区高度就是对应方向的页边距，边距太小内容会被挤掉。
 - headerTemplate / footerTemplate：用 class 为 pageNumber、totalPages、date、title 的 span 取值；只认内联样式，不加载外部图片和字体，logo 用 base64；默认字号极小，要显式写 9px 左右；margin 参数里要留出页眉页脚的高度。
 - 封面不放页眉页码：@page :first 里把各边距区的 content 设为 none。封面不计页码、前言用罗马数字时，WeasyPrint / Prince 在正文起点 counter-reset: page；Chromium 做不到，就把封面单独生成再合并。
@@ -39,3 +39,22 @@ order: 30
 3. 封面（如有）不显示页眉页码；打印方式 {单面 / 双面}，双面时页码放外侧。
 4. 上下边距留够页眉页脚的高度，正文不被盖住。
 最后说明用的是哪种机制、改了哪些文件，并截图第 1 页、中间页和最后一页核对页码。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, page } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const head = 'HT-2026-0158 · 年度保洁服务合同';
+  const foot = '2026-10-29 14:35 · 第 {p} 页 / 共 {n} 页';
+  draw(root, page({
+    pages: [
+      { label: '封面：@page :first 不显示', blocks: ['gap', 'gap', 'gap', 'gap', 'title:年度保洁服务合同', 'text:合同编号 HT-2026-0158'] },
+      { head, foot, label: '第 2 页', blocks: ['h:第一条 服务内容与标准', 'p:6', 'h:第二条 服务期限', 'p:4', 'h:第三条 费用与支付', 'p:6', 'p:5'] },
+      { head, foot, label: '第 3 页：页码随页变化', blocks: ['h:第七条 违约责任', 'p:5', 'h:第八条 变更与解除', 'p:6', 'text:（以下无正文）'] },
+    ],
+  }), { title: '@page 边距区 · counter(page) / counter(pages)', center: true, min: 0.3 });
+}
+</script>

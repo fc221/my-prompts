@@ -40,3 +40,54 @@ Word 表格的版式规范：用表格样式统一线条和底色，表头跨页
 3. 每张表根据窗口调整到版心宽；表头设为跨页重复的标题行，取消“允许跨页断行”，行高用最小值。
 4. 表题放在表格上方，用插入题注生成“表 2-1”格式；有数据来源或口径说明的，在表格下方加小五号表注。
 5. 最后列出超过一页或比版心宽的表，建议哪些改横向分节、哪些拆分；数据区里的合并单元格标出来让我确认。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-wrap{display:flex;gap:16px;align-items:center}
+.m-st{display:grid;gap:0;width:400px}
+.m-pg{position:relative;padding:12px 34px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 10px 22px -10px rgba(16,24,40,.25);color:#111;font-family:"Songti SC","SimSun",serif}
+.m-pg.a{padding-top:14px;clip-path:inset(-30px -30px 0 -30px)}
+.m-pg.b{padding-bottom:14px;clip-path:inset(0 -30px -30px -30px)}
+.m-desk .m-gap{display:flex;align-items:center;gap:8px;height:30px;padding:0 6px;color:#b54708;font:600 10.5px/1 system-ui,"PingFang SC",sans-serif}
+.m-desk .m-gap::before,.m-gap::after{content:"";flex:1;border-top:1.5px dashed #e7a663}
+.m-desk .m-p{margin:0 0 4px;font-size:11px;line-height:1.8;text-indent:2em;color:#333}
+.m-desk .m-cap{margin:2px 0 4px;text-align:center;font-size:10.5px;line-height:1.4}
+.m-cap b{font-weight:400;padding:0 1px;background:#e4e7ec}
+.m-tb{width:100%;table-layout:fixed;border-collapse:collapse;font-size:10.5px;line-height:1.55;border-top:1.5px solid #111;border-bottom:1.5px solid #111}
+.m-tb th{padding:2px 6px;border-bottom:.75px solid #111;font:700 10.5px/1.55 "PingFang SC","SimHei",sans-serif;text-align:center;white-space:nowrap}
+.m-tb td{padding:2px 6px;white-space:nowrap}
+.m-tb td.n{text-align:right;font-variant-numeric:tabular-nums}
+.m-tb td.c{text-align:center}
+.m-tb tr.rep th{background:#eaf1fb}
+.m-tb tr.sum td{border-top:.75px solid #111;font-weight:700}
+.m-desk .m-note{margin:4px 0 0;font-size:9px;line-height:1.5;color:#333}
+.m-desk .m-pn{margin:8px 0 0;text-align:center;font:9.5px/1 "Times New Roman",serif;color:#555}
+.m-desk .m-hd{margin:0 0 8px;padding-bottom:2px;border-bottom:.75px solid #595959;color:#595959;font-size:8.5px;text-align:right;display:flex;align-items:center}
+.m-flag{margin-right:auto;padding:0 6px;border-radius:8px;background:#2b579a;color:#fff;font:9px/1.5 system-ui,"PingFang SC",sans-serif;white-space:nowrap}
+.m-ann{display:grid;width:150px;font:11px/1.35 system-ui,"PingFang SC",sans-serif;color:#344054}
+.m-ann p{margin:0;padding:6px 0 6px 10px;border-left:2px solid #2b579a}
+.m-ann b{display:block;color:#101828;font-size:11.5px}
+.m-ann span{color:#667085}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const cols = '<colgroup><col style="width:12%"><col style="width:30%"><col style="width:13%"><col style="width:27%"><col style="width:18%"></colgroup>';
+  const head = (cls) => cols + '<tr' + (cls ? ' class="' + cls + '"' : '') + '><th>序号</th><th>门店</th><th>区域</th><th>销售额（万元）</th><th>同比</th></tr>';
+  const row = (r) => '<tr><td class="c">' + r[0] + '</td><td>' + r[1] + '</td><td class="c">' + r[2] + '</td><td class="n">' + r[3] + '</td><td class="n">' + r[4] + '</td></tr>';
+  const a = [['1', '杭州湖滨店', '华东', '268.30', '+12.4%'], ['2', '苏州园区店', '华东', '228.30', '+8.1%'], ['3', '南京新街口店', '华东', '241.06', '+5.7%']];
+  const b = [['4', '合肥天鹅湖店', '华东', '156.92', '−2.3%'], ['5', '宁波天一店', '华东', '183.45', '+9.6%']];
+  const p1 = '<div class="m-pg a"><p class="m-p">5 家门店三季度合计销售 1,078.03 万元，明细见表 3-2。</p><p class="m-cap"><b>表 3-2</b>　2026 年三季度门店销售汇总</p><table class="m-tb">' + head() + a.map(row).join('') + '</table><p class="m-pn">— 5 —</p></div>';
+  const p2 = '<div class="m-pg b"><p class="m-hd"><span class="m-flag">↓ 表头自动重复</span>门店运营分析报告</p><table class="m-tb" style="border-top-width:1.5px">' + head('rep') + b.map(row).join('') + '<tr class="sum"><td></td><td>合计</td><td></td><td class="n">1,078.03</td><td class="n">+7.2%</td></tr></table><p class="m-note">注：销售额为含税金额，数据截至 2026 年 9 月 30 日。</p></div>';
+  const ann = [['三线表', '顶线底线 1.5 磅，栏目线 0.75 磅'], ['跨页', '标题行重复，行不允许跨页断行'], ['宽度与对齐', '根据窗口调整；数字右对齐'], ['表题在上，表注在下', '表注小五号，左对齐']];
+  draw(root, '<div class="m-wrap"><div class="m-st">' + p1 + '<p class="m-gap">第 5 页 ↓ 第 6 页</p>' + p2 + '</div><div class="m-ann">' + ann.map(([x, y]) => '<p><b>' + x + '</b><span>' + y + '</span></p>').join('') + '</div></div>', { center: true, min: 0.35 });
+}
+</script>

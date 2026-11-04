@@ -1,7 +1,7 @@
 ---
 zh: 标签栏正中的主按钮
 en: Center action tab
-order: 70
+order: 80
 ---
 
 ## 是什么
@@ -33,3 +33,104 @@ order: 70
 ## 提示词
 
 给{产品}的底部标签栏做「标签栏正中的主按钮」：56px 标签栏加安全区，{标签数}个标签分在两侧，正中一个 54px 的圆形“+”按钮向上凸出 16px；标签只负责切页，用 aria-current="page" 标当前页，切走再切回时保留各页的滚动位置，再点当前标签回到顶部；“+”不是标签，不带 aria-current，带 aria-expanded、aria-controls 和名称“新建”；点开后“+”旋转 45° 变“×”，{新建选项}沿弧线从按钮中心依次弹出（错开 40ms，每个约 220ms，只动 transform 和 opacity），页面和标签栏压暗约 45%，只有“+”在遮罩上面；用户点开时焦点移到第一个选项，方向键切换选项，Esc、点遮罩、再点“+”关闭并把焦点还给“+”，用 Tab 把焦点移出菜单时直接收起；内容区底部留出标签栏高度 + 凸出部分 + 安全区；开关用 role="status" 播报；减少动态效果时直接出现。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/app-scroll-base.css">
+<link rel="stylesheet" href="../../_shared/app-card-photos.css">
+<style>
+.st{background:#e9ecf1}
+.scr{position:relative;height:100%;max-width:400px;margin:0 auto;overflow:hidden;background:#faf8f5}
+.pg{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;padding:0 14px calc(56px + 22px + env(safe-area-inset-bottom));scrollbar-width:none;outline-offset:-2px}
+.pg::-webkit-scrollbar{display:none}
+.pg:not(.cur){visibility:hidden}
+.pg h2{margin:0;height:40px;font-size:17px;line-height:40px}
+.dy{display:flex;align-items:center;gap:12px;margin-bottom:8px;padding:8px 12px;border-radius:12px;background:#fff;box-shadow:0 0 0 1px #efebe5}
+.dy .dt{flex:none;width:36px;text-align:center;line-height:1.1}
+.dt b{display:block;color:#e0603a;font-size:18px;font-variant-numeric:tabular-nums}
+.dt small{color:#8b8d94;font-size:10px}
+.dy span{flex:1;min-width:0}
+.dy span b,.dy span small,.rm span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dy span b{font-weight:600}
+.dy span small{color:#6b6f78;font-size:12px}
+.al{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.al i{aspect-ratio:1;border-radius:6px}
+.rm{display:flex;align-items:center;gap:10px;height:44px;box-shadow:inset 0 -1px #efebe5}
+.rm i{flex:none;width:18px;height:18px;border:2px solid #d3cdc4;border-radius:50%}
+.rm span{flex:1;min-width:0}
+.rm small{flex:none;color:#8b8d94;font-size:11px}
+.me{display:flex;align-items:center;gap:12px;padding:6px 0 12px}
+.me i{flex:none;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#fde3cf 0 22%,transparent 23%),radial-gradient(ellipse 60% 40% at 50% 100%,#fde3cf 0 99%,transparent),#f0a97f}
+.me small{display:block;color:#6b6f78;font-size:12px}
+.tb{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));height:calc(56px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:#fff;box-shadow:0 -1px 0 #ebe6df}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;padding:0;border:0;background:none;color:#8b8d94;font-size:11px}
+.tab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}
+.tab[aria-current=page]{color:#e0603a;font-weight:600}
+.mid{position:relative}
+.fab{position:absolute;left:50%;top:-16px;z-index:4;display:grid;place-items:center;width:54px;height:54px;margin-left:-27px;padding:0;border:0;border-radius:50%;background:linear-gradient(145deg,#f4835a,#e0503a);color:#fff;box-shadow:0 0 0 4px #fff,0 8px 18px -6px rgba(224,80,58,.65)}
+.fab svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;transition:transform .22s cubic-bezier(.2,0,0,1)}
+.fab[aria-expanded=true] svg{transform:rotate(45deg)}
+.ov{position:absolute;inset:0;z-index:2;background:rgba(24,18,12,.46);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .2s,visibility 0s .2s}
+.open .ov{opacity:1;visibility:visible;transition:opacity .2s}
+.menu{position:absolute;left:50%;top:11px;z-index:3;width:0;height:0;visibility:hidden;transition:visibility 0s .24s}
+.open .menu{visibility:visible;transition:none}
+.opt{position:absolute;left:-34px;top:-23px;display:flex;flex-direction:column;align-items:center;gap:3px;width:68px;padding:0;border:0;background:none;color:#fff;font-size:11px;white-space:nowrap;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.65);opacity:0;transform:scale(.4);transition:transform .16s,opacity .12s}
+.opt i{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:#fff;color:var(--c);box-shadow:0 6px 14px -4px rgba(0,0,0,.35)}
+.opt svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linejoin:round;stroke-linecap:round}
+.opt:focus-visible{outline:none}
+.opt:focus-visible i{outline:2px solid #fff;outline-offset:2px}
+.open .opt{opacity:1;transform:translate(var(--dx),var(--dy));transition:transform .22s cubic-bezier(.2,.9,.3,1.25),opacity .14s}
+.open .opt:nth-child(2){transition-delay:.04s}
+.open .opt:nth-child(3){transition-delay:.08s}
+@container (max-width:320px){.pg{padding-left:12px;padding-right:12px}
+.dy{gap:10px;padding:7px 10px}
+}
+@container (min-width:560px){.al{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+</style>
+
+<div class="st"><div class="scr"><section class="pg cur" data-t="0" tabindex="0" aria-label="日记"><h2>日记</h2></section><section class="pg" data-t="1" tabindex="0" aria-label="相册" inert><h2>相册</h2><div class="al"></div></section><section class="pg" data-t="2" tabindex="0" aria-label="提醒" inert><h2>提醒</h2></section><section class="pg" data-t="3" tabindex="0" aria-label="我的" inert><h2>我的</h2><div class="me"><i aria-hidden="true"></i><span><b>阿禾</b><small>写了 128 篇 · 坚持 96 天</small></span></div></section><i class="ov" aria-hidden="true"></i><nav class="tb" aria-label="主导航"><button type="button" class="tab" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h10l3 3v13H6z"/><path d="M9 10h7M9 14h5"/></svg>日记</button><button type="button" class="tab"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 16l5-5 4 4 3-3 4 4"/></svg>相册</button><div class="mid"><button type="button" class="fab" aria-expanded="false" aria-controls="fab-menu" aria-label="新建"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><div class="menu" id="fab-menu" role="group" aria-label="新建"><button type="button" class="opt" style="--dx:-80px;--dy:-68px;--c:#e0603a"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19l1-4L16 5l3 3L9 18z"/><path d="M14 7l3 3"/></svg></i>写日记</button><button type="button" class="opt" style="--dx:0px;--dy:-94px;--c:#2f7fd8"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></i>拍一张</button><button type="button" class="opt" style="--dx:80px;--dy:-68px;--c:#2f9e6e"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></i>加提醒</button></div></div><button type="button" class="tab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>提醒</button><button type="button" class="tab"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>我的</button></nav><p class="sr" role="status"></p></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const $ = (s) => root.querySelector(s), scr = $('.scr'), fab = $('.fab'), mid = $('.mid'), ov = $('.ov'), msg = $('[role=status]');
+  const pages = [...root.querySelectorAll('.pg')], tabs = [...root.querySelectorAll('.tab')], opts = [...root.querySelectorAll('.opt')];
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const D = [['28', '周二', '楼下桂花开了', '下班路上整条街都是香味，捡了几朵夹在本子里'], ['26', '周日', '第一次自己包饺子', '韭菜鸡蛋馅，形状歪歪扭扭，一个都没破'], ['25', '周六', '去江边骑车', '逆风骑了十二公里，回来腿是软的'], ['22', '周三', '项目终于提测', '路过面馆吃了碗热汤面，算是犒劳'], ['19', '周日', '整理衣柜', '收出一袋不穿的衣服，放进了小区回收箱'], ['17', '周五', '和老同学吃饭', '聊到宿舍楼要拆了，有点舍不得'], ['14', '周二', '换了新台灯', '暖光，晚上看书眼睛舒服多了']];
+  pages[0].insertAdjacentHTML('beforeend', D.map(([d, w, t, x]) => `<div class="dy"><span class="dt"><b>${d}</b><small>${w}</small></span><span><b>${t}</b><small>${x}</small></span></div>`).join(''));
+  $('.al').innerHTML = Array.from({ length: 18 }, (_, i) => `<i class="ph${(i * 5) % 6 + 1}" aria-hidden="true"></i>`).join('');
+  pages[2].insertAdjacentHTML('beforeend', [['给阳台的花浇水', '今天 19:00'], ['妈妈生日，记得订蛋糕', '11月2日'], ['交物业费', '11月5日'], ['续借图书馆的书', '11月8日'], ['体检预约', '11月12日'], ['给猫买驱虫药', '11月15日']].map(([a, b]) => `<div class="rm"><i aria-hidden="true"></i><span>${a}</span><small>${b}</small></div>`).join(''));
+  pages[3].insertAdjacentHTML('beforeend', ['我的日记本', '导出与备份', '提醒设置', '隐私锁', '关于小日子'].map((a) => `<div class="rm"><span>${a}</span><small>›</small></div>`).join(''));
+  let cur = 0, open = false;
+  // 标签只切页：各页一直留在原位，只是隐藏，滚动位置自然保留
+  tabs.forEach((t, i) => t.addEventListener('click', () => {
+    if (i === cur) return pages[i].scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' });
+    cur = i;
+    tabs.forEach((b, k) => (k === i ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current')));
+    pages.forEach((p, k) => { p.classList.toggle('cur', k === i); p.inert = k !== i; });
+  }));
+  // “+”只负责新建：不是标签，不带 aria-current
+  const setOpen = (o, { say = true, focus = true } = {}) => {
+    if (o === open) return;
+    open = o; scr.classList.toggle('open', o);
+    fab.setAttribute('aria-expanded', String(o)); fab.setAttribute('aria-label', o ? '收起新建菜单' : '新建');
+    if (say) msg.textContent = o ? '新建菜单已展开，共 3 项' : '新建菜单已收起';
+    if (focus) (o ? opts[0] : fab).focus();
+  };
+  fab.addEventListener('click', () => setOpen(!open));
+  ov.addEventListener('click', () => setOpen(false));
+  opts.forEach((b, i) => {
+    b.addEventListener('click', () => { setOpen(false); msg.textContent = `示例：这里会打开“${b.textContent}”`; });
+    b.addEventListener('keydown', (e) => {
+      const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (k) { e.preventDefault(); opts[(i + k + opts.length) % opts.length].focus(); }
+    });
+  });
+  scr.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) setOpen(false); });
+  // Tab 把焦点移到菜单外时收起，焦点留在用户去的地方
+  mid.addEventListener('focusout', (e) => { if (e.relatedTarget && !mid.contains(e.relatedTarget)) setOpen(false, { focus: false }); });
+  // 缩略图：日记页往下翻一点，再展开新建菜单（不抢焦点）
+  setTimeout(() => { if (root.host.isConnected) pages[0].scrollTo({ top: 48, behavior: still ? 'auto' : 'smooth' }); }, 200);
+  setTimeout(() => { if (root.host.isConnected) setOpen(true, { say: false, focus: false }); }, 650);
+}
+</script>

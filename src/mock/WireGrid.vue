@@ -3,12 +3,14 @@
 // 只占一行、且全是“条”类区域（顶栏、标签栏、筛选条…）的行改成 auto，按真实高度显示，不按百分比拉伸。
 // 所在行全是 auto 的区域按内容高度画（fit），这样数据里用 auto 行 + 末尾 1fr 就能让内容紧凑排列，不被百分比撑出空白。
 // 单行嵌套里全是条类区域、并且有 Logo / 导航 / 账号 / 筛选项时，画成一整条白色横栏（顶栏、筛选区），导航横排。
-// drawer：盖在页面上的左侧抽屉或底部面板，后面加遮罩；root 时贴到画布边缘（盖住状态栏和边距）。
+// drawer：盖在页面上的左侧抽屉或底部面板，后面加遮罩；root 时贴到画布边缘（盖住状态栏和边距）。底部面板放单个区块时高度贴内容，size 只是上限。
 // annotate：给每个区域画虚线框和名称（主体区域用强调色），标注的字号按缩放比例反向放大，缩略图里也看得清
+// 框架页（根网格里有侧栏、模块栏、顶栏、页签栏或底部标签栏）按贴边画：框架区域朝画布边缘伸出画布边距、朝相邻框架区域伸出一格列间距，
+// 彼此相接不留缝；内容区照常隔着列间距（桌面 24、手机 16），这就是内容区的内边距
 import { computed } from 'vue';
 import type { MockKind, Wire, WireBox } from '../types';
 import MockBlock from './MockBlock.vue';
-import { BAR, inferKind } from './infer';
+import { BAR, inferKind, isFrame, isFrameBox } from './infer';
 
 // open：抽屉画成打开还是收起；不传时按数据里的 drawer.open（导航抽屉默认收起，页面本身才是手机端的默认样子）
 // open 默认 undefined：Vue 会把没传的布尔属性当成 false，那样数据里的 drawer.open 就不起作用
@@ -21,6 +23,7 @@ const props = withDefaults(
     dark?: boolean;
     root?: boolean;
     open?: boolean;
+    floating?: boolean;
   }>(),
   { open: undefined },
 );
@@ -34,19 +37,56 @@ const isStrip = (w?: Wire) =>
   (w.rows ?? '1fr').trim().split(/\s+/).length === 1 &&
   leaves(w).every((b) => !b.inner && (BAR.has(kindOf(b)) || kindOf(b) === 'nav'));
 const cells = computed(() => props.w.areas.map((r) => r.trim().split(/\s+/)));
+const frame = computed(() => !!props.root && !props.floating && isFrame(props.w));
+type Bleed = 'edge' | 'gap' | '';
+const NEG: Record<Bleed, string | undefined> = {
+  edge: 'calc(-1 * var(--px, 0px))',
+  gap: 'calc(-1 * var(--grid-gap, 24px))',
+  '': undefined,
+};
+// 框架区域四边各伸出多少：edge 伸到画布边缘，gap 伸过列间距贴住相邻的框架区域（只朝上、朝左伸，两个相邻区域不会都伸）
+const bleed = (area: string, b: WireBox) => {
+  if (!frame.value || !isFrameBox(b)) return null;
+  const rows = cells.value;
+  const ys = rows.flatMap((r, y) => (r.includes(area) ? [y] : []));
+  const xs = [...new Set(ys.flatMap((y) => rows[y].flatMap((n, x) => (n === area ? [x] : []))))];
+  const y0 = Math.min(...ys),
+    x0 = Math.min(...xs);
+  const isF = (n?: string) => !!n && n !== '.' && n !== area && isFrameBox(norm(props.w.boxes[n] ?? ''));
+  const f: Record<'t' | 'l' | 'r' | 'b', Bleed> = {
+    t: y0 === 0 ? 'edge' : xs.every((x) => isF(rows[y0 - 1]?.[x])) ? 'gap' : '',
+    l: x0 === 0 ? 'edge' : ys.every((y) => isF(rows[y]?.[x0 - 1])) ? 'gap' : '',
+    r: Math.max(...xs) === rows[0].length - 1 ? 'edge' : '',
+    b: Math.max(...ys) === rows.length - 1 ? 'edge' : '',
+  };
+  return f;
+};
 
 const boxes = computed(() =>
   Object.entries(props.w.boxes).map(([area, v], i) => {
     const b = norm(v);
     const strip = isStrip(b.inner);
+    const kind = kindOf(b);
+    const f = bleed(area, b);
+    const pop = b.pop && norm(b.pop.box);
     return {
       area,
       b,
-      kind: kindOf(b),
+      kind,
       seed: (props.seed ?? 0) + i,
       strip,
       surf: strip && leaves(b.inner!).some((c) => SURF.has(kindOf(c))),
       lane: !!b.inner && leaves(b.inner).some((c) => kindOf(c) === 'colhead'),
+      f,
+      col: !!f && (kind === 'nav' || kind === 'rail'),
+      style: {
+        gridArea: area,
+        marginTop: f?.t === 'edge' ? 'calc(-1 * var(--pt, 0px))' : NEG[f?.t ?? ''],
+        marginLeft: NEG[f?.l ?? ''],
+        marginRight: NEG[f?.r ?? ''],
+        marginBottom: NEG[f?.b ?? ''],
+      },
+      pop: pop && { b: pop, kind: kindOf(pop), ...b.pop! },
     };
   }),
 );
@@ -83,7 +123,7 @@ const dr = computed(() => {
 </script>
 
 <template>
-  <div class="wg" :style="style">
+  <div class="wg" :class="{ root }" :style="style">
     <div
       v-for="x in boxes"
       :key="x.area"
@@ -97,8 +137,12 @@ const dr = computed(() => {
         card: x.b.card,
         ann: annotate && x.b.label,
         acc: x.b.acc,
+        flush: x.f,
+        ft: x.f?.t === 'edge',
+        fb: x.f?.b === 'edge',
+        col: x.col,
       }"
-      :style="{ gridArea: x.area }"
+      :style="x.style"
     >
       <WireGrid
         v-if="x.b.inner"
@@ -121,6 +165,15 @@ const dr = computed(() => {
         :seed="x.seed"
       />
       <span v-if="annotate && x.b.label" class="tag">{{ x.b.label }}</span>
+      <div
+        v-if="x.pop"
+        class="pop"
+        :class="{ ann: annotate && x.pop.b.label, acc: x.pop.b.acc }"
+        :style="{ width: x.pop.size, top: x.pop.y, height: x.pop.height }"
+      >
+        <MockBlock :kind="x.pop.kind" :label="x.pop.b.label" :text="x.pop.b.text" :seed="x.seed + 9" />
+        <span v-if="annotate && x.pop.b.label" class="tag">{{ x.pop.b.label }}</span>
+      </div>
     </div>
     <template v-if="dr">
       <div class="scrim" :class="{ bleed: root }" />
@@ -130,7 +183,13 @@ const dr = computed(() => {
           dr.side,
           { bleed: root, nest: dr.b.inner, dark: dr.b.dark, ann: annotate && dr.b.label, acc: dr.b.acc },
         ]"
-        :style="dr.side === 'bottom' ? { height: dr.size } : { width: dr.size, height: dr.height }"
+        :style="
+          dr.side === 'bottom'
+            ? dr.b.inner
+              ? { height: dr.size }
+              : { maxHeight: dr.size }
+            : { width: dr.size, height: dr.height }
+        "
       >
         <WireGrid v-if="dr.b.inner" :w="dr.b.inner" :seed="dr.seed" :annotate="annotate" :dark="dr.b.dark" />
         <MockBlock v-else :kind="dr.kind" :label="dr.b.label" :text="dr.b.text" :dark="dr.b.dark" :seed="dr.seed" />
@@ -144,7 +203,7 @@ const dr = computed(() => {
 .wg {
   position: relative;
   display: grid;
-  gap: 16px;
+  gap: var(--grid-gap, 24px); /* 桌面列间距 24，手机画布 16 */
   flex: 1;
   min-width: 0;
   min-height: 0;
@@ -165,17 +224,76 @@ const dr = computed(() => {
 .cell.fit {
   min-height: auto;
 }
+/* 贴边的框架区域：不要圆角，只在朝内容的一侧留 1px 分割线；顶栏、页签栏白底 */
+.cell.flush > :deep(.blk),
+.cell.flush.nest.surf {
+  border-radius: 0;
+}
+.cell.flush > :deep(.k-nav) {
+  border-width: 0 1px 0 0;
+}
+.cell.flush > :deep(.k-topbar),
+.cell.flush > :deep(.k-tabs),
+.cell.flush > :deep(.k-mtop),
+.cell.flush > :deep(.k-aitop) {
+  background: #fff;
+  border-width: 0 0 1px;
+  border-color: var(--line, #e5e7eb);
+}
+.cell.flush > :deep(.k-tabs) {
+  padding: 0 20px;
+}
+.cell.flush > :deep(.k-tabs.pages) {
+  padding: 0 8px; /* 小卡片页签自带 12 内边距，文字和顶栏的面包屑对齐在 20 */
+}
+.cell.flush > :deep(.k-tabbar) {
+  border-color: var(--line, #e5e7eb);
+}
+.cell.flush.nest.surf {
+  border-width: 0 0 1px;
+}
+/* 手机：贴到顶部的栏把状态栏那 44px 也铺上白底，内容仍在状态栏下面；左右内边距 16 */
+.phone-c .cell.flush.ft > :deep(.blk) {
+  padding-top: var(--pt, 44px);
+}
+.phone-c .cell.flush > :deep(.k-topbar),
+.phone-c .cell.flush > :deep(.k-tabs) {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+/* 区域旁边弹出的浮层（悬停菜单）：贴着区域右侧，不加遮罩 */
+.pop {
+  position: absolute;
+  left: calc(100% + 4px);
+  top: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px #e5e7eb,
+    0 16px 40px -12px rgba(15, 23, 42, 0.35);
+}
+.pop > :deep(.blk) {
+  container-type: inline-size;
+  flex: none;
+  border-color: transparent;
+}
+.pop > :deep(.k-nav) {
+  padding: 12px 8px;
+}
 /* 看板列：浅灰底的整列，列头在列里 */
 .nest.lane {
   padding: 12px;
   background: #eceff3;
-  border-radius: 14px;
+  border-radius: 12px;
 }
 .nest.lane > .wg {
-  gap: 10px;
+  gap: 8px;
 }
 .nest {
-  border-radius: 14px;
+  border-radius: 12px;
 }
 .nest.dark {
   padding: 24px;
@@ -199,9 +317,9 @@ const dr = computed(() => {
   padding: 0;
 }
 .nest.card {
-  padding: 28px 32px;
+  padding: 24px;
   background: #fff;
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow:
     0 0 0 1px #e5e7eb,
     0 16px 36px -18px rgba(15, 23, 42, 0.3);
@@ -227,7 +345,7 @@ const dr = computed(() => {
   top: 0;
   bottom: 0;
   left: 0;
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 16px 40px -12px rgba(15, 23, 42, 0.45);
 }
 .drawer.left.bleed {
@@ -239,7 +357,7 @@ const dr = computed(() => {
   top: 0;
   bottom: 0;
   right: 0;
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 16px 40px -12px rgba(15, 23, 42, 0.45);
 }
 .drawer.right.bleed {
@@ -252,14 +370,14 @@ const dr = computed(() => {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 24px 60px -16px rgba(15, 23, 42, 0.5);
 }
 .drawer.bottom {
   left: 0;
   right: 0;
   bottom: 0;
-  border-radius: 18px 18px 0 0;
+  border-radius: 12px 12px 0 0;
   box-shadow: 0 -12px 32px -12px rgba(15, 23, 42, 0.35);
 }
 .drawer.bottom.bleed {
@@ -275,8 +393,17 @@ const dr = computed(() => {
   padding-right: 4px;
 }
 .drawer.nest > .wg {
-  padding: 12px;
-  gap: 12px;
+  padding: 16px;
+  gap: 16px;
+}
+/* 底部面板放单个区块时高度贴内容：区块默认是尺寸型容器，高度不能由内容撑起，这里改成只按宽度查询 */
+.drawer.bottom:not(.nest) > :deep(.blk) {
+  container-type: inline-size;
+  flex: none;
+}
+/* 底部面板里的表单：把手上下 12px，两侧 16px，底部 16 内边距 + 16 安全区 */
+.drawer.bottom > :deep(.k-form) {
+  padding: 12px 16px 32px;
 }
 .drawer.center.nest > .wg,
 .drawer.right.nest > .wg {
@@ -309,18 +436,19 @@ const dr = computed(() => {
   border-color: #2563eb;
   background: rgba(37, 99, 235, 0.07);
 }
+/* 标签 20px 高，骑在区域边框上（top = −10）；尺寸都除以缩放比例，屏幕上就是 12px 字、6px 圆角 */
 .tag {
   position: absolute;
-  left: calc(10px / var(--k, 1));
-  top: calc(-9px / var(--k, 1));
+  left: calc(12px / var(--k, 1));
+  top: calc(-10px / var(--k, 1));
   z-index: 2;
-  max-width: calc(100% - 12px / var(--k, 1));
-  padding: calc(1px / var(--k, 1)) calc(7px / var(--k, 1));
-  border-radius: calc(5px / var(--k, 1));
+  max-width: calc(100% - 16px / var(--k, 1));
+  padding: 0 calc(8px / var(--k, 1));
+  border-radius: calc(6px / var(--k, 1));
   background: #334155;
   color: #fff;
   font:
-    600 calc(11px / var(--k, 1)) / 1.5 system-ui,
+    600 calc(12px / var(--k, 1)) / calc(20px / var(--k, 1)) system-ui,
     'PingFang SC',
     sans-serif;
   white-space: nowrap;
@@ -331,7 +459,31 @@ const dr = computed(() => {
 .ann.acc > .tag {
   background: #2563eb;
 }
+/* 根网格的区域：标签放在区域上方（上边框上面 2px），不盖住区域里顶部的文字；嵌套区域空间小，仍骑在边框上 */
+.wg.root > .cell > .tag {
+  top: calc(-22px / var(--k, 1));
+  max-width: calc(
+    100% - 16px / var(--k, 1) + var(--grid-gap, 24px)
+  ); /* 窄栏（模块栏、图标栏）的标签可以伸进右边的间距，不被截成“模…” */
+}
+/* 贴边的横栏（顶栏、页签栏）：标签骑在它的下边框右侧，不和下一个区域的标签撞；贴到底边的标签栏骑在上边框上 */
+.cell.flush:not(.col) > .tag {
+  top: auto;
+  bottom: calc(-10px / var(--k, 1));
+  left: auto;
+  right: calc(12px / var(--k, 1));
+}
+.cell.flush.fb:not(.col) > .tag {
+  top: calc(-10px / var(--k, 1));
+  bottom: auto;
+}
+/* 贴边的侧栏、模块栏：标签贴在左上角里面 */
+.cell.flush.col > .tag {
+  top: 0;
+  left: 0;
+  border-radius: 0 0 calc(6px / var(--k, 1)) 0;
+}
 .drawer.bottom.ann::after {
-  border-radius: 18px 18px 0 0;
+  border-radius: 12px 12px 0 0;
 }
 </style>

@@ -28,3 +28,40 @@ order: 40
 ## 提示词
 
 {内容}用「瀑布流」：手机 2 列、平板 3 列、桌面 5 列，列间距 8px（手机）到 16px（桌面）；卡片为图片（原始比例，加载前同比例骨架）+ 最多 2 行标题 + {作者或价格}，整卡可点；新卡片放进最短的一列；滚动到底自动加载，显示加载中、没有更多、失败重试；返回列表保留滚动位置。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 1fr 1fr 1fr',
+  rows: '1fr 1fr 1fr 1fr 1fr 1fr',
+  areas: ['a d g j', 'a d g j', 'a e g k', 'b e h k', 'b e h l', 'c f h l'],
+  boxes: {
+    a: { label: '图文', acc: true },
+    b: { label: '', acc: true },
+    c: { label: '', acc: true },
+    d: { label: '', acc: true },
+    e: { label: '图文', acc: true },
+    f: { label: '', acc: true },
+    g: { label: '', acc: true },
+    h: { label: '图文', acc: true },
+    j: { label: '', acc: true },
+    k: { label: '', acc: true },
+    l: { label: '', acc: true },
+  },
+};
+export const wireMobile = {
+  cols: '1fr 1fr',
+  rows: '11% 1fr 1fr 1fr 1fr 1fr 1fr',
+  areas: ['top top', 'a d', 'a d', 'a e', 'b e', 'b e', 'c f'],
+  boxes: {
+    top: '搜索 分类',
+    a: { label: '', acc: true },
+    b: { label: '', acc: true },
+    c: { label: '', acc: true },
+    d: { label: '', acc: true },
+    e: { label: '', acc: true },
+    f: { label: '', acc: true },
+  },
+};
+```

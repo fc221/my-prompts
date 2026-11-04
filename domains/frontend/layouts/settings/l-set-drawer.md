@@ -2,6 +2,7 @@
 zh: 界面设置抽屉
 en: Appearance settings drawer
 order: 80
+of: l-settings-page
 ---
 
 ## 是什么
@@ -28,3 +29,58 @@ order: 80
 ## 提示词
 
 {后台}加一个「界面设置抽屉」：顶栏右上角设置按钮打开右侧 340px 抽屉（标题“界面设置”+ 关闭），遮罩用浅色让背后页面可见；内容依次是：明暗模式分段按钮（浅色 / 深色 / 跟随系统）、主题色色块（{颜色}）、布局方式缩略图（侧边栏 / 顶部导航 / 综合）、开关项（折叠侧栏、顶部菜单居中、页面切换动画）；每项改了立即生效并记住，不需要保存；底部“恢复默认”；Esc 和点遮罩关闭，焦点回到设置按钮；手机上改成底部面板。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '22% 1fr',
+  rows: 'auto 1fr',
+  areas: ['side top', 'side main'],
+  boxes: {
+    side: { label: '侧栏导航', kind: 'nav' },
+    top: { label: '顶栏（右上角设置按钮）' },
+    main: { label: '内容', kind: 'content' },
+  },
+  drawer: {
+    side: 'right',
+    size: '340px',
+    open: true,
+    box: {
+      label: '界面设置抽屉',
+      inner: {
+        cols: '1fr',
+        rows: 'auto 1fr',
+        areas: ['hd', 'pf'],
+        boxes: {
+          hd: { label: '标题 · 关闭', kind: 'dlghead', text: '界面设置' },
+          pf: { label: '主题 · 布局 · 开关', kind: 'prefs', acc: true },
+        },
+      },
+    },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto 1fr',
+  areas: ['top', 'main'],
+  boxes: { top: '顶栏 ☰', main: { label: '内容', kind: 'content' } },
+  drawer: {
+    side: 'bottom',
+    size: '78%',
+    open: true,
+    box: {
+      label: '界面设置（底部面板）',
+      inner: {
+        cols: '1fr',
+        rows: 'auto 1fr',
+        areas: ['hd', 'pf'],
+        boxes: {
+          hd: { label: '标题 · 关闭', kind: 'dlghead', text: '界面设置' },
+          pf: { label: '主题 · 布局 · 开关', kind: 'prefs', acc: true },
+        },
+      },
+    },
+  },
+};
+```

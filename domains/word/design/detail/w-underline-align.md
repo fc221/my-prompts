@@ -40,3 +40,56 @@ order: 10
 3. 正文里的填空横线：打印后手填的用右对齐制表位加实线前导符，终点在 {横线终点，如 版心右边缘}；电子填写的给制表符加下划线。
 4. 签字区：甲乙两方用版心中点的左对齐制表位分成两列，盖章、签字、日期几行用同一个制表位；日期统一写成“____年__月__日”。
 5. 改完后整段不再有连续空格；最后说明用到了哪些制表位（位置、对齐方式、前导符）。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+<style>
+.dg.m-desk{background:linear-gradient(135deg,#e9ebef,#d9dde3)}
+.m-desk .dg-row{justify-content:center}
+.m-desk .dg-col{flex:none}
+.m-two{display:flex;gap:16px;align-items:stretch}
+.m-pn{display:flex;flex-direction:column;width:268px;background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.1),0 12px 28px -10px rgba(16,24,40,.25);color:#111;font-family:"Songti SC","SimSun",serif}
+.m-tag{display:flex;align-items:center;gap:6px;padding:6px 12px;border-bottom:1px solid #eaecf0;font:650 11.5px/1.3 system-ui,"PingFang SC",sans-serif}
+.m-tag i{display:grid;place-items:center;width:16px;height:16px;border-radius:50%;color:#fff;font:700 10px/1 system-ui;font-style:normal}
+.m-bad .m-tag{color:#b42318}
+.m-bad .m-tag i{background:#d92d20}
+.m-ok .m-tag{color:#1d3f75}
+.m-ok .m-tag i{background:#2b579a}
+.m-ru{position:relative;height:14px;margin:6px 16px 0;border-bottom:1px solid #c4cad3;background:repeating-linear-gradient(90deg,#c4cad3 0 1px,transparent 1px 10px) bottom/100% 4px no-repeat;color:#2b579a;font:700 11px/1 system-ui}
+.m-ru b{position:absolute;bottom:-1px;transform:translateX(-50%)}
+.m-bd{display:grid;gap:7px;padding:10px 16px 0;font-size:12px;line-height:1.5}
+.m-ln{display:flex;align-items:flex-end;white-space:nowrap}
+.m-dot{color:#e0857c;letter-spacing:-.05em}
+.m-u{display:inline-block;border-bottom:1px solid #111;height:1.2em}
+.m-lb{display:inline-block;width:4em;text-align:justify;text-align-last:justify}
+.m-f{position:relative;flex:1;border-bottom:1px solid #111;text-align:center;color:#1d3f75;font-family:"STKaiti","KaiTi",serif}
+.m-f::after{content:"→";position:absolute;right:0;bottom:1px;color:#9fb4d6;font:10px/1 system-ui}
+.m-sg{display:grid;gap:4px;margin-top:6px;padding-top:8px;border-top:1px dashed #e4e7ec;font-size:11px}
+.m-c2{display:inline-block}
+.m-t{color:#9fb4d6;font:10px/1 system-ui;display:inline-block}
+.m-desk .m-cap{margin:auto 0 0;padding:8px 12px;color:#667085;font:10.5px/1.4 system-ui,"PingFang SC",sans-serif}
+</style>
+
+<div class="dg m-desk"></div>
+
+<script type="module">
+import { draw } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  const d = (n) => '<span class="m-dot">' + '·'.repeat(n) + '</span>';
+  const u = (w) => '<span class="m-u" style="width:' + w + 'px"></span>';
+  const bad = '<div class="m-pn m-bad"><p class="m-tag"><i>✕</i>错 · 空格和下划线字符</p><div class="m-bd">'
+    + '<p class="m-ln">学' + d(3) + '院：' + u(150) + '</p>'
+    + '<p class="m-ln">学生姓名：' + u(118) + '</p>'
+    + '<p class="m-ln">学' + d(3) + '号：' + u(138) + '</p>'
+    + '<p class="m-ln">指导教师：' + u(160) + '</p>'
+    + '<div class="m-sg"><p class="m-ln">甲方（盖章）：' + d(9) + '乙方（盖章）：</p><p class="m-ln">日期：' + d(14) + '日期：</p></div>'
+    + '</div><p class="m-cap">换个字体、填进名字，横线就长短不一</p></div>';
+  const f = (lb, v) => '<p class="m-ln"><span class="m-lb">' + lb + '</span>：<span class="m-f">' + v + '</span></p>';
+  const ok = '<div class="m-pn m-ok"><p class="m-tag"><i>✓</i>对 · 制表位 + 调整宽度</p><div class="m-ru"><b style="left:50%">└</b><b style="left:100%">┘</b></div><div class="m-bd">'
+    + f('学院', '信息工程学院') + f('学生姓名', '林知夏') + f('学号', '2022110437') + f('指导教师', '周启明 副教授')
+    + '<div class="m-sg"><p class="m-ln"><span style="width:50%;display:inline-block">甲方（盖章）：<span class="m-t">→</span></span>乙方（盖章）：</p><p class="m-ln"><span style="width:50%;display:inline-block">日期：<span class="m-t">→</span></span>日期：</p></div>'
+    + '</div><p class="m-cap">标签调整宽度 4 字符；横线终点、第二列都对着同一个制表位</p></div>';
+  draw(root, '<div class="m-two">' + bad + ok + '</div>', { center: true, min: 0.35 });
+}
+</script>

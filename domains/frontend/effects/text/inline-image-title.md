@@ -1,7 +1,7 @@
 ---
 zh: 标题里嵌小图
 en: Inline image in a headline
-order: 150
+order: 180
 ---
 
 ## 是什么
@@ -30,3 +30,39 @@ order: 150
 ## 提示词
 
 给{首屏大标题}加「标题里嵌小图」：在“{前半句}”和“{后半句}”之间嵌一枚胶囊形小图（高 0.8em、宽 1.8em、圆角 999px，用{图片内容}，background-size: cover），它是带 aria-label、aria-expanded、aria-controls 的真实按钮；点击或 Enter / 空格后小图宽度在 260ms 内拉到 3.2em 把前后文字推开，同时标题下方用 grid-template-rows 0fr → 1fr 展开同一张图的 16:9 大图，图片从 0.92 倍淡入到原大；再点或按 Esc 收起，顺序相反；尺寸都用 em，跟着字号缩放；标题文本去掉小图仍然完整；减少动态效果时直接切换。
+
+## 示例
+
+<style>
+.s{--pic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f7cf94'/%3E%3Cstop offset='1' stop-color='%23e7896b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='160' height='90' fill='url(%23a)'/%3E%3Ccircle cx='108' cy='40' r='11' fill='%23fff4da'/%3E%3Cpath d='M0 68 38 40 66 58 98 30 160 70V90H0Z' fill='%236e5a7c'/%3E%3Cpath d='M0 80 48 60 86 76 128 56 160 68V90H0Z' fill='%233d3350'/%3E%3C/svg%3E");height:100%;display:grid;align-content:center;gap:8px;padding:12px 16px;box-sizing:border-box;background:#faf8f4;color:#1c1b22;font-family:system-ui,"PingFang SC",sans-serif}
+.tt{margin:0;font-size:24px;line-height:1.3;font-weight:700;letter-spacing:.01em}
+.chip{display:inline-block;width:1.8em;height:.8em;margin:0 .12em;padding:0;border:0;border-radius:999px;vertical-align:-.04em;background:var(--pic) center/cover;cursor:pointer;transition:width .26s cubic-bezier(.2,0,0,1)}
+.chip[aria-expanded="true"]{width:3.2em}
+.chip:focus-visible{outline:2px solid #3b5bdb;outline-offset:3px}
+.fig{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s cubic-bezier(.2,0,0,1)}
+.fig.open{grid-template-rows:1fr}
+.in{overflow:hidden;min-height:0}
+.big{width:168px;aspect-ratio:16/9;border-radius:10px;background:var(--pic) center/cover;opacity:0;transform:scale(.92);transform-origin:left top;transition:opacity .26s,transform .3s cubic-bezier(.2,0,0,1)}
+.fig.open .big{opacity:1;transform:none}
+@container (min-width:520px){.s{padding:16px 28px;gap:12px}
+.tt{font-size:34px}
+.big{width:300px}
+}
+@media (prefers-reduced-motion:reduce){.chip,.fig,.big{transition:none}
+}
+</style>
+
+<div class="s">
+  <h2 class="tt">把周末<button type="button" class="chip" aria-label="晚霞下的两道山脊（图片）" aria-expanded="false" aria-controls="ig-fig"></button>交给山野和晚霞</h2>
+  <div class="fig" id="ig-fig"><div class="in" data-clip><div class="big" role="img" aria-label="晚霞下的两道山脊"></div></div></div>
+</div>
+
+<script type="module">
+export default function demo(root) {
+  const chip = root.querySelector('.chip'), fig = root.querySelector('.fig');
+  const set = (open) => { chip.setAttribute('aria-expanded', String(open)); fig.classList.toggle('open', open); };
+  chip.addEventListener('click', () => set(chip.getAttribute('aria-expanded') !== 'true'));
+  chip.addEventListener('keydown', (e) => { if (e.key === 'Escape') set(false); });
+  setTimeout(() => root.host.isConnected && chip.getAttribute('aria-expanded') === 'false' && set(true), 700);
+}
+</script>

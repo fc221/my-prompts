@@ -27,3 +27,48 @@ order: 60
 ## 提示词
 
 给{后台表格}加「列宽调整与列显隐」：表头每列右边缘 8px 拖动区，悬停显示分隔线和左右光标，拖动实时改列宽（最小 80px），拖动区可键盘聚焦、方向键每次 16px、双击恢复默认；工具栏“列设置”浮层用复选框控制显示哪些列，{主标识列}和操作列不可隐藏，带“恢复默认”；设置按用户保存；超出宽度时表格在自己的容器里横向滚动。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/interactions-base.css">
+<style>
+.st{padding:12px 18px}
+.box{max-width:600px;margin:0 auto}
+.bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.t{font-weight:600}
+.cfg-w{position:relative}
+.pop{position:absolute;right:0;top:38px;z-index:3;display:grid;gap:6px;width:170px;padding:10px;border:1px solid #e3e6eb;border-radius:10px;background:#fff;box-shadow:0 12px 28px -12px rgba(15,23,42,.3)}
+.pop label{display:flex;align-items:center;gap:8px}
+.pop input:disabled+span{color:#a0a5ae}
+.pop .rs{margin-top:4px;border:0;background:none;color:#3b5bdb;text-align:left;padding:0}
+.tw{overflow-x:auto;border:1px solid #e3e6eb;border-radius:10px;background:#fff}
+table{border-collapse:collapse;table-layout:fixed;width:max-content;min-width:100%}
+th,td{height:34px;padding:0 10px;border-bottom:1px solid #eef0f3;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+th{position:relative;background:#f8f9fb;color:#5b616e;font-weight:500}
+.rz{position:absolute;right:-4px;top:0;bottom:0;width:8px;cursor:col-resize;z-index:1}
+.rz::after{content:"";position:absolute;left:3px;top:8px;bottom:8px;width:2px;border-radius:1px;background:transparent}
+.rz:hover::after,.rz:focus-visible::after,.rz.drag::after{background:#3b5bdb}
+td.num{text-align:right}
+</style>
+
+<div class="st"><div class="box"><div class="bar"><span class="t">订单（8）</span><div class="cfg-w"><button type="button" class="ctl cfg" aria-expanded="false" aria-controls="cp">列设置</button><div class="pop" id="cp" role="dialog" aria-label="列设置" hidden></div></div></div><div class="tw"><table><colgroup></colgroup><thead><tr></tr></thead><tbody></tbody></table></div></div></div>
+
+<script type="module">
+export default function demo(root) {
+  const C = [['id', '订单号', 110, 1], ['cus', '客户', 110], ['amt', '金额', 100], ['st', '状态', 90], ['ch', '渠道', 90], ['at', '下单时间', 120]];
+  const R = [['SO-20931', '林知科技', '¥1,299.00', '已发货', '小程序', '10-25 14:32'], ['SO-20930', '陈一鸣', '¥356.50', '待发货', '门店', '10-25 13:08'], ['SO-20928', '杭州云帆', '¥8,420.00', '已完成', '官网', '10-25 11:46'], ['SO-20925', '周以宁', '¥89.00', '已退款', '小程序', '10-24 21:15']];
+  const W = Object.fromEntries(C.map((c) => [c[0], c[2]])), show = Object.fromEntries(C.map((c) => [c[0], true]));
+  const cg = root.querySelector('colgroup'), hr = root.querySelector('thead tr'), tb = root.querySelector('tbody'), pop = root.querySelector('.pop'), cfg = root.querySelector('.cfg');
+  const draw = () => { const cs = C.filter((c) => show[c[0]]); cg.innerHTML = cs.map((c) => `<col style="width:${W[c[0]]}px">`).join(''); hr.innerHTML = cs.map((c) => `<th>${c[1]}<span class="rz" tabindex="0" role="separator" aria-orientation="vertical" aria-label="调整“${c[1]}”列宽" aria-valuenow="${W[c[0]]}" data-k="${c[0]}"></span></th>`).join(''); tb.innerHTML = R.map((r) => '<tr>' + cs.map((c) => `<td class="${c[0] === 'amt' ? 'num' : ''}">${r[C.indexOf(c)]}</td>`).join('') + '</tr>').join(''); };
+  const setW = (k, w) => { W[k] = Math.max(80, Math.round(w)); draw(); root.querySelector(`.rz[data-k="${k}"]`)?.focus({ preventScroll: true }); };
+  hr.addEventListener('pointerdown', (e) => { const h = e.target.closest('.rz'); if (!h) return; e.preventDefault(); const k = h.dataset.k, x0 = e.clientX, w0 = W[k]; h.classList.add('drag'); const mv = (ev) => { W[k] = Math.max(80, w0 + ev.clientX - x0); cg.children[[...hr.children].indexOf(h.parentNode)].style.width = W[k] + 'px'; }; const up = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); h.classList.remove('drag'); draw(); }; addEventListener('pointermove', mv); addEventListener('pointerup', up); });
+  hr.addEventListener('keydown', (e) => { const h = e.target.closest('.rz'); if (!h || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return; e.preventDefault(); setW(h.dataset.k, W[h.dataset.k] + (e.key === 'ArrowRight' ? 16 : -16)); });
+  hr.addEventListener('dblclick', (e) => { const h = e.target.closest('.rz'); if (h) setW(h.dataset.k, C.find((c) => c[0] === h.dataset.k)[2]); });
+  pop.innerHTML = C.map((c) => `<label><input type="checkbox" data-k="${c[0]}" checked ${c[3] ? 'disabled' : ''}><span>${c[1]}${c[3] ? '（固定）' : ''}</span></label>`).join('') + '<button type="button" class="rs">恢复默认</button>';
+  pop.addEventListener('change', (e) => { show[e.target.dataset.k] = e.target.checked; draw(); });
+  pop.querySelector('.rs').addEventListener('click', () => { C.forEach((c) => { W[c[0]] = c[2]; show[c[0]] = true; }); pop.querySelectorAll('input').forEach((i) => { i.checked = true; }); draw(); });
+  cfg.addEventListener('click', () => { const o = pop.hidden; pop.hidden = !o; cfg.setAttribute('aria-expanded', String(o)); if (o) pop.querySelector('input:not(:disabled)').focus(); });
+  pop.addEventListener('keydown', (e) => { if (e.key === 'Escape') { pop.hidden = true; cfg.setAttribute('aria-expanded', 'false'); cfg.focus(); } });
+  draw();
+}
+</script>

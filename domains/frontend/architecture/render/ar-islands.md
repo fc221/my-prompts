@@ -42,3 +42,21 @@ order: 40
 5. 逐个修控制台里的水合不匹配：时间、随机数、本地化格式在服务端算好传下去，浏览器才有的值挂载后再读、首帧给占位。
 6. 关键操作在水合前用原生表单或链接也能完成。
 完成后汇报：改前改后的 JS 体积、仍在水合的组件及理由、改了哪些文件；验证：禁用 JS 时内容完整，弱网下首屏关键按钮可用，控制台没有水合警告。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: '顶栏导航', items: ['纯 HTML'] },
+    { t: '搜索框', items: ['client:load', '首屏立即要用'], acc: true },
+    { t: '购物车数量', items: ['client:idle', '订阅共享 store'], acc: true },
+    { t: '商品介绍正文', items: ['纯 HTML，不带 JS'] },
+    { t: '评论区', items: ['client:visible', '首屏以下'], acc: true },
+    { t: '页脚', items: ['纯 HTML'] },
+  ], { cols: 3, note: '只给交互的几块水合；水合前原生表单也能提交' }), { title: '孤岛 · 一个商品详情页' });
+}
+</script>

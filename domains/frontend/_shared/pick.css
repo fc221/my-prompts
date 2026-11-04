@@ -1,0 +1,66 @@
+.pk {
+  color-scheme: light;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f5f6f8;
+  color: #1f2329;
+  font:
+    13px/20px system-ui,
+    'PingFang SC',
+    sans-serif;
+}
+.pk-tabs {
+  flex: none;
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px 4px; /* 底部留出焦点环 */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.pk-tabs button {
+  flex: none;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: none;
+  color: #5b616e;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.pk-tabs button:hover {
+  color: #1f2329;
+}
+.pk-tabs [aria-selected='true'] {
+  border-color: #d5d9e0;
+  background: #fff;
+  color: #1f2329;
+  font-weight: 600;
+}
+.pk-tabs button:focus-visible {
+  outline: 2px solid #3b5bdb;
+  outline-offset: 2px;
+}
+.pk-stage:focus-visible {
+  outline: 2px solid #3b5bdb;
+  outline-offset: -2px;
+}
+.pk-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  overflow: hidden;
+}
+.pk-fit {
+  flex: none;
+  margin: 0;
+  padding: 0 12px 8px;
+  color: #5b616e;
+  font-size: 12px;
+  line-height: 20px;
+}

@@ -39,3 +39,19 @@ order: 60
 3. 令牌写在 {令牌文件路径}，挂在 :root，暗色用 [data-theme="dark"] 覆盖同名变量；脚本里要用的颜色从同一份源导出。
 4. 批量替换，组件只引用语义令牌；加 stylelint 规则，令牌文件以外出现十六进制色就报错。
 5. 对主要页面在 1440 和 390 宽下截图比对，差异只能来自近似值归并。汇报改动文件、归并了哪些值、哪些裸值因为是动态计算而保留。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, stack } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, stack([
+    { t: '基础令牌', items: ['blue-1 … blue-12', 'space-1 = 4px'], note: '色阶和尺度，组件不直接引用' },
+    { t: '语义令牌', items: ['color-text-muted', 'color-bg-hover', 'radius-md'], note: '暗色在 [data-theme="dark"] 覆盖同名变量', acc: true },
+    { t: '组件令牌', items: ['button-height-md'], note: '只给要单独调的组件' },
+    { t: '组件', items: ['var(--color-bg-hover)'], note: '不写 #333、13px 这类裸值' },
+  ], { arrow: '语义令牌引用色阶' }), { title: '设计令牌 · 组件只引后两层' });
+}
+</script>

@@ -28,3 +28,32 @@ order: 20
 ## 提示词
 
 {产品}的结算页：宽屏左侧主列依次是收货地址卡片（带出默认地址，可更换）、配送方式选项卡片（{配送方式}，写费用和时效）、支付方式选项卡片（{支付方式}）、订单备注；右侧 360px 订单汇总吸顶：商品列表、商品合计、运费、优惠、应付（22px 等宽数字）和“提交订单”按钮；换配送或用优惠券时汇总即时更新；提交后按钮立刻进入加载并防重复提交，失败保留已填信息并说明原因；手机上单列，底部固定栏放应付金额和“提交订单”并加安全区。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '1fr 360px',
+  rows: 'auto auto auto auto 1fr',
+  areas: ['hd sm', 'ad sm', 'dl sm', 'pm sm', '. sm'],
+  boxes: {
+    hd: { label: '页面标题', kind: 'heading', text: '确认订单' },
+    ad: { label: '收货地址', kind: 'addr' },
+    dl: { label: '配送方式（选项卡片）', kind: 'radiocards' },
+    pm: { label: '支付方式（选项卡片）', kind: 'radiocards', acc: true },
+    sm: { label: '订单汇总（吸顶）', kind: 'summary', acc: true },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto auto auto 1fr auto',
+  areas: ['top', 'ad', 'dl', 'pm', '.', 'bar'],
+  boxes: {
+    top: { label: '‹ 返回', kind: 'mtop', text: '确认订单' },
+    ad: { label: '收货地址', kind: 'addr' },
+    dl: { label: '配送方式', kind: 'radiocards' },
+    pm: { label: '支付方式', kind: 'radiocards', acc: true },
+    bar: { label: '底部结算栏', kind: 'paybar' },
+  },
+};
+```

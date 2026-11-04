@@ -39,3 +39,21 @@ order: 60
 3. 不超过 6 个状态且没有嵌套的，用 status 联合类型加 reducer（React useReducer / Vue 组合式函数）；更复杂的用项目已有的状态机库，没有就提议 XState v5 并说明理由。
 4. 组件只发送事件、按 status 渲染，按钮可用性从 status 推导；取消或离开状态时中止进行中的请求，晚到的结果不改状态。
 5. 为每条转换写单元测试；汇报改动的文件和测试结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../_shared/diagram.css">
+
+<script type="module">
+import { draw, boxes } from '../../_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, boxes([
+    { t: 'idle', items: ['START → uploading'] },
+    { t: 'uploading', items: ['UPLOADED → processing', 'FAIL → failed', 'CANCEL → idle'], acc: true },
+    { t: 'processing', items: ['DONE → done', 'after 超时 → failed'] },
+    { t: 'done', items: ['带 fileUrl'] },
+    { t: 'failed', items: ['带 error', 'RETRY → uploading'] },
+    { t: '其他事件', items: ['原样返回', 'uploading 时再点 START 无效'], dash: true },
+  ], { cols: 3, note: '一个 status 替代 isLoading、isError、isSuccess' }), { title: '上传流程 · 状态 + 事件 → 下一个状态' });
+}
+</script>

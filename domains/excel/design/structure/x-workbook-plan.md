@@ -41,3 +41,31 @@ order: 30
 4. 说明表写好用途、维护人、每张表的填写规则和更新记录模板。
 5. 录入表和公式表的标签用两种颜色区分。
 交付时给出工作表清单和数据流向，标明每张表哪些列手填、哪些列是公式，并放 3 行示例数据验证汇总结果。
+
+## 示例
+
+<link rel="stylesheet" href="../../../frontend/_shared/diagram.css">
+
+<script type="module">
+import { draw, sheet, flow } from '../../../frontend/_shared/diagram.ts';
+export default function demo(root) {
+  draw(root, flow([
+    { t: '参数', note: '门店表、商品表' },
+    { t: '明细', note: '只录入', acc: true },
+    { t: '汇总', note: 'SUMIFS / 透视表' },
+    { t: '看板', note: '图表' },
+  ]) + '<div style="height:10px"></div>' + sheet({
+    head: ['工作表', '用途', '谁来填', '更新'],
+    widths: [64, 170, 60, 70],
+    rows: [
+      ['门店表', '门店名称、区域、店长', '运营', '开新店时'],
+      ['商品表', '商品编号、名称、单价', '采购', '上新时'],
+      ['订单', '每笔订单一行，全年一张表', '店员', '每天'],
+      ['月汇总', '按门店和月份汇总金额', '公式', '自动'],
+      ['看板', '趋势图和门店排名', '公式', '自动'],
+    ],
+    marks: { C4: 'warn', C5: 'acc', C6: 'acc' },
+    tabs: ['说明', '门店表', '商品表', '订单', '月汇总', '看板'],
+  }), { title: '工作簿分表 · 数据只朝一个方向流', min: 0.45 });
+}
+</script>

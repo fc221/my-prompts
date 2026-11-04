@@ -28,3 +28,59 @@ order: 10
 ## 提示词
 
 {产品}的文档站用「三栏文档布局」：顶栏放 Logo、文档搜索（⌘K 打开，结果按文档 / 接口分组）和版本切换；左侧 240px 目录树按{章节}分组、可折叠、当前页高亮并单独滚动；中间正文最大 720px，16px / 1.75，标题带锚点链接，代码块等宽 14px 带语言标签和复制按钮；右侧 200px “本页内容”只列二三级标题，滚动时高亮当前小节；底部上一篇 / 下一篇和“有帮助吗”反馈；窄于 1200px 去掉右栏，窄于 900px 目录收进左侧抽屉，“本页内容”变成正文上方可展开的一行。
+
+## 示意图
+
+```js
+export const wire = {
+  cols: '240px 1fr 200px',
+  rows: 'auto 1fr',
+  areas: ['top top top', 'nav body toc'],
+  boxes: {
+    top: {
+      inner: {
+        cols: '200px 1fr 420px',
+        rows: '1fr',
+        areas: ['logo sr links'],
+        boxes: { logo: 'Logo', sr: { label: '文档搜索 ⌘K', kind: 'search', text: '搜索文档  ⌘K' }, links: '导航' },
+      },
+    },
+    nav: {
+      label: '文档目录',
+      kind: 'toc',
+      text: '文档目录|快速开始|安装与配置|订单接口|客户接口|Webhook|错误码|更新日志',
+    },
+    body: {
+      inner: {
+        cols: '1fr',
+        rows: 'auto 200px 1fr',
+        areas: ['t', 'c', '.'],
+        boxes: {
+          t: { label: '正文', kind: 'text', acc: true, text: '快速开始' },
+          c: { label: '代码示例', kind: 'code' },
+        },
+      },
+    },
+    toc: { label: '本页内容', kind: 'toc', text: '本页内容|安装依赖|配置密钥|发送第一个请求|下一步' },
+  },
+};
+export const wireMobile = {
+  cols: '1fr',
+  rows: 'auto auto auto 200px 1fr',
+  areas: ['top', 'toc', 'body', 'code', '.'],
+  boxes: {
+    top: { label: '顶栏 ☰', text: '快速开始' },
+    toc: { label: '本页内容（横条）', kind: 'toc', text: '本页内容|安装依赖|配置密钥|发送请求' },
+    body: { label: '正文', kind: 'text', acc: true, text: '快速开始' },
+    code: { label: '代码示例', kind: 'code' },
+  },
+  drawer: {
+    size: '78%',
+    box: {
+      label: '文档目录（左侧抽屉）',
+      kind: 'toc',
+      text: '文档目录|快速开始|安装与配置|订单接口|客户接口|Webhook|错误码',
+    },
+  },
+};
+```
