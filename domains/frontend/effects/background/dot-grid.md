@@ -1,6 +1,7 @@
 ---
 zh: 点阵渐隐背景
 en: Dot grid fade
+aka: 点阵背景 网点背景 dot grid
 order: 50
 ---
 

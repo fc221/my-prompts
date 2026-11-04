@@ -1,6 +1,7 @@
 ---
 zh: 搜索联想
 en: Autocomplete
+aka: 自动补全 输入联想 搜索建议
 order: 40
 ---
 

@@ -1,6 +1,7 @@
 ---
 zh: 粒子连线背景
 en: Particle network
+aka: 粒子背景 粒子网络 粒子连线
 order: 70
 ---
 

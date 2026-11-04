@@ -1,6 +1,7 @@
 ---
 zh: 鼠标跟随光晕卡片
 en: Spotlight card grid
+aka: 聚光灯卡片 聚光卡片 光晕卡片
 order: 30
 ---
 

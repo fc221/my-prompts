@@ -1,6 +1,7 @@
 ---
 zh: 无限滚动横带
 en: Infinite marquee
+aka: 跑马灯 Logo 墙滚动 横向循环滚动 marquee
 order: 130
 ---
 

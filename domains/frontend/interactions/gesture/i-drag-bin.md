@@ -30,13 +30,13 @@ tab: 回收区
 - 靠近：按指针到回收区边缘的距离线性放大，90px 内开始变化，贴上时到 1.25 倍；以底边中点为基准往上长，贴边不被裁掉
 - 热区：回收区外扩 16px；进入后变危险色，文案换成“松手删除”，桶盖掀开，缩略图缩到 0.55 倍；手机上可加 navigator.vibrate(10)
 - 松手：热区内缩略图约 180ms 缩小飞进回收区，其余项 200ms 补位；热区外约 200ms 回到原位，Esc 取消同样回原位
-- 撤销：底部提示 6 秒，带一条倒计时细线，悬停或聚焦时暂停；窗口内连删合并成“已删除 N 张”，撤销一次全部回到原位；窗口结束后才发删除请求，或者先做软删除
+- 撤销：做法同「操作后撤销」，底部提示至少留 10 秒，带一条倒计时细线，悬停或聚焦时暂停；窗口内连删合并成“已删除 N 张”，撤销一次全部回到原位；窗口结束后才发删除请求，或者先做软删除
 - 键盘和替代：每项有 × 按钮（悬停、聚焦时显示，触屏常显）；聚焦时 Delete 删除，⌘Z / Ctrl+Z 撤销；删除后焦点移到相邻项，撤销后回到恢复的那一项
 - 删除和撤销用 role="status" 播报；减少动态效果时回收区只变色不放大，补位和飞入直接到位
 
 ## 提示词
 
-给{相册}做「拖到回收区」：拖起{照片}（位移超过 4px 才算拖动）后，底部居中升起回收区（180ms），同时铺一层底部暗色渐变；原位留 22% 透明度的占位，缩略图跟手并倾斜 2.5°；按指针到回收区边缘的距离放大回收区，90px 内开始，贴上时 1.25 倍；回收区外扩 16px 是热区，指针进入后变危险色、文案换成“松手删除”、缩略图缩到 0.55 倍；热区内松手，缩略图 180ms 缩小飞入，其余项 200ms 补位，并显示“已删除 N {单位}”和“撤销”；提示停留 6 秒，带倒计时细线，悬停或聚焦时暂停，窗口内连删合并成一条，撤销一次全部回到原位，窗口结束后才调用{删除接口}；热区外松手或按 Esc，缩略图 200ms 回到原位；每项另有 × 按钮（悬停、聚焦显示，触屏常显），聚焦时 Delete 删除、⌘Z / Ctrl+Z 撤销，删除后焦点移到相邻项，撤销后回到恢复的项；用 role="status" 播报；减少动态效果时回收区不放大，只变色，补位直接到位。
+给{相册}做「拖到回收区」：拖起{照片}（位移超过 4px 才算拖动）后，底部居中升起回收区（180ms），同时铺一层底部暗色渐变；原位留 22% 透明度的占位，缩略图跟手并倾斜 2.5°；按指针到回收区边缘的距离放大回收区，90px 内开始，贴上时 1.25 倍；回收区外扩 16px 是热区，指针进入后变危险色、文案换成“松手删除”、缩略图缩到 0.55 倍；热区内松手，缩略图 180ms 缩小飞入，其余项 200ms 补位，并显示“已删除 N {单位}”和“撤销”；提示停留 10 秒，带倒计时细线，悬停或聚焦时暂停，窗口内连删合并成一条，撤销一次全部回到原位，窗口结束后才调用{删除接口}；热区外松手或按 Esc，缩略图 200ms 回到原位；每项另有 × 按钮（悬停、聚焦显示，触屏常显），聚焦时 Delete 删除、⌘Z / Ctrl+Z 撤销，删除后焦点移到相邻项，撤销后回到恢复的项；用 role="status" 播报；减少动态效果时回收区不放大，只变色，补位直接到位。
 
 ## 示例
 
@@ -73,7 +73,7 @@ tab: 回收区
 .toast button{height:28px;padding:0 10px;border:0;border-radius:7px;background:transparent;color:#a9bcff;font-size:12.5px;font-weight:600}
 .toast button:hover{background:rgba(255,255,255,.12)}
 .toast :focus-visible{outline-color:#a9bcff;outline-offset:-2px}
-.toast i{position:absolute;left:0;bottom:0;width:100%;height:2px;background:#a9bcff;transform-origin:0 50%;animation:cd 6s linear both}
+.toast i{position:absolute;left:0;bottom:0;width:100%;height:2px;background:#a9bcff;transform-origin:0 50%;animation:cd 10s linear both}
 .toast.pause i,.toast.hold i{animation-play-state:paused}
 .dr .toast{opacity:0;pointer-events:none}
 @keyframes cd{to{transform:scaleX(0)}
@@ -108,7 +108,7 @@ export default function demo(root) {
       e.style.transition = 'transform .2s cubic-bezier(.2,0,0,1)'; e.style.transform = '';
     });
   };
-  // 撤销窗口：6 秒，悬停或聚焦提示时暂停；窗口内连删合并成一条
+  // 撤销窗口：10 秒，悬停或聚焦提示时暂停；窗口内连删合并成一条
   const run = () => { if (toast.classList.contains('hold')) return; t0 = performance.now(); to = setTimeout(commit, left); toast.classList.remove('pause'); };
   const pause = () => { if (toast.hidden || toast.classList.contains('hold')) return; clearTimeout(to); left -= performance.now() - t0; toast.classList.add('pause'); };
   const commit = () => { clearTimeout(to); const back = root.activeElement === un; gone = []; toast.hidden = true; if (back) list()[0]?.querySelector('.pic').focus(); };
@@ -116,7 +116,7 @@ export default function demo(root) {
     const i = list().indexOf(li), next = list()[i + 1] ?? list()[i - 1];
     li.classList.remove('hole'); flip(() => li.remove()); gone.push({ li, i });
     tx.textContent = `已删除 ${gone.length} 张`; sr.textContent = `已删除「${name(li)}」，可以撤销`;
-    clearTimeout(to); left = 6000; toast.hidden = false; toast.classList.remove('pause'); toast.classList.toggle('hold', !!hold);
+    clearTimeout(to); left = 10000; toast.hidden = false; toast.classList.remove('pause'); toast.classList.toggle('hold', !!hold);
     bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = ''; run();
     return next;
   };

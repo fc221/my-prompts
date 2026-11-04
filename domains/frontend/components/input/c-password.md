@@ -1,6 +1,7 @@
 ---
 zh: 密码框
 en: Password input
+aka: 密码强度 显示密码
 order: 50
 ---
 

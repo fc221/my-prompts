@@ -1,6 +1,7 @@
 ---
 zh: 文字提示
 en: Tooltip
+aka: 气泡提示 悬停提示 tooltip
 order: 60
 ---
 

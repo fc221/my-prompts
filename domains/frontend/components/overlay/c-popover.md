@@ -1,6 +1,7 @@
 ---
 zh: 浮层卡片
 en: Popover
+aka: 气泡卡片 弹出卡片 popover
 order: 70
 ---
 

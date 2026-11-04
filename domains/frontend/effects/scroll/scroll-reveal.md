@@ -1,6 +1,7 @@
 ---
 zh: 滚动渐显
 en: Scroll reveal
+aka: 滚动出现 滚动渐入 进入视口出现 scroll reveal
 order: 20
 tab: 滚动渐显
 ---

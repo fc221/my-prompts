@@ -1,6 +1,7 @@
 ---
 zh: 大字里透出图片
 en: Image-filled type
+aka: 文字镂空 镂空字 图片填充文字 text mask
 order: 160
 ---
 

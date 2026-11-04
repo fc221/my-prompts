@@ -1,6 +1,7 @@
 ---
 zh: 统计指标卡
 en: Stat card
+aka: 统计卡片 指标卡 数字卡片 KPI 卡片
 order: 50
 ---
 

@@ -1,6 +1,7 @@
 ---
 zh: 一笔笔写出来的字
 en: Stroke drawing
+aka: 描边书写 手写签名动画 描边动画 文字描边
 order: 50
 ---
 

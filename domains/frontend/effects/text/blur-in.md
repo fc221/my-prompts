@@ -1,6 +1,7 @@
 ---
 zh: 由虚到实的标题
 en: Blur-in heading
+aka: 模糊渐显 模糊入场 由模糊变清晰
 order: 40
 ---
 

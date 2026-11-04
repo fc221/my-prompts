@@ -2,6 +2,7 @@
 zh: 揭起贴纸
 en: Sticker lift
 order: 10
+tab: 贴纸
 ---
 
 ## 是什么

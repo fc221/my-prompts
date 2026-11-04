@@ -1,6 +1,7 @@
 ---
 zh: 折叠面板
 en: Accordion / Collapse
+aka: 手风琴 折叠卡片 展开收起
 order: 130
 ---
 

@@ -2,6 +2,7 @@
 zh: 极光渐变背景
 en: Aurora gradient
 order: 10
+tab: 极光
 ---
 
 ## 是什么

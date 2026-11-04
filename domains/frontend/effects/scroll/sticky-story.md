@@ -1,6 +1,7 @@
 ---
 zh: 滚动钉住叙事
 en: Sticky scroll story
+aka: 滚动叙事 产品页滚动讲解 scrollytelling
 order: 60
 ---
 

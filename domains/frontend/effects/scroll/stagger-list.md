@@ -1,6 +1,7 @@
 ---
 zh: 列表依次进入
 en: Staggered list enter
+aka: 错峰入场 依次出现 交错入场 stagger
 order: 50
 of: scroll-reveal
 tab: 列表依次

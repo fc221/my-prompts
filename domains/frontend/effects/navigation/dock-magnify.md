@@ -2,6 +2,7 @@
 zh: 靠近就放大的图标栏
 en: Magnifying dock
 order: 50
+tab: 悬停放大
 ---
 
 ## 是什么

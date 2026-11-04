@@ -1,6 +1,7 @@
 ---
 zh: 标题逐行浮现
 en: Staggered text reveal
+aka: 逐词浮现 逐行出现 标题入场
 order: 30
 of: scroll-reveal
 tab: 标题逐行

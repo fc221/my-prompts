@@ -2,6 +2,7 @@
 zh: 修复手机端排版
 en: Broken on mobile
 aka: 手机上排版乱
+tab: 排版
 order: 110
 ---
 

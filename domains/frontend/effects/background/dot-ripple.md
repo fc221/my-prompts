@@ -3,6 +3,7 @@ zh: 点阵波纹
 en: Dot grid ripple
 aka: 点阵涟漪 波点背景 交互点阵 dot ripple
 order: 60
+tab: 波纹
 ---
 
 ## 是什么

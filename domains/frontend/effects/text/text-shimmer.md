@@ -1,6 +1,7 @@
 ---
 zh: 文字上的扫光
 en: Shimmering text
+aka: 流光文字 渐变流光字 扫光文字 shimmer text
 order: 150
 ---
 

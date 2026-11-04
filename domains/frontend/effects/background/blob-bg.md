@@ -85,7 +85,7 @@ order: 20
 <script type="module">
 export default function demo(root) {
   const st = root.querySelector('.st'), b = root.querySelector('.pz');
-  b.addEventListener('click', () => { const on = st.classList.toggle('paused'); b.setAttribute('aria-pressed', String(on)); b.setAttribute('aria-label', on ? '继续背景动画' : '暂停背景动画'); });
+  b.addEventListener('click', () => { const on = st.classList.toggle('paused'); b.setAttribute('aria-pressed', String(on)); }); // 切换按钮：名称固定，只改 aria-pressed
   // 离开视口时暂停
   const io = new IntersectionObserver(([e]) => { if (!root.host.isConnected) return io.disconnect(); st.querySelectorAll('.bo,.bi').forEach((el) => { el.style.animationPlayState = e.isIntersecting ? '' : 'paused'; }); });
   io.observe(st);
